@@ -1,0 +1,20 @@
+{
+  "revision": "12191083eea106edf85c7bbc6e60a140faf1b4c2",
+  "pytest": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "2618",
+    "time": "18.462",
+    "timestamp": "2026-09-22T18:57:58.144488+03:00",
+    "hostname": "lockR"
+  },
+  "junit_sha256": "82c109b79f6160e51d5fb1da613e44370e3d1f18f0d4ec8cc0b76d64bd5fb41c",
+  "log_sha256": "68fbc3de4b88dbab68dc6ddfc038569bc292d3e0932825b79bc33f9761a4dc08",
+  "python": "3.14.7t",
+  "redis": "Isolated real Redis, including Sentinel tests",
+  "lint_command": "ruff check seif tests scripts",
+  "lint_result": "passed",
+  "global_lint_limitation": "ruff check . finds three unchanged E702 violations in archived review-v2/redmadrobot/aggregate.py outside the CI scope."
+}

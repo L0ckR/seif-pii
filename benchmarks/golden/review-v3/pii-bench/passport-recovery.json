@@ -1,0 +1,36 @@
+{
+  "rules": {
+    "passport_002": {
+      "baseline_spans_exactly_restored": true,
+      "spans_count": 2,
+      "trial_spans_count": 0
+    },
+    "passport_015": {
+      "baseline_spans_exactly_restored": true,
+      "spans_count": 1,
+      "trial_spans_count": 0
+    },
+    "passport_048": {
+      "baseline_spans_exactly_restored": true,
+      "spans_count": 1,
+      "trial_spans_count": 0
+    }
+  },
+  "hybrid_person_only": {
+    "passport_002": {
+      "baseline_spans_exactly_restored": true,
+      "spans_count": 2,
+      "trial_spans_count": 0
+    },
+    "passport_015": {
+      "baseline_spans_exactly_restored": true,
+      "spans_count": 1,
+      "trial_spans_count": 0
+    },
+    "passport_048": {
+      "baseline_spans_exactly_restored": true,
+      "spans_count": 1,
+      "trial_spans_count": 0
+    }
+  }
+}

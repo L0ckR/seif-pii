@@ -1,0 +1,48 @@
+{
+  "all_input_hashes_equal": true,
+  "all_scope_id_hashes_equal": true,
+  "baseline_exactly_reproduces_previous_after_scopes": true,
+  "mappings_equal_between_versions": true,
+  "frozen_gold_spans_identical": true,
+  "before_checks": {
+    "source_and_inputs_immutable": true,
+    "cached_gold_matches_csv": true,
+    "frozen_protocol_exclusions_unchanged": true,
+    "historical_common5_ids_unchanged": true,
+    "network_disabled": true,
+    "live_ner_inference": false,
+    "actual_mask_and_restore_checked_all_modes_all_rows": true,
+    "cached_ner_score": 0.85,
+    "cached_ner_scores_reconstructed": true
+  },
+  "after_checks": {
+    "source_and_inputs_immutable": true,
+    "cached_gold_matches_csv": true,
+    "frozen_protocol_exclusions_unchanged": true,
+    "historical_common5_ids_unchanged": true,
+    "network_disabled": true,
+    "live_ner_inference": false,
+    "actual_mask_and_restore_checked_all_modes_all_rows": true,
+    "cached_ner_score": 0.85,
+    "cached_ner_scores_reconstructed": true
+  },
+  "runtime_python_before": "3.13.7",
+  "runtime_python_after": "3.13.7",
+  "strict_regression_gate_passed": false,
+  "strict_typed_gate_passed": false,
+  "strict_untyped_gate_passed": true,
+  "strict_actual_mask_gate_passed": true,
+  "declared_acceptance_passed": true,
+  "aggregate_uses_only_numeric_reports": true,
+  "new_bootstrap": false,
+  "artifact_sha256": {
+    "runner.py": "b83c1f163e09dc4a380d028786e2a8d710757c04ede1d40ce7a3d100738fa233",
+    "aggregate.py": "11c13f85b3196baf9db0d0a4e58fc2438cae7b4d5c5919481c6147f8be91a4a1",
+    "prior-reference.json": "87a9d3263050069e67a97ea8884500fdc6d2a5a8e78c489417318def5f6e7d19",
+    "report.json": "a8d1fd1835eb219f6a6619f49f3c2375b551eb41a330c2a2bd59524b1ba99064",
+    "summary.md": "77e8169db42f1dcdf7cb5883fc05fba78eb84e8659a12a8b9104018f4f2ad783",
+    "paired-all8-character-counts.json": "651071ff2dca8aa1d8e4ca03c1e7e16603e6c08870a85cdd4f4c5a74ddbf01f0",
+    "baseline.json": "f6f04b79060a4ab3f42474f332e53f249a3c83688ce53a8760ee00cb286ffd5c",
+    "current.json": "35a735e6eba9e1acbf74ae54a0cc1f5eb3433ccd5612757468b9c8b164459703"
+  }
+}

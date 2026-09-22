@@ -1,0 +1,208 @@
+{
+  "previous_after_revision": "4e46c86a6f6c7bf91e9525968981ae47d7984aba",
+  "previous_after_file_sha256": "d6e67a59451dbba6ad0b701a6f63aa1183f23909550947a7b6de35cdb5a9c781",
+  "previous_after_scopes_sha256": "a6ac55f108f41d9cd3a4e35439d5ccbb2ebd1497f70eef1ba862daa788cfc205",
+  "previous_before_revision": "cbb628562f68afd764fb5a9f271c017d4c8fdeb1",
+  "previous_before_file_sha256": "f33847d02abb6522939c2564609c18549338ed579912bac2c4cdcafd1baab9f5",
+  "previous_regression_case_counts": {
+    "rules": {
+      "row_0314": {
+        "before_regression": [
+          32,
+          0,
+          0
+        ],
+        "after_regression": [
+          19,
+          0,
+          13
+        ]
+      },
+      "row_0404": {
+        "before_regression": [
+          32,
+          0,
+          0
+        ],
+        "after_regression": [
+          19,
+          0,
+          13
+        ]
+      },
+      "row_0520": {
+        "before_regression": [
+          0,
+          0,
+          11
+        ],
+        "after_regression": [
+          0,
+          11,
+          11
+        ]
+      },
+      "row_2187": {
+        "before_regression": [
+          0,
+          6,
+          11
+        ],
+        "after_regression": [
+          0,
+          11,
+          11
+        ]
+      },
+      "row_2572": {
+        "before_regression": [
+          48,
+          6,
+          0
+        ],
+        "after_regression": [
+          31,
+          6,
+          17
+        ]
+      }
+    },
+    "person_only": {
+      "row_0314": {
+        "before_regression": [
+          32,
+          0,
+          0
+        ],
+        "after_regression": [
+          19,
+          0,
+          13
+        ]
+      },
+      "row_0404": {
+        "before_regression": [
+          32,
+          0,
+          0
+        ],
+        "after_regression": [
+          25,
+          0,
+          7
+        ]
+      },
+      "row_0520": {
+        "before_regression": [
+          0,
+          0,
+          11
+        ],
+        "after_regression": [
+          0,
+          11,
+          11
+        ]
+      },
+      "row_2187": {
+        "before_regression": [
+          0,
+          6,
+          11
+        ],
+        "after_regression": [
+          0,
+          11,
+          11
+        ]
+      },
+      "row_2572": {
+        "before_regression": [
+          48,
+          6,
+          0
+        ],
+        "after_regression": [
+          31,
+          6,
+          17
+        ]
+      }
+    },
+    "person_location": {
+      "row_0314": {
+        "before_regression": [
+          32,
+          0,
+          0
+        ],
+        "after_regression": [
+          19,
+          0,
+          13
+        ]
+      },
+      "row_0404": {
+        "before_regression": [
+          32,
+          0,
+          0
+        ],
+        "after_regression": [
+          25,
+          0,
+          7
+        ]
+      },
+      "row_0520": {
+        "before_regression": [
+          0,
+          0,
+          11
+        ],
+        "after_regression": [
+          0,
+          11,
+          11
+        ]
+      },
+      "row_2187": {
+        "before_regression": [
+          0,
+          6,
+          11
+        ],
+        "after_regression": [
+          0,
+          11,
+          11
+        ]
+      },
+      "row_2572": {
+        "before_regression": [
+          48,
+          6,
+          0
+        ],
+        "after_regression": [
+          31,
+          6,
+          17
+        ]
+      }
+    }
+  },
+  "intermediate_trial": {
+    "revision": "5719ff5e54ec0f9ee1b0d9024777cd49039dea6f",
+    "report_sha256": "8bdcacc560453219f7d05bab22df685d540d8dbbfdb0004e176d78bc00192550",
+    "flagged_case_ids": [
+      "row_0466",
+      "row_0705",
+      "row_2092",
+      "row_2364",
+      "row_2401",
+      "row_2722"
+    ]
+  },
+  "unresolved_category_diagnostic_case_id": "row_2256"
+}

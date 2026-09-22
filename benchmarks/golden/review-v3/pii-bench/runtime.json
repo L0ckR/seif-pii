@@ -1,0 +1,11 @@
+{
+  "python_executable": "/tmp/seif-presidio-313/bin/python",
+  "python": "3.13.7 (main, Aug 18 2025, 19:20:03) [Clang 20.1.4 ]",
+  "packages": {
+    "pyarrow": "25.0.1",
+    "numpy": "2.4.6",
+    "presidio-analyzer": "2.2.364"
+  },
+  "ner_model_calls": 0,
+  "network_calls": 0
+}

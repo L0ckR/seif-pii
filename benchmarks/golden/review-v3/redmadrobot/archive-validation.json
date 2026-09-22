@@ -1,0 +1,48 @@
+{
+  "source_snapshots_match_git_revisions": true,
+  "old_reports_unchanged": true,
+  "baseline_copy_and_runner_byte_identical_to_executed_replay": true,
+  "aggregate_from_gzip_reproduces_outputs_byte_for_byte": true,
+  "compressed_reports": {
+    "baseline.json.gz": {
+      "bytes": 494620,
+      "sha256": "0f43be3241ad76affea555633170a71e6d4f7b9a848b1b7d0ace4d930d860625",
+      "uncompressed_sha256": "f6f04b79060a4ab3f42474f332e53f249a3c83688ce53a8760ee00cb286ffd5c"
+    },
+    "current.json.gz": {
+      "bytes": 494910,
+      "sha256": "e4b9d5847ea0eef1ebe79a2506d6bf772c252daf124cc98702a1e70ea06515d2",
+      "uncompressed_sha256": "35a735e6eba9e1acbf74ae54a0cc1f5eb3433ccd5612757468b9c8b164459703"
+    },
+    "paired-all8-character-counts.json.gz": {
+      "bytes": 116971,
+      "sha256": "972200fd1cd337d7e62a2813eadbeb12e6ab29ec583d19cf7d7ab78bb6b227ab",
+      "uncompressed_sha256": "651071ff2dca8aa1d8e4ca03c1e7e16603e6c08870a85cdd4f4c5a74ddbf01f0"
+    }
+  },
+  "publication_files": [
+    "README.md",
+    "runner.py",
+    "aggregate.py",
+    "prior-reference.json",
+    "report.json",
+    "summary.md",
+    "validation.json",
+    "baseline.json.gz",
+    "current.json.gz",
+    "paired-all8-character-counts.json.gz",
+    "archive-validation.json"
+  ],
+  "publication_sha256": {
+    "README.md": "6b075bf6c5bb3fde6cb02fb95c3b9cba893bb342049a37a22c9d34a020f46c86",
+    "runner.py": "b83c1f163e09dc4a380d028786e2a8d710757c04ede1d40ce7a3d100738fa233",
+    "aggregate.py": "11c13f85b3196baf9db0d0a4e58fc2438cae7b4d5c5919481c6147f8be91a4a1",
+    "prior-reference.json": "87a9d3263050069e67a97ea8884500fdc6d2a5a8e78c489417318def5f6e7d19",
+    "report.json": "a8d1fd1835eb219f6a6619f49f3c2375b551eb41a330c2a2bd59524b1ba99064",
+    "summary.md": "77e8169db42f1dcdf7cb5883fc05fba78eb84e8659a12a8b9104018f4f2ad783",
+    "validation.json": "1b1781478e2bf34f31bde62117502bd5a03b11f5b13ea3a64d2132ffc7980665",
+    "baseline.json.gz": "0f43be3241ad76affea555633170a71e6d4f7b9a848b1b7d0ace4d930d860625",
+    "current.json.gz": "e4b9d5847ea0eef1ebe79a2506d6bf772c252daf124cc98702a1e70ea06515d2",
+    "paired-all8-character-counts.json.gz": "972200fd1cd337d7e62a2813eadbeb12e6ab29ec583d19cf7d7ab78bb6b227ab"
+  }
+}

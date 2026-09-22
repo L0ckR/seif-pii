@@ -1,0 +1,212 @@
+{
+  "primary_common_whole_cases": {
+    "before_rules": {
+      "precision": 0.853432,
+      "recall": 0.390548,
+      "f1": 0.53587,
+      "true_positive": 2760,
+      "false_positive": 474,
+      "false_negative": 4307
+    },
+    "before_hybrid": {
+      "precision": 0.786582,
+      "recall": 0.632093,
+      "f1": 0.700926,
+      "true_positive": 4467,
+      "false_positive": 1212,
+      "false_negative": 2600
+    },
+    "after_rules": {
+      "precision": 0.853432,
+      "recall": 0.390548,
+      "f1": 0.53587,
+      "true_positive": 2760,
+      "false_positive": 474,
+      "false_negative": 4307
+    },
+    "after_hybrid": {
+      "precision": 0.786582,
+      "recall": 0.632093,
+      "f1": 0.700926,
+      "true_positive": 4467,
+      "false_positive": 1212,
+      "false_negative": 2600
+    },
+    "presidio_ru_unchanged": {
+      "precision": 0.829508,
+      "recall": 0.644404,
+      "f1": 0.725332,
+      "true_positive": 4554,
+      "false_positive": 936,
+      "false_negative": 2513
+    }
+  },
+  "common_types_all_532_diagnostic": {
+    "before_rules": {
+      "precision": 0.833989,
+      "recall": 0.406975,
+      "f1": 0.547015,
+      "true_positive": 7842,
+      "false_positive": 1561,
+      "false_negative": 11427
+    },
+    "before_hybrid": {
+      "precision": 0.722236,
+      "recall": 0.60548,
+      "f1": 0.658725,
+      "true_positive": 11667,
+      "false_positive": 4487,
+      "false_negative": 7602
+    },
+    "after_rules": {
+      "precision": 0.833989,
+      "recall": 0.406975,
+      "f1": 0.547015,
+      "true_positive": 7842,
+      "false_positive": 1561,
+      "false_negative": 11427
+    },
+    "after_hybrid": {
+      "precision": 0.722236,
+      "recall": 0.60548,
+      "f1": 0.658725,
+      "true_positive": 11667,
+      "false_positive": 4487,
+      "false_negative": 7602
+    },
+    "presidio_ru_unchanged": {
+      "precision": 0.689399,
+      "recall": 0.597021,
+      "f1": 0.639893,
+      "true_positive": 11504,
+      "false_positive": 5183,
+      "false_negative": 7765
+    }
+  },
+  "person_all_532_diagnostic": {
+    "before_rules": {
+      "precision": 0.941248,
+      "recall": 0.451453,
+      "f1": 0.610223,
+      "true_positive": 3092,
+      "false_positive": 193,
+      "false_negative": 3757
+    },
+    "before_hybrid": {
+      "precision": 0.665906,
+      "recall": 0.809023,
+      "f1": 0.730521,
+      "true_positive": 5541,
+      "false_positive": 2780,
+      "false_negative": 1308
+    },
+    "after_rules": {
+      "precision": 0.941248,
+      "recall": 0.451453,
+      "f1": 0.610223,
+      "true_positive": 3092,
+      "false_positive": 193,
+      "false_negative": 3757
+    },
+    "after_hybrid": {
+      "precision": 0.665906,
+      "recall": 0.809023,
+      "f1": 0.730521,
+      "true_positive": 5541,
+      "false_positive": 2780,
+      "false_negative": 1308
+    },
+    "presidio_ru_unchanged": {
+      "precision": 0.65648,
+      "recall": 0.78099,
+      "f1": 0.713343,
+      "true_positive": 5349,
+      "false_positive": 2799,
+      "false_negative": 1500
+    }
+  },
+  "location_all_532_diagnostic": {
+    "before_rules": {
+      "precision": 0.329121,
+      "recall": 0.083415,
+      "f1": 0.133096,
+      "true_positive": 599,
+      "false_positive": 1221,
+      "false_negative": 6582
+    },
+    "before_hybrid": {
+      "precision": 0.558699,
+      "recall": 0.275031,
+      "f1": 0.368608,
+      "true_positive": 1975,
+      "false_positive": 1560,
+      "false_negative": 5206
+    },
+    "after_rules": {
+      "precision": 0.329121,
+      "recall": 0.083415,
+      "f1": 0.133096,
+      "true_positive": 599,
+      "false_positive": 1221,
+      "false_negative": 6582
+    },
+    "after_hybrid": {
+      "precision": 0.558699,
+      "recall": 0.275031,
+      "f1": 0.368608,
+      "true_positive": 1975,
+      "false_positive": 1560,
+      "false_negative": 5206
+    },
+    "presidio_ru_unchanged": {
+      "precision": 0.815052,
+      "recall": 0.230748,
+      "f1": 0.35967,
+      "true_positive": 1657,
+      "false_positive": 376,
+      "false_negative": 5524
+    }
+  },
+  "document_tax_all_532_diagnostic": {
+    "before_rules": {
+      "precision": 0.88024,
+      "recall": 0.096204,
+      "f1": 0.173451,
+      "true_positive": 147,
+      "false_positive": 20,
+      "false_negative": 1381
+    },
+    "before_hybrid": {
+      "precision": 0.88024,
+      "recall": 0.096204,
+      "f1": 0.173451,
+      "true_positive": 147,
+      "false_positive": 20,
+      "false_negative": 1381
+    },
+    "after_rules": {
+      "precision": 0.878049,
+      "recall": 0.094241,
+      "f1": 0.170213,
+      "true_positive": 144,
+      "false_positive": 20,
+      "false_negative": 1384
+    },
+    "after_hybrid": {
+      "precision": 0.878049,
+      "recall": 0.094241,
+      "f1": 0.170213,
+      "true_positive": 144,
+      "false_positive": 20,
+      "false_negative": 1384
+    },
+    "presidio_ru_unchanged": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 1528
+    }
+  }
+}
