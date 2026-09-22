@@ -1,0 +1,31 @@
+{
+  "python": "3.14.7 (main, Sep  1 2026, 14:18:09) [Clang 22.1.3 ]",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "logical_cpus": 16,
+  "free_threaded_build": false,
+  "gil_enabled_after_imports": {
+    "fastapi": true,
+    "pydantic_core": true,
+    "cryptography.hazmat.primitives.ciphers.aead": true,
+    "regex": true,
+    "yaml": true,
+    "redis": true,
+    "uvloop": true,
+    "httptools": true
+  },
+  "detector_thread_benchmark": [
+    {
+      "threads": 1,
+      "calls": 20000,
+      "seconds": 1.856,
+      "calls_per_second": 10773
+    },
+    {
+      "threads": 4,
+      "calls": 20000,
+      "seconds": 1.804,
+      "calls_per_second": 11084
+    }
+  ],
+  "scope": "Single synthetic CPU microbenchmark; no HTTP, Redis or network latency"
+}

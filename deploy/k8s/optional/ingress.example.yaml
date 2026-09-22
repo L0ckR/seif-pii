@@ -1,0 +1,25 @@
+# Not included in the base. Replace domain, class and TLS secret before applying.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: seif-api
+  namespace: seif
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 12m
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts: [seif.example.com]
+      secretName: seif-tls
+  rules:
+    - host: seif.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: seif-api
+                port:
+                  number: 80

@@ -1,0 +1,204 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seif-api
+  labels:
+    app.kubernetes.io/name: seif-api
+    app.kubernetes.io/part-of: seif
+spec:
+  replicas: 3
+  revisionHistoryLimit: 3
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: seif-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: seif-api
+        app.kubernetes.io/part-of: seif
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 45
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: seif-api
+                topologyKey: kubernetes.io/hostname
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: seif-api
+      containers:
+        - name: api
+          image: ghcr.io/l0ckr/seif-pii:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          env:
+            - name: SEIF_DEMO
+              value: "0"
+            - name: SEIF_HOST
+              value: "0.0.0.0"
+            - name: SEIF_PORT
+              value: "8000"
+            - name: SEIF_WORKERS
+              value: "1"
+            - name: SEIF_CPU_WORKERS
+              value: "2"
+            - name: SEIF_CONFIG
+              value: /etc/seif/policies.yaml
+            - name: SEIF_SENTINELS
+              value: redis-0.redis-headless:26379,redis-1.redis-headless:26379,redis-2.redis-headless:26379
+            - name: SEIF_SENTINEL_MASTER
+              value: seif-master
+            - name: SEIF_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: seif-secrets
+                  key: redis-password
+            - name: SEIF_SENTINEL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: seif-secrets
+                  key: redis-password
+            - name: SEIF_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: seif-secrets
+                  key: master-key
+            - name: SEIF_BANK_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: seif-secrets
+                  key: api-key
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+            limits:
+              cpu: "2"
+              memory: 1Gi
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+            failureThreshold: 120
+            timeoutSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+            failureThreshold: 2
+            timeoutSeconds: 3
+          # Liveness checks the HTTP listener, not Redis availability: an outage
+          # must remove readiness without restarting every healthy API process.
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 15
+            failureThreshold: 4
+            timeoutSeconds: 3
+          lifecycle:
+            preStop:
+              exec:
+                command: [python, -c, "import time; time.sleep(5)"]
+          volumeMounts:
+            - name: policies
+              mountPath: /etc/seif
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: policies
+          configMap:
+            name: seif-policies
+        - name: tmp
+          emptyDir:
+            medium: Memory
+            sizeLimit: 64Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: seif-api
+  labels:
+    app.kubernetes.io/name: seif-api
+    app.kubernetes.io/part-of: seif
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: seif-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: seif-api
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: seif-api
+  minReplicas: 2
+  maxReplicas: 8
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 65
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 30
+      policies:
+        - type: Pods
+          value: 2
+          periodSeconds: 60
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 60
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: seif-api
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: seif-api

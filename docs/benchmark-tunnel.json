@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "method": "open-loop correlation pairs; 2 offered HTTP requests/pair; no retries",
+  "transport": "aiohttp",
+  "event_loop": "uvloop",
+  "target_url": "https://left-rivers-emotions-doctor.trycloudflare.com",
+  "synthetic_data_only": true,
+  "configured_duration_seconds": 10.0,
+  "observed_elapsed_seconds_including_drain": 10.225,
+  "offered_http_rps": 50.0,
+  "max_concurrent_pairs": 30,
+  "achieved_attempted_http_rps": 48.9,
+  "achieved_successful_http_rps": 48.9,
+  "counts": {
+    "pairs_offered": 250,
+    "pairs_dispatched": 250,
+    "requests_attempted": 500,
+    "requests_successful": 500,
+    "pairs_verified": 250
+  },
+  "http_statuses": {
+    "200": 500
+  },
+  "errors": {},
+  "latency_ms_all_attempts": {
+    "p50": 127.355,
+    "p95": 157.958,
+    "p99": 315.823,
+    "max": 585.233
+  },
+  "client_scheduler_max_lag_ms": 1.071,
+  "limitations": [
+    "This is a local synthetic sample, not the organizer's closed evaluation dataset.",
+    "Reported throughput includes request completion after the scheduling window.",
+    "Client drops or significant scheduler lag mean the client could not offer the target load.",
+    "Fast responses do not establish PII detection quality or production availability."
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "method": "open-loop correlation pairs; 2 offered HTTP requests/pair; no retries",
+  "transport": "aiohttp",
+  "event_loop": "uvloop",
+  "target_url": "http://127.0.0.1:8766",
+  "synthetic_data_only": true,
+  "configured_duration_seconds": 15.0,
+  "observed_elapsed_seconds_including_drain": 15.134,
+  "offered_http_rps": 2000.0,
+  "max_concurrent_pairs": 200,
+  "achieved_attempted_http_rps": 1767.41,
+  "achieved_successful_http_rps": 1621.78,
+  "counts": {
+    "pairs_offered": 15000,
+    "pairs_dispatched": 14280,
+    "requests_attempted": 26748,
+    "requests_successful": 24544,
+    "pairs_verified": 12076,
+    "pairs_dropped_client_capacity": 720,
+    "pairs_mask_failed": 1812,
+    "pairs_unmask_failed": 392
+  },
+  "http_statuses": {
+    "200": 24544,
+    "429": 2204
+  },
+  "errors": {
+    "http_429": 2204
+  },
+  "latency_ms_all_attempts": {
+    "p50": 96.924,
+    "p95": 144.729,
+    "p99": 173.804,
+    "max": 1627.317
+  },
+  "client_scheduler_max_lag_ms": 8.113,
+  "limitations": [
+    "This is a local synthetic sample, not the organizer's closed evaluation dataset.",
+    "Reported throughput includes request completion after the scheduling window.",
+    "Client drops or significant scheduler lag mean the client could not offer the target load.",
+    "Fast responses do not establish PII detection quality or production availability."
+  ]
+}

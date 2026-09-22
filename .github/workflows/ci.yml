@@ -1,0 +1,72 @@
+name: Source quality and behavior
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  kubernetes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          kubectl kustomize deploy/k8s > /tmp/seif-base.yaml
+          kubectl kustomize deploy/k8s/overlays/production > /tmp/seif-production.yaml
+          curl -fsSL https://github.com/yannh/kubeconform/releases/download/v0.8.0/kubeconform-linux-amd64.tar.gz -o /tmp/kubeconform.tar.gz
+          tar -xzf /tmp/kubeconform.tar.gz -C /tmp kubeconform
+          /tmp/kubeconform -strict -summary -kubernetes-version 1.35.0 /tmp/seif-base.yaml /tmp/seif-production.yaml
+  container:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t seif-pii:ci .
+      - run: docker run --rm -e SEIF_DEMO=1 seif-pii:ci python -c "import sys; from seif.app import create_app; app=create_app(); assert not sys._is_gil_enabled()"
+      - run: |
+          docker run -d --name seif-smoke -e SEIF_DEMO=1 -e SEIF_WORKERS=1 -p 8765:8000 seif-pii:ci
+          for attempt in $(seq 1 20); do
+            if curl --fail http://127.0.0.1:8765/health; then exit 0; fi
+            sleep 1
+          done
+          docker logs seif-smoke
+          exit 1
+      - name: Publish private repository container
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          image_name="ghcr.io/${GITHUB_REPOSITORY,,}"
+          printf '%s' "$GHCR_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          docker tag seif-pii:ci "$image_name:1.0.0"
+          docker tag seif-pii:ci "$image_name:$GITHUB_SHA"
+          docker push "$image_name:1.0.0"
+          docker push "$image_name:$GITHUB_SHA"
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.14', '3.14t']
+    services:
+      redis:
+        image: redis:7.4-alpine
+        ports: ['6379:6379']
+        options: --health-cmd 'redis-cli ping' --health-interval 5s --health-timeout 3s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - run: pip install -r requirements.lock && pip install -e '.[dev]'
+      - run: sudo apt-get update && sudo apt-get install -y redis-server
+      - run: ruff check seif tests scripts
+      - run: pytest -q
+        env:
+          SEIF_TEST_REDIS_URL: redis://127.0.0.1:6379/15
+          SEIF_TEST_REDIS_SERVER: /usr/bin/redis-server
+      - run: python scripts/evaluate.py --output output/evaluation.json
+      - run: python scripts/package.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: seif-pii-source-${{ matrix.python }}
+          path: output/seif-pii-source.zip

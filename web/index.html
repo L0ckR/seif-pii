@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111b17">
+  <meta name="description" content="СЕЙФ — контекстная защита персональных данных перед отправкой в языковую модель. Интерактивная демонстрация API.">
+  <title>СЕЙФ — личное остаётся личным</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#demo">Перейти к демонстрации</a>
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="СЕЙФ, в начало"><span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i><i></i></span>СЕЙФ<span class="brand-dot" aria-hidden="true">●</span></a>
+      <nav aria-label="Основная навигация"><a href="#demo">Демонстрация</a><a href="#architecture">Как устроено</a><a class="nav-api" href="/openapi.json">API <span aria-hidden="true">↗</span></a></nav>
+      <span class="live-state" id="health-status"><span class="status-dot"></span><span id="health-label">Проверяем API</span></span>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="small-square"></span> PRIVACY INFRASTRUCTURE / 001</div>
+          <h1 id="hero-title">Данные работают.<br>Личное остаётся<br><span class="serif-accent">личным.</span><span class="mint-period">●</span></h1>
+          <p class="hero-description">Между вашим текстом и нейросетью — СЕЙФ.<br>Он находит персональные данные, защищает их<br class="desktop-break"> и возвращает, когда это нужно.</p>
+          <div class="hero-actions"><a class="button button-mint" href="#demo">Проверить свой текст <span aria-hidden="true">↗</span></a><a class="text-link" href="/openapi.json">Открыть API <span aria-hidden="true">↗</span></a></div>
+          <div class="hero-caption"><span class="tiny-lock" aria-hidden="true">⌑</span> Контекст имеет значение. Не каждое имя — секрет.</div>
+        </div>
+        <div class="flow-panel" aria-label="Схема: персональные данные проходят через СЕЙФ и поступают в модель в защищённом виде">
+          <div class="panel-topline"><span>КОНТУР ЗАЩИТЫ</span><span class="panel-id">SEIF / v1.0</span></div>
+          <div class="flow-top"><span class="data-pill">Иван Петров</span><span class="data-pill data-pill-orange">+7 900 123-45-67</span><span class="data-pill faint">user@example.org</span></div>
+          <svg class="flow-lines" viewBox="0 0 420 300" fill="none" aria-hidden="true"><defs><linearGradient id="wire" x1="210" y1="0" x2="210" y2="300" gradientUnits="userSpaceOnUse"><stop stop-color="#679d83" stop-opacity=".15"/><stop offset=".5" stop-color="#b7f4d1" stop-opacity=".8"/><stop offset="1" stop-color="#679d83" stop-opacity=".15"/></linearGradient></defs><path d="M65 0V72Q65 91 86 91H190Q210 91 210 112V183Q210 209 186 209H73Q65 209 65 227V300"/><path d="M210 0V300"/><path d="M355 0V72Q355 91 334 91H230Q210 91 210 112V183Q210 209 234 209H347Q355 209 355 227V300"/><circle class="traveler traveler-one" r="3.5" fill="#b7f4d1"/><circle class="traveler traveler-two" r="3.5" fill="#f4b693"/><circle class="traveler traveler-three" r="3.5" fill="#b7f4d1"/></svg>
+          <div class="vault-object" aria-hidden="true"><div class="vault-face"><div class="vault-wheel"><span></span><span></span><span></span></div><div class="vault-hinge hinge-top"></div><div class="vault-hinge hinge-bottom"></div><span class="vault-word">СЕЙФ</span><span class="vault-light"></span></div></div>
+          <div class="flow-bottom"><span class="token-pill">&lt;PERSON_1&gt;</span><span class="token-pill">&lt;PHONE_1&gt;</span><span class="token-pill">&lt;EMAIL_1&gt;</span></div>
+          <div class="flow-legend"><span><span class="legend-dot"></span> Полезный контекст</span><span class="legend-private">⌑ Личные данные внутри</span></div>
+          <div class="diagram-disclaimer">Иллюстрация маршрута · реальные результаты ниже</div>
+        </div>
+      </section>
+
+      <div class="principles-strip" aria-label="Принципы системы"><span><b>01</b> Учитывает контекст</span><span><b>02</b> Три способа защиты</span><span><b>03</b> Обратимые подстановки</span><span class="strip-note">Designed for trust.</span></div>
+
+      <section class="demo-section" id="demo" aria-labelledby="demo-title">
+        <div class="section-heading"><div><div class="eyebrow">01 / ПЕСОЧНИЦА</div><h2 id="demo-title">Попробуйте <span class="serif-accent">прямо здесь.</span></h2></div><p>Один текст. Три способа сохранить тайну.<br>Личные данные в примерах вымышлены.</p></div>
+        <div class="playground">
+          <div class="playground-toolbar">
+            <div class="example-tabs" role="tablist" aria-label="Пример текста"><button type="button" role="tab" aria-selected="true" tabindex="0" class="example-tab active" data-example="client" aria-controls="source-pane">Карточка клиента</button><button type="button" role="tab" aria-selected="false" tabindex="-1" class="example-tab" data-example="context" aria-controls="source-pane">Контекст важен</button><button type="button" role="tab" aria-selected="false" tabindex="-1" class="example-tab" data-example="foreign" aria-controls="source-pane">Foreign ID <span aria-hidden="true">↗</span></button></div>
+            <button class="connection-toggle" type="button" id="connection-toggle" aria-expanded="false" aria-controls="connection-settings"><span aria-hidden="true">⚙</span> Подключение</button>
+          </div>
+          <div class="connection-settings" id="connection-settings" hidden><label>Идентификатор системы <input id="system-id" type="text" autocomplete="off" spellcheck="false" placeholder="X-System-ID (необязательно)"></label><label>Ключ API <input id="api-key" type="password" autocomplete="off" spellcheck="false" placeholder="X-API-Key (необязательно)"></label><p>Параметры хранятся только в памяти этой страницы. API вызывается на текущем сервере.</p></div>
+          <div class="editor-grid">
+            <div class="editor-pane source-pane" id="source-pane"><div class="editor-heading"><span><span class="small-square muted-square"></span> Исходный текст</span><span class="mono editor-count" id="source-count">0 символов</span></div><label class="sr-only" for="source-text">Текст для защиты персональных данных</label><textarea id="source-text" spellcheck="false" maxlength="100000" aria-describedby="source-hint" placeholder="Вставьте текст, в котором нужно защитить персональные данные…"></textarea><div class="editor-footer"><span id="source-hint">Текст отправится в API этого сервиса</span><button class="plain-button" type="button" id="clear-button">Очистить <span aria-hidden="true">×</span></button></div></div>
+            <div class="editor-pane output-pane"><div class="editor-heading"><span><span class="small-square"></span> Защищённый текст</span><button class="copy-button" id="copy-button" type="button" disabled><span aria-hidden="true">⧉</span> Копировать</button></div><div class="output-content" id="output-area" aria-live="polite" aria-atomic="true"><div class="output-empty"><div class="empty-symbol" aria-hidden="true">⌑</div><p>Здесь будет текст,<br>которому можно доверить больше.</p><span>Выберите режим и нажмите «Защитить»</span></div></div><div class="editor-footer output-footer"><span id="result-status">Ожидает обработки</span><span class="mono" id="result-timing">— ms</span></div></div>
+          </div>
+          <div class="action-bar">
+            <fieldset class="mode-fieldset"><legend class="sr-only">Режим защиты</legend><label class="mode-option"><input type="radio" name="mode" value="token" checked><span>Токены</span></label><label class="mode-option"><input type="radio" name="mode" value="mask"><span>Маска</span></label><label class="mode-option"><input type="radio" name="mode" value="synthetic"><span>Синтетика</span></label></fieldset>
+            <span class="mode-help" id="mode-help">Именованные токены сохраняют структуру текста</span>
+            <button type="button" class="button button-outline restore-button" id="restore-button" disabled><span aria-hidden="true">↶</span> Восстановить</button><button type="button" class="button button-mint protect-button" id="protect-button">Защитить текст <span aria-hidden="true">↗</span></button>
+          </div>
+          <div class="demo-notice" id="demo-notice" role="status" hidden></div>
+        </div>
+        <div class="results-detail" id="results-detail" hidden>
+          <div class="details-heading"><h3>Что увидел СЕЙФ <span id="entity-total" class="count-badge">0</span></h3><span id="payload-meta" class="mono"></span></div>
+          <div class="analysis-grid"><div><div class="small-label">КОНТЕКСТ РАСПОЗНАВАНИЯ</div><div id="highlighted-source" class="highlighted-source"></div></div><div class="entity-details"><div class="small-label">ТИПЫ И ОБЪЯСНЕНИЯ</div><ul id="entities-list"></ul><p class="no-entities" id="no-entities" hidden>Защищаемые сущности не найдены. Публичные имена и реквизиты в подходящем контексте могут остаться в тексте.</p></div></div>
+        </div>
+        <div class="demo-footnote"><span aria-hidden="true">↳</span> Это работающий API: время и найденные сущности появляются только после запроса. Для первой проверки используйте примеры.</div>
+      </section>
+
+      <section class="architecture-section" id="architecture" aria-labelledby="architecture-title">
+        <div class="section-heading"><div><div class="eyebrow">02 / ВНУТРИ СЕЙФА</div><h2 id="architecture-title">Защита без <span class="serif-accent">потери смысла.</span></h2></div><p>Персональные данные меняют форму.<br>Задача для модели остаётся прежней.</p></div>
+        <div class="feature-grid">
+          <article class="feature-card context-card"><span class="feature-number">01 / CONTEXT</span><div class="mini-context" aria-hidden="true"><span class="context-untouched">Пушкин — автор романа</span><span class="context-sensitive">Клиент: <mark>Иван Петров</mark></span><span class="context-note">одинаковые слова ≠ одинаковый риск</span></div><h3>Сначала контекст.<br>Потом решение.</h3><p>Сочетаем шаблоны и контекстные признаки, чтобы различать личные данные, публичные сведения и реквизиты организаций.</p></article>
+          <article class="feature-card modes-card"><span class="feature-number">02 / TRANSFORM</span><div class="mini-modes" aria-hidden="true"><div><span>mask</span><code>██████████</code></div><div class="selected-mini"><span>token</span><code>&lt;PERSON_1&gt;</code></div><div><span>synthetic</span><code>Новое имя</code></div></div><h3>Режим под вашу<br>задачу.</h3><p>Скрывайте чувствительные фрагменты, заменяйте их токенами или синтетическими значениями для естественного текста.</p></article>
+          <article class="feature-card restore-card"><span class="feature-number">03 / RESTORE</span><div class="mini-restore" aria-hidden="true"><span>&lt;PERSON_1&gt;</span><div class="restore-orbit">↶</div><span>Иван Петров</span></div><h3>Вернуть данные.<br>Сохранить контроль.</h3><p>Идентификатор запроса связывает замену с оригиналом. Обратное преобразование выполняется через отдельный метод API.</p></article>
+        </div>
+      </section>
+
+      <section class="integration-section" aria-labelledby="integration-title"><div class="integration-copy"><div class="eyebrow">03 / API FIRST</div><h2 id="integration-title">Встраивается<br>в ваш <span class="serif-accent">процесс.</span></h2><p>Два основных метода — защита и восстановление.<br>Настройки доступа передаются в заголовках запроса.</p><a class="text-link" href="/openapi.json">Изучить спецификацию <span aria-hidden="true">↗</span></a></div><div class="code-card"><div class="code-header"><span><i></i><i></i><i></i></span><span>request.http</span><span>REST</span></div><pre><code><span class="code-comment"># 1. Защитить перед отправкой в LLM</span>
+<span class="code-method">POST</span> /v1/mask
+Content-Type: application/json
+
+{
+  <span class="code-key">"payload"</span>: <span class="code-value">"Клиент: Иван Петров"</span>,
+  <span class="code-key">"payload_id"</span>: <span class="code-value">"request-001"</span>,
+  <span class="code-key">"mode"</span>: <span class="code-value">"token"</span>
+}
+
+<span class="code-comment"># 2. Вернуть оригинал по идентификатору</span>
+<span class="code-method">POST</span> /v1/unmask</code></pre><div class="code-bottom"><span class="small-square"></span> Одна граница доверия. Понятный контракт.</div></div></section>
+      <section class="honesty-note"><span class="honesty-icon" aria-hidden="true">↗</span><div><h3>Проверяемое качество, а не красивые обещания.</h3><p>Точность и пропускная способность зависят от данных и окружения. Целевые показатели ТЗ проверяются отдельными тестами; демонстрация показывает фактический результат каждого запроса.</p></div><a href="/openapi.json" aria-label="Открыть документацию API">↗</a></section>
+    </main>
+    <footer><a class="brand footer-brand" href="#"><span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i><i></i></span>СЕЙФ</a><p>Меньше личного снаружи. Больше возможностей внутри.</p><span class="mono">PRIVACY, BY DESIGN.</span></footer>
+  </div>
+</body>
+</html>

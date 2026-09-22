@@ -1,0 +1,53 @@
+openapi: 3.0.3
+info:
+  title: СЕЙФ — контракт проверки персональных данных
+  version: 1.0.0
+paths:
+  /process:
+    post:
+      operationId: process
+      summary: Маскирование и демаскирование с корреляцией по payload_id
+      description: |
+        Первый новый payload_id маскирует. Точное совпадение с ранее возвращённой
+        маской восстанавливает исходный текст. Повтор исходного запроса возвращает
+        прежнюю маску. Повтор обратного запроса возвращает исходный текст.
+        Соответствия доступны в течение TTL; после него нужен новый payload_id.
+        В режиме demo заголовки не нужны. В restricted нужны X-System-ID и X-API-Key.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessRequest'
+      responses:
+        '200':
+          description: Успешная обработка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessResponse'
+        '429':
+          description: Перегрузка; повторить согласно Retry-After
+        '4XX':
+          description: Ошибка запроса или доступа
+        '5XX':
+          description: Защита недоступна; исходный текст не передаётся дальше
+components:
+  schemas:
+    ProcessRequest:
+      type: object
+      additionalProperties: false
+      required: [payload, payload_id]
+      properties:
+        payload:
+          type: string
+        payload_id:
+          type: string
+          minLength: 1
+          maxLength: 256
+    ProcessResponse:
+      type: object
+      required: [result]
+      properties:
+        result:
+          type: string

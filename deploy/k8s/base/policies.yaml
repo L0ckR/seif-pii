@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: seif-policies
+  labels:
+    app.kubernetes.io/part-of: seif
+data:
+  policies.yaml: |
+    systems:
+      bank-assistant:
+        enabled: true
+        api_key_env: SEIF_BANK_API_KEY
+        mode: token
+        allow_unmask: true
+        allowed_modes: [token, mask, synthetic]
+        rps: 2500
+        types: []
+        min_types: 1
+        required_types: []
+---
+# Deliberately disabled. Enable only once for an empty, NEW cluster.
+# This file is mounted, rather than captured as a startup environment variable.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-bootstrap
+  labels:
+    app.kubernetes.io/part-of: seif
+data:
+  allow: "false"

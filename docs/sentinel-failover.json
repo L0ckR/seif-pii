@@ -1,0 +1,19 @@
+{
+  "scenario": "Isolated 3 Redis + 3 authenticated Sentinel processes; quorum 2; primary killed",
+  "redis_nodes": 3,
+  "sentinel_nodes": 3,
+  "original_primary_port": 45007,
+  "promoted_primary_port": 47641,
+  "recovery_seconds": 1.427,
+  "same_vault_and_client_after_failover": true,
+  "record_verified_on_both_replicas_before_failure": true,
+  "redis_payload_ciphertext_only": true,
+  "http_process_roundtrip_exact_after_failover": true,
+  "new_http_writes_after_failover": true,
+  "first_writer_preserved": true,
+  "limitations": [
+    "Loopback processes, not Kubernetes or cross-host network failure.",
+    "HTTP contract exercised through ASGI transport, not an external load generator.",
+    "Replication was verified before primary termination; asynchronous replication can lose recent acknowledged writes."
+  ]
+}

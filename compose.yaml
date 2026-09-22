@@ -1,0 +1,37 @@
+services:
+  api:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      SEIF_REDIS_URL: redis://redis:6379/0
+    depends_on:
+      redis:
+        condition: service_healthy
+    ports: ["127.0.0.1:8765:8000"]
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 1g
+    logging:
+      options:
+        max-size: 10m
+        max-file: '3'
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2)"]
+      interval: 15s
+      timeout: 3s
+      retries: 3
+  redis:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+    # No disk persistence. Redis sees only AES-GCM ciphertext and HMAC keys.
+    command: [redis-server, --save, "", --appendonly, "no", --maxmemory, 1gb, --maxmemory-policy, noeviction]
+    expose: ["6379"]
+    mem_limit: 1200m
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 5s
+      timeout: 2s
+      retries: 10
