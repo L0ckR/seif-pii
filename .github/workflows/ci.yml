@@ -21,16 +21,62 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
-      - run: docker build -f Dockerfile.ner -t seif-pii-ner:ci .
+      - name: Extract standalone service archive
+        run: |
+          python3 scripts/package.py
+          archive_dir=$(mktemp -d "$RUNNER_TEMP/seif-ner-archive.XXXXXX")
+          python3 -m zipfile -e output/seif-pii-source.zip "$archive_dir"
+          printf 'SEIF_ARCHIVE_DIR=%s\n' "$archive_dir" >> "$GITHUB_ENV"
+      - name: Build NER using only the extracted archive
+        run: docker build -f "$SEIF_ARCHIVE_DIR/Dockerfile.ner" -t seif-pii-ner:ci "$SEIF_ARCHIVE_DIR"
       - name: Check real Russian model behind authenticated endpoint
         run: |
-          docker run -d --name ner-smoke -e SEIF_NER_TOKEN=ci-only-test-key -e SEIF_NER_WORKERS=1 -p 127.0.0.1:8770:8770 seif-pii-ner:ci
+          python3 - <<'PY'
+          import os
+          import secrets
+          from pathlib import Path
+
+          destination = Path(os.environ["RUNNER_TEMP"]) / "ner-smoke.env"
+          with destination.open("x") as stream:
+              os.chmod(destination, 0o600)
+              stream.write(f"SEIF_NER_TOKEN={secrets.token_urlsafe(32)}\nSEIF_NER_WORKERS=1\n")
+          PY
+          docker run -d --name ner-smoke --env-file "$RUNNER_TEMP/ner-smoke.env" -p 127.0.0.1:8770:8770 seif-pii-ner:ci
           for attempt in $(seq 1 60); do
             if curl --fail --silent http://127.0.0.1:8770/health; then break; fi
             sleep 1
           done
-          curl --fail --silent http://127.0.0.1:8770/analyze -H 'Authorization: Bearer ci-only-test-key' -H 'Content-Type: application/json' -d '{"text":"Передайте заявление Дине Шварц."}' > /tmp/ner-result.json
-          python3 -c "import json; r=json.load(open('/tmp/ner-result.json')); assert r['entities'] and all(set(e)=={'start','end','score','entity_type'} for e in r['entities'])"
+          docker exec -i ner-smoke python - <<'PY'
+          import json
+          import os
+          from urllib.error import HTTPError
+          from urllib.request import Request, urlopen
+
+          data = json.dumps({"text": "Передайте заявление Дине Шварц."}).encode()
+          request = Request("http://127.0.0.1:8770/analyze", data=data,
+                            headers={"Content-Type": "application/json"})
+          try:
+              urlopen(request, timeout=10)
+          except HTTPError as error:
+              assert error.code == 401, error.code
+          else:
+              raise AssertionError("NER allowed an unauthenticated request")
+          request.add_header("Authorization", "Bearer " + os.environ["SEIF_NER_TOKEN"])
+          with urlopen(request, timeout=30) as response:
+              result = json.load(response)
+          assert any(entity["entity_type"] == "PERSON" for entity in result["entities"])
+          assert all(set(entity) == {"start", "end", "score", "entity_type"}
+                     for entity in result["entities"])
+          print("Standalone archive NER image: real model and authentication passed")
+          PY
+      - name: NER diagnostics on failure
+        if: failure()
+        run: docker logs ner-smoke || true
+      - name: Clean up NER smoke container
+        if: always()
+        run: |
+          docker rm -f ner-smoke || true
+          rm -f "$RUNNER_TEMP/ner-smoke.env"
       - name: Publish optional NER image
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
@@ -49,16 +95,128 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
-      - run: docker build -t seif-pii:ci .
+      - name: Extract standalone service archive
+        run: |
+          python3 scripts/package.py
+          archive_dir=$(mktemp -d "$RUNNER_TEMP/seif-api-archive.XXXXXX")
+          python3 -m zipfile -e output/seif-pii-source.zip "$archive_dir"
+          printf 'SEIF_ARCHIVE_DIR=%s\n' "$archive_dir" >> "$GITHUB_ENV"
+      - name: Build API using only the extracted archive
+        run: docker build -t seif-pii:ci "$SEIF_ARCHIVE_DIR"
       - run: docker run --rm -e SEIF_DEMO=1 seif-pii:ci python -c "import sys; from seif.app import create_app; app=create_app(); assert not sys._is_gil_enabled()"
       - run: |
-          docker run -d --name seif-smoke -e SEIF_DEMO=1 -e SEIF_WORKERS=1 -p 8765:8000 seif-pii:ci
+          docker run -d --name seif-smoke -e SEIF_DEMO=1 -e SEIF_WORKERS=1 -p 127.0.0.1:8765:8000 seif-pii:ci
           for attempt in $(seq 1 20); do
-            if curl --fail http://127.0.0.1:8765/health; then exit 0; fi
+            if curl --fail http://127.0.0.1:8765/health; then
+              docker rm -f seif-smoke
+              exit 0
+            fi
             sleep 1
           done
           docker logs seif-smoke
           exit 1
+      - name: Prepare isolated Compose integration with fresh credentials
+        run: |
+          python3 - <<'PY'
+          import base64
+          import os
+          import secrets
+          from pathlib import Path
+
+          archive = Path(os.environ["SEIF_ARCHIVE_DIR"])
+          values = {
+              "SEIF_MASTER_KEY": base64.b64encode(secrets.token_bytes(32)).decode(),
+              "SEIF_DEMO_API_KEY": secrets.token_urlsafe(32),
+              "SEIF_NER_TOKEN": secrets.token_urlsafe(32),
+              "SEIF_DEMO": "0",
+              "SEIF_WORKERS": "1",
+          }
+          destination = archive / ".env"
+          with destination.open("x") as stream:
+              os.chmod(destination, 0o600)
+              stream.write("".join(f"{name}={value}\n" for name, value in values.items()))
+          override = Path(os.environ["RUNNER_TEMP"]) / "seif-compose-ci.yaml"
+          override.write_text(
+              "services:\n"
+              "  api:\n"
+              "    image: seif-pii:ci\n"
+              "  ner:\n"
+              "    image: seif-pii-ner:archive-ci\n"
+              "    environment:\n"
+              "      SEIF_NER_WORKERS: '1'\n"
+          )
+          PY
+      - name: Start archived Compose stack with Redis and the real Russian model
+        run: |
+          cd "$SEIF_ARCHIVE_DIR"
+          docker compose -p seif-archive-ci -f compose.yaml -f compose.ner.yaml -f "$RUNNER_TEMP/seif-compose-ci.yaml" build ner
+          docker compose -p seif-archive-ci -f compose.yaml -f compose.ner.yaml -f "$RUNNER_TEMP/seif-compose-ci.yaml" up -d --no-build --wait --wait-timeout 180
+      - name: Check archived hybrid API authentication and reversible protection
+        run: |
+          cd "$SEIF_ARCHIVE_DIR"
+          docker compose -p seif-archive-ci -f compose.yaml -f compose.ner.yaml -f "$RUNNER_TEMP/seif-compose-ci.yaml" exec -T api python - <<'PY'
+          import json
+          import os
+          from urllib.error import HTTPError
+          from urllib.request import Request, urlopen
+
+          api = "http://127.0.0.1:8000"
+          headers = {"X-System-ID": "demo", "X-API-Key": os.environ["SEIF_DEMO_API_KEY"]}
+
+          def request(base, path, body=None, credentials=None):
+              data = json.dumps(body).encode() if body is not None else None
+              request_headers = {"Content-Type": "application/json", **(credentials or {})}
+              call = Request(base + path, data=data, headers=request_headers)
+              try:
+                  with urlopen(call, timeout=30) as response:
+                      return response.status, json.load(response)
+              except HTTPError as error:
+                  return error.code, None
+
+          status, health = request(api, "/health")
+          assert status == 200 and health["status"] == "ok", health
+          assert health["mode"] == "restricted" and health["storage"] == "redis", health
+          assert health["detector_profile"] == "hybrid", health
+          assert health["free_threaded"] and not health["gil_enabled"], health
+          assert request(api, "/")[0] == 404
+          assert request(api, "/v1/types")[0] == 200
+
+          text = "Передайте заявление Дине Шварц. Email: package@example.invalid."
+          body = {"payload": text, "payload_id": "archive-compose-smoke"}
+          assert request(api, "/process", body)[0] == 403
+          assert request(api, "/process", body, {"X-System-ID": "demo"})[0] == 401
+          status, masked = request(api, "/process", body, headers)
+          assert status == 200 and set(masked) == {"result"}, masked
+          assert "Дине Шварц" not in masked["result"]
+          assert "package@example.invalid" not in masked["result"]
+          status, restored = request(api, "/process", {**body, "payload": masked["result"]}, headers)
+          assert status == 200 and restored == {"result": text}, restored
+
+          ner = os.environ["SEIF_NER_URL"]
+          assert request(ner, "/analyze", {"text": text})[0] == 401
+          status, analysis = request(ner, "/analyze", {"text": text},
+                                     {"Authorization": "Bearer " + os.environ["SEIF_NER_TOKEN"]})
+          assert status == 200 and any(entity["entity_type"] == "PERSON"
+                                       for entity in analysis["entities"]), analysis
+          print("Standalone archive: restricted hybrid API, Redis, real NER and mask/restore passed")
+          PY
+      - name: Archive integration diagnostics on failure
+        if: failure()
+        run: |
+          docker logs seif-smoke || true
+          if [ -f "$RUNNER_TEMP/seif-compose-ci.yaml" ] && [ -d "${SEIF_ARCHIVE_DIR:-}" ]; then
+            cd "$SEIF_ARCHIVE_DIR"
+            docker compose -p seif-archive-ci -f compose.yaml -f compose.ner.yaml -f "$RUNNER_TEMP/seif-compose-ci.yaml" logs --no-color || true
+          fi
+      - name: Clean up archive integration containers and credentials
+        if: always()
+        run: |
+          docker rm -f seif-smoke || true
+          if [ -f "$RUNNER_TEMP/seif-compose-ci.yaml" ] && [ -d "${SEIF_ARCHIVE_DIR:-}" ]; then
+            cd "$SEIF_ARCHIVE_DIR"
+            docker compose -p seif-archive-ci -f compose.yaml -f compose.ner.yaml -f "$RUNNER_TEMP/seif-compose-ci.yaml" down --volumes --remove-orphans || true
+            rm -f .env
+          fi
       - name: Publish private repository container
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
@@ -111,10 +269,13 @@ jobs:
           cache: pip
       - run: pip install -r requirements.lock && pip install -e '.[dev]'
       - run: git diff --check
-      - run: python scripts/package.py
+      - name: Archive the full source scope for code-quality analysis
+        run: |
+          mkdir -p output
+          git archive --format=zip --output=output/seif-pii-quality-source.zip HEAD seif scripts tests deploy pyproject.toml
       - name: Generate GitLab Code Quality reports
         run: |
-          python scripts/code_quality.py output/seif-pii-source.zip \
+          python scripts/code_quality.py output/seif-pii-quality-source.zip \
             --ruff ruff --output local-data/code-analysis/ci
       - name: Enforce reviewed project lint policy
         run: ruff check seif tests scripts deploy

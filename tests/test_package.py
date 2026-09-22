@@ -1,11 +1,17 @@
-"""The submission must be reproducible and exclude local data and linked files."""
+"""The submission must start independently and fail closed on missing files."""
+import ast
+import hashlib
+import os
 import runpy
-from pathlib import Path
+import shutil
+import subprocess
+import sys
+import tomllib
 from zipfile import ZipFile
 
 import pytest
 
-from scripts.package import build_archive
+from scripts.package import REQUIRED_FILES, ROOT, TEMPLATES, build_archive
 
 
 def put(root, name, content="example"):
@@ -15,65 +21,196 @@ def put(root, name, content="example"):
     return path
 
 
-def test_only_source_formats_are_included_without_traversing_links(tmp_path):
+@pytest.fixture
+def project(tmp_path):
     root = tmp_path / "project"
-    expected = {"README.md", ".env.example", "seif/app.py", "config/policies.yaml",
-                "deploy/ner/requirements-ner.txt", "docs/check.json", "web/app.js", "scripts/run.sh"}
-    for name in expected:
-        put(root, name)
-    for name in (".env", "seif/.env", "seif/dump.rdb", "seif/__pycache__/cache.py",
-                 "scripts/venv/secret.py", "local-data/requests.jsonl", "output/credentials.json",
-                 "web/database.sqlite", "deploy/key.pem", "docs/private.zip"):
-        put(root, name, "DO NOT INCLUDE")
-    secret = put(tmp_path, "outside/secret.py", "LINKED PRIVATE DATA")
-    (root / "seif/linked.py").symlink_to(secret)
-    (root / "scripts/linked").symlink_to(secret.parent, target_is_directory=True)
-    archive = build_archive(root, root / "output/source.zip")
+    shutil.copytree(ROOT / "seif", root / "seif", ignore=shutil.ignore_patterns("__pycache__"))
+    for name in (*REQUIRED_FILES, *TEMPLATES.values()):
+        path = root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / name, path)
+    return root
+
+
+def test_service_only_with_complete_runtime_and_checksums(project):
+    excluded = (".env", "seif/.env", "seif/dump.rdb", "seif/__pycache__/cache.py",
+                "tests/test_app.py", "scripts/benchmark.py", "scripts/package.py",
+                "local-data/requests.jsonl", "output/credentials.json", "web/app.js",
+                "deploy/k8s/create-secrets.py", "docs/check.json", ".github/workflows/ci.yml")
+    for name in excluded:
+        put(project, name, "PRIVATE DEVELOPMENT FILE")
+    archive = build_archive(project, project / "output/source.zip")
     with ZipFile(archive) as packaged:
-        assert set(packaged.namelist()) == expected
-        assert all(b"PRIVATE" not in packaged.read(name) for name in packaged.namelist())
+        names = set(packaged.namelist())
+        expected = {path.relative_to(ROOT).as_posix() for path in (ROOT / "seif").glob("*.py")}
+        expected.update(REQUIRED_FILES)
+        expected.update({"README.md", ".env.example", ".dockerignore", "SHA256SUMS"})
+        assert names == expected
+        assert names.isdisjoint(excluded)
+        assert all(b"PRIVATE DEVELOPMENT FILE" not in packaged.read(name) for name in names)
+        hashes = dict(line.split("  ")[::-1] for line in packaged.read("SHA256SUMS").decode().splitlines())
+        assert set(hashes) == names - {"SHA256SUMS"}
+        for name, digest in hashes.items():
+            assert hashlib.sha256(packaged.read(name)).hexdigest() == digest
+        metadata = tomllib.loads(packaged.read("pyproject.toml").decode())
+        original = tomllib.loads((ROOT / "pyproject.toml").read_text())
+        assert metadata["project"]["dependencies"] == original["project"]["dependencies"]
+        assert "optional-dependencies" not in metadata["project"]
+        assert "COPY web" not in packaged.read("Dockerfile").decode()
+        assert not any(line and not line.startswith("#") and line.split("=")[1]
+                       for line in packaged.read(".env.example").decode().splitlines()
+                       if line.startswith(("SEIF_MASTER_KEY=", "SEIF_DEMO_API_KEY=", "SEIF_NER_TOKEN=")))
 
 
-def test_archive_is_reproducible_across_file_creation_order_and_mtime(tmp_path):
-    left, right = tmp_path / "left", tmp_path / "right"
-    names = ["README.md", "seif/app.py", "scripts/run.sh"]
-    for root, order in ((left, names), (right, list(reversed(names)))):
-        for name in order:
-            put(root, name, name)
-    a = build_archive(left, left / "output/source.zip")
-    b = build_archive(right, right / "output/source.zip")
-    assert a.read_bytes() == b.read_bytes()
-    with ZipFile(a) as archive:
-        assert archive.getinfo("scripts/run.sh").external_attr >> 16 == 0o100755
+def test_runtime_unchanged_except_optional_static_ui(project):
+    archive = build_archive(project, project / "output/source.zip")
+    with ZipFile(archive) as packaged:
+        for name in packaged.namelist():
+            if name.endswith(".py") and name != "seif/app.py":
+                assert packaged.read(name) == (project / name).read_bytes()
+        original = ast.parse((project / "seif/app.py").read_text())
+        original.body = [node for node in original.body if not (
+            isinstance(node, ast.ImportFrom) and node.module in {"pathlib", "fastapi.staticfiles"})]
+        factory = next(node for node in original.body if isinstance(node, ast.FunctionDef) and node.name == "create_app")
+        assert isinstance(factory.body[-3], ast.Assign) and factory.body[-3].targets[0].id == "web"
+        assert isinstance(factory.body[-2], ast.Expr) and factory.body[-2].value.func.attr == "mount"
+        del factory.body[-3:-1]
+        assert ast.dump(original) == ast.dump(ast.parse(packaged.read("seif/app.py")))
 
 
-def test_failed_build_preserves_previous_archive_and_removes_temporary(tmp_path, monkeypatch):
-    put(tmp_path, "seif/app.py")
-    target = put(tmp_path, "output/source.zip", "previous archive")
+@pytest.mark.parametrize("name", [*REQUIRED_FILES, *TEMPLATES.values(), "seif/detector.py", "seif/async_callbacks.py"])
+def test_missing_runtime_dependency_preserves_previous_zip(project, name):
+    target = put(project, "output/source.zip", "previous archive")
+    (project / name).unlink()
+    with pytest.raises(ValueError, match="Missing"):
+        build_archive(project, target)
+    assert target.read_text() == "previous archive"
+    assert list(target.parent.iterdir()) == [target]
+
+
+@pytest.mark.parametrize("name", ["seif/app.py", "seif/detector.py", "config/policies.yaml", "deploy/service/README.md"])
+def test_linked_runtime_file_is_rejected(project, name, tmp_path):
+    path = project / name
+    outside = tmp_path / "outside.py"
+    path.rename(outside)
+    path.symlink_to(outside)
+    with pytest.raises(ValueError, match="symbolic link"):
+        build_archive(project, project / "output/source.zip")
+
+
+def test_linked_required_directory_is_rejected(project, tmp_path):
+    outside = tmp_path / "outside"
+    (project / "config").rename(outside)
+    (project / "config").symlink_to(outside, target_is_directory=True)
+    with pytest.raises(ValueError, match="symbolic link"):
+        build_archive(project, project / "output/source.zip")
+
+
+@pytest.mark.parametrize(("file", "extra", "message"), [
+    ("seif/detector.py", "\nfrom .missing import detect\n", "Missing local import"),
+    ("seif/detector.py", "\nimport scripts.evaluate\n", "Missing local import"),
+    ("seif/detector.py", "\nfrom seif import missing\n", "Missing local import"),
+    ("seif/detector.py", "\nfrom . import missing\n", "Missing local import"),
+    ("Dockerfile.ner", "\nCOPY models ./models\n", "Missing Docker COPY"),
+    ("Dockerfile.ner", "\n  copy models ./models\n", "Missing Docker COPY"),
+    ("Dockerfile.ner", '\nCOPY ["models", "./models"]\n', "recipe needs review"),
+    ("seif/app.py", "\nRESOURCE = Path('some-resource')\n", "removed UI import"),
+])
+def test_new_unpackaged_dependency_rejected(project, file, extra, message):
+    path = project / file
+    path.write_text(path.read_text() + extra)
+    with pytest.raises(ValueError, match=message):
+        build_archive(project, project / "output/source.zip")
+
+
+def test_changed_ui_mount_requires_packaging_review(project):
+    path = project / "seif/app.py"
+    path.write_text(path.read_text().replace('name="web")', 'name="demo")'))
+    with pytest.raises(ValueError, match="recipe needs review"):
+        build_archive(project, project / "output/source.zip")
+
+
+def test_package_imports_support_existing_submodules_and_exports(project):
+    path = project / "seif/detector.py"
+    path.write_text(path.read_text() + "\nfrom seif import person_fields, VERSION\nfrom scripts import serve\n")
+    package = project / "seif/__init__.py"
+    package.write_text(package.read_text() + '\nVERSION = "example"\n')
+    assert build_archive(project, project / "output/source.zip").is_file()
+
+
+def test_archive_is_reproducible_across_mtime_changes(project):
+    first = build_archive(project, project / "output/first.zip")
+    for path in project.rglob("*"):
+        if path.is_file():
+            os.utime(path, (1_700_000_000, 1_700_000_000))
+    second = build_archive(project, project / "output/second.zip")
+    assert first.read_bytes() == second.read_bytes()
+
+
+def test_failed_build_preserves_previous_archive_and_removes_temporary(project, monkeypatch):
+    target = put(project, "output/source.zip", "previous archive")
 
     def fail(*_args, **_kwargs):
         raise OSError("simulated write failure")
 
     monkeypatch.setattr(ZipFile, "writestr", fail)
     with pytest.raises(OSError, match="simulated"):
-        build_archive(tmp_path, target)
+        build_archive(project, target)
     assert target.read_text() == "previous archive"
     assert list(target.parent.iterdir()) == [target]
 
 
-def test_output_cannot_replace_source_or_follow_symlink(tmp_path):
-    source = put(tmp_path, "seif/app.py", "original source")
+def test_output_cannot_replace_source_or_follow_symlink(project):
+    source = project / "seif/app.py"
+    original = source.read_bytes()
     with pytest.raises(ValueError):
-        build_archive(tmp_path, tmp_path / "seif/../seif/app.py")
-    link = tmp_path / "submission.zip"
+        build_archive(project, project / "seif/../seif/app.py")
+    link = project / "submission.zip"
     link.symlink_to(source)
     with pytest.raises(ValueError):
-        build_archive(tmp_path, link)
-    assert source.read_text() == "original source"
+        build_archive(project, link)
+    assert source.read_bytes() == original
 
 
 def test_import_does_not_create_or_replace_archive(tmp_path):
-    source = Path(__file__).resolve().parents[1] / "scripts/package.py"
-    copied = put(tmp_path, "scripts/package.py", source.read_text())
+    copied = put(tmp_path, "scripts/package.py", (ROOT / "scripts/package.py").read_text())
     runpy.run_path(str(copied), run_name="package_import_test")
     assert not (tmp_path / "output").exists()
+
+
+def test_extracted_service_starts_without_checkout_or_environment(project, tmp_path):
+    archive = build_archive(project, project / "output/source.zip")
+    isolated = tmp_path / "standalone"
+    with ZipFile(archive) as packaged:
+        packaged.extractall(isolated)
+    shutil.rmtree(project)
+    program = '''
+import os
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path.cwd()))
+import seif.app
+from scripts.ner_service import create_app as ner_app, NerSettings
+from fastapi.testclient import TestClient
+assert Path(seif.app.__file__).resolve().parent == Path.cwd() / 'seif'
+os.environ['SEIF_DEMO'] = '1'
+os.environ['SEIF_DEMO_API_KEY'] = ''
+with TestClient(seif.app.create_app()) as client:
+    assert client.get('/health').status_code == 200
+    assert client.get('/').status_code == 404
+    assert client.get('/v1/types').status_code == 200
+    text = 'Email: package@example.com'
+    response = client.post('/process', json={'payload': text, 'payload_id': 'isolated'})
+    assert response.status_code == 200 and response.json()['result'] != text
+    restored = client.post('/process', json={'payload': response.json()['result'], 'payload_id': 'isolated'})
+    assert restored.status_code == 200 and restored.json()['result'] == text
+with TestClient(ner_app(NerSettings(demo=True), analyzer_factory=lambda: object())) as client:
+    assert client.get('/health').status_code == 200
+    assert client.post('/analyze', json={'text': ''}).json() == {'entities': []}
+    assert client.post('/analyze', json={'text': 1}).status_code == 422
+'''
+    env = {key: value for key, value in os.environ.items()
+           if not key.startswith(("SEIF_", "PYTHON")) and key != "PROMETHEUS_MULTIPROC_DIR"}
+    result = subprocess.run([sys.executable, "-I", "-c", program], cwd=isolated, env=env,
+                            capture_output=True, text=True, timeout=30, check=False)
+    assert result.returncode == 0, result.stderr
