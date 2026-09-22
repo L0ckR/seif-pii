@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="slide5-title slide5-desc"><title id="slide5-title">Детекция: правила и RuBERT в одном контракте</title><desc id="slide5-desc">RuBERT экспериментальный профиль. Исходный Unicode-текст без нормализации поступает в правила, затем в опциональный private NER. 21 нативный тип модели отображается в 14 транспортных типов без изменения исходных границ. Контекстное объединение и политика выбирают spans, затем применяются mask, token или synthetic. Ошибка NER завершает запрос 503.</desc>
+<defs><marker id="slide5-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 8 4 L 0 8" fill="none" stroke="#c0f0c5" stroke-width="1.5"/></marker><marker id="slide5-arrow-orange" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 8 4 L 0 8" fill="none" stroke="#eab291" stroke-width="1.5"/></marker></defs>
+<rect x="0" y="0" width="1600" height="900" rx="2" fill="#111b17"/>
+<rect x="64" y="37" width="8" height="8" rx="2" fill="#c0f0c5"/>
+<text x="86" y="47" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="17" font-weight="400" text-anchor="start" letter-spacing="2">СЕЙФ / АРХИТЕКТУРА</text>
+<text x="1536" y="47" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="17" font-weight="400" text-anchor="end">23.09.2026</text>
+<text x="64" y="106" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="44" font-weight="500" text-anchor="start">Детекция: правила и RuBERT в одном контракте</text>
+<text x="64" y="147" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Экспериментальный GPU-профиль · исходные Unicode-координаты сохраняются до самой замены.</text>
+<rect x="64" y="265" width="252" height="153" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<rect x="64" y="265" width="3" height="153" rx="0" fill="#c0f0c5"/>
+<text x="88" y="303" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">Исходный текст</text>
+<text x="88" y="337" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">Unicode code points</text>
+<text x="88" y="365" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">без нормализации</text>
+<rect x="383" y="236" width="310" height="151" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<rect x="383" y="236" width="3" height="151" rx="0" fill="#c0f0c5"/>
+<text x="407" y="274" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">Правила РФ / СНГ</text>
+<text x="407" y="308" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">формат и проверки сумм</text>
+<text x="407" y="336" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">контекст и типы документов</text>
+<rect x="383" y="498" width="310" height="166" rx="2" fill="#1c2a22" stroke="#c0f0c5" stroke-width="1.2" stroke-dasharray="7 6"/>
+<rect x="383" y="498" width="3" height="166" rx="0" fill="#c0f0c5"/>
+<text x="407" y="536" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">RuBERT / TensorRT</text>
+<text x="407" y="570" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">FP16 · word decoder</text>
+<text x="407" y="598" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">21 нативный тип</text>
+<rect x="760" y="498" width="310" height="166" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<rect x="760" y="498" width="3" height="166" rx="0" fill="#c0f0c5"/>
+<text x="784" y="536" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">Контракт: 21 → 14</text>
+<text x="784" y="570" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">ФИО → PERSON</text>
+<text x="784" y="598" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">адрес → LOCATION</text>
+<text x="784" y="626" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">границы сохраняются</text>
+<rect x="1137" y="236" width="399" height="278" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<rect x="1137" y="236" width="3" height="278" rx="0" fill="#c0f0c5"/>
+<text x="1161" y="267" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="17" font-weight="400" text-anchor="start">СЛИЯНИЕ КАНДИДАТОВ</text>
+<text x="1161" y="310" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="28" font-weight="500" text-anchor="start">Контекст + политика</text>
+<text x="1161" y="352" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">валидация типа и координат</text>
+<text x="1161" y="386" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">приоритеты и пересечения</text>
+<text x="1161" y="420" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">разрешённые tenant-типы</text>
+<text x="1161" y="454" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">упорядоченные spans</text>
+<path d="M 316 312 H 383" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#slide5-arrow)"/>
+<path d="M 190 418 V 581 H 383" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" stroke-dasharray="6 5" marker-end="url(#slide5-arrow)"/>
+<path d="M 693 312 H 1137" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#slide5-arrow)"/>
+<text x="767" y="292" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="17" font-weight="400" text-anchor="start">rule spans</text>
+<path d="M 693 581 H 760" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#slide5-arrow)"/>
+<path d="M 1070 581 H 1101 V 421 H 1137" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#slide5-arrow)"/>
+<rect x="1137" y="625" width="399" height="160" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<text x="1161" y="667" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="28" font-weight="500" text-anchor="start">Преобразование</text>
+<rect x="1161" y="696" width="94" height="28" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<text x="1173" y="716" fill="#c0f0c5" font-family="Consolas, Liberation Mono, monospace" font-size="16" font-weight="400" text-anchor="start">mask</text>
+<rect x="1267" y="696" width="105" height="28" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<text x="1279" y="716" fill="#c0f0c5" font-family="Consolas, Liberation Mono, monospace" font-size="16" font-weight="400" text-anchor="start">token</text>
+<rect x="1384" y="696" width="128" height="28" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<text x="1396" y="716" fill="#c0f0c5" font-family="Consolas, Liberation Mono, monospace" font-size="16" font-weight="400" text-anchor="start">synthetic</text>
+<text x="1161" y="760" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="400" text-anchor="start">выход: защищённый текст + замены</text>
+<path d="M 1337 514 V 625" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#slide5-arrow)"/>
+<text x="1360" y="575" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="17" font-weight="400" text-anchor="start">spans</text>
+<rect x="64" y="713" width="1006" height="72" rx="2" fill="#17231d" stroke="#334138" stroke-width="1.2"/>
+<text x="88" y="743" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Выполнение: правила → NER → объединение → политика.</text>
+<text x="88" y="770" fill="#eab291" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="400" text-anchor="start">Ошибка или таймаут включённого NER → 503; частичный результат не выдаётся.</text>
+<text x="64" y="826" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">Одна и та же политика на всех датасетах. NER дополняет правила; числовые и контекстные проверки сохраняются.</text>
+<rect x="0" y="830" width="1600" height="70" rx="0" fill="#111b17" stroke="none" stroke-width="1" opacity="1"/><line x1="64" y1="830" x2="1536" y2="830" stroke="#334138" stroke-width="1"/><text x="64" y="866" font-size="15" font-family="Segoe UI, Arial, DejaVu Sans, sans-serif" font-weight="400" font-style="normal" text-anchor="start" fill="#93a397" data-max-width="1350">Источники: seif/detector.py · seif/rubert_decoder.py · seif/ner_contract.py</text><text x="1536" y="866" font-size="16" font-family="Consolas, DejaVu Sans Mono, monospace" font-weight="400" font-style="normal" text-anchor="end" fill="#93a397">05 / 16</text></svg>

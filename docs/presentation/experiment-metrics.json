@@ -1,0 +1,870 @@
+{
+  "schema_version": 1,
+  "prepared_date": "2026-09-23",
+  "purpose": "Проверенные метрики для архитектурной web-презентации: аудит сохранённых экспериментов и CPU replay GLiNER/spaCy с текущими правилами; без нового модельного inference или HTTP-нагрузки.",
+  "metric_definitions": {
+    "full_mask_f1": "Micro F1 по замаскированным буквам и цифрам исходного текста; все gold-типы и все предсказания. Тип и точные границы сущности не требуются.",
+    "exact_f1_common14": "Точное совпадение типа семейства, start и end; исходные gold-границы RedMadRobot; предсказания вне 14 семейств исключены явно для всех систем.",
+    "exact_f1_all_predictions": "Те же исходные границы; предсказания вне таксономии сохраняются как FP.",
+    "native_inference": "Вызовы локальной модели без полного HTTP→NER→маскирование→хранилище цикла; не RPS сервиса.",
+    "http_rps": "Успешные HTTP запросы маскирования в локальном closed-loop тесте. Каждый запрос выполнил реальный NER; нет prediction cache. Это наблюдение, не максимальная ёмкость и не SLA."
+  },
+  "corpora": [
+    {
+      "id": "organizer",
+      "label": "Organizer AI silver",
+      "cases": 446,
+      "certain": 329,
+      "uncertain": 117,
+      "ground_truth": "Предварительная AI-разметка, не официальный эталон организаторов."
+    },
+    {
+      "id": "pii",
+      "label": "HiveTrace PII-Bench",
+      "cases": 1810,
+      "splits": {
+        "domain": 900,
+        "entity": 910
+      }
+    },
+    {
+      "id": "redmadrobot",
+      "label": "RedMadRobot",
+      "cases": 2839,
+      "excluded_alignment_cases": 2
+    }
+  ],
+  "global_caveats": [
+    "После проверки GLiNER первые три строки качества обновлены CPU replay текущих правил; прежние цифры сохранены в historical_mask_f1. HTTP GLiNER остаётся историческим.",
+    "Все корпуса уже изучались во время разработки; это регрессионная проверка, не blind holdout.",
+    "Разные версии правил и интерфейса сравниваются как разные сервисы. Таблица кандидатов не доказывает причинный эффект одной модели.",
+    "Organizer часто размечает ФИО целиком, RedMadRobot — отдельные компоненты; улучшение маскирования не означает улучшение exact span.",
+    "Публичные правила исключают часть корпоративных реквизитов; политика задачи и taxonomy внешнего датасета различаются.",
+    "Неизмеренные значения равны null, а не нулю."
+  ],
+  "experiments": [
+    {
+      "id": "spacy",
+      "label": "spaCy ru_core_news_sm + правила",
+      "model": "ru_core_news_sm 3.8.0",
+      "role": "Исторический CPU baseline",
+      "quality_protocol": "current_rules_frozen_predictions",
+      "mask_f1": {
+        "organizer": {
+          "value": 96.8856,
+          "unit": "percent",
+          "source": "gliner_recheck",
+          "json_pointer": "/models/spacy/current_mask_f1/organizer"
+        },
+        "pii": {
+          "value": 74.3979,
+          "unit": "percent",
+          "source": "gliner_recheck",
+          "json_pointer": "/models/spacy/current_mask_f1/pii"
+        },
+        "redmadrobot": {
+          "value": 65.3661,
+          "unit": "percent",
+          "source": "gliner_recheck",
+          "json_pointer": "/models/spacy/current_mask_f1/redmadrobot"
+        }
+      },
+      "http": null,
+      "native_inference": {
+        "value": 343.887528675805,
+        "unit": "texts/s; not HTTP RPS",
+        "source": "spacy_native",
+        "json_pointer": "/performance/sequential_documents_per_second"
+      },
+      "notes": [
+        "Качество пересчитано через текущие правила на неизменённых PERSON/LOCATION предсказаниях; нового model inference не было.",
+        "343,89 текста/с — последовательный CPU inference, 446 текстов, один поток; это не HTTP RPS."
+      ],
+      "historical_mask_f1": {
+        "organizer": {
+          "value": 96.8856,
+          "unit": "percent",
+          "source": "gliner_quality",
+          "json_pointer": "/corpora/organizer/service_hybrid/spacy/unique_case_primary/character_metrics/f1"
+        },
+        "pii": {
+          "value": 71.9545,
+          "unit": "percent",
+          "source": "gliner_quality",
+          "json_pointer": "/corpora/pii/full_masking_all_gold_types/systems/spacy_hybrid/f1"
+        },
+        "redmadrobot": {
+          "value": 59.4971,
+          "unit": "percent",
+          "source": "gliner_quality",
+          "json_pointer": "/corpora/redmadrobot/full_masking_all_gold_types/systems/spacy_hybrid/f1"
+        }
+      },
+      "current_rmr_exact_common14_percent": 42.2018
+    },
+    {
+      "id": "gliner_native",
+      "label": "GLiNER 2.5 PyTorch + правила",
+      "model": "fastino/gliner2.5-multi-v1",
+      "role": "Кандидат zero-shot NER",
+      "quality_protocol": "current_rules_frozen_predictions",
+      "mask_f1": {
+        "organizer": {
+          "value": 97.4598,
+          "unit": "percent",
+          "source": "gliner_recheck",
+          "json_pointer": "/models/gliner/current_mask_f1/organizer"
+        },
+        "pii": {
+          "value": 74.2888,
+          "unit": "percent",
+          "source": "gliner_recheck",
+          "json_pointer": "/models/gliner/current_mask_f1/pii"
+        },
+        "redmadrobot": {
+          "value": 70.4692,
+          "unit": "percent",
+          "source": "gliner_recheck",
+          "json_pointer": "/models/gliner/current_mask_f1/redmadrobot"
+        }
+      },
+      "http": {
+        "protocol_group": "gliner_c4_short",
+        "successful_mask_rps": {
+          "value": 31.889317020931525,
+          "source": "gliner_http",
+          "json_pointer": "/backends/0/phases/1/successful_mask_rps"
+        },
+        "mask_requests": {
+          "value": 446,
+          "source": "gliner_http",
+          "json_pointer": "/backends/0/phases/1/mask_requests"
+        },
+        "concurrency": {
+          "value": 4,
+          "source": "gliner_http",
+          "json_pointer": "/backends/0/phases/1/concurrency"
+        },
+        "elapsed_seconds": {
+          "value": 13.985874947000411,
+          "source": "gliner_http",
+          "json_pointer": "/backends/0/phases/1/elapsed_seconds"
+        },
+        "errors": {
+          "value": {},
+          "source": "gliner_http",
+          "json_pointer": "/backends/0/phases/1/errors"
+        },
+        "every_mask_completed_real_ner": {
+          "value": true,
+          "source": "gliner_http",
+          "json_pointer": "/backends/0/phases/1/every_mask_completed_real_ner"
+        },
+        "mask_mismatches": {
+          "value": 0,
+          "source": "gliner_http",
+          "json_pointer": "/backends/0/phases/1/mask_mismatches"
+        },
+        "typed_entity_mismatches": {
+          "value": 0,
+          "source": "gliner_http",
+          "json_pointer": "/backends/0/phases/1/typed_entity_mismatches"
+        },
+        "p95_ms": {
+          "value": 176.04489100631326,
+          "unit": "ms",
+          "source": "gliner_http",
+          "json_pointer": "/backends/0/phases/1/latency_ms_all_attempts/p95"
+        },
+        "measured_for_current_rules": false,
+        "runtime_scope_notice": "Исторический HTTP замер прежней конфигурации; после CPU replay текущих правил новый RPS не измерялся."
+      },
+      "notes": [
+        "Качество пересчитано через текущие правила на неизменённых PERSON/LOCATION предсказаниях; нового model inference не было.",
+        "FP32 CUDA; described-names; threshold=0.8, выбранный на organizer.",
+        "После gateway сохранены PERSON/LOCATION; другие типы обеспечивают правила."
+      ],
+      "historical_mask_f1": {
+        "organizer": {
+          "value": 97.4598,
+          "unit": "percent",
+          "source": "gliner_quality",
+          "json_pointer": "/corpora/organizer/service_hybrid/native/unique_case_primary/character_metrics/f1"
+        },
+        "pii": {
+          "value": 71.7599,
+          "unit": "percent",
+          "source": "gliner_quality",
+          "json_pointer": "/corpora/pii/full_masking_all_gold_types/systems/native_hybrid/f1"
+        },
+        "redmadrobot": {
+          "value": 65.656,
+          "unit": "percent",
+          "source": "gliner_quality",
+          "json_pointer": "/corpora/redmadrobot/full_masking_all_gold_types/systems/native_hybrid/f1"
+        }
+      },
+      "current_rmr_exact_common14_percent": 41.7465
+    },
+    {
+      "id": "gliner_onnx",
+      "label": "GLiNER 2.5 ONNX + правила",
+      "model": "DanKau/gliner2.5-multi-v1-onnx",
+      "role": "Ускорение без изменения spans",
+      "quality_protocol": "current_rules_frozen_predictions",
+      "mask_f1": {
+        "organizer": {
+          "value": 97.4598,
+          "unit": "percent",
+          "source": "gliner_recheck",
+          "json_pointer": "/models/onnx/current_mask_f1/organizer"
+        },
+        "pii": {
+          "value": 74.2888,
+          "unit": "percent",
+          "source": "gliner_recheck",
+          "json_pointer": "/models/onnx/current_mask_f1/pii"
+        },
+        "redmadrobot": {
+          "value": 70.4692,
+          "unit": "percent",
+          "source": "gliner_recheck",
+          "json_pointer": "/models/onnx/current_mask_f1/redmadrobot"
+        }
+      },
+      "http": {
+        "protocol_group": "gliner_c4_short",
+        "successful_mask_rps": {
+          "value": 49.863405857413625,
+          "source": "gliner_http",
+          "json_pointer": "/backends/1/phases/1/successful_mask_rps"
+        },
+        "mask_requests": {
+          "value": 446,
+          "source": "gliner_http",
+          "json_pointer": "/backends/1/phases/1/mask_requests"
+        },
+        "concurrency": {
+          "value": 4,
+          "source": "gliner_http",
+          "json_pointer": "/backends/1/phases/1/concurrency"
+        },
+        "elapsed_seconds": {
+          "value": 8.944435149001947,
+          "source": "gliner_http",
+          "json_pointer": "/backends/1/phases/1/elapsed_seconds"
+        },
+        "errors": {
+          "value": {},
+          "source": "gliner_http",
+          "json_pointer": "/backends/1/phases/1/errors"
+        },
+        "every_mask_completed_real_ner": {
+          "value": true,
+          "source": "gliner_http",
+          "json_pointer": "/backends/1/phases/1/every_mask_completed_real_ner"
+        },
+        "mask_mismatches": {
+          "value": 0,
+          "source": "gliner_http",
+          "json_pointer": "/backends/1/phases/1/mask_mismatches"
+        },
+        "typed_entity_mismatches": {
+          "value": 0,
+          "source": "gliner_http",
+          "json_pointer": "/backends/1/phases/1/typed_entity_mismatches"
+        },
+        "p95_ms": {
+          "value": 116.83626599551644,
+          "unit": "ms",
+          "source": "gliner_http",
+          "json_pointer": "/backends/1/phases/1/latency_ms_all_attempts/p95"
+        },
+        "measured_for_current_rules": false,
+        "runtime_scope_notice": "Исторический HTTP замер прежней конфигурации; после CPU replay текущих правил новый RPS не измерялся."
+      },
+      "notes": [
+        "Качество пересчитано через текущие правила на неизменённых PERSON/LOCATION предсказаниях; нового model inference не было.",
+        "На всех 5 095 текстах spans совпали с native PyTorch; небольшие отличия float scores.",
+        "Прирост HTTP относительно PyTorch измерен внутри одинакового короткого протокола C4."
+      ],
+      "historical_mask_f1": {
+        "organizer": {
+          "value": 97.4598,
+          "unit": "percent",
+          "source": "gliner_quality",
+          "json_pointer": "/corpora/organizer/service_hybrid/candidate/unique_case_primary/character_metrics/f1"
+        },
+        "pii": {
+          "value": 71.7599,
+          "unit": "percent",
+          "source": "gliner_quality",
+          "json_pointer": "/corpora/pii/full_masking_all_gold_types/systems/candidate_hybrid/f1"
+        },
+        "redmadrobot": {
+          "value": 65.656,
+          "unit": "percent",
+          "source": "gliner_quality",
+          "json_pointer": "/corpora/redmadrobot/full_masking_all_gold_types/systems/candidate_hybrid/f1"
+        }
+      },
+      "current_rmr_exact_common14_percent": 41.7465
+    },
+    {
+      "id": "lfm_hybrid",
+      "label": "LFM2.5 350M hybrid + правила",
+      "model": "LiquidAI/LFM2.5-Encoder-350M-PII-Detector",
+      "role": "Альтернативный multilingual detector",
+      "quality_protocol": "legacy_address_proxy",
+      "mask_f1": {
+        "organizer": {
+          "value": 94.5814,
+          "unit": "percent",
+          "source": "lfm_quality",
+          "json_pointer": "/corpora/organizer/gateway_profiles/lfm_hybrid_gateway_address_proxy/unique_case_primary/character_metrics/f1"
+        },
+        "pii": {
+          "value": 70.8583,
+          "unit": "percent",
+          "source": "lfm_quality",
+          "json_pointer": "/corpora/pii/gateway_profiles/full_masking_all_gold_types/systems/lfm_hybrid_gateway_address_proxy/f1"
+        },
+        "redmadrobot": {
+          "value": 53.6616,
+          "unit": "percent",
+          "source": "lfm_quality",
+          "json_pointer": "/corpora/redmadrobot/gateway_profiles/full_masking_all_gold_types/systems/lfm_hybrid_gateway_address_proxy/f1"
+        }
+      },
+      "http": null,
+      "native_mask_f1": {
+        "raw": {
+          "organizer": {
+            "value": 59.8633,
+            "unit": "percent",
+            "source": "lfm_quality",
+            "json_pointer": "/corpora/organizer/native_full_masking_all_types/systems/raw/f1"
+          },
+          "pii": {
+            "value": 77.2176,
+            "unit": "percent",
+            "source": "lfm_quality",
+            "json_pointer": "/corpora/pii/native_full_masking_all_types/systems/raw/f1"
+          },
+          "redmadrobot": {
+            "value": 60.4366,
+            "unit": "percent",
+            "source": "lfm_quality",
+            "json_pointer": "/corpora/redmadrobot/native_full_masking_all_types/systems/raw/f1"
+          }
+        },
+        "official_hybrid": {
+          "organizer": {
+            "value": 60.68,
+            "unit": "percent",
+            "source": "lfm_quality",
+            "json_pointer": "/corpora/organizer/native_full_masking_all_types/systems/hybrid/f1"
+          },
+          "pii": {
+            "value": 84.1837,
+            "unit": "percent",
+            "source": "lfm_quality",
+            "json_pointer": "/corpora/pii/native_full_masking_all_types/systems/hybrid/f1"
+          },
+          "redmadrobot": {
+            "value": 57.0922,
+            "unit": "percent",
+            "source": "lfm_quality",
+            "json_pointer": "/corpora/redmadrobot/native_full_masking_all_types/systems/hybrid/f1"
+          }
+        }
+      },
+      "native_inference": {
+        "value": 61.04892886529458,
+        "unit": "texts/s; not HTTP RPS",
+        "source": "lfm_quality",
+        "json_pointer": "/lfm_cache/timing_by_dataset/organizer/sequential_documents_per_second"
+      },
+      "notes": [
+        "Исторический сервисный профиль с прежними правилами; через текущие правила здесь не пересчитывался.",
+        "PERSON + contact.address→LOCATION (address-proxy): у LFM нет обычной географической LOCATION.",
+        "61,05 текста/с — GPU inference с двумя декодерами, не HTTP RPS.",
+        "Native hybrid PII-Bench 84,18% измерен без правил СЕЙФ и с 40 типами; не путать с результатом вставки модели в сервис."
+      ]
+    },
+    {
+      "id": "rubert_before",
+      "label": "RuBERT TRT: прежний интерфейс",
+      "model": "lockR/rubert-base-pii-ner-tensorrt",
+      "role": "Контроль до исправлений",
+      "quality_protocol": "rubert_upgrade_fixed",
+      "mask_f1": {
+        "organizer": {
+          "value": 96.8791,
+          "unit": "percent",
+          "source": "rubert_quality",
+          "json_pointer": "/corpora/organizer/full_masking_all_gold_types/systems/previous_service/f1"
+        },
+        "pii": {
+          "value": 74.0731,
+          "unit": "percent",
+          "source": "rubert_quality",
+          "json_pointer": "/corpora/pii/full_masking_all_gold_types/systems/previous_service/f1"
+        },
+        "redmadrobot": {
+          "value": 69.7101,
+          "unit": "percent",
+          "source": "rubert_quality",
+          "json_pointer": "/corpora/redmadrobot/full_masking_all_gold_types/systems/previous_service/f1"
+        }
+      },
+      "http": {
+        "protocol_group": "rubert_c8_long",
+        "successful_mask_rps": {
+          "value": 528.8590917811647,
+          "source": "rubert_http_before",
+          "json_pointer": "/service/phases/0/successful_mask_rps"
+        },
+        "mask_requests": {
+          "value": 22300,
+          "source": "rubert_http_before",
+          "json_pointer": "/service/phases/0/mask_requests"
+        },
+        "concurrency": {
+          "value": 8,
+          "source": "rubert_http_before",
+          "json_pointer": "/service/phases/0/concurrency"
+        },
+        "elapsed_seconds": {
+          "value": 42.16624115299783,
+          "source": "rubert_http_before",
+          "json_pointer": "/service/phases/0/elapsed_seconds"
+        },
+        "errors": {
+          "value": {},
+          "source": "rubert_http_before",
+          "json_pointer": "/service/phases/0/errors"
+        },
+        "every_mask_completed_real_ner": {
+          "value": true,
+          "source": "rubert_http_before",
+          "json_pointer": "/service/phases/0/every_mask_completed_real_ner"
+        },
+        "mask_mismatches": {
+          "value": 0,
+          "source": "rubert_http_before",
+          "json_pointer": "/service/phases/0/mask_mismatches"
+        },
+        "typed_entity_mismatches": {
+          "value": 0,
+          "source": "rubert_http_before",
+          "json_pointer": "/service/phases/0/typed_entity_mismatches"
+        },
+        "p95_ms": {
+          "value": 20.005122998554725,
+          "unit": "ms",
+          "source": "rubert_http_before",
+          "json_pointer": "/service/phases/0/latency_ms_all_attempts/p95"
+        }
+      },
+      "notes": [
+        "Исторический контроль до исправления сервиса.",
+        "Коммит 0ab6d876008af27ee015167ea50488be9d488fb7; через NER transport проходили только PERSON/LOCATION."
+      ],
+      "rmr_exact_f1_common14": {
+        "value": 42.8622,
+        "unit": "percent",
+        "source": "rubert_quality",
+        "json_pointer": "/corpora/redmadrobot/paper14/systems/previous_service/raw_strict_common14_prediction_scope/f1"
+      },
+      "rmr_exact_f1_all_predictions": {
+        "value": 42.7411,
+        "unit": "percent",
+        "source": "rubert_quality",
+        "json_pointer": "/corpora/redmadrobot/paper14/systems/previous_service/raw_strict/f1"
+      },
+      "rmr_mask_precision": {
+        "value": 95.5897,
+        "unit": "percent",
+        "source": "rubert_quality",
+        "json_pointer": "/corpora/redmadrobot/full_masking_all_gold_types/systems/previous_service/precision"
+      },
+      "rmr_mask_recall": {
+        "value": 54.858,
+        "unit": "percent",
+        "source": "rubert_quality",
+        "json_pointer": "/corpora/redmadrobot/full_masking_all_gold_types/systems/previous_service/recall"
+      },
+      "original_boundary_exact_f1": {
+        "organizer": {
+          "value": 89.5616,
+          "unit": "percent",
+          "source": "rubert_quality",
+          "json_pointer": "/corpora/organizer/typed_family_all_types_unfiltered/original_boundaries/systems/previous_service/exact_span/f1"
+        },
+        "pii": {
+          "value": 67.0761,
+          "unit": "percent",
+          "source": "rubert_quality",
+          "json_pointer": "/corpora/pii/typed_family_all_types_unfiltered/original_boundaries/systems/previous_service/exact_span/f1"
+        },
+        "redmadrobot": {
+          "value": 42.7411,
+          "unit": "percent",
+          "source": "rubert_quality",
+          "json_pointer": "/corpora/redmadrobot/typed_family_all_types_unfiltered/original_boundaries/systems/previous_service/exact_span/f1"
+        }
+      }
+    },
+    {
+      "id": "rubert_after",
+      "label": "RuBERT TRT: полный интерфейс + правила",
+      "model": "lockR/rubert-base-pii-ner-tensorrt",
+      "role": "Текущий экспериментальный сервис",
+      "quality_protocol": "rubert_upgrade_fixed",
+      "mask_f1": {
+        "organizer": {
+          "value": 97.1285,
+          "unit": "percent",
+          "source": "rubert_quality",
+          "json_pointer": "/corpora/organizer/full_masking_all_gold_types/systems/upgraded_service/f1"
+        },
+        "pii": {
+          "value": 77.8639,
+          "unit": "percent",
+          "source": "rubert_quality",
+          "json_pointer": "/corpora/pii/full_masking_all_gold_types/systems/upgraded_service/f1"
+        },
+        "redmadrobot": {
+          "value": 93.9041,
+          "unit": "percent",
+          "source": "rubert_quality",
+          "json_pointer": "/corpora/redmadrobot/full_masking_all_gold_types/systems/upgraded_service/f1"
+        }
+      },
+      "http": {
+        "protocol_group": "rubert_c8_long",
+        "successful_mask_rps": {
+          "value": 533.742949239374,
+          "source": "rubert_http_after",
+          "json_pointer": "/service/phases/0/successful_mask_rps"
+        },
+        "mask_requests": {
+          "value": 22300,
+          "source": "rubert_http_after",
+          "json_pointer": "/service/phases/0/mask_requests"
+        },
+        "concurrency": {
+          "value": 8,
+          "source": "rubert_http_after",
+          "json_pointer": "/service/phases/0/concurrency"
+        },
+        "elapsed_seconds": {
+          "value": 41.78041139799461,
+          "source": "rubert_http_after",
+          "json_pointer": "/service/phases/0/elapsed_seconds"
+        },
+        "errors": {
+          "value": {},
+          "source": "rubert_http_after",
+          "json_pointer": "/service/phases/0/errors"
+        },
+        "every_mask_completed_real_ner": {
+          "value": true,
+          "source": "rubert_http_after",
+          "json_pointer": "/service/phases/0/every_mask_completed_real_ner"
+        },
+        "mask_mismatches": {
+          "value": 0,
+          "source": "rubert_http_after",
+          "json_pointer": "/service/phases/0/mask_mismatches"
+        },
+        "typed_entity_mismatches": {
+          "value": 0,
+          "source": "rubert_http_after",
+          "json_pointer": "/service/phases/0/typed_entity_mismatches"
+        },
+        "p95_ms": {
+          "value": 19.58420199662214,
+          "unit": "ms",
+          "source": "rubert_http_after",
+          "json_pointer": "/service/phases/0/latency_ms_all_attempts/p95"
+        }
+      },
+      "notes": [
+        "Word decoder, исправления Unicode, 21 категория модели→14 типов gateway, контекстные правила и атомарные границы.",
+        "Правила и декодер изменились вместе: это оценка сервиса целиком, не изолированная замена модели.",
+        "Результат экспериментальной ветки; существующий публичный сервис автоматически не переключён."
+      ],
+      "rmr_exact_f1_common14": {
+        "value": 86.7601,
+        "unit": "percent",
+        "source": "rubert_quality",
+        "json_pointer": "/corpora/redmadrobot/paper14/systems/upgraded_service/raw_strict_common14_prediction_scope/f1"
+      },
+      "rmr_exact_f1_all_predictions": {
+        "value": 86.6113,
+        "unit": "percent",
+        "source": "rubert_quality",
+        "json_pointer": "/corpora/redmadrobot/paper14/systems/upgraded_service/raw_strict/f1"
+      },
+      "rmr_mask_precision": {
+        "value": 97.225,
+        "unit": "percent",
+        "source": "rubert_quality",
+        "json_pointer": "/corpora/redmadrobot/full_masking_all_gold_types/systems/upgraded_service/precision"
+      },
+      "rmr_mask_recall": {
+        "value": 90.8026,
+        "unit": "percent",
+        "source": "rubert_quality",
+        "json_pointer": "/corpora/redmadrobot/full_masking_all_gold_types/systems/upgraded_service/recall"
+      },
+      "original_boundary_exact_f1": {
+        "organizer": {
+          "value": 55.814,
+          "unit": "percent",
+          "source": "rubert_quality",
+          "json_pointer": "/corpora/organizer/typed_family_all_types_unfiltered/original_boundaries/systems/upgraded_service/exact_span/f1"
+        },
+        "pii": {
+          "value": 45.6751,
+          "unit": "percent",
+          "source": "rubert_quality",
+          "json_pointer": "/corpora/pii/typed_family_all_types_unfiltered/original_boundaries/systems/upgraded_service/exact_span/f1"
+        },
+        "redmadrobot": {
+          "value": 86.6113,
+          "unit": "percent",
+          "source": "rubert_quality",
+          "json_pointer": "/corpora/redmadrobot/typed_family_all_types_unfiltered/original_boundaries/systems/upgraded_service/exact_span/f1"
+        }
+      }
+    },
+    {
+      "id": "pii_guard_raw",
+      "label": "pii-guard: raw-text reference",
+      "model": "Pinned pii-guard 24230abb + word-decoded RuBERT",
+      "role": "Внешний алгоритмический ориентир",
+      "quality_protocol": "rubert_upgrade_fixed",
+      "mask_f1": {
+        "organizer": {
+          "value": 81.8104,
+          "unit": "percent",
+          "source": "rubert_quality",
+          "json_pointer": "/corpora/organizer/full_masking_all_gold_types/systems/pii_guard_raw_word/f1"
+        },
+        "pii": {
+          "value": 78.5479,
+          "unit": "percent",
+          "source": "rubert_quality",
+          "json_pointer": "/corpora/pii/full_masking_all_gold_types/systems/pii_guard_raw_word/f1"
+        },
+        "redmadrobot": {
+          "value": 93.6748,
+          "unit": "percent",
+          "source": "rubert_quality",
+          "json_pointer": "/corpora/redmadrobot/full_masking_all_gold_types/systems/pii_guard_raw_word/f1"
+        }
+      },
+      "http": null,
+      "notes": [
+        "Правила, email gate, word NER и merge upstream на исходных текстах.",
+        "Без нормализации, транслитерации, преобразования английских числительных и base64; это не полный pipeline и не воспроизведение опубликованного 88,9."
+      ],
+      "rmr_exact_f1_common14": {
+        "value": 89.8458,
+        "unit": "percent",
+        "source": "rubert_quality",
+        "json_pointer": "/corpora/redmadrobot/paper14/systems/pii_guard_raw_word/raw_strict_common14_prediction_scope/f1"
+      },
+      "rmr_exact_f1_all_predictions": {
+        "value": 87.8188,
+        "unit": "percent",
+        "source": "rubert_quality",
+        "json_pointer": "/corpora/redmadrobot/paper14/systems/pii_guard_raw_word/raw_strict/f1"
+      },
+      "rmr_mask_precision": {
+        "value": 94.6488,
+        "unit": "percent",
+        "source": "rubert_quality",
+        "json_pointer": "/corpora/redmadrobot/full_masking_all_gold_types/systems/pii_guard_raw_word/precision"
+      },
+      "rmr_mask_recall": {
+        "value": 92.7205,
+        "unit": "percent",
+        "source": "rubert_quality",
+        "json_pointer": "/corpora/redmadrobot/full_masking_all_gold_types/systems/pii_guard_raw_word/recall"
+      },
+      "original_boundary_exact_f1": {
+        "organizer": {
+          "value": 33.0563,
+          "unit": "percent",
+          "source": "rubert_quality",
+          "json_pointer": "/corpora/organizer/typed_family_all_types_unfiltered/original_boundaries/systems/pii_guard_raw_word/exact_span/f1"
+        },
+        "pii": {
+          "value": 45.9606,
+          "unit": "percent",
+          "source": "rubert_quality",
+          "json_pointer": "/corpora/pii/typed_family_all_types_unfiltered/original_boundaries/systems/pii_guard_raw_word/exact_span/f1"
+        },
+        "redmadrobot": {
+          "value": 87.8188,
+          "unit": "percent",
+          "source": "rubert_quality",
+          "json_pointer": "/corpora/redmadrobot/typed_family_all_types_unfiltered/original_boundaries/systems/pii_guard_raw_word/exact_span/f1"
+        }
+      }
+    }
+  ],
+  "supplementary": {
+    "rubert_word_solo_rmr_exact_f1": {
+      "value": 89.5165,
+      "unit": "percent",
+      "source": "rubert_quality",
+      "json_pointer": "/corpora/redmadrobot/paper14/systems/upgraded_native_only/raw_strict_common14_prediction_scope/f1"
+    },
+    "rubert_word_solo_rmr_mask_f1": {
+      "value": 94.115,
+      "unit": "percent",
+      "source": "rubert_quality",
+      "json_pointer": "/corpora/redmadrobot/full_masking_all_gold_types/systems/upgraded_native_only/f1"
+    },
+    "rubert_organizer_certain_f1": {
+      "value": 99.3156,
+      "unit": "percent",
+      "source": "rubert_quality",
+      "json_pointer": "/corpora/organizer/certain/systems/upgraded_service/f1"
+    },
+    "onnx_span_parity": {
+      "organizer": {
+        "value": 446,
+        "unit": "count",
+        "source": "gliner_quality",
+        "json_pointer": "/parity_vs_native/organizer/identical_span_cases"
+      },
+      "pii": {
+        "value": 1810,
+        "unit": "count",
+        "source": "gliner_quality",
+        "json_pointer": "/parity_vs_native/pii/identical_span_cases"
+      },
+      "redmadrobot": {
+        "value": 2839,
+        "unit": "count",
+        "source": "gliner_quality",
+        "json_pointer": "/parity_vs_native/redmadrobot/identical_span_cases"
+      }
+    }
+  },
+  "throughput_protocols": {
+    "gliner_c4_short": {
+      "requests": 446,
+      "concurrency": 4,
+      "cycles": 1,
+      "hardware": "RTX 4070 Ti SUPER",
+      "scope": "Одинаковый короткий протокол PyTorch vs ONNX; локальный HTTP, память, запись capture выключена.",
+      "source": "gliner_http"
+    },
+    "rubert_c8_long": {
+      "requests": 22300,
+      "concurrency": 8,
+      "cycles": 50,
+      "hardware": "RTX 4070 Ti SUPER",
+      "api": "Python 3.14.7t, 1 worker, GIL disabled",
+      "ner": "Python 3.12.11, 1 worker, TRT CUDA graphs, 4 Torch CPU threads",
+      "scope": "Одинаковые интерпретаторы, модель, GPU и workload для before/after; memory store, capture off, loopback. Без model prediction cache.",
+      "source": [
+        "rubert_http_before",
+        "rubert_http_after"
+      ]
+    }
+  },
+  "suggested_slides": [
+    {
+      "title": "Проверили четыре семейства NER",
+      "ids": [
+        "spacy",
+        "gliner_native",
+        "gliner_onnx",
+        "lfm_hybrid"
+      ],
+      "visual": "Таблица full-mask F1, три корпуса. GLiNER PyTorch/ONNX выделить как parity-пару.",
+      "takeaway": "Кандидат выбирается по покрытию всех корпусов и цене inference, не по одному красивому score.",
+      "mandatory_footnote": "spaCy/GLiNER: frozen PERSON/LOCATION + текущие правила (CPU replay). LFM: прежние правила + address-proxy. Organizer — AI silver; модели решали задачи с разным покрытием типов."
+    },
+    {
+      "title": "Большой выигрыш дал полный интерфейс модели",
+      "ids": [
+        "rubert_before",
+        "rubert_after"
+      ],
+      "visual": "Три пары before/after full-mask F1; рядом 2→14 типов NER gateway и Unicode/word decoder.",
+      "takeaway": "RMR +24,19 п.п.; PII-Bench +3,79 п.п.; Organizer +0,25 п.п.",
+      "mandatory_footnote": "Обновлены и интерфейс, и декодер, и правила. Exact-span Organizer/PII-Bench снизился из-за компонентных границ; это отдельная метрика."
+    },
+    {
+      "title": "Где мы выше pii-guard, а где ещё нет",
+      "ids": [
+        "rubert_after",
+        "pii_guard_raw"
+      ],
+      "visual": "Full-mask F1 на трёх корпусах; отдельная компактная пара RMR exact common14 86,76 / 89,85.",
+      "takeaway": "Маскирование выше на Organizer и RMR, ниже на PII-Bench. Полного превосходства нет.",
+      "mandatory_footnote": "Сравнен raw-text rules+NER+merge reference, не полный pii-guard. RMR recall 90,80% против 92,72%: рост F1 объясняется большей точностью."
+    },
+    {
+      "title": "Качество улучшили без наблюдаемого провала скорости",
+      "ids": [
+        "rubert_before",
+        "rubert_after"
+      ],
+      "visual": "Главная пара 528,86→533,74 RPS, p95 20,01→19,58 мс. Отдельный блок GLiNER C4: 31,89→49,86 RPS.",
+      "takeaway": "22 300 успешных запросов на каждый RuBERT прогон, без ошибок и mismatches.",
+      "mandatory_footnote": "RuBERT before/after: +0,92% — один прогон, не доказанное ускорение. GLiNER C4/446 — исторический HTTP прежних правил, не новый замер после CPU replay. LFM 61,05 — texts/s inference."
+    }
+  ],
+  "sources": {
+    "gliner_quality": {
+      "worktree": "/home/lockr/projects/seif-pii-rubert",
+      "file": "benchmarks/ner-models/gliner25-onnx/comparison-gpu.json",
+      "sha256": "0123d9875641ad6ed03e30c9508e4b3aae6ff81381ec54a985142e59d54d6d74"
+    },
+    "gliner_http": {
+      "worktree": "/home/lockr/projects/seif-pii-rubert",
+      "file": "benchmarks/ner-models/gliner25-onnx/http-cuda-v2.json",
+      "sha256": "1271fc25d69b15b944dceaa7feee2b75af0bac321fab46aff033ad020267a223"
+    },
+    "lfm_quality": {
+      "worktree": "/home/lockr/projects/seif-pii-lfm",
+      "file": "benchmarks/ner-models/lfm25-pii/comparison.json",
+      "sha256": "a421fb724a3770c3311abe9664fd82b942b9b584de1faaf2e47b4a9258137888"
+    },
+    "spacy_native": {
+      "worktree": "/home/lockr/projects/seif-pii-rubert",
+      "file": "benchmarks/ner-models/gliner25-multi-v1/spacy-fresh.meta.json",
+      "sha256": "3d9365ada2608199929a0af494a9155b530739b3a0ab5537ec087bd52be8e11b"
+    },
+    "rubert_quality": {
+      "worktree": "/home/lockr/projects/seif-pii-rubert",
+      "file": "benchmarks/ner-models/rubert-upgrade/quality-v5.json",
+      "sha256": "1fe31edd072443ddb9a6cae49d2bdefbe5295d7d3490bcf02fb9ebc1ae728f54"
+    },
+    "rubert_http_before": {
+      "worktree": "/home/lockr/projects/seif-pii-rubert",
+      "file": "benchmarks/ner-models/rubert-upgrade/http-baseline-control.json",
+      "sha256": "91eea0047ad133555227fb3a7ddddc7a969e49a07c4a53134d5d73cf5ba0f1c0"
+    },
+    "rubert_http_after": {
+      "worktree": "/home/lockr/projects/seif-pii-rubert",
+      "file": "benchmarks/ner-models/rubert-upgrade/http-upgraded-final.json",
+      "sha256": "022d78846ce9c8643c3130616e4fcb8be2a91d07724fb517b543c5d70460cf9e"
+    },
+    "gliner_recheck": {
+      "worktree": "/home/lockr/projects/seif-pii-rubert",
+      "file": "docs/presentation/gliner-recheck-metrics.json",
+      "sha256": "a0e14a942e5b8f2566b66064063d915aadbf06dc3c567cd7328e825e3f8f63a8"
+    }
+  }
+}

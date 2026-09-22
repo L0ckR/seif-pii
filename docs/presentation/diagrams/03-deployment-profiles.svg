@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc"><title id="title">Один сервис. Несколько профилей размещения.</title><desc id="desc">Слева базовый Docker Compose: один API и Redis, опциональный CPU NER; GPU RuBERT работает отдельным процессом. Справа подготовленные Kubernetes манифесты: API 3 реплики и HPA 2–8, опциональный CPU NER 2 реплики, три Redis/Sentinel pod. Схема не утверждает наличие работающего кластера.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 8 4 L 0 8" fill="none" stroke="#c0f0c5" stroke-width="1.5"/></marker><marker id="arrow-orange" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 8 4 L 0 8" fill="none" stroke="#eab291" stroke-width="1.5"/></marker></defs>
+<rect x="0" y="0" width="1600" height="900" rx="2" fill="#111b17"/>
+<rect x="64" y="37" width="8" height="8" rx="2" fill="#c0f0c5"/>
+<text x="86" y="47" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="17" font-weight="400" text-anchor="start" letter-spacing="2">СЕЙФ / АРХИТЕКТУРА</text>
+<text x="1536" y="47" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="17" font-weight="400" text-anchor="end">23.09.2026</text>
+<text x="64" y="106" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="44" font-weight="500" text-anchor="start">Один сервис. Несколько профилей размещения.</text>
+<text x="64" y="147" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Базовый Compose и подготовленные Kubernetes-манифесты. GPU-профиль подключается отдельно.</text>
+<rect x="64" y="188" width="648" height="565" rx="2" fill="#17231d" stroke="#334138" stroke-width="1.2"/>
+<rect x="752" y="188" width="784" height="565" rx="2" fill="#17231d" stroke="#334138" stroke-width="1.2" stroke-dasharray="8 6"/>
+<text x="88" y="221" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="18" font-weight="400" text-anchor="start">01 / DOCKER COMPOSE</text>
+<text x="776" y="221" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="18" font-weight="400" text-anchor="start">02 / ПОДГОТОВЛЕННЫЙ KUBERNETES</text>
+<rect x="1377" y="203" width="135" height="28" rx="2" fill="#1c2a22" stroke="#eab291" stroke-width="1.2"/>
+<text x="1389" y="223" fill="#eab291" font-family="Consolas, Liberation Mono, monospace" font-size="16" font-weight="400" text-anchor="start">не live</text>
+<rect x="94" y="268" width="248" height="132" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<rect x="94" y="268" width="3" height="132" rx="0" fill="#c0f0c5"/>
+<text x="118" y="306" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">Вход</text>
+<text x="118" y="340" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">localhost:8765</text>
+<text x="118" y="368" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">TLS / туннель снаружи</text>
+<rect x="409" y="268" width="271" height="132" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<rect x="409" y="268" width="3" height="132" rx="0" fill="#c0f0c5"/>
+<text x="433" y="306" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="23" font-weight="500" text-anchor="start">API-контейнер × 1</text>
+<text x="433" y="340" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">аутентификация</text>
+<text x="433" y="368" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">правила и политики</text>
+<path d="M 342 334 H 409" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="409" y="505" width="271" height="142" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<rect x="409" y="505" width="3" height="142" rx="0" fill="#c0f0c5"/>
+<text x="433" y="543" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">Redis</text>
+<text x="433" y="577" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">ciphertext + TTL</text>
+<text x="433" y="605" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">без persistence</text>
+<rect x="94" y="505" width="248" height="142" rx="2" fill="#1c2a22" stroke="#c0f0c5" stroke-width="1.2" stroke-dasharray="7 6"/>
+<rect x="94" y="505" width="3" height="142" rx="0" fill="#c0f0c5"/>
+<text x="118" y="543" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">Private NER</text>
+<text x="118" y="577" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">CPU: spaCy</text>
+<text x="118" y="605" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">отдельный HTTP</text>
+<path d="M 545 400 V 505" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 473 400 V 457 H 218 V 505" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
+<text x="271" y="445" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="17" font-weight="400" text-anchor="start">private network</text>
+<text x="88" y="688" fill="#eab291" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">GPU: RuBERT / TensorRT — отдельный процесс.</text>
+<text x="88" y="721" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="400" text-anchor="start">Готового GPU-контейнера и GPU-манифеста нет.</text>
+<rect x="786" y="268" width="716" height="88" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<rect x="786" y="268" width="3" height="88" rx="0" fill="#c0f0c5"/>
+<text x="810" y="306" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">Ingress / TLS</text>
+<text x="810" y="340" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">шаблон: домен и сертификат задаются при развёртывании</text>
+<rect x="786" y="419" width="356" height="122" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<rect x="786" y="419" width="3" height="122" rx="0" fill="#c0f0c5"/>
+<text x="810" y="457" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">API replicas</text>
+<text x="810" y="491" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">base: 3 · HPA: 2–8</text>
+<rect x="1200" y="419" width="302" height="122" rx="2" fill="#1c2a22" stroke="#c0f0c5" stroke-width="1.2" stroke-dasharray="7 6"/>
+<rect x="1200" y="419" width="3" height="122" rx="0" fill="#c0f0c5"/>
+<text x="1224" y="457" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">CPU NER × 2</text>
+<text x="1224" y="491" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">hybrid overlay</text>
+<path d="M 964 356 V 419" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 1142 480 H 1200" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
+<rect x="786" y="600" width="716" height="106" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<rect x="786" y="600" width="3" height="106" rx="0" fill="#c0f0c5"/>
+<text x="810" y="638" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">Redis + Sentinel</text>
+<text x="810" y="672" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">3 pod · в каждом Redis и Sentinel · автоматический failover</text>
+<path d="M 964 541 V 600" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="1133" y="578" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="17" font-weight="400" text-anchor="start">приватный контур</text>
+<text x="64" y="805" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">Репликация Redis асинхронная: последние записи могут быть потеряны при сбое. HA требует проверки в кластере.</text>
+</svg>

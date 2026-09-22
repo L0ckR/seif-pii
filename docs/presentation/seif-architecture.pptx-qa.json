@@ -1,0 +1,141 @@
+{
+  "output": "/home/lockr/projects/seif-pii-rubert/docs/presentation/seif-architecture.pptx",
+  "conversion": {
+    "mode": "native editable text and shapes; no image fallback",
+    "font_mapping": {
+      "sans": "Segoe UI",
+      "serif": "Georgia",
+      "mono": "Consolas"
+    },
+    "limitations": [
+      "Arbitrary Bézier paths, skew and rotated groups fail explicitly.",
+      "Dash arrays are mapped to native PowerPoint dash presets.",
+      "Text uses local TrueType advances; applications may render font baselines slightly differently.",
+      "Tspan chunks are separate editable text boxes; current slides have no tspans."
+    ]
+  },
+  "structural": {
+    "slide_count": 16,
+    "notes_count": 16,
+    "slides": [
+      {
+        "file": "ppt/slides/slide1.xml",
+        "editable_text_runs": 16,
+        "native_shapes": 385,
+        "pictures": 0,
+        "text_sha256": "995e51bbf24ed1fd23f8bceef214040203bf2dc08c9c9c2cb43241f849149513"
+      },
+      {
+        "file": "ppt/slides/slide2.xml",
+        "editable_text_runs": 28,
+        "native_shapes": 38,
+        "pictures": 0,
+        "text_sha256": "a02ec3d577ab0cb7b5e4f4ae047b1cfd440f4d0c245c62523b28b875dae4969a"
+      },
+      {
+        "file": "ppt/slides/slide3.xml",
+        "editable_text_runs": 41,
+        "native_shapes": 80,
+        "pictures": 0,
+        "text_sha256": "6d1e5f53473faef3eff78c72041887d5ec3da26403f38a1d56182d44dd8dfad7"
+      },
+      {
+        "file": "ppt/slides/slide4.xml",
+        "editable_text_runs": 26,
+        "native_shapes": 51,
+        "pictures": 0,
+        "text_sha256": "bae3f763e00db6688ea1c5e8f536eb264725e3b21a08c14efde8b6a6224433b6"
+      },
+      {
+        "file": "ppt/slides/slide5.xml",
+        "editable_text_runs": 35,
+        "native_shapes": 63,
+        "pictures": 0,
+        "text_sha256": "e2ce4a0fab42a0df0406a427cafaed9183d208f8fcfec8eb9877a55e55b99c83"
+      },
+      {
+        "file": "ppt/slides/slide6.xml",
+        "editable_text_runs": 34,
+        "native_shapes": 65,
+        "pictures": 0,
+        "text_sha256": "10e8728b29c9845452e8b05e6f37af81a1d0a3855f245927af9f80b616d389f6"
+      },
+      {
+        "file": "ppt/slides/slide7.xml",
+        "editable_text_runs": 24,
+        "native_shapes": 35,
+        "pictures": 0,
+        "text_sha256": "a4a12b794895c0befccf33871d0facb8dd6482dc34e82687355b6055557939de"
+      },
+      {
+        "file": "ppt/slides/slide8.xml",
+        "editable_text_runs": 45,
+        "native_shapes": 58,
+        "pictures": 0,
+        "text_sha256": "7ac99b9a0ae2d3c39308b1a29daff7d60d2ee72c762289a5e8b3729b177aa0da"
+      },
+      {
+        "file": "ppt/slides/slide9.xml",
+        "editable_text_runs": 35,
+        "native_shapes": 63,
+        "pictures": 0,
+        "text_sha256": "896fa564ad3f689e0f7f04b0233bb8341121abe5d7424aaad904dcf14846757f"
+      },
+      {
+        "file": "ppt/slides/slide10.xml",
+        "editable_text_runs": 26,
+        "native_shapes": 35,
+        "pictures": 0,
+        "text_sha256": "6ab2f33daedb07a6471af547f77337d50538cb27249c7efbdf5d3dafb3f89afc"
+      },
+      {
+        "file": "ppt/slides/slide11.xml",
+        "editable_text_runs": 27,
+        "native_shapes": 44,
+        "pictures": 0,
+        "text_sha256": "d7153f24c526d4292bd089e481e1a7b77c42e0eec74b5f0d2e7066353b7434fb"
+      },
+      {
+        "file": "ppt/slides/slide12.xml",
+        "editable_text_runs": 22,
+        "native_shapes": 33,
+        "pictures": 0,
+        "text_sha256": "41fb3ea46f35f670dc29e030a721be882e737b8be3b30aec233a0fbc51220816"
+      },
+      {
+        "file": "ppt/slides/slide13.xml",
+        "editable_text_runs": 28,
+        "native_shapes": 38,
+        "pictures": 0,
+        "text_sha256": "ecc9d7a1a2ac92ed6821840a35829aa46dd75f7c1a4c917726c84a48f8d16ebf"
+      },
+      {
+        "file": "ppt/slides/slide14.xml",
+        "editable_text_runs": 26,
+        "native_shapes": 35,
+        "pictures": 0,
+        "text_sha256": "fd8332c4d1023ee8307c74f76b80716aa4ff5e6a2f30c3b146e01a7b5e619c51"
+      },
+      {
+        "file": "ppt/slides/slide15.xml",
+        "editable_text_runs": 18,
+        "native_shapes": 26,
+        "pictures": 0,
+        "text_sha256": "c66b6432a958d3ea4494e4070e78defa44012c867f61cbed09a21117afe45961"
+      },
+      {
+        "file": "ppt/slides/slide16.xml",
+        "editable_text_runs": 26,
+        "native_shapes": 35,
+        "pictures": 0,
+        "text_sha256": "30ec248c63c822f3a52aba90fc83e53798c4392ef8de96d8425bc4eb3a69f611"
+      }
+    ],
+    "editable_text_runs": 457,
+    "native_shapes": 1084,
+    "picture_count": 0,
+    "canvas_bounds_errors": []
+  },
+  "text_integrity_errors": [],
+  "source_warnings": []
+}

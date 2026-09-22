@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="slide3-title slide3-desc"><title id="slide3-title">Защита данных до обращения к LLM</title><desc id="slide3-desc">Логическая архитектура SEIF: приложение вызывает API, правила и опциональный NER, контекстное объединение и политику, трансформацию, зашифрованное хранилище. Только приложение вызывает внешнюю LLM. Показан путь нового payload_id; повторный запрос может вернуть сохранённый результат.</desc>
+<defs><marker id="slide3-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 8 4 L 0 8" fill="none" stroke="#c0f0c5" stroke-width="1.5"/></marker><marker id="slide3-arrow-orange" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 8 4 L 0 8" fill="none" stroke="#eab291" stroke-width="1.5"/></marker></defs>
+<rect x="0" y="0" width="1600" height="900" rx="2" fill="#111b17"/>
+<rect x="64" y="37" width="8" height="8" rx="2" fill="#c0f0c5"/>
+<text x="86" y="47" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="17" font-weight="400" text-anchor="start" letter-spacing="2">СЕЙФ / АРХИТЕКТУРА</text>
+<text x="1536" y="47" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="17" font-weight="400" text-anchor="end">23.09.2026</text>
+<text x="64" y="106" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="44" font-weight="500" text-anchor="start">Защита данных до обращения к LLM</text>
+<text x="64" y="147" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Путь нового payload_id. Повтор исходного запроса может вернуть сохранённый результат.</text>
+<rect x="310" y="184" width="1226" height="566" rx="2" fill="#17231d" stroke="#334138" stroke-width="1.2"/>
+<text x="334" y="216" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="17" font-weight="400" text-anchor="start">КОНТУР SEIF</text>
+<rect x="64" y="264" width="210" height="150" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<rect x="64" y="264" width="3" height="150" rx="0" fill="#c0f0c5"/>
+<text x="88" y="302" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">Приложение</text>
+<text x="88" y="336" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">исходный текст</text>
+<text x="88" y="364" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">ключ системы</text>
+<rect x="350" y="250" width="270" height="158" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<rect x="350" y="250" width="3" height="158" rx="0" fill="#c0f0c5"/>
+<text x="374" y="277" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="16" font-weight="400" text-anchor="start">01 / ВХОД</text>
+<text x="374" y="310" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">FastAPI</text>
+<text x="374" y="344" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">tenant + API key</text>
+<text x="374" y="372" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">лимиты и валидация</text>
+<rect x="685" y="250" width="290" height="158" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<rect x="685" y="250" width="3" height="158" rx="0" fill="#c0f0c5"/>
+<text x="709" y="277" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="16" font-weight="400" text-anchor="start">02 / DETECT</text>
+<text x="709" y="310" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">Правила</text>
+<text x="709" y="344" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">РФ / СНГ · контекст</text>
+<text x="709" y="372" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">проверки формата</text>
+<rect x="1040" y="250" width="450" height="158" rx="2" fill="#1c2a22" stroke="#c0f0c5" stroke-width="1.2" stroke-dasharray="7 6"/>
+<rect x="1040" y="250" width="3" height="158" rx="0" fill="#c0f0c5"/>
+<text x="1064" y="277" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="16" font-weight="400" text-anchor="start">03 / ОПЦИОНАЛЬНО</text>
+<text x="1064" y="310" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">Private NER</text>
+<text x="1064" y="344" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">CPU spaCy / GPU RuBERT</text>
+<text x="1064" y="372" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">исходный текст → PII-кандидаты</text>
+<rect x="1040" y="517" width="450" height="158" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<rect x="1040" y="517" width="3" height="158" rx="0" fill="#c0f0c5"/>
+<text x="1064" y="544" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="16" font-weight="400" text-anchor="start">04 / MERGE + SELECT</text>
+<text x="1064" y="577" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">Контекст + политика</text>
+<text x="1064" y="611" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">пересечения и границы сущностей</text>
+<text x="1064" y="639" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">типы и режим из политики tenant</text>
+<rect x="685" y="517" width="290" height="158" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<rect x="685" y="517" width="3" height="158" rx="0" fill="#c0f0c5"/>
+<text x="709" y="544" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="16" font-weight="400" text-anchor="start">05 / TRANSFORM</text>
+<text x="709" y="577" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">Преобразование</text>
+<text x="709" y="611" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">mask · token · synthetic</text>
+<text x="709" y="639" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">текст + замены</text>
+<rect x="350" y="517" width="270" height="158" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<rect x="350" y="517" width="3" height="158" rx="0" fill="#c0f0c5"/>
+<text x="374" y="544" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="16" font-weight="400" text-anchor="start">06 / СОХРАНЕНИЕ</text>
+<text x="374" y="577" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">Encrypted vault</text>
+<text x="374" y="611" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">AES-GCM · TTL</text>
+<text x="374" y="639" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">Redis / RAM</text>
+<path d="M 274 338 H 350" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#slide3-arrow)"/>
+<path d="M 620 328 H 685" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#slide3-arrow)"/>
+<path d="M 975 328 H 1040" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" stroke-dasharray="6 5" marker-end="url(#slide3-arrow)"/>
+<path d="M 1265 408 V 517" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" stroke-dasharray="6 5" marker-end="url(#slide3-arrow)"/>
+<path d="M 830 408 V 461 H 1207 V 517" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#slide3-arrow)"/>
+<text x="860" y="447" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="17" font-weight="400" text-anchor="start">без NER: только правила</text>
+<path d="M 1040 594 H 975" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#slide3-arrow)"/>
+<path d="M 685 594 H 620" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#slide3-arrow)"/>
+<path d="M 350 594 H 297 V 466 H 169 V 414" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#slide3-arrow)"/>
+<text x="67" y="497" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="17" font-weight="400" text-anchor="start">защищённый текст</text>
+<rect x="64" y="648" width="210" height="103" rx="2" fill="#1c2a22" stroke="#eab291" stroke-width="1.2"/>
+<rect x="64" y="648" width="3" height="103" rx="0" fill="#eab291"/>
+<text x="88" y="686" fill="#eab291" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">Внешняя LLM</text>
+<text x="88" y="720" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">вызов приложения</text>
+<path d="M 64 370 H 35 V 700 H 64" fill="none" stroke="#eab291" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#slide3-arrow-orange)"/>
+<text x="64" y="801" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Политика выбирает, какие сущности защищать. Качество детектора определяет полноту маскирования.</text>
+<path d="M 1147 720 H 1185" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round"/>
+<text x="1197" y="726" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="17" font-weight="400" text-anchor="start">ядро</text>
+<path d="M 1334 720 H 1372" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" stroke-dasharray="6 5"/>
+<text x="1384" y="726" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="17" font-weight="400" text-anchor="start">опция</text>
+<rect x="0" y="830" width="1600" height="70" rx="0" fill="#111b17" stroke="none" stroke-width="1" opacity="1"/><line x1="64" y1="830" x2="1536" y2="830" stroke="#334138" stroke-width="1"/><text x="64" y="866" font-size="15" font-family="Segoe UI, Arial, DejaVu Sans, sans-serif" font-weight="400" font-style="normal" text-anchor="start" fill="#93a397" data-max-width="1350">Источники: seif/app.py · seif/ner.py · seif/vault.py · scripts/client_example.py</text><text x="1536" y="866" font-size="16" font-family="Consolas, DejaVu Sans Mono, monospace" font-weight="400" font-style="normal" text-anchor="end" fill="#93a397">03 / 16</text></svg>

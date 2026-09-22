@@ -1,0 +1,650 @@
+{
+  "schema_version": 1,
+  "assessed_at": "2026-09-23",
+  "repository": "seif-pii",
+  "branch": "experiment/rubert-tensorrt",
+  "commit": "15eea677748d6805818d2ac64dbab2a7018040ac",
+  "method": "Read-only review of versioned code and manifests; no live tunnel, cluster or deployment availability claim.",
+  "verdict": "Хорошо разделённый privacy gateway с обратимым преобразованием, а не LLM-orchestrator; зрелость локального runtime выше, чем подтверждённая зрелость deployment и operational SLO.",
+  "profiles": [
+    {
+      "id": "rules",
+      "label": "Основной CPU-профиль",
+      "status": "implemented_default_compose",
+      "runtime": "FastAPI/Uvicorn; Docker Python 3.14.7t, без GIL",
+      "detection": "Локальные правила РФ/СНГ, контекст и контрольные суммы",
+      "ner": null,
+      "evidence": [
+        {
+          "path": "Dockerfile",
+          "line": 1,
+          "end_line": 17
+        },
+        {
+          "path": "compose.yaml",
+          "line": 1,
+          "end_line": 36
+        },
+        {
+          "path": "seif/detector.py",
+          "line": 1370,
+          "end_line": 1397
+        }
+      ]
+    },
+    {
+      "id": "spacy",
+      "label": "Опциональный CPU hybrid",
+      "status": "implemented_opt_in_compose",
+      "runtime": "Отдельный Python 3.13 / Presidio + spaCy ru_core_news_sm",
+      "detection": "Те же правила + PERSON/LOCATION от spaCy",
+      "ner_types": 2,
+      "evidence": [
+        {
+          "path": "compose.ner.yaml",
+          "line": 1,
+          "end_line": 45
+        },
+        {
+          "path": "Dockerfile.ner",
+          "line": 1,
+          "end_line": 18
+        },
+        {
+          "path": "scripts/ner_service.py",
+          "line": 174,
+          "end_line": 196
+        }
+      ]
+    },
+    {
+      "id": "rubert",
+      "label": "Экспериментальный GPU hybrid",
+      "status": "implemented_measured_experimental_branch",
+      "runtime": "Отдельный Python 3.12 / CUDA / TensorRT FP16",
+      "detection": "Те же правила + RuBERT с декодированием слов и сохранением исходных границ",
+      "native_types": 21,
+      "ner_types": 14,
+      "model": "lockR/rubert-base-pii-ner-tensorrt",
+      "revision": "73be581047bf123dac6505e7b3900ec292942296",
+      "constraint": "Нет готового GPU-образа/overlay в текущем deployment-комплекте; веса отдельно; совместимость движка с произвольной GPU не установлена.",
+      "evidence": [
+        {
+          "path": "seif/rubert_ner.py",
+          "line": 22,
+          "end_line": 41
+        },
+        {
+          "path": "seif/rubert_ner.py",
+          "line": 175,
+          "end_line": 260
+        },
+        {
+          "path": "deploy/service/README.md",
+          "line": 72,
+          "end_line": 103
+        }
+      ]
+    }
+  ],
+  "flows": [
+    {
+      "id": "fresh-mask",
+      "steps": [
+        "client JSON + headers",
+        "bounded POST body",
+        "FastAPI request validation",
+        "tenant authentication + rate limit",
+        "HMAC tenant/payload_id + payload fingerprint",
+        "vault read",
+        "rules detector",
+        "optional private NER sequentially",
+        "validated merge + policy",
+        "mask/token/synthetic",
+        "AES-GCM seal + SET NX/TTL",
+        "masked response"
+      ],
+      "evidence": [
+        {
+          "path": "seif/app.py",
+          "line": 384,
+          "end_line": 432
+        },
+        {
+          "path": "seif/app.py",
+          "line": 448,
+          "end_line": 485
+        }
+      ]
+    },
+    {
+      "id": "retry",
+      "steps": [
+        "same tenant + payload_id",
+        "same input fingerprint",
+        "stored masked result"
+      ],
+      "note": "Повтор не обязательно запускает NER. Нагрузочные сравнения должны использовать новые ID или отдельно считать cache/idempotent hits.",
+      "evidence": [
+        {
+          "path": "seif/app.py",
+          "line": 414,
+          "end_line": 431
+        }
+      ]
+    },
+    {
+      "id": "restore",
+      "steps": [
+        "same tenant + payload_id",
+        "policy allow_unmask",
+        "vault lookup",
+        "exact fingerprint or known token substitution",
+        "restored text"
+      ],
+      "note": "LLM вызывает потребитель. API не отправляет текст в LLM.",
+      "evidence": [
+        {
+          "path": "seif/app.py",
+          "line": 320,
+          "end_line": 335
+        },
+        {
+          "path": "seif/transform.py",
+          "line": 65,
+          "end_line": 101
+        }
+      ]
+    }
+  ],
+  "modes": [
+    {
+      "id": "mask",
+      "representation": "Буквы/цифры → *, структура/пунктуация сохранены",
+      "restore": "Точное совпадение сохранённой маски"
+    },
+    {
+      "id": "token",
+      "representation": "Случайные типизированные токены, повтор значения в одном payload → тот же токен",
+      "restore": "Точный roundtrip; /v1/unmask также известные переставленные/повторённые токены в изменённом ответе"
+    },
+    {
+      "id": "synthetic",
+      "representation": "Демонстрационные значения; для неподдержанного synthetic-типа shape_mask",
+      "restore": "Точное совпадение сохранённого результата"
+    }
+  ],
+  "storage": {
+    "ttl_default_seconds": 900,
+    "encryption": "AES-256-GCM; HMAC-derived tenant+payload_id key used as AAD",
+    "record_contents": "masked text, PII replacements/original fragments if allow_unmask, entities, hashes, policy snapshot fields",
+    "memory": "encrypted process-local bounded records; one worker via provided supervisor",
+    "compose": "one Redis; maxmemory/noeviction; no AOF/RDB; shared across workers",
+    "kubernetes": "prepared 3 Redis/Sentinel pods + PVC/AOF; async replication; not zero-RPO",
+    "evidence": [
+      {
+        "path": "seif/vault.py",
+        "line": 25,
+        "end_line": 128
+      },
+      {
+        "path": "seif/app.py",
+        "line": 400,
+        "end_line": 407
+      },
+      {
+        "path": "scripts/serve.py",
+        "line": 16,
+        "end_line": 20
+      }
+    ]
+  },
+  "trust_boundaries": [
+    {
+      "id": "external-api",
+      "data": "Original text, tenant key and payload_id enter API",
+      "controls": "API key unless explicit anonymous demo; TLS is edge responsibility; bounded bodies; rate limits",
+      "limitation": "Gateway does not cryptographically prevent a caller from bypassing it or prove every PII has been found."
+    },
+    {
+      "id": "api-ner",
+      "data": "Raw text/chunks sent over private HTTP; returns type/start/end/score only",
+      "controls": "Bearer token, no redirects/proxy environment, bounded response validation, private Docker network or K8s NetworkPolicy",
+      "limitation": "Private HTTP is not mTLS; NER must be within trusted processing boundary; it is not blind to input."
+    },
+    {
+      "id": "api-vault",
+      "data": "Encrypted record and HMAC keys",
+      "controls": "AES-GCM tenant-bound AAD, TTL, SET NX, Redis private network",
+      "limitation": "Encryption at rest does not encrypt internal Redis/Sentinel credentials or all transport; server process holds key."
+    },
+    {
+      "id": "capture",
+      "data": "Optional raw JSONL originals on local disk",
+      "controls": "Opt-in, mode0700/0600, bounded queue/disk",
+      "limitation": "Independent of vault TTL and encryption; IP metadata is not verified organizer identity."
+    },
+    {
+      "id": "consumer-llm",
+      "data": "Only caller-selected masked text should go to LLM",
+      "controls": "Consumer invokes external LLM and later unmask",
+      "limitation": "No LLM connector, agent or reverse proxy in current service."
+    }
+  ],
+  "deployment": {
+    "status": "manifests_prepared_not_confirmed_deployed",
+    "api_initial_replicas": 3,
+    "api_hpa": {
+      "min": 2,
+      "max": 8,
+      "metric": "CPU 65%"
+    },
+    "redis_sentinel_pods": 3,
+    "optional_cpu_ner_replicas": 2,
+    "gpu_overlay": false,
+    "ingress": "separate TLS example, not included in base",
+    "overlay_limit": "hybrid inherits base; production strict placement must be added explicitly",
+    "evidence": [
+      {
+        "path": "deploy/k8s/base/app.yaml",
+        "line": 8,
+        "end_line": 16
+      },
+      {
+        "path": "deploy/k8s/base/app.yaml",
+        "line": 164,
+        "end_line": 204
+      },
+      {
+        "path": "deploy/k8s/base/redis.yaml",
+        "line": 29,
+        "end_line": 36
+      },
+      {
+        "path": "deploy/k8s/overlays/hybrid/ner.yaml",
+        "line": 8,
+        "end_line": 9
+      },
+      {
+        "path": "docs/kubernetes.md",
+        "line": 3,
+        "end_line": 5
+      },
+      {
+        "path": "docs/kubernetes.md",
+        "line": 191,
+        "end_line": 199
+      }
+    ]
+  },
+  "strengths": [
+    {
+      "id": "S1",
+      "title": "Чёткая граница API и модельного процесса",
+      "detail": "Тяжёлые NLP-зависимости вынесены из CPU API; один bounded wire-контракт поддерживает смену NER.",
+      "evidence": [
+        {
+          "path": "seif/ner_contract.py",
+          "line": 10,
+          "end_line": 45
+        },
+        {
+          "path": "scripts/ner_service.py",
+          "line": 159,
+          "end_line": 196
+        }
+      ]
+    },
+    {
+      "id": "S2",
+      "title": "Контролируемые ошибки вместо аварийного обхода защиты",
+      "detail": "Ошибки NER/хранилища завершают операцию 503; нет автоматического возврата plaintext вместо результата. Это не гарантия обнаружения каждого PII.",
+      "evidence": [
+        {
+          "path": "seif/app.py",
+          "line": 487,
+          "end_line": 495
+        },
+        {
+          "path": "seif/ner.py",
+          "line": 154,
+          "end_line": 169
+        }
+      ]
+    },
+    {
+      "id": "S3",
+      "title": "Обратимость и идемпотентность встроены в контракт",
+      "detail": "HMAC связывает tenant+payload_id, SET NX сохраняет единственного победителя; конфликт текста — 409, отсутствующее соответствие — 410.",
+      "evidence": [
+        {
+          "path": "seif/vault.py",
+          "line": 74,
+          "end_line": 86
+        },
+        {
+          "path": "seif/vault.py",
+          "line": 107,
+          "end_line": 128
+        },
+        {
+          "path": "seif/app.py",
+          "line": 414,
+          "end_line": 431
+        }
+      ]
+    },
+    {
+      "id": "S4",
+      "title": "Ограничены основные источники перегрузки",
+      "detail": "Лимиты HTTP, байтов буфера, длины текста, CPU-работ, модельной очереди и времени NER; capture отбрасывает записи при переполнении вместо ожидания диска.",
+      "evidence": [
+        {
+          "path": "seif/config.py",
+          "line": 104,
+          "end_line": 115
+        },
+        {
+          "path": "seif/app.py",
+          "line": 142,
+          "end_line": 195
+        },
+        {
+          "path": "seif/ner.py",
+          "line": 74,
+          "end_line": 87
+        },
+        {
+          "path": "scripts/ner_service.py",
+          "line": 327,
+          "end_line": 335
+        },
+        {
+          "path": "seif/request_capture.py",
+          "line": 137,
+          "end_line": 156
+        }
+      ]
+    },
+    {
+      "id": "S5",
+      "title": "Наблюдаемость без содержимого в обычном аудите",
+      "detail": "Фиксированные labels Prometheus, длительности этапов, request_id; access_log=False и сообщения ошибок без оригинального input.",
+      "evidence": [
+        {
+          "path": "seif/app.py",
+          "line": 111,
+          "end_line": 113
+        },
+        {
+          "path": "seif/app.py",
+          "line": 261,
+          "end_line": 264
+        },
+        {
+          "path": "seif/app.py",
+          "line": 475,
+          "end_line": 481
+        },
+        {
+          "path": "scripts/serve.py",
+          "line": 26,
+          "end_line": 27
+        }
+      ]
+    }
+  ],
+  "risks": [
+    {
+      "id": "R1",
+      "priority": "high",
+      "title": "Масштабирование API не масштабирует NER",
+      "fact": "Клиент NER имеет semaphore=4 на API-процесс; NER-процесс выполняет модель в одном потоке, RuBERT дополнительно сериализован lock. Kubernetes HPA смотрит CPU API, а NER имеет две фиксированные CPU-реплики.",
+      "impact": "При очереди GPU/NER рост числа API может увеличить ожидание, 429 и timeout без прироста успешного RPS.",
+      "action": "Сначала измерить queue wait, model latency, GPU utilisation и length buckets; затем microbatching/NER-реплики и autoscaling по модельной очереди. Не обещать линейное масштабирование.",
+      "evidence": [
+        {
+          "path": "seif/ner.py",
+          "line": 81,
+          "end_line": 87
+        },
+        {
+          "path": "scripts/ner_service.py",
+          "line": 235,
+          "end_line": 242
+        },
+        {
+          "path": "seif/rubert_ner.py",
+          "line": 234,
+          "end_line": 244
+        },
+        {
+          "path": "deploy/k8s/base/app.yaml",
+          "line": 164,
+          "end_line": 194
+        },
+        {
+          "path": "deploy/k8s/overlays/hybrid/ner.yaml",
+          "line": 8,
+          "end_line": 9
+        }
+      ]
+    },
+    {
+      "id": "R2",
+      "priority": "high",
+      "title": "Смысл политики смешан с распознаванием",
+      "fact": "Корпоративные ИНН и публичные имена отфильтровываются внутри детектора до tenant type selection. Атомарные границы модели отличаются от цельных ФИО и адресов в части gold.",
+      "impact": "Одна настройка не может честно оптимизировать все схемы разметки; tenant не может вернуть кандидата, который детектор уже исключил.",
+      "action": "Разделить extraction → typed canonical candidates → explicit policy decision, сохранять explainable reason; отдельно проверять mask coverage, exact entity F1 и false positives на holdout.",
+      "evidence": [
+        {
+          "path": "seif/context_filters.py",
+          "line": 111,
+          "end_line": 121
+        },
+        {
+          "path": "seif/context_filters.py",
+          "line": 218,
+          "end_line": 244
+        },
+        {
+          "path": "seif/detector.py",
+          "line": 1392,
+          "end_line": 1397
+        },
+        {
+          "path": "seif/app.py",
+          "line": 373,
+          "end_line": 405
+        },
+        {
+          "path": "benchmarks/ner-models/rubert-upgrade/QUALITY_NOTES.md",
+          "line": 99,
+          "end_line": 118
+        }
+      ]
+    },
+    {
+      "id": "R3",
+      "priority": "high",
+      "title": "Обратимость зависит от сохранности vault и мастер-ключа",
+      "fact": "RAM теряет записи при рестарте; Compose Redis без persistence/replicas. K8s использует AOF everysec и async replication. В текущем формате ciphertext нет версии ключа/keyring для плавной ротации.",
+      "impact": "Потеря подтверждённого соответствия или смена ключа делает unmask невозможным; Sentinel не означает zero-RPO.",
+      "action": "Выбрать RPO/RTO, принять failover на целевом кластере, закрепить image digests; добавить versioned keyring и процедуру ротации с сохранением предыдущего ключа на TTL.",
+      "evidence": [
+        {
+          "path": "seif/vault.py",
+          "line": 26,
+          "end_line": 32
+        },
+        {
+          "path": "seif/vault.py",
+          "line": 80,
+          "end_line": 86
+        },
+        {
+          "path": "compose.yaml",
+          "line": 26,
+          "end_line": 36
+        },
+        {
+          "path": "deploy/k8s/base/scripts/start-redis.sh",
+          "line": 26,
+          "end_line": 35
+        },
+        {
+          "path": "docs/kubernetes.md",
+          "line": 177,
+          "end_line": 189
+        }
+      ]
+    },
+    {
+      "id": "R4",
+      "priority": "high",
+      "title": "Захват запросов — отдельный контур хранения исходных данных",
+      "fact": "Opt-in capture записывает plaintext JSONL, независимо от encrypted vault и его TTL; submit вызывается после POST даже для ошибочного статуса. Права 0700/0600 и .gitignore ограничивают часть рисков, но не задают удаление или шифрование.",
+      "impact": "Нельзя заявлять, что оригиналы никогда не попадают на диск; disk cap per worker не равен общей retention-политике.",
+      "action": "Управляемые capture windows, срок удаления, отдельный ключ/шифрование и общий бюджет; лучше explicit evaluation tenant/token, чем определение организатора по IP.",
+      "evidence": [
+        {
+          "path": "seif/request_capture.py",
+          "line": 63,
+          "end_line": 76
+        },
+        {
+          "path": "seif/request_capture.py",
+          "line": 95,
+          "end_line": 109
+        },
+        {
+          "path": "seif/request_capture.py",
+          "line": 176,
+          "end_line": 197
+        },
+        {
+          "path": "seif/app.py",
+          "line": 126,
+          "end_line": 160
+        },
+        {
+          "path": "seif/app.py",
+          "line": 63,
+          "end_line": 93
+        },
+        {
+          "path": ".gitignore",
+          "line": 20
+        }
+      ]
+    },
+    {
+      "id": "R5",
+      "priority": "medium",
+      "title": "Public API проверяет ключ после чтения тела",
+      "fact": "Boundary ограничивает body, но сначала полностью буферизует POST, затем FastAPI разбирает JSON, и лишь execute вызывает authorize. Private NER уже проверяет Bearer до чтения тела.",
+      "impact": "Неавторизованный клиент может занимать bounded upload/JSON memory и CPU; tenant rate limit не ограничивает эту стадию.",
+      "action": "Вынести дешёвую проверку system/key для защищённых POST перед body read; сохранить отдельные глобальные/IP ingress limits, bounded upload и anonymous-demo как явный профиль.",
+      "evidence": [
+        {
+          "path": "seif/app.py",
+          "line": 199,
+          "end_line": 219
+        },
+        {
+          "path": "seif/app.py",
+          "line": 448,
+          "end_line": 450
+        },
+        {
+          "path": "seif/app.py",
+          "line": 294,
+          "end_line": 318
+        },
+        {
+          "path": "scripts/ner_service.py",
+          "line": 74,
+          "end_line": 84
+        }
+      ]
+    }
+  ],
+  "priorities": [
+    {
+      "order": 1,
+      "title": "Разделить распознавание и политику",
+      "risk": "R2",
+      "success": "Улучшение качества по трём метрикам на фиксированных regression + новом holdout; tenant policy не меняет необратимо raw candidate evidence."
+    },
+    {
+      "order": 2,
+      "title": "Сделать NER самостоятельной масштабируемой подсистемой",
+      "risk": "R1",
+      "success": "GPU образ+readiness, queue wait/model latency, bounded microbatch; подтверждённый RPS/p95 на реальном corpus и больших текстах."
+    },
+    {
+      "order": 3,
+      "title": "Принять развёртывание и восстановление как эксплуатационный продукт",
+      "risk": "R3",
+      "success": "Проверенные manifests/image digests, staged key rotation, failover restore across pods, измеренные RPO/RTO."
+    },
+    {
+      "order": 4,
+      "title": "Закрыть ранний admission и внутренний транспорт",
+      "risk": "R5",
+      "success": "Отказ неавторизованным POST до body parse; ingress limits; TLS/mTLS policy на нужных границах."
+    },
+    {
+      "order": 5,
+      "title": "Управлять жизненным циклом capture",
+      "risk": "R4",
+      "success": "Явный evaluation tenant, encryption/retention, подтверждённое удаление и метрики пропусков; disabled вне окна замера."
+    }
+  ],
+  "diagram_spec": {
+    "flow_direction": "left_to_right",
+    "solid": "Implemented runtime",
+    "dashed": "Optional or prepared deployment",
+    "warnings": [
+      "rules and NER are sequential",
+      "LLM external to service, invoked by consumer",
+      "API 31 exposed types is not same count as model 21 native / 14 interface",
+      "raw text crosses API→NER trust boundary",
+      "masked response returned only after vault write success",
+      "Kubernetes diagram describes manifests, not live deployment"
+    ],
+    "recommended_diagrams": [
+      "Request and restoration flow",
+      "CPU and GPU profile separation",
+      "TTL vault, capture and trust boundaries",
+      "Prepared Kubernetes topology with unavailable GPU overlay noted"
+    ]
+  },
+  "source_sha256": {
+    ".gitignore": "20880704b20559f0894c029768c39cfdcf5f3ccd057b7b906b6e963b2d08b602",
+    "Dockerfile": "ca245c593cd4fdadf4fd8b29eb3ab7680c8e5b3a2dd9f5d9d62c0f04cc129ca5",
+    "Dockerfile.ner": "553d8d4a3938a79cbb2dfe74d087b8853a4edc49b98830af510661627f109617",
+    "benchmarks/ner-models/rubert-upgrade/QUALITY_NOTES.md": "0fbca40569921134cf15e7e4fa46db61e478df25e3905a4ae151254e02a8b7a3",
+    "compose.ner.yaml": "ffbca75bb5b0f8051ed17e44ae1fb87f1d449d811f86f3b484f6bf0a0733f73d",
+    "compose.yaml": "ec1d0366f5fabd3b6b991400125daa7261f4a8e3cc21d91b73a739831ab0171f",
+    "deploy/k8s/base/app.yaml": "addcb2b1504fad4ce998fefb9792663638589d90fea464334fddfd2c1a2f19c5",
+    "deploy/k8s/base/redis.yaml": "2665faa087d4bb156888709a2d8f3bb4ba900cb5703fb5895bceb321eea988db",
+    "deploy/k8s/base/scripts/start-redis.sh": "9ea4c5072b84da9cf791379ed50575aa291a7c780b8d9b90a6d3a6b0483014c1",
+    "deploy/k8s/overlays/hybrid/ner.yaml": "c8a30e98af69e083a052b75f93547e288eaa76a179c1d14494366d741eecab96",
+    "deploy/service/README.md": "70a5fa6f528f233b9014de4a6e8bcd3510e184b52b714da3864b8c217810c560",
+    "docs/kubernetes.md": "92af5fa59fa43bfbe771b992d88c47bf2da3018d3c12141a72730793932b08c8",
+    "scripts/ner_service.py": "efb6ebe91c1232dcbc6f32b533f1dd6177acfadb870062c7b693e357cafb1679",
+    "scripts/serve.py": "7a8e564142d93a4619d9f01eea09e40b3753699c93310f1a92a608ec7e492300",
+    "seif/app.py": "e958559569fae134ace1e54ef02af655dc65a4fc481a93545c315721bc1f8951",
+    "seif/config.py": "ca9c4e4bc80fcb6847f53f08593b25e5a3b41d6ae5a44ce7c416075ffd7b4b45",
+    "seif/context_filters.py": "d2bd0a0303aaae5bb44e6748ae429c5348e34f0f711a46285ed869b657c59fa1",
+    "seif/detector.py": "0fa80ea590895f862be2d44278bf68e75f5ce4a7f8cabb76d079f065f491b98c",
+    "seif/ner.py": "6dec8f01a73331f2f61b5ae8c2c2df97e13490e8baf3fe810a9527e5310aa83f",
+    "seif/ner_contract.py": "83ce1bf1345ece197c74e7477e4524f08f511a5b0fb3218247039efb7e1addb2",
+    "seif/request_capture.py": "ce9d53ed7827992cd5c0c4b10914e3f9becc978cc192263116112c642e506855",
+    "seif/rubert_ner.py": "92e977971f3764c00a3dc7fb9e2c957163f7682b5b1e87ea34ef2fac4db7178a",
+    "seif/transform.py": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+    "seif/vault.py": "b6b4f59bc911bb0a0c745b6801bcd9a034200e016f321e38c2984206c2946554"
+  }
+}

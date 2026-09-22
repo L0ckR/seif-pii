@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "scope": "CPU-only replay of frozen GLiNER PERSON/LOCATION outputs through current rules; strict tokenizer-only audit. No new model inference or HTTP load.",
+  "corpus_identity": {
+    "ordered_membership_sha256": "8c330eeee653b2414824a28e9c45863d5bfeb43965698174a3516a96f00a12e8",
+    "text_sha256": "04d16d733c44eb8917f3138399ebbb8df05a27db9a1399dd86ff1ee2cf93aec9",
+    "gold_sha256": "932cd5d5d3573b043a74c845503e89af7dbbd87fda99316075e3a5dcbd7e1720"
+  },
+  "corpus_counts": {
+    "organizer": 446,
+    "pii": 1810,
+    "redmadrobot": 2839
+  },
+  "preprocessing_audit": {
+    "status": "PASS",
+    "counts": {
+      "documents": 5095,
+      "long_documents": 80,
+      "chunks": 5179
+    },
+    "issues": [],
+    "empty_subword_words": []
+  },
+  "gliner_onnx_identical_span_cases": {
+    "organizer": 446,
+    "pii": 1810,
+    "redmadrobot": 2839
+  },
+  "candidate_counts": {
+    "gliner": {
+      "PERSON": 1660,
+      "LOCATION": 1323
+    },
+    "spacy": {
+      "LOCATION": 1030,
+      "PERSON": 1068
+    },
+    "onnx": {
+      "PERSON": 1660,
+      "LOCATION": 1323
+    }
+  },
+  "candidate_maximum_chars": {
+    "gliner": 44,
+    "spacy": 78,
+    "onnx": 44
+  },
+  "models": {
+    "gliner": {
+      "historical_mask_f1_percent": {
+        "organizer": 97.4598,
+        "pii": 71.7599,
+        "redmadrobot": 65.656
+      },
+      "current_mask_f1_percent": {
+        "organizer": 97.4598,
+        "pii": 74.2888,
+        "redmadrobot": 70.4692
+      },
+      "delta_pp": {
+        "organizer": 0.0,
+        "pii": 2.5289,
+        "redmadrobot": 4.8132
+      },
+      "current_source_pointers": {
+        "organizer": "/corpora/organizer/full_masking_all_gold_types/systems/gliner_hybrid/f1",
+        "pii": "/corpora/pii/full_masking_all_gold_types/systems/gliner_hybrid/f1",
+        "redmadrobot": "/corpora/redmadrobot/full_masking_all_gold_types/systems/gliner_hybrid/f1"
+      },
+      "current_rmr_exact_common14_percent": 41.7465,
+      "current_mask_f1": {
+        "organizer": 0.974598,
+        "pii": 0.742888,
+        "redmadrobot": 0.704692
+      }
+    },
+    "onnx": {
+      "historical_mask_f1_percent": {
+        "organizer": 97.4598,
+        "pii": 71.7599,
+        "redmadrobot": 65.656
+      },
+      "current_mask_f1_percent": {
+        "organizer": 97.4598,
+        "pii": 74.2888,
+        "redmadrobot": 70.4692
+      },
+      "delta_pp": {
+        "organizer": 0.0,
+        "pii": 2.5289,
+        "redmadrobot": 4.8132
+      },
+      "current_source_pointers": {
+        "organizer": "/corpora/organizer/full_masking_all_gold_types/systems/onnx_hybrid/f1",
+        "pii": "/corpora/pii/full_masking_all_gold_types/systems/onnx_hybrid/f1",
+        "redmadrobot": "/corpora/redmadrobot/full_masking_all_gold_types/systems/onnx_hybrid/f1"
+      },
+      "current_rmr_exact_common14_percent": 41.7465,
+      "current_mask_f1": {
+        "organizer": 0.974598,
+        "pii": 0.742888,
+        "redmadrobot": 0.704692
+      }
+    },
+    "spacy": {
+      "historical_mask_f1_percent": {
+        "organizer": 96.8856,
+        "pii": 71.9545,
+        "redmadrobot": 59.4971
+      },
+      "current_mask_f1_percent": {
+        "organizer": 96.8856,
+        "pii": 74.3979,
+        "redmadrobot": 65.3661
+      },
+      "delta_pp": {
+        "organizer": 0.0,
+        "pii": 2.4434,
+        "redmadrobot": 5.869
+      },
+      "current_source_pointers": {
+        "organizer": "/corpora/organizer/full_masking_all_gold_types/systems/spacy_hybrid/f1",
+        "pii": "/corpora/pii/full_masking_all_gold_types/systems/spacy_hybrid/f1",
+        "redmadrobot": "/corpora/redmadrobot/full_masking_all_gold_types/systems/spacy_hybrid/f1"
+      },
+      "current_rmr_exact_common14_percent": 42.2018,
+      "current_mask_f1": {
+        "organizer": 0.968856,
+        "pii": 0.743979,
+        "redmadrobot": 0.653661
+      }
+    }
+  },
+  "comparison_current_rubert": {
+    "organizer": 97.1285,
+    "pii": 77.8639,
+    "redmadrobot": 93.9041
+  },
+  "sources": {
+    "baseline": {
+      "file": "local-data/gliner-recheck/baseline.json",
+      "sha256": "abdedd8dbab673a1a54abdc9b37cd3c0f1b56a1dcebaaf221f6d5c0f294e4da6"
+    },
+    "current": {
+      "file": "local-data/gliner-recheck/current.json",
+      "sha256": "79dca7acff75eb8c5f9e09543bb30e1093b59e3cd77a45a4435c1f975d7b9d6c"
+    },
+    "preprocessing": {
+      "file": "local-data/gliner-recheck/preprocessing.json",
+      "sha256": "8621649a164cccd2c331499fcb23d1216a79074b7406c997606faf7a3715dd2d"
+    },
+    "replay_runner": {
+      "file": "local-data/gliner-recheck/replay.py",
+      "sha256": "e5b56acc72853be22019e614ef1b64d0563f75103d2ab1ba83f0dc0afb0bffe8"
+    },
+    "preflight_runner": {
+      "file": "local-data/gliner-recheck/preflight.py",
+      "sha256": "4ea0d1cd944dfb557d5430612e5cde3cc4da48d3bfa16fea77f0e6a54fcb3aeb"
+    },
+    "current_rubert": {
+      "file": "benchmarks/ner-models/rubert-upgrade/quality-v5.json",
+      "sha256": "1fe31edd072443ddb9a6cae49d2bdefbe5295d7d3490bcf02fb9ebc1ae728f54"
+    }
+  },
+  "runtime_source_sha256": {
+    "seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+    "seif/app.py": "e958559569fae134ace1e54ef02af655dc65a4fc481a93545c315721bc1f8951",
+    "seif/async_callbacks.py": "b5ce7aae9979e6251c827d3e2099a4377266bcb8076606d67dbe86c38fa21ebe",
+    "seif/cardholder_fields.py": "3d80d59636e4b2e1a668325fbb945027b48a37e60aad5297c39b727a51806462",
+    "seif/config.py": "ca9c4e4bc80fcb6847f53f08593b25e5a3b41d6ae5a44ce7c416075ffd7b4b45",
+    "seif/context_filters.py": "d2bd0a0303aaae5bb44e6748ae429c5348e34f0f711a46285ed869b657c59fa1",
+    "seif/detector.py": "0fa80ea590895f862be2d44278bf68e75f5ce4a7f8cabb76d079f065f491b98c",
+    "seif/document_fields.py": "2200ed9f9751ee4894f164a4b43654de6f204c9661da83cdbf7a2a455d46ba51",
+    "seif/gliner_ner.py": "8012d0c3fc83b6c0a0defd4a07735d6e9cd4aa0c5debb1f7c395ddafb7431311",
+    "seif/gliner_onnx.py": "08118aaf0326e89d7a0ef890a24f7a29728578a713690e930cf7cf48cd12056d",
+    "seif/location_fields.py": "2d806e7a35bb7669001e796deba5cbac020dddb2887284390d27becebc43009e",
+    "seif/ner.py": "6dec8f01a73331f2f61b5ae8c2c2df97e13490e8baf3fe810a9527e5310aa83f",
+    "seif/ner_boundaries.py": "0f93e7eeed5125933de09e2e05f8ebb037a477b46d9be93cab7cbb1c750bf815",
+    "seif/ner_contract.py": "83ce1bf1345ece197c74e7477e4524f08f511a5b0fb3218247039efb7e1addb2",
+    "seif/person_fields.py": "ca843e9b6f8ef9d4739703e83b1438a96d114dc95782626fa2e89366bf29f08d",
+    "seif/request_capture.py": "ce9d53ed7827992cd5c0c4b10914e3f9becc978cc192263116112c642e506855",
+    "seif/rubert_decoder.py": "303608a624d591c20e0d68730537009a0694f78d614307e46b9cf288063ffe81",
+    "seif/rubert_ner.py": "92e977971f3764c00a3dc7fb9e2c957163f7682b5b1e87ea34ef2fac4db7178a",
+    "seif/structured_fields.py": "26462106b1a29140a3bbf2b2370feab631145932ee44fbb78ca007b6d1d1218c",
+    "seif/transform.py": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+    "seif/vault.py": "b6b4f59bc911bb0a0c745b6801bcd9a034200e016f321e38c2984206c2946554",
+    "scripts/benchmark.py": "494a3da78f56396517ff3094896dd11d7b61977e440e552e3e986add26db70e5",
+    "scripts/benchmark_corpus.py": "8a47252e2bd2e525373c29e0314694bac4c80627ec656ded68d2fef6f46a4606",
+    "scripts/cache_gliner.py": "80d04e6a1e10f7e2d606d096722a7ebf36c10309d29155a895b4d739ea0dba88",
+    "scripts/capture_requests.py": "0c5ca76522f41df003596830968ef4267cc47f82d368c35a09ccc0bbbb3419e6",
+    "scripts/client_example.py": "4bda224a64ee21d1af48d1beaf3017103f0fafbee50f0677b4c054241392a3bf",
+    "scripts/code_quality.py": "13372c6b78dd751ce5917a49b72ce2a05077b5d4d40747d5c600a5c96a2a54c2",
+    "scripts/compare_ner_models.py": "f520284721d8a85096627c32230eb256ba1375072df4e5d73e6f4da1bdb19652",
+    "scripts/compare_ner_public.py": "a781a7fc73b3ac947f27c14459f1e40aafd7bb8fcc6bdf064bcba14c7ded6286",
+    "scripts/compare_onnx.py": "bc3b7a3acc02d1ba755afd4e114b0930966ec44dd78a0bc5658388cadacbd6e5",
+    "scripts/compare_presidio.py": "e6839cccbeccb27303d69037a7f4d73256a5e89a15b5bb04bafcb5fe86c7e99a",
+    "scripts/compare_rubert.py": "177ba639ea126f5eaa961d2e5730088edad49b3c7c1415e8d5818edd7b7e4ddb",
+    "scripts/evaluate.py": "c50bc7e4f571955be7a76c79c6c15c115d6c7ab5e95829bcbc07e2efc3abe4ff",
+    "scripts/evaluate_annotations.py": "b429e3605b90a9090a8eae0185ee9286708836494235617901fbd6ae4e0d5463",
+    "scripts/evaluate_external.py": "7281551dc7c62ce22b10676f7029de5580b9558f3c1d427a79e2a89497a22e85",
+    "scripts/evaluate_golden.py": "02e1160fbfbb2933e4e90d65573e559962e6b474ab69ddaa1c2c0f66e68226ff",
+    "scripts/evaluate_hybrid.py": "74a96f4a2d1a4a235aa8087e7d23f268b04b3c34dbdf3caa0e0bf134b2312d8c",
+    "scripts/evaluate_location_ablation.py": "4b854f1b42f91af35bd18bf29da50ef52100cb255e2efa93912f710cba4c0956",
+    "scripts/evaluate_redmadrobot.py": "2e94c14034db198cb8718ed8161abe76354c27980f63346e3d34fad439aaa5c4",
+    "scripts/evaluate_scanpatch.py": "49eb2e72da5dd4f36b0efa7fec6f1c1cafca85392b705b8cf3e6f8989511aca8",
+    "scripts/failover_check.py": "9790535a19266f1e11f66ae696e9714cc9d05a1c8e0bf6326344bceab511dde0",
+    "scripts/large_input.py": "5646f5bde88ee5b9f865876a9290fc5a922403248a82320a97a189ae2b10e1d1",
+    "scripts/local_redis.py": "440cbfaecb69ac2c48dbb3101c86b25481904c9e497d55e7770a021c96d2c6d2",
+    "scripts/ner_service.py": "efb6ebe91c1232dcbc6f32b533f1dd6177acfadb870062c7b693e357cafb1679",
+    "scripts/package.py": "bb286815feccdcb043897ab449f279baf06e33f6c582e68295d261ac6c6826e4",
+    "scripts/runtime_probe.py": "9ac64e8f0f5b3f42f93230038b590e78ed07a9877672c47c1df6dafea648352c",
+    "scripts/serve.py": "7a8e564142d93a4619d9f01eea09e40b3753699c93310f1a92a608ec7e492300"
+  },
+  "historical_aggregate_control": "PASS",
+  "limitations": [
+    "GLiNER requested only person/location (+ organization competing label, deliberately excluded from PII output).",
+    "The old prediction cache has no other PII classes; expanding labels requires new inference.",
+    "Native/ONNX parity proves conversion equivalence, not independent decoder correctness.",
+    "All replay spans and scores unchanged; actual rules/merge/mask/restore logic evaluated.",
+    "No new HTTP measurement; old RPS describes old service configuration.",
+    "Previously inspected corpora; organizer provisional AI silver, not official labels.",
+    "Current GLiNER processor audited; historical reports pinned package versions but did not hash all installed decoder/preprocessor files."
+  ]
+}

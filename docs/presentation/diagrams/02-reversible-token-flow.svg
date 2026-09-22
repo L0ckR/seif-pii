@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc"><title id="title">Обратимость без передачи таблицы замен в LLM</title><desc id="desc">Диаграмма последовательности token-режима. Приложение защищает текст, самостоятельно вызывает LLM и передаёт ответ на восстановление. Хранилище шифрует соответствия с TTL и привязкой к tenant и payload_id. Токены должны сохраниться в ответе.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 8 4 L 0 8" fill="none" stroke="#c0f0c5" stroke-width="1.5"/></marker><marker id="arrow-orange" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 8 4 L 0 8" fill="none" stroke="#eab291" stroke-width="1.5"/></marker></defs>
+<rect x="0" y="0" width="1600" height="900" rx="2" fill="#111b17"/>
+<rect x="64" y="37" width="8" height="8" rx="2" fill="#c0f0c5"/>
+<text x="86" y="47" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="17" font-weight="400" text-anchor="start" letter-spacing="2">СЕЙФ / АРХИТЕКТУРА</text>
+<text x="1536" y="47" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="17" font-weight="400" text-anchor="end">23.09.2026</text>
+<text x="64" y="106" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="44" font-weight="500" text-anchor="start">Обратимость без передачи таблицы замен в LLM</text>
+<text x="64" y="147" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Token-режим: восстановление ответа разрешает политика системы, а соответствия живут до истечения TTL.</text>
+<rect x="64" y="184" width="236" height="94" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<rect x="64" y="184" width="3" height="94" rx="0" fill="#c0f0c5"/>
+<text x="88" y="222" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">Приложение</text>
+<text x="88" y="256" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">tenant + payload_id</text>
+<rect x="447" y="184" width="286" height="94" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<rect x="447" y="184" width="3" height="94" rx="0" fill="#c0f0c5"/>
+<text x="471" y="222" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">API SEIF</text>
+<text x="471" y="256" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">protect / restore</text>
+<rect x="858" y="184" width="286" height="94" rx="2" fill="#1c2a22" stroke="#334138" stroke-width="1.2"/>
+<rect x="858" y="184" width="3" height="94" rx="0" fill="#c0f0c5"/>
+<text x="882" y="222" fill="#f0f0df" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">Private vault</text>
+<text x="882" y="256" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">AES-GCM + TTL</text>
+<rect x="1273" y="184" width="263" height="94" rx="2" fill="#1c2a22" stroke="#eab291" stroke-width="1.2"/>
+<rect x="1273" y="184" width="3" height="94" rx="0" fill="#eab291"/>
+<text x="1297" y="222" fill="#eab291" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" text-anchor="start">Внешняя LLM</text>
+<text x="1297" y="256" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start">вызов приложения</text>
+<path d="M 182 278 L 182 775" fill="none" stroke="#334138" stroke-width="1" stroke-linejoin="round" stroke-dasharray="4 8"/>
+<path d="M 590 278 L 590 775" fill="none" stroke="#334138" stroke-width="1" stroke-linejoin="round" stroke-dasharray="4 8"/>
+<path d="M 1001 278 L 1001 775" fill="none" stroke="#334138" stroke-width="1" stroke-linejoin="round" stroke-dasharray="4 8"/>
+<path d="M 1404 278 L 1404 775" fill="none" stroke="#334138" stroke-width="1" stroke-linejoin="round" stroke-dasharray="4 8"/>
+<path d="M 1207 176 L 1207 786" fill="none" stroke="#334138" stroke-width="1" stroke-linejoin="round" stroke-dasharray="8 8"/>
+<text x="1227" y="310" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="17" font-weight="400" text-anchor="start">ВНЕ SEIF</text>
+<path d="M 182 323 H 590" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="198" y="310" fill="#c0f0c5" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="400" text-anchor="start">1  /v1/mask · token</text>
+<path d="M 590 388 H 1001" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="606" y="375" fill="#c0f0c5" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="400" text-anchor="start">2  записать зашифрованную запись</text>
+<path d="M 590 453 H 182" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="198" y="440" fill="#c0f0c5" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="400" text-anchor="start">3  текст с токенами</text>
+<path d="M 182 518 H 1404" fill="none" stroke="#eab291" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#arrow-orange)"/>
+<text x="198" y="505" fill="#eab291" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="400" text-anchor="start">4  приложение → LLM: текст с токенами</text>
+<path d="M 1404 583 H 182" fill="none" stroke="#eab291" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#arrow-orange)"/>
+<text x="198" y="570" fill="#eab291" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="400" text-anchor="start">5  ответ LLM с сохранёнными токенами</text>
+<path d="M 182 648 H 590" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="198" y="635" fill="#c0f0c5" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="400" text-anchor="start">6  /v1/unmask</text>
+<path d="M 590 713 H 1001" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="606" y="700" fill="#c0f0c5" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="400" text-anchor="start">7  прочитать и расшифровать</text>
+<path d="M 590 778 H 182" fill="none" stroke="#c0f0c5" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="198" y="765" fill="#c0f0c5" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="400" text-anchor="start">8  восстановленный ответ</text>
+<text x="700" y="639" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="400" text-anchor="start">тот же tenant + payload_id</text>
+<text x="1090" y="765" fill="#93a397" font-family="Consolas, Liberation Mono, monospace" font-size="18" font-weight="400" text-anchor="start">HMAC(tenant, payload_id)</text>
+<text x="64" y="826" fill="#93a397" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="400" text-anchor="start">Срок истёк → 410. Неизвестный или повреждённый токен не восстанавливается; ошибка детекции остаётся риском.</text>
+</svg>
