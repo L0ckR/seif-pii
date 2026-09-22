@@ -147,6 +147,21 @@ def create_analyzer(args):
     return GlinerOnnxAnalyzer.from_local(args.model_path, args.native_path, device=args.device, cpu_threads=4)
 
 
+def measured_call(analyzer, text, device):
+    import torch
+
+    started = time.perf_counter()
+    error = None
+    try:
+        entities = public.infer_document(analyzer, text)
+    except Exception as exc:
+        # Never score an unavailable corpus as a successful empty prediction.
+        entities, error = [], type(exc).__name__
+    if device == "cuda":
+        torch.cuda.synchronize()
+    return entities, error, (time.perf_counter() - started) * 1000
+
+
 def cache(args, rows, protocol):
     import torch
 
@@ -162,19 +177,19 @@ def cache(args, rows, protocol):
         public.infer_document(analyzer, "Иван Иванов приехал в Москву.")
     if args.device == "cuda":
         torch.cuda.synchronize()
-    by_corpus, per_case = defaultdict(list), []
+    by_corpus, per_case, failures = defaultdict(list), [], defaultdict(list)
     started = time.perf_counter()
     with target.open("x", encoding="utf-8") as stream:
         for index, row in enumerate(selected, 1):
-            before = time.perf_counter()
-            entities = public.infer_document(analyzer, row["text"])
-            if args.device == "cuda":
-                torch.cuda.synchronize()
-            ms = (time.perf_counter() - before) * 1000
+            entities, error, ms = measured_call(analyzer, row["text"], args.device)
             by_corpus[row["dataset"]].append(ms)
-            per_case.append({"case_id": row["key"], "latency_ms": ms})
-            stream.write(json.dumps({"case_id": row["key"], "text_sha256": hashlib.sha256(row["text"].encode()).hexdigest(),
-                                     "entities": entities}, sort_keys=True, separators=(",", ":")) + "\n")
+            per_case.append({"case_id": row["key"], "latency_ms": ms, "error_type": error})
+            record = {"case_id": row["key"], "text_sha256": hashlib.sha256(row["text"].encode()).hexdigest(),
+                      "entities": entities}
+            if error:
+                record["inference_error"] = error
+                failures[row["dataset"]].append({"case_id": row["key"], "error_type": error})
+            stream.write(json.dumps(record, sort_keys=True, separators=(",", ":")) + "\n")
             if index % 100 == 0:
                 stream.flush()
                 print(json.dumps({"completed": index, "total": len(selected), "backend": args.backend, "device": args.device}), flush=True)
@@ -189,7 +204,11 @@ def cache(args, rows, protocol):
                 "settings": SETTINGS, "versions": versions(), "source_sha256": protocol["source_sha256"],
                 "hardware": {"platform": platform.platform(), "logical_cpus": os.cpu_count(),
                              "gpu": torch.cuda.get_device_name() if args.device == "cuda" else None},
-                "timing_by_corpus": {k: timing(v) for k, v in by_corpus.items()},
+                "timing_by_corpus": {k: {**timing(v), "failed_cases": len(failures[k]),
+                                         "valid_complete_corpus_measurement": not failures[k],
+                                         "successful_documents_per_second": (len(v) - len(failures[k])) / (sum(v) / 1000)}
+                                     for k, v in by_corpus.items()},
+                "failures_by_corpus": dict(failures),
                 "elapsed_seconds_including_cache": elapsed, "documents_per_second_including_cache": len(selected) / elapsed,
                 "per_case_latency_ms": per_case,
                 "timing_scope": "Warm sequential full analyzer calls, batch1, no HTTP/Redis/masking/concurrency; not service RPS."}
@@ -283,6 +302,11 @@ def evaluate(args, rows, protocol):
     selected = [r for r in rows if args.scope == "all" or r["dataset"] == "organizer"]
     path = args.run_dir / f"{args.backend}-{args.device}-{args.scope}.jsonl"
     candidate, metadata = public.load_cache(path, selected, golden.sha256(args.run_dir / "protocol.json"))
+    records = [json.loads(line) for line in path.read_text().splitlines()]
+    failed_ids = {r["case_id"] for r in records if "inference_error" in r}
+    expected_failed = {r["case_id"] for group in metadata["failures_by_corpus"].values() for r in group}
+    if failed_ids != expected_failed:
+        raise ValueError("Failure provenance differs between cache and metadata")
     caches = reference_caches(args, rows)
     caches["candidate"] = candidate
     predictions = defaultdict(dict)
@@ -292,6 +316,11 @@ def evaluate(args, rows, protocol):
     corpora, cases = {}, golden.load_cases(DATA)
     for dataset in dict.fromkeys(r["dataset"] for r in selected):
         part = [r for r in selected if r["dataset"] == dataset]
+        failures = sorted(r["key"] for r in part if r["key"] in failed_ids)
+        if failures:
+            corpora[dataset] = {"cases": len(part), "quality_available": False, "failed_case_ids": failures,
+                                "reason": "No complete-corpus quality claim when actual inference failed; no cases silently excluded."}
+            continue
         if dataset != "organizer":
             corpora[dataset] = score_public(part, predictions, caches)
             continue
@@ -300,7 +329,8 @@ def evaluate(args, rows, protocol):
         corpora[dataset] = {"cases": len(part), "service_hybrid": scored, "raw_person_candidate": person_only(cases, organizer_cache)}
     result = {"schema_version": 1, "protocol_sha256": golden.sha256(args.run_dir / "protocol.json"),
               "protocol": protocol, "candidate_metadata": metadata, "corpora": corpora,
-              "parity_vs_native": {ds: parity([r for r in selected if r["dataset"] == ds], caches["native"], candidate)
+              "parity_vs_native": {ds: (None if metadata["failures_by_corpus"].get(ds)
+                                         else parity([r for r in selected if r["dataset"] == ds], caches["native"], candidate))
                                    for ds in dict.fromkeys(r["dataset"] for r in selected)},
               "limitations": ["Organizer labels are provisional AI silver, not organizer ground truth.",
                               "Corpora already used for rule development; selected GLiNER schema tuned on organizer before this experiment.",

@@ -108,7 +108,11 @@ def _check_boundary_arrays(arrays, text_mask, query_mask):
     pair, indices, valid, null = (arrays[name] for name in
                                 ("pair_logits", "candidate_indices", "candidate_valid", "null_logits"))
     batch, queries = query_mask.shape
-    expected = (batch, queries, 192)
+    # The export's 192 is a maximum pool budget, not a fixed output axis.
+    # Short inputs produce smaller pools (e.g. six words produce K=73).
+    if pair.ndim != 3 or not 0 <= pair.shape[2] <= 192:
+        raise ValueError("Invalid ONNX candidate pool dimension or budget.")
+    expected = (batch, queries, pair.shape[2])
     if (pair.shape != expected or indices.shape != (*expected, 2) or valid.shape != expected
             or null.shape != (batch, queries) or pair.dtype != np.float32 or null.dtype != np.float32
             or indices.dtype != np.int64 or valid.dtype != np.bool_):

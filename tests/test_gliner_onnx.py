@@ -199,6 +199,49 @@ def test_invalid_padding_not_mistaken_for_a_real_nonfinite_candidate(numeric):
     _check_boundary_arrays(arrays, np.ones((1, 3), dtype=np.bool_), np.ones((1, 3), dtype=np.bool_))
 
 
+@pytest.mark.parametrize("pool_size", [0, 1, 2, 33, 40, 73, 191, 192])
+def test_dynamic_candidate_pool_keeps_short_input_candidates(numeric, pool_size):
+    np, torch = numeric
+    arrays = boundary_arrays(np)
+    for name in ("pair_logits", "candidate_indices", "candidate_valid"):
+        arrays[name] = arrays[name][:, :, :pool_size]
+    session = FakeSession(BOUNDARY_INPUTS, sorted(BOUNDARY_OUTPUTS), arrays)
+    _, boundary = _make_shims(None, session)
+    result = boundary(torch.zeros((1, 3, 768)), torch.ones((1, 3), dtype=torch.bool),
+                      torch.zeros((1, 3, 768)), torch.ones((1, 3), dtype=torch.bool))
+    assert result.candidates.indices.shape == (1, 3, pool_size, 2)
+    assert torch.equal(result.candidates.indices, torch.from_numpy(arrays["candidate_indices"]))
+    assert torch.equal(result.candidates.valid_mask, torch.from_numpy(arrays["candidate_valid"]))
+    assert torch.equal(result.candidates.pair_logits, torch.from_numpy(arrays["pair_logits"]))
+    assert torch.equal(result.null_logits, torch.from_numpy(arrays["null_logits"]))
+
+
+def test_oversized_pool_rejects_even_when_all_output_shapes_agree(numeric):
+    np, _ = numeric
+    arrays = {"candidate_indices": np.zeros((1, 3, 193, 2), dtype=np.int64),
+              "candidate_valid": np.zeros((1, 3, 193), dtype=np.bool_),
+              "pair_logits": np.zeros((1, 3, 193), dtype=np.float32),
+              "null_logits": np.zeros((1, 3), dtype=np.float32)}
+    with pytest.raises(ValueError, match="pool dimension or budget"):
+        _check_boundary_arrays(arrays, np.ones((1, 3), dtype=np.bool_), np.ones((1, 3), dtype=np.bool_))
+
+
+def test_export_runtime_failure_propagates_without_empty_prediction_or_native_fallback(numeric):
+    _, torch = numeric
+
+    class BrokenSession:
+        def get_outputs(self):
+            return [SimpleNamespace(name=name) for name in BOUNDARY_OUTPUTS]
+
+        def run(self, *_):
+            raise RuntimeError("export cannot broadcast Where_14")
+
+    _, boundary = _make_shims(None, BrokenSession())
+    with pytest.raises(RuntimeError, match="cannot broadcast"):
+        boundary(torch.zeros((1, 1, 768)), torch.ones((1, 1), dtype=torch.bool),
+                 torch.zeros((1, 3, 768)), torch.ones((1, 3), dtype=torch.bool))
+
+
 @pytest.mark.parametrize("malformed", ["float64", "nan", "width"])
 def test_invalid_encoder_outputs_fail_closed(numeric, malformed):
     np, torch = numeric

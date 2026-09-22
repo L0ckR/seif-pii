@@ -1,0 +1,384 @@
+{
+  "status": "valid_fixture_parity_pass_with_export_edge_case_failure",
+  "synthetic_only": true,
+  "fixtures": [
+    {
+      "fixture": "empty",
+      "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "characters": 0,
+      "native_status": "ok",
+      "onnx_status": "ok",
+      "native_spans": 0,
+      "onnx_spans": 0,
+      "observed_pools": [],
+      "span_identity_equal": true,
+      "max_score_delta": 0.0
+    },
+    {
+      "fixture": "exact_warmup",
+      "text_sha256": "54ce906ceaa22c18151f637ca8429aa9d7d35990cf706c59d61716876b8e8605",
+      "characters": 29,
+      "native_status": "ok",
+      "onnx_status": "ok",
+      "native_spans": 2,
+      "onnx_spans": 2,
+      "observed_pools": [
+        {
+          "words": 6,
+          "candidate_count": 73
+        }
+      ],
+      "span_identity_equal": true,
+      "max_score_delta": 1.1920928955078125e-07
+    },
+    {
+      "fixture": "one_word",
+      "text_sha256": "cc0781950ffebec65a7f552e099f5111dc6526384615f13801e3f0d25b38e960",
+      "characters": 4,
+      "native_status": "ok",
+      "onnx_status": "ok",
+      "native_spans": 1,
+      "onnx_spans": 1,
+      "observed_pools": [
+        {
+          "words": 2,
+          "candidate_count": 33
+        }
+      ],
+      "span_identity_equal": true,
+      "max_score_delta": 0.0
+    },
+    {
+      "fixture": "two_words",
+      "text_sha256": "99ba3288cafe8a8e371a47fe0bd452f3fcb2ed775242c5a97a8ec6fece43ca06",
+      "characters": 11,
+      "native_status": "ok",
+      "onnx_status": "ok",
+      "native_spans": 1,
+      "onnx_spans": 1,
+      "observed_pools": [
+        {
+          "words": 3,
+          "candidate_count": 40
+        }
+      ],
+      "span_identity_equal": true,
+      "max_score_delta": 0.0
+    },
+    {
+      "fixture": "names_address",
+      "text_sha256": "a66c6421da8fe1a94a3657ce2aabc9bc7b96e3efdb4daefaa692a1bc74d8d92b",
+      "characters": 59,
+      "native_status": "ok",
+      "onnx_status": "ok",
+      "native_spans": 2,
+      "onnx_spans": 2,
+      "observed_pools": [
+        {
+          "words": 14,
+          "candidate_count": 192
+        }
+      ],
+      "span_identity_equal": true,
+      "max_score_delta": 0.0
+    },
+    {
+      "fixture": "unicode",
+      "text_sha256": "90ad224570081849c427bed974b34d068281ee252e5d70f2a965ea14b8313deb",
+      "characters": 59,
+      "native_status": "ok",
+      "onnx_status": "ok",
+      "native_spans": 3,
+      "onnx_spans": 3,
+      "observed_pools": [
+        {
+          "words": 13,
+          "candidate_count": 192
+        }
+      ],
+      "span_identity_equal": true,
+      "max_score_delta": 1.1920928955078125e-07
+    },
+    {
+      "fixture": "markers",
+      "text_sha256": "a1aefa7e258f059f465f4676f5727de19ba595555737a4894d629897c45fa552",
+      "characters": 69,
+      "native_status": "ok",
+      "onnx_status": "ok",
+      "native_spans": 2,
+      "onnx_spans": 2,
+      "observed_pools": [
+        {
+          "words": 20,
+          "candidate_count": 192
+        }
+      ],
+      "span_identity_equal": true,
+      "max_score_delta": 0.0
+    },
+    {
+      "fixture": "long_tail",
+      "text_sha256": "453179e03f71038b0c8f4c62be79fbbdec84ef8d16f2d15095a8f1c4ce0b2683",
+      "characters": 3900,
+      "native_status": "ok",
+      "onnx_status": "ok",
+      "native_spans": 2,
+      "onnx_spans": 2,
+      "observed_pools": [
+        {
+          "words": 384,
+          "candidate_count": 192
+        },
+        {
+          "words": 226,
+          "candidate_count": 192
+        }
+      ],
+      "span_identity_equal": true,
+      "max_score_delta": 0.0
+    },
+    {
+      "fixture": "one_punctuation",
+      "text_sha256": "bb7208bc9b5d7c04f1236a82a0093a5e33f40423d5ba8d4266f7092c3ba43b62",
+      "characters": 1,
+      "native_status": "ok",
+      "onnx_status": "error",
+      "native_spans": 0,
+      "onnx_error_type": "Fail",
+      "onnx_error": "[ONNXRuntimeError] : 1 : FAIL : Non-zero status code returned while running Where node. Name:'/head/shared_pool_builder/Where_14' Status Message: /head/shared_pool_builder/Where_14: condition operand cannot broadcast on dim 1 Condition Shape: {1,16}, X Shape: {1,28}, Y Shape: {1,28}",
+      "observed_pools": []
+    }
+  ],
+  "successful_onnx_fixtures": 8,
+  "failed_onnx_fixtures": 1,
+  "all_successful_span_identities_equal": true,
+  "metadata": {
+    "model": "DanKau/gliner2.5-multi-v1-onnx",
+    "revision": "481ad683a5420349c20f7ccc992efd25f9f3b809",
+    "native_revision": "a221b77a8baf4a613b8f8652661d41fa10a5641e",
+    "onnx_files_sha256": {
+      "onnx/encoder.onnx": "ab5f77ea6df6de0c8e5be3038d3bd55bb2dfe28b37dfbd2b1248cf17c6073579",
+      "onnx/boundary.onnx": "131f64aa024ea46a991de880562ffc94c02f8fa7886b8afe03c55d927c9e33e2",
+      "config.json": "dca03c3cfc6144e1c08409ac5be48377edfaea7bc48dbda5b57dd8fd9f5d4fbb",
+      "gliner2_config.json": "96089e65559fbd5d4484063cd165c50522ba65954d9710e3f44459233cb083db",
+      "tokenizer.json": "c62446df87ae18ec98b133f8f84fc449a07cc89bbf8ef192a4cb5f9c53777a7a",
+      "tokenizer_config.json": "db8ff95e236160a65fb6139babdf12dcaec4759bd0225af09b26eca8aa97d017"
+    },
+    "native_files_sha256": {
+      "config.json": "8b59a0f426a65859c89cd1ea850c3529c09aa3be3a6fafd8eddfdd17b1bf0146",
+      "encoder_config/config.json": "fa4f9ef2903b5369ab172333aae4574e6a476511d7465845cf59f8360ee18716",
+      "model.safetensors": "c1ff4ec0bc00031c15530b8f3c33d3677f27949e6a0cb52e1247a6224b6c5395",
+      "tokenizer.json": "c62446df87ae18ec98b133f8f84fc449a07cc89bbf8ef192a4cb5f9c53777a7a",
+      "tokenizer_config.json": "0bf3ea0873234bd9bfdd3853c440395009ac6365a925b91654daed5396d655e1"
+    },
+    "schema": "described-names",
+    "threshold": 0.8,
+    "overlap_policy": "flat",
+    "device": "cuda",
+    "dtype": "float32",
+    "cpu_threads": 4,
+    "inter_op_threads": 1,
+    "torch_threads": 4,
+    "cuda_tf32": false,
+    "runtime": "ORT encoder + boundary; native GLiNER2 CPU Torch preprocessing and decoding",
+    "io": "CPU NumPy inputs/outputs; CUDA includes host/device copies at both sessions",
+    "native_checkpoint_required_at_startup": true,
+    "classification_records_relations_supported": false,
+    "encoder": {
+      "providers": [
+        "CUDAExecutionProvider",
+        "CPUExecutionProvider"
+      ],
+      "provider_options": {
+        "CPUExecutionProvider": {},
+        "CUDAExecutionProvider": {
+          "sdpa_kernel": "0",
+          "use_tf32": "0",
+          "fuse_conv_bias": "0",
+          "prefer_nhwc": "0",
+          "tunable_op_max_tuning_duration_ms": "0",
+          "tunable_op_enable": "0",
+          "tunable_op_tuning_enable": "0",
+          "enable_cudnn": "1",
+          "use_ep_level_unified_stream": "0",
+          "device_id": "0",
+          "has_user_compute_stream": "0",
+          "gpu_external_empty_cache": "0",
+          "cudnn_conv_algo_search": "EXHAUSTIVE",
+          "cudnn_conv1d_pad_to_nc1d": "0",
+          "gpu_mem_limit": "18446744073709551615",
+          "gpu_external_alloc": "0",
+          "gpu_external_free": "0",
+          "arena_extend_strategy": "kNextPowerOfTwo",
+          "do_copy_in_default_stream": "1",
+          "enable_cuda_graph": "0",
+          "user_compute_stream": "0",
+          "cudnn_conv_use_max_workspace": "1"
+        }
+      },
+      "inputs": [
+        {
+          "name": "input_ids",
+          "type": "tensor(int64)",
+          "shape": [
+            "batch",
+            "sequence"
+          ]
+        },
+        {
+          "name": "attention_mask",
+          "type": "tensor(int64)",
+          "shape": [
+            "batch",
+            "sequence"
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "hidden_states",
+          "type": "tensor(float)",
+          "shape": [
+            "batch",
+            "sequence",
+            768
+          ]
+        }
+      ]
+    },
+    "boundary": {
+      "providers": [
+        "CUDAExecutionProvider",
+        "CPUExecutionProvider"
+      ],
+      "provider_options": {
+        "CPUExecutionProvider": {},
+        "CUDAExecutionProvider": {
+          "sdpa_kernel": "0",
+          "use_tf32": "0",
+          "fuse_conv_bias": "0",
+          "prefer_nhwc": "0",
+          "tunable_op_max_tuning_duration_ms": "0",
+          "tunable_op_enable": "0",
+          "tunable_op_tuning_enable": "0",
+          "enable_cudnn": "1",
+          "use_ep_level_unified_stream": "0",
+          "device_id": "0",
+          "has_user_compute_stream": "0",
+          "gpu_external_empty_cache": "0",
+          "cudnn_conv_algo_search": "EXHAUSTIVE",
+          "cudnn_conv1d_pad_to_nc1d": "0",
+          "gpu_mem_limit": "18446744073709551615",
+          "gpu_external_alloc": "0",
+          "gpu_external_free": "0",
+          "arena_extend_strategy": "kNextPowerOfTwo",
+          "do_copy_in_default_stream": "1",
+          "enable_cuda_graph": "0",
+          "user_compute_stream": "0",
+          "cudnn_conv_use_max_workspace": "1"
+        }
+      },
+      "inputs": [
+        {
+          "name": "token_states",
+          "type": "tensor(float)",
+          "shape": [
+            "batch",
+            "words",
+            768
+          ]
+        },
+        {
+          "name": "text_mask",
+          "type": "tensor(bool)",
+          "shape": [
+            "batch",
+            "words"
+          ]
+        },
+        {
+          "name": "query_states",
+          "type": "tensor(float)",
+          "shape": [
+            "batch",
+            "queries",
+            768
+          ]
+        },
+        {
+          "name": "query_mask",
+          "type": "tensor(bool)",
+          "shape": [
+            "batch",
+            "queries"
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "pair_logits",
+          "type": "tensor(float)",
+          "shape": [
+            "batch",
+            "queries",
+            "queries"
+          ]
+        },
+        {
+          "name": "candidate_indices",
+          "type": "tensor(int64)",
+          "shape": [
+            "batch",
+            "queries",
+            "Expandcandidate_indices_dim_2",
+            2
+          ]
+        },
+        {
+          "name": "candidate_valid",
+          "type": "tensor(bool)",
+          "shape": [
+            "batch",
+            "queries",
+            "Expandcandidate_valid_dim_2"
+          ]
+        },
+        {
+          "name": "null_logits",
+          "type": "tensor(float)",
+          "shape": [
+            "batch",
+            "queries"
+          ]
+        }
+      ]
+    },
+    "packages": {
+      "gliner2": "2.0.0",
+      "torch": "2.14.0",
+      "onnxruntime-gpu": "1.30.0",
+      "numpy": "2.5.3",
+      "transformers": "4.57.6",
+      "tokenizers": "0.22.2"
+    }
+  },
+  "source_sha256": {
+    "seif/gliner_onnx.py": "08118aaf0326e89d7a0ef890a24f7a29728578a713690e930cf7cf48cd12056d",
+    "tests/test_gliner_onnx.py": "930d5aeb3009be79734eb2390996b9473e98de4adb4cbdb5ddffd12d06db52ed"
+  },
+  "profile_node_summary": {
+    "encoder": {
+      "CUDAExecutionProvider": 7722,
+      "CPUExecutionProvider": 8262
+    },
+    "boundary": {
+      "CUDAExecutionProvider": 4937,
+      "CPUExecutionProvider": 1676
+    }
+  },
+  "profile_paths": [
+    "local-data/gliner25-onnx/smoke-profile-v2/encoder_2026-09-22_22-35-00_793.json",
+    "local-data/gliner25-onnx/smoke-profile-v2/boundary_2026-09-22_22-35-03_930.json"
+  ],
+  "note": "Fixed adapter validation: candidate dimension is dynamic within0..192, not always192. Native succeeds on punctuation-only fixture but pinned ONNX boundary export fails internally in Where_14 before adapter validation. No fallback, input padding, exclusion or threshold adjustment. The earlier smoke artifact describes its smaller passing fixture set accurately; it did not include these short cases."
+}
