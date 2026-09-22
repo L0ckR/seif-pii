@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "started_at_utc": "2026-09-22T18:26:02.628191+00:00",
+  "scope": "Native loopback correctness smoke; synthetic data, memory vault, one worker per service; no RPS claim.",
+  "configuration": {
+    "backend": "gliner",
+    "schema": "described-names",
+    "threshold": 0.8,
+    "device": "cuda",
+    "dotenv_disabled": true,
+    "inherited_seif_settings": false
+  },
+  "source_sha256": {
+    "seif/gliner_ner.py": "8012d0c3fc83b6c0a0defd4a07735d6e9cd4aa0c5debb1f7c395ddafb7431311",
+    "scripts/ner_service.py": "9d2291f08dc6013ba23552f34abe206f93a46fd6afc3da6abfc48e34b0958069",
+    "seif/app.py": "e958559569fae134ace1e54ef02af655dc65a4fc481a93545c315721bc1f8951"
+  },
+  "health": {
+    "ner": {
+      "status": "ok",
+      "model": "fastino/gliner2.5-multi-v1",
+      "entities": [
+        "PERSON",
+        "LOCATION"
+      ]
+    },
+    "api": {
+      "status": "ok",
+      "mode": "restricted",
+      "storage": "memory",
+      "python": "3.14.7",
+      "free_threaded": true,
+      "gil_enabled": false,
+      "detector_profile": "hybrid"
+    }
+  },
+  "boundaries": {
+    "ner_401": true,
+    "ner_422": true,
+    "api_401": true,
+    "api_422": true
+  },
+  "short": {
+    "ner": {
+      "entity_count": 1,
+      "exact_person_found": true,
+      "name_start": 9,
+      "characters": 63
+    },
+    "api": {
+      "mask_ms": 122.28,
+      "person_and_email_masked": true,
+      "roundtrip_exact": true,
+      "characters": 63
+    },
+    "words": 7
+  },
+  "long": {
+    "ner": {
+      "entity_count": 1,
+      "exact_person_found": true,
+      "name_start": 3879,
+      "characters": 3933
+    },
+    "api": {
+      "mask_ms": 233.854,
+      "person_and_email_masked": true,
+      "roundtrip_exact": true,
+      "characters": 3933
+    },
+    "words": 457
+  },
+  "cleanup": [
+    {
+      "service": "api",
+      "exited": true,
+      "return_code": -15,
+      "forced_kill": false
+    },
+    {
+      "service": "ner",
+      "exited": true,
+      "return_code": -15,
+      "forced_kill": false
+    }
+  ],
+  "completed_at_utc": "2026-09-22T18:26:13.191487+00:00"
+}
