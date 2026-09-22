@@ -104,24 +104,16 @@ def _valid_written_date(match: re.Match[str]) -> bool:
         return False
 
 
-def _valid_field_date(value: str) -> bool:
-    """Validate a full or partial calendar date without inferring a century.
-
-    A missing/short year retains the February 29 possibility. Both numeric
-    day-month orders are supported, matching the assignment's format variants.
-    """
-    numbers = [int(part) for part in re.findall(r"[0-9]+", value)]
-    month_match = next((index + 1 for index, month in enumerate(_MONTH_NAMES)
-                        if re.search(rf"(?<!\w){month}(?!\w)", value, _FLAGS)), None)
+def _date_options(numbers: list[int], month_match: int | None) -> list[tuple[int, int, int]]:
     if month_match is not None:
         if len(numbers) not in (1, 2):
-            return False
+            return []
         day = numbers[0]
         year = numbers[1] if len(numbers) == 2 else 2000
         if year < 100:
             year += 2000
-        options = [(year, month_match, day)]
-    elif len(numbers) in (2, 3):
+        return [(year, month_match, day)]
+    if len(numbers) in (2, 3):
         if len(numbers) == 2:
             first, second = numbers
             year = 2000
@@ -131,10 +123,20 @@ def _valid_field_date(value: str) -> bool:
             first, second, year = numbers
             if year < 100:
                 year += 2000
-        options = [(year, first, second), (year, second, first)]
-    else:
-        return False
-    for year, month, day in options:
+        return [(year, first, second), (year, second, first)]
+    return []
+
+
+def _valid_field_date(value: str) -> bool:
+    """Validate a full or partial calendar date without inferring a century.
+
+    A missing/short year retains the February 29 possibility. Both numeric
+    day-month orders are supported, matching the assignment's format variants.
+    """
+    numbers = [int(part) for part in re.findall(r"[0-9]+", value)]
+    month_match = next((index + 1 for index, month in enumerate(_MONTH_NAMES)
+                        if re.search(rf"(?<!\w){month}(?!\w)", value, _FLAGS)), None)
+    for year, month, day in _date_options(numbers, month_match):
         if 1800 <= year <= 2100:
             try:
                 date(year, month, day)
@@ -142,6 +144,15 @@ def _valid_field_date(value: str) -> bool:
             except ValueError:
                 continue
     return False
+
+
+def _match_date_value(text: str, label, prefix, end) -> tuple[re.Match | None, bool]:
+    value = _DATE_START.match(text, prefix.end(), end)
+    valid = value is not None and _valid_field_date(value.group())
+    if value is None and label.lastgroup == "birth":
+        value = _WRITTEN_DATE.match(text, prefix.end(), end)
+        valid = value is not None and _valid_written_date(value)
+    return value, valid
 
 
 def _date_candidates(text: str) -> Iterator[Candidate]:
@@ -160,11 +171,7 @@ def _date_candidates(text: str) -> Iterator[Candidate]:
         before = re.split(r"[.!?;\n]", before)[-1]
         if (_PUBLIC_OWNER.search(owner) or _HISTORICAL_OWNER.search(before)) and not _PRIVATE_OWNER.search(before):
             continue
-        value = _DATE_START.match(text, prefix.end(), end)
-        valid = value is not None and _valid_field_date(value.group())
-        if value is None and label.lastgroup == "birth":
-            value = _WRITTEN_DATE.match(text, prefix.end(), end)
-            valid = value is not None and _valid_written_date(value)
+        value, valid = _match_date_value(text, label, prefix, end)
         if value is not None and valid:
             kind = "BIRTH_DATE" if label.lastgroup == "birth" else "PASSPORT_DATE"
             stop = value.end()
@@ -230,20 +237,34 @@ _NONPERSONAL_DOCUMENT = re.compile(
 )
 
 
+def _document_qualifier(text: str, label, end) -> str:
+    qualifier_end = min(end, label.end() + 80)
+    first_digit = re.search(r"[0-9]", text[label.end():qualifier_end])
+    if first_digit is not None:
+        qualifier_end = label.end() + first_digit.start()
+    first_part = _DOCUMENT_PART.search(text, label.end(), end)
+    if first_part is not None:
+        qualifier_end = min(qualifier_end, first_part.start())
+    return text[label.end():qualifier_end]
+
+
+def _document_parts(text: str, label, end, kind) -> Iterator[Candidate]:
+    for part in _DOCUMENT_PART.finditer(text, label.end(), end):
+        size = sum(char.isdigit() for char in part.group("value"))
+        if size == (4 if part.group("series") else 6):
+            start, stop = part.span("value")
+            if stop == end and stop < len(text) and (text[stop].isalnum() or text[stop] == "_"):
+                continue
+            yield start, stop, kind, 0.99, "explicit-personal-document-part"
+
+
 def _document_candidates(text: str) -> Iterator[Candidate]:
     for label in _DOCUMENT_LABEL.finditer(text):
         kind = "DRIVER_LICENSE" if label.lastgroup == "license" else "PASSPORT"
         end = min(len(text), label.end() + 180)
         owner = _DOCUMENT_OWNER.match(text, label.end(), end)
         assert owner is not None
-        qualifier_end = min(end, label.end() + 80)
-        first_digit = re.search(r"[0-9]", text[label.end():qualifier_end])
-        if first_digit is not None:
-            qualifier_end = label.end() + first_digit.start()
-        first_part = _DOCUMENT_PART.search(text, label.end(), end)
-        if first_part is not None:
-            qualifier_end = min(qualifier_end, first_part.start())
-        qualifier = text[label.end():qualifier_end]
+        qualifier = _document_qualifier(text, label, end)
         if _NONPERSONAL_DOCUMENT.search(qualifier) or _UNKNOWN_FIELD.search(qualifier):
             continue
         value = _DOCUMENT_VALUE.match(text, owner.end(), end)
@@ -255,13 +276,7 @@ def _document_candidates(text: str) -> Iterator[Candidate]:
         stop = _DOCUMENT_STOP.search(text, label.end(), end)
         if stop is not None:
             end = stop.start()
-        for part in _DOCUMENT_PART.finditer(text, label.end(), end):
-            size = sum(char.isdigit() for char in part.group("value"))
-            if size == (4 if part.group("series") else 6):
-                start, stop = part.span("value")
-                if stop == end and stop < len(text) and (text[stop].isalnum() or text[stop] == "_"):
-                    continue
-                yield start, stop, kind, 0.99, "explicit-personal-document-part"
+        yield from _document_parts(text, label, end, kind)
     for value in _LICENSE_SUFFIX.finditer(text):
         start, end = value.span("value")
         yield start, end, "DRIVER_LICENSE", 0.99, "explicit-license-suffix"
