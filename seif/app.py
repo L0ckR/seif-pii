@@ -214,13 +214,7 @@ class Boundary:
         await self.app(scope, bounded_receive, send)
 
 
-def create_app(settings: Settings | None = None) -> FastAPI:
-    settings = settings or Settings.from_env()
-    validate_ner_settings(settings.ner_url, settings.ner_token, settings.ner_timeout_seconds)
-    if settings.ttl_seconds < 1 or settings.max_records < 1 or len(settings.encryption_key) != 32:
-        raise ValueError("Invalid vault settings")
-    large_inflight = 0
-    # Detect invalid plugin rules on startup, before any sensitive request arrives.
+def _validate_policies(settings: Settings) -> None:
     for policy in settings.policies.values():
         if type(policy.masking_enabled) is not bool:
             raise ValueError("masking_enabled must be a boolean")
@@ -233,64 +227,55 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         known_types = set(TYPES) | {rule["type"] for rule in policy.extra_rules}
         if (set(policy.types) | set(policy.required_types)) - known_types:
             raise ValueError("Unknown entity type in system policy")
-    # Validation can fail synchronously, before lifespan cleanup exists.
-    # Allocate clients and the worker pool only after all policies are valid.
-    ner = NerClient(settings.ner_url, settings.ner_token, settings.ner_timeout_seconds) if settings.ner_url else None
-    vault, registry = Vault(settings), CollectorRegistry()
-    cpu_pool = ThreadPoolExecutor(max_workers=settings.cpu_workers, thread_name_prefix="seif-detect")
-    detected = Counter("seif_entities_total", "Detected entity types, never values", ["type"], registry=registry)
-    chars = Counter("seif_input_characters_total", "Processed input Unicode characters", registry=registry)
-    tokens = Counter("seif_input_tokens_estimated_total", "Estimated tokens = characters / 4, not a model tokenizer", registry=registry)
-    stages = Histogram("seif_stage_duration_seconds", "Processing stages", ["stage"], registry=registry)
-    limits = {}
-    capture = RequestCapture.from_env()
+
+
+class _AppContext:
+    """Shared request-processing state and handlers for the FastAPI app."""
+
+    def __init__(self, settings, vault, ner, cpu_pool, registry, capture):
+        self.settings = settings
+        self.vault = vault
+        self.ner = ner
+        self.cpu_pool = cpu_pool
+        self.registry = registry
+        self.capture = capture
+        self.large_inflight = 0
+        self.limits = {}
+        self.detected = Counter("seif_entities_total", "Detected entity types, never values", ["type"], registry=registry)
+        self.chars = Counter("seif_input_characters_total", "Processed input Unicode characters", registry=registry)
+        self.tokens = Counter("seif_input_tokens_estimated_total", "Estimated tokens = characters / 4, not a model tokenizer", registry=registry)
+        self.stages = Histogram("seif_stage_duration_seconds", "Processing stages", ["stage"], registry=registry)
 
     @asynccontextmanager
-    async def lifespan(app):
+    async def lifespan(self, app):
         logging.basicConfig(level=os.getenv("SEIF_LOG_LEVEL", "INFO"), format="%(message)s")
         try:
             if os.getenv("SEIF_REQUIRE_FREE_THREADING", "0") == "1" and (
                 not sysconfig.get_config_var("Py_GIL_DISABLED") or getattr(sys, "_is_gil_enabled", lambda: True)()
             ):
                 raise RuntimeError("This deployment requires a free-threaded Python with GIL disabled")
-            await vault.ping()
-            if ner:
-                await ner.health()
+            await self.vault.ping()
+            if self.ner:
+                await self.ner.health()
             yield
         finally:
             try:
                 # Running detector jobs cannot be killed safely. Drain them without
                 # blocking the event loop, including jobs whose HTTP task was cancelled.
-                await asyncio.to_thread(cpu_pool.shutdown, wait=True, cancel_futures=True)
+                await asyncio.to_thread(self.cpu_pool.shutdown, wait=True, cancel_futures=True)
             finally:
                 try:
-                    if ner:
-                        await ner.close()
+                    if self.ner:
+                        await self.ner.close()
                 finally:
                     try:
-                        await vault.close()
+                        await self.vault.close()
                     finally:
-                        if capture:
-                            await asyncio.to_thread(capture.close)
+                        if self.capture:
+                            await asyncio.to_thread(self.capture.close)
 
-    app = FastAPI(title="СЕЙФ · Personal Data Gateway", version="1.0.0", lifespan=lifespan,
-                  docs_url=None, redoc_url=None)
-    app.state.vault, app.state.settings = vault, settings
-    app.state.ner = ner
-    app.state.capture = capture
-    app.add_middleware(Boundary, settings=settings, registry=registry, capture=capture)
-
-    @app.exception_handler(RequestValidationError)
-    async def validation_error(request, exc):
-        # FastAPI's default errors include the input. Never echo them.
-        return error(422, "invalid_request", "Ожидаются строковые payload и непустой payload_id (до 256 символов).")
-
-    @app.exception_handler(StarletteHTTPException)
-    async def http_error(request, exc):
-        detail = exc.detail if isinstance(exc.detail, dict) else {"code": "http_error", "message": "Запрос не выполнен."}
-        return error(exc.status_code, detail["code"], detail["message"], exc.headers)
-
-    async def authorize(request: Request):
+    async def authorize(self, request):
+        settings = self.settings
         tenant = request.headers.get("X-System-ID", "demo" if settings.demo else "")
         policy = settings.policies.get(tenant)
         if policy is None or not policy.enabled:
@@ -300,23 +285,127 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         if not anonymous_demo and (not policy.api_key or not hmac.compare_digest(supplied.encode(), policy.api_key.encode())):
             fail(401, "unauthorized", "Требуется ключ системы.")
         # Fixed bounded keyspace: rate state exists only for configured tenants.
-        if vault.redis:
-            limiter_key = "seif:rate:" + vault.digest(tenant)
-            allowed = await vault.redis.eval("local n=redis.call('INCR',KEYS[1]); if n==1 then redis.call('EXPIRE',KEYS[1],1) end; return n", 1, limiter_key)
+        if self.vault.redis:
+            limiter_key = "seif:rate:" + self.vault.digest(tenant)
+            allowed = await self.vault.redis.eval("local n=redis.call('INCR',KEYS[1]); if n==1 then redis.call('EXPIRE',KEYS[1],1) end; return n", 1, limiter_key)
             if allowed > policy.rps:
                 fail(429, "rate_limit", "Превышена частота запросов системы.")
         else:
             now = time.monotonic()
-            balance, last = limits.get(tenant, (float(policy.rps), now))
+            balance, last = self.limits.get(tenant, (float(policy.rps), now))
             balance = min(float(policy.rps), balance + (now - last) * policy.rps)
             if balance < 1:
-                limits[tenant] = (balance, now)
+                self.limits[tenant] = (balance, now)
                 fail(429, "rate_limit", "Превышена частота запросов системы.")
-            limits[tenant] = (balance - 1, now)
+            self.limits[tenant] = (balance - 1, now)
         return tenant, policy
 
-    async def execute(body: ProcessRequest, request: Request, operation: str):
-        nonlocal large_inflight
+    def _restore_record(self, policy, body, operation, fingerprint, record, stage):
+        if not policy.allow_unmask:
+            fail(403, "unmask_disabled", "Демаскирование отключено для системы.")
+        with stage("restore"):
+            if fingerprint == record["masked_hash"]:
+                return restore_exact(record)
+            if operation == "unmask" and record["mode"] == "token":
+                try:
+                    return restore_tokens(body.payload, record, max_output_chars=self.settings.max_payload_chars)
+                except RestorationTooLarge:
+                    fail(413, "too_large", "Превышен лимит восстановленного текста.")
+                except ValueError:
+                    fail(409, "unknown_token", "Токен не принадлежит этому запросу или отсутствует.")
+            fail(409, "payload_conflict", "Текст не соответствует сохранённой маске.")
+
+    async def _detect_large(self, policy, body):
+        if self.large_inflight >= self.settings.cpu_workers:
+            fail(429, "cpu_busy", "Все обработчики больших текстов заняты; повторите запрос.")
+        self.large_inflight += 1
+        loop = asyncio.get_running_loop()
+        pending = loop.create_future()
+        pending.add_done_callback(lambda done: None if done.cancelled() else done.exception())
+
+        def release_cpu_slot():
+            self.large_inflight -= 1
+
+        def complete_cpu_work(done):
+            release_cpu_slot()
+            try:
+                result = done.result()
+            except BaseException as exc:
+                if not pending.done():
+                    pending.set_exception(exc)
+            else:
+                if not pending.done():
+                    pending.set_result(result)
+
+        try:
+            work = self.cpu_pool.submit(partial(detect, body.payload, extra_rules=list(policy.extra_rules)))
+        except BaseException:
+            release_cpu_slot()
+            raise
+        # Cancellation affects only our waiter, never the CPU job.
+        # Its real completion releases capacity on the owning loop.
+        # Avoid shield: Python 3.14 reports detached shield failures
+        # to the loop exception hook, potentially exposing input.
+        work.add_done_callback(lambda done: loop.call_soon_threadsafe(complete_cpu_work, done))
+        return await pending
+
+    def _select_spans(self, spans, policy):
+        selected = [s for s in spans if not policy.types or s.type in policy.types]
+        type_set = {s.type for s in selected}
+        if len(type_set) < policy.min_types or not set(policy.required_types).issubset(type_set):
+            selected = []
+        if not policy.masking_enabled:
+            # Recognition and NER failures still fail closed. Only the
+            # transformation selection changes under this explicit policy.
+            selected = []
+        return selected, type_set
+
+    async def _detect_and_transform(self, policy, body, operation, key, fingerprint, mode, stage):
+        with stage("detect"):
+            if len(body.payload) > 16000:
+                spans = await self._detect_large(policy, body)
+            else:
+                spans = detect(body.payload, extra_rules=list(policy.extra_rules))
+        if self.ner:
+            with stage("ner"):
+                candidates = await self.ner.detect(body.payload)
+                spans = merge_ner_candidates(body.payload, spans, candidates)
+        selected, type_set = self._select_spans(spans, policy)
+        with stage("transform"):
+            result, replacements = mask(body.payload, selected, mode)
+        record = {"original_hash": fingerprint, "masked_hash": self.vault.digest(result),
+                  "masked": result, "replacements": replacements if policy.allow_unmask else [],
+                  "entities": [asdict(s) for s in selected], "mode": mode,
+                  "detected_types": sorted(type_set),
+                  "masking_enabled": policy.masking_enabled,
+                  "detector_profile": "hybrid" if self.ner else "rules"}
+        with stage("vault_write"):
+            record = await self.vault.put_if_absent(key, record)
+        if record["original_hash"] != fingerprint:
+            fail(409, "payload_conflict", "payload_id уже связан с другим текстом.")
+        if operation == "mask" and record["mode"] != mode:
+            fail(409, "mode_conflict", "Для нового режима используйте новый payload_id.")
+        return record["masked"]
+
+    async def _resolve_record(self, tenant, policy, body, operation, key, fingerprint, record, mode, stage):
+        direction = "mask"
+        if record is not None:
+            if operation == "unmask" or (operation == "process" and fingerprint == record["masked_hash"] and fingerprint != record["original_hash"]):
+                direction = "unmask"
+                result = self._restore_record(policy, body, operation, fingerprint, record, stage)
+            elif fingerprint == record["original_hash"]:
+                if operation == "mask" and mode != record["mode"]:
+                    fail(409, "mode_conflict", "Для нового режима используйте новый payload_id.")
+                result = record["masked"]
+            else:
+                fail(409, "payload_conflict", "payload_id уже связан с другим текстом.")
+        elif operation == "unmask":
+            fail(410, "mapping_expired", "Соответствие отсутствует или срок хранения истёк.")
+        else:
+            result = await self._detect_and_transform(policy, body, operation, key, fingerprint, mode, stage)
+        return direction, result, record
+
+    async def execute(self, body: ProcessRequest, request: Request, operation: str):
         start = time.perf_counter()
         stage_times = {}
 
@@ -327,13 +416,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 yield
             finally:
                 seconds = time.perf_counter() - stage_start
-                stages.labels(name).observe(seconds)
+                self.stages.labels(name).observe(seconds)
                 stage_times[name] = round(seconds * 1000, 3)
 
         try:
             with stage("authorize"):
-                tenant, policy = await authorize(request)
-            if len(body.payload) > settings.max_payload_chars:
+                tenant, policy = await self.authorize(request)
+            if len(body.payload) > self.settings.max_payload_chars:
                 fail(413, "too_large", "Превышен лимит текста.")
             # Reject lone UTF-16 surrogates before UTF-8 encoding, with no input echo.
             try:
@@ -345,106 +434,18 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             if mode not in policy.allowed_modes:
                 fail(422, "invalid_mode", "Этот режим не разрешён политикой системы.")
             with stage("fingerprint"):
-                key, fingerprint = vault.key(tenant, body.payload_id), vault.digest(body.payload)
+                key, fingerprint = self.vault.key(tenant, body.payload_id), self.vault.digest(body.payload)
             with stage("vault_read"):
-                record = await vault.get(key)
-            direction = "mask"
-            if record is not None:
-                if operation == "unmask" or (operation == "process" and fingerprint == record["masked_hash"] and fingerprint != record["original_hash"]):
-                    if not policy.allow_unmask:
-                        fail(403, "unmask_disabled", "Демаскирование отключено для системы.")
-                    direction = "unmask"
-                    with stage("restore"):
-                        if fingerprint == record["masked_hash"]:
-                            result = restore_exact(record)
-                        elif operation == "unmask" and record["mode"] == "token":
-                            try:
-                                result = restore_tokens(body.payload, record, max_output_chars=settings.max_payload_chars)
-                            except RestorationTooLarge:
-                                fail(413, "too_large", "Превышен лимит восстановленного текста.")
-                            except ValueError:
-                                fail(409, "unknown_token", "Токен не принадлежит этому запросу или отсутствует.")
-                        else:
-                            fail(409, "payload_conflict", "Текст не соответствует сохранённой маске.")
-                elif fingerprint == record["original_hash"]:
-                    if operation == "mask" and mode != record["mode"]:
-                        fail(409, "mode_conflict", "Для нового режима используйте новый payload_id.")
-                    result = record["masked"]
-                else:
-                    fail(409, "payload_conflict", "payload_id уже связан с другим текстом.")
-            elif operation == "unmask":
-                fail(410, "mapping_expired", "Соответствие отсутствует или срок хранения истёк.")
-            else:
-                with stage("detect"):
-                    if len(body.payload) > 16000:
-                        if large_inflight >= settings.cpu_workers:
-                            fail(429, "cpu_busy", "Все обработчики больших текстов заняты; повторите запрос.")
-                        large_inflight += 1
-                        loop = asyncio.get_running_loop()
-                        pending = loop.create_future()
-                        pending.add_done_callback(lambda done: None if done.cancelled() else done.exception())
-
-                        def release_cpu_slot():
-                            nonlocal large_inflight
-                            large_inflight -= 1
-
-                        def complete_cpu_work(done):
-                            release_cpu_slot()
-                            try:
-                                result = done.result()
-                            except BaseException as exc:
-                                if not pending.done():
-                                    pending.set_exception(exc)
-                            else:
-                                if not pending.done():
-                                    pending.set_result(result)
-
-                        try:
-                            work = cpu_pool.submit(partial(detect, body.payload, extra_rules=list(policy.extra_rules)))
-                        except BaseException:
-                            release_cpu_slot()
-                            raise
-                        # Cancellation affects only our waiter, never the CPU job.
-                        # Its real completion releases capacity on the owning loop.
-                        # Avoid shield: Python 3.14 reports detached shield failures
-                        # to the loop exception hook, potentially exposing input.
-                        work.add_done_callback(lambda done: loop.call_soon_threadsafe(complete_cpu_work, done))
-                        spans = await pending
-                    else:
-                        spans = detect(body.payload, extra_rules=list(policy.extra_rules))
-                if ner:
-                    with stage("ner"):
-                        candidates = await ner.detect(body.payload)
-                        spans = merge_ner_candidates(body.payload, spans, candidates)
-                selected = [s for s in spans if not policy.types or s.type in policy.types]
-                type_set = {s.type for s in selected}
-                if len(type_set) < policy.min_types or not set(policy.required_types).issubset(type_set):
-                    selected = []
-                if not policy.masking_enabled:
-                    # Recognition and NER failures still fail closed. Only the
-                    # transformation selection changes under this explicit policy.
-                    selected = []
-                with stage("transform"):
-                    result, replacements = mask(body.payload, selected, mode)
-                record = {"original_hash": fingerprint, "masked_hash": vault.digest(result),
-                          "masked": result, "replacements": replacements if policy.allow_unmask else [],
-                          "entities": [asdict(s) for s in selected], "mode": mode,
-                          "detected_types": sorted(type_set),
-                          "masking_enabled": policy.masking_enabled,
-                          "detector_profile": "hybrid" if ner else "rules"}
-                with stage("vault_write"):
-                    record = await vault.put_if_absent(key, record)
-                if record["original_hash"] != fingerprint:
-                    fail(409, "payload_conflict", "payload_id уже связан с другим текстом.")
-                if operation == "mask" and record["mode"] != mode:
-                    fail(409, "mode_conflict", "Для нового режима используйте новый payload_id.")
-                result = record["masked"]
+                record = await self.vault.get(key)
+            direction, result, record = await self._resolve_record(
+                tenant, policy, body, operation, key, fingerprint, record, mode, stage,
+            )
             elapsed = (time.perf_counter() - start) * 1000
             kinds = sorted({s["type"] for s in record["entities"]})
             for kind in kinds:
-                detected.labels(kind if kind in TYPES else "CUSTOM").inc()
-            chars.inc(len(body.payload))
-            tokens.inc(len(body.payload) / 4)
+                self.detected.labels(kind if kind in TYPES else "CUSTOM").inc()
+            self.chars.inc(len(body.payload))
+            self.tokens.inc(len(body.payload) / 4)
             request.state.capture_operation = direction
             LOG.info(json.dumps({"event": "processed", "request_id": request.state.request_id,
                                  "system": tenant, "operation": direction, "types": kinds,
@@ -468,53 +469,87 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                                   "stages_ms": stage_times}))
             fail(503, "temporarily_unavailable", "Защита временно недоступна; исходный текст не отправлен дальше.")
 
-    @app.post("/process", response_model=dict[str, str])
-    async def process(body: ProcessRequest, request: Request):
-        return await execute(body, request, "process")
+    async def process(self, body: ProcessRequest, request: Request):
+        return await self.execute(body, request, "process")
 
-    @app.post("/v1/mask")
-    async def mask_endpoint(body: MaskRequest, request: Request):
-        return await execute(body, request, "mask")
+    async def mask(self, body: MaskRequest, request: Request):
+        return await self.execute(body, request, "mask")
 
-    @app.post("/v1/unmask")
-    async def unmask_endpoint(body: ProcessRequest, request: Request):
-        return await execute(body, request, "unmask")
+    async def unmask(self, body: ProcessRequest, request: Request):
+        return await self.execute(body, request, "unmask")
 
-    @app.get("/health")
-    async def health():
+    async def health(self):
         try:
-            await vault.ping()
-            if ner:
-                await ner.health()
+            await self.vault.ping()
+            if self.ner:
+                await self.ner.health()
         except Exception:
             return error(503, "storage_unavailable", "Хранилище недоступно.")
-        if vault.sentinel:
+        if self.vault.sentinel:
             storage = "sentinel"
-        elif vault.redis:
+        elif self.vault.redis:
             storage = "redis"
         else:
             storage = "memory"
-        return {"status": "ok", "mode": "demo" if settings.demo else "restricted",
+        return {"status": "ok", "mode": "demo" if self.settings.demo else "restricted",
                 "storage": storage, "python": sys.version.split()[0],
                 "free_threaded": bool(sysconfig.get_config_var("Py_GIL_DISABLED")),
                 "gil_enabled": getattr(sys, "_is_gil_enabled", lambda: True)(),
-                "detector_profile": "hybrid" if ner else "rules"}
+                "detector_profile": "hybrid" if self.ner else "rules"}
 
-    @app.get("/v1/types")
-    async def types():
+    async def types(self):
         return {"types": TYPES}
 
-    @app.get("/metrics")
-    async def metrics(request: Request):
-        await authorize(request)
+    async def metrics(self, request: Request):
+        await self.authorize(request)
         if os.getenv("PROMETHEUS_MULTIPROC_DIR"):
             from prometheus_client import multiprocess
             combined = CollectorRegistry()
             multiprocess.MultiProcessCollector(combined)
             content = generate_latest(combined)
         else:
-            content = generate_latest(registry)
+            content = generate_latest(self.registry)
         return Response(content, media_type="text/plain; version=0.0.4")
+
+
+def create_app(settings: Settings | None = None) -> FastAPI:
+    settings = settings or Settings.from_env()
+    validate_ner_settings(settings.ner_url, settings.ner_token, settings.ner_timeout_seconds)
+    if settings.ttl_seconds < 1 or settings.max_records < 1 or len(settings.encryption_key) != 32:
+        raise ValueError("Invalid vault settings")
+    # Detect invalid plugin rules on startup, before any sensitive request arrives.
+    _validate_policies(settings)
+    # Validation can fail synchronously, before lifespan cleanup exists.
+    # Allocate clients and the worker pool only after all policies are valid.
+    ner = NerClient(settings.ner_url, settings.ner_token, settings.ner_timeout_seconds) if settings.ner_url else None
+    vault, registry = Vault(settings), CollectorRegistry()
+    cpu_pool = ThreadPoolExecutor(max_workers=settings.cpu_workers, thread_name_prefix="seif-detect")
+    capture = RequestCapture.from_env()
+    ctx = _AppContext(settings, vault, ner, cpu_pool, registry, capture)
+
+    app = FastAPI(title="СЕЙФ · Personal Data Gateway", version="1.0.0", lifespan=ctx.lifespan,
+                  docs_url=None, redoc_url=None)
+    app.state.vault, app.state.settings = vault, settings
+    app.state.ner = ner
+    app.state.capture = capture
+    app.add_middleware(Boundary, settings=settings, registry=registry, capture=capture)
+
+    @app.exception_handler(RequestValidationError)
+    async def validation_error(request, exc):
+        # FastAPI's default errors include the input. Never echo them.
+        return error(422, "invalid_request", "Ожидаются строковые payload и непустой payload_id (до 256 символов).")
+
+    @app.exception_handler(StarletteHTTPException)
+    async def http_error(request, exc):
+        detail = exc.detail if isinstance(exc.detail, dict) else {"code": "http_error", "message": "Запрос не выполнен."}
+        return error(exc.status_code, detail["code"], detail["message"], exc.headers)
+
+    app.post("/process", response_model=dict[str, str])(ctx.process)
+    app.post("/v1/mask")(ctx.mask)
+    app.post("/v1/unmask")(ctx.unmask)
+    app.get("/health")(ctx.health)
+    app.get("/v1/types")(ctx.types)
+    app.get("/metrics")(ctx.metrics)
 
     web = Path(__file__).resolve().parent.parent / "web"
     app.mount("/", StaticFiles(directory=web, html=True), name="web")

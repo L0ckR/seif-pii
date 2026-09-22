@@ -861,6 +861,59 @@ def _detect_contacts(text: str, lower: str, add) -> None:
             add(pattern, kind, "cis-personal-id" if kind == "INN" else "cis-document-context")
 
 
+def _detect_documents(text: str, lower: str, add) -> None:
+    if PASSPORT_WORD in lower or "серия" in lower:
+        add(_PASSPORT, "PASSPORT")
+        add(_PASS_SERIES, "PASSPORT")
+    if any(label in lower for label in ("удостоверен", "в/у", "в у", "права")):
+        add(_LICENSE, "DRIVER_LICENSE")
+    if any(label in lower for label in (PASSPORT_WORD, "внж", "жительств", "свидетельство")):
+        add(_FOREIGN_DOC, "FOREIGN_DOCUMENT")
+    if "код" in lower or "к/п" in lower:
+        add(_DEPT, "DEPARTMENT_CODE")
+
+
+def _detect_identifiers(text: str, lower: str, add) -> None:
+    add(_INN_LABEL, "INN", check=lambda v, s, e: not _is_public_inn(text, s, v))
+    add(
+        _INN_BARE,
+        "INN",
+        "checksum",
+        0.94,
+        lambda v, s, e: (
+            _valid_inn(v) and not _is_public_inn(text, s, v) and not _is_nonpersonal_number_field(text, s)
+        ),
+    )
+    add(_CARD_LABEL, "CARD", "explicit-card-context", 0.98)
+    add(
+        _CARD_BARE,
+        "CARD",
+        "luhn-checksum",
+        0.96,
+        lambda v, s, e: _luhn(v) and not _is_nonpersonal_number_field(text, s),
+    )
+    add(_CVV, "CVV")
+    add(_PIN, "PIN")
+
+
+def _detect_dates(text: str, lower: str, add) -> None:
+    if any(label in lower for label in ("рожд", "родил", "д.р", "д. р", "г.р", "г. р")):
+        add(_BIRTH_DATE, "BIRTH_DATE", check=lambda v, s, e: _valid_date(v) and not _is_public_record(text, s))
+        add(_AFTER_BIRTH, "BIRTH_DATE", check=lambda v, s, e: _valid_date(v) and not _is_public_record(text, s))
+    if "выда" in lower:
+        add(
+            _PASS_DATE,
+            "PASSPORT_DATE",
+            check=lambda v, s, e: _valid_date(v) and _has_passport_context(text, s),
+        )
+        if PASSPORT_WORD in lower:
+            add(
+                _PASS_DATE_LATE,
+                "PASSPORT_DATE",
+                check=lambda v, s, e: _valid_date(v) and _has_passport_context(text, s),
+            )
+
+
 def _detect_numeric(text: str, lower: str, add) -> None:
     if not any(c.isdigit() for c in text):
         return
@@ -883,50 +936,9 @@ def _detect_numeric(text: str, lower: str, add) -> None:
         )
     if any(label in lower for label in ("тел", "моб", "phone")):
         add(_LABEL_PHONE, "PHONE", check=lambda value, *_: 7 <= len(_digits(value)) <= 15)
-    if PASSPORT_WORD in lower or "серия" in lower:
-        add(_PASSPORT, "PASSPORT")
-        add(_PASS_SERIES, "PASSPORT")
-    if any(label in lower for label in ("удостоверен", "в/у", "в у", "права")):
-        add(_LICENSE, "DRIVER_LICENSE")
-    if any(label in lower for label in (PASSPORT_WORD, "внж", "жительств", "свидетельство")):
-        add(_FOREIGN_DOC, "FOREIGN_DOCUMENT")
-    if "код" in lower or "к/п" in lower:
-        add(_DEPT, "DEPARTMENT_CODE")
-    add(_INN_LABEL, "INN", check=lambda v, s, e: not _is_public_inn(text, s, v))
-    add(
-        _INN_BARE,
-        "INN",
-        "checksum",
-        0.94,
-        lambda v, s, e: (
-            _valid_inn(v) and not _is_public_inn(text, s, v) and not _is_nonpersonal_number_field(text, s)
-        ),
-    )
-    add(_CARD_LABEL, "CARD", "explicit-card-context", 0.98)
-    add(
-        _CARD_BARE,
-        "CARD",
-        "luhn-checksum",
-        0.96,
-        lambda v, s, e: _luhn(v) and not _is_nonpersonal_number_field(text, s),
-    )
-    add(_CVV, "CVV")
-    add(_PIN, "PIN")
-    if any(label in lower for label in ("рожд", "родил", "д.р", "д. р", "г.р", "г. р")):
-        add(_BIRTH_DATE, "BIRTH_DATE", check=lambda v, s, e: _valid_date(v) and not _is_public_record(text, s))
-        add(_AFTER_BIRTH, "BIRTH_DATE", check=lambda v, s, e: _valid_date(v) and not _is_public_record(text, s))
-    if "выда" in lower:
-        add(
-            _PASS_DATE,
-            "PASSPORT_DATE",
-            check=lambda v, s, e: _valid_date(v) and _has_passport_context(text, s),
-        )
-        if PASSPORT_WORD in lower:
-            add(
-                _PASS_DATE_LATE,
-                "PASSPORT_DATE",
-                check=lambda v, s, e: _valid_date(v) and _has_passport_context(text, s),
-            )
+    _detect_documents(text, lower, add)
+    _detect_identifiers(text, lower, add)
+    _detect_dates(text, lower, add)
     add(_POSTAL, "POSTAL_CODE", check=lambda _, s, e: not _is_public_address(text, s))
     add(
         _ADDRESS_POSTAL, "POSTAL_CODE", "address-format", 0.95,
