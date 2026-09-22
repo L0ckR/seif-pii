@@ -74,7 +74,7 @@ def parse_bio(row):
     if not isinstance(tokens, list) or not isinstance(labels, list) or len(tokens) != len(labels):
         return None, "token_label_length_mismatch"
     cursor, previous, spans = 0, "O", []
-    for token, label in zip(tokens, labels):
+    for token, label in zip(tokens, labels, strict=True):
         # An empty O token marks no characters/entities; preserve its BIO
         # boundary without changing the sentence or inventing a text offset.
         if token == "" and label == "O":

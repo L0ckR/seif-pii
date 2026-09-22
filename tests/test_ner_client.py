@@ -112,6 +112,20 @@ def test_total_deadline_includes_capacity_wait():
     asyncio.run(scenario())
 
 
+def test_nested_health_json_is_reported_as_unavailable():
+    async def scenario():
+        body = b"[" * 1500 + b"0" + b"]" * 1500
+        client = NerClient("http://ner.internal", "secret", transport=httpx.MockTransport(
+            lambda _: httpx.Response(200, content=body)))
+        try:
+            with pytest.raises(NerUnavailable, match="NER is unavailable"):
+                await client.health()
+        finally:
+            await client.close()
+
+    asyncio.run(scenario())
+
+
 @pytest.mark.parametrize('url,token,timeout', [
     ('ftp://ner.internal', 'secret', 1),
     ('http://user:password@ner.internal', 'secret', 1),

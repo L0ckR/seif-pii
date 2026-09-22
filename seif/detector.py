@@ -429,11 +429,11 @@ def _valid_inn(value: str) -> bool:
         return False
     d = [int(c) for c in value]
     if len(d) == 10:
-        return sum(a * b for a, b in zip(d, (2, 4, 10, 3, 5, 9, 4, 6, 8))) % 11 % 10 == d[9]
+        return sum(a * b for a, b in zip(d[:9], (2, 4, 10, 3, 5, 9, 4, 6, 8), strict=True)) % 11 % 10 == d[9]
     if len(d) == 12:
         return (
-            sum(a * b for a, b in zip(d, (7, 2, 4, 10, 3, 5, 9, 4, 6, 8))) % 11 % 10 == d[10]
-            and sum(a * b for a, b in zip(d, (3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8))) % 11 % 10 == d[11]
+            sum(a * b for a, b in zip(d[:10], (7, 2, 4, 10, 3, 5, 9, 4, 6, 8), strict=True)) % 11 % 10 == d[10]
+            and sum(a * b for a, b in zip(d[:11], (3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8), strict=True)) % 11 % 10 == d[11]
         )
     return False
 
@@ -604,6 +604,9 @@ def _resolve(candidates: Iterable[Span]) -> list[Span]:
                 -(s.end - s.start),
                 -s.confidence,
                 s.start,
+                # Exact ties must not inherit per-process set/hash ordering.
+                s.type,
+                s.reason,
             ),
         ):
             i = bisect_left(starts, span.start)
@@ -947,7 +950,7 @@ def detect(text: str, *, extra_rules: list[dict] | None = None) -> list[Span]:
     )
     # Sliding token pairs (lookahead) avoid losing a name after an ordinary word.
     tokens = list(re.finditer(r"[а-яёА-ЯЁ][а-яёА-ЯЁ'-]{1,39}", text))
-    for a, b in zip(tokens, tokens[1:]):
+    for a, b in zip(tokens, tokens[1:], strict=False):
         if not 0 < b.start() - a.end() <= 3 or not text[a.end() : b.start()].isspace():
             continue
         av, bv = a.group(), b.group()
@@ -980,8 +983,12 @@ def detect(text: str, *, extra_rules: list[dict] | None = None) -> list[Span]:
             validate_extra_rule(rule)
             try:
                 for match in _custom_pattern(rule["pattern"]).finditer(text, timeout=0.025):
-                    if 0 < match.end() - match.start() <= 4096:
-                        candidates.append(Span(match.start(), match.end(), rule["type"], 1.0, "custom-rule"))
+                    size = match.end() - match.start()
+                    if size == 0:
+                        raise ValueError("Custom patterns must not match empty text")
+                    if size > 4096:
+                        raise ValueError("Custom detection rule matched more than 4096 characters")
+                    candidates.append(Span(match.start(), match.end(), rule["type"], 1.0, "custom-rule"))
             except TimeoutError as exc:
                 raise ValueError("Custom detection rule exceeded its time budget") from exc
     return _resolve(candidates)

@@ -1,7 +1,14 @@
 """Lossless reversible replacements, without saving the entire original text."""
 from __future__ import annotations
 
+import re
 import secrets
+
+_TOKEN = re.compile(r"⟦PD:[A-Z][A-Z0-9_]{1,39}:[0-9a-f]{16}⟧")
+
+
+class RestorationTooLarge(ValueError):
+    """Token restoration would exceed the configured output character limit."""
 
 
 def shape_mask(value: str) -> str:
@@ -57,17 +64,38 @@ def mask(text: str, spans, mode: str) -> tuple[str, list[dict]]:
 
 def restore_exact(record: dict) -> str:
     text = record["masked"]
-    for item in reversed(record["replacements"]):
-        text = text[:item["start"]] + item["original"] + text[item["end"]:]
-    return text
+    parts, offset = [], 0
+    for item in record["replacements"]:
+        start, end = item["start"], item["end"]
+        if (
+            type(start) is not int
+            or type(end) is not int
+            or not offset <= start < end <= len(text)
+            or text[start:end] != item["replacement"]
+        ):
+            raise ValueError("Invalid replacement coordinates or masked value")
+        parts.extend((text[offset:start], item["original"]))
+        offset = end
+    parts.append(text[offset:])
+    return "".join(parts)
 
 
-def restore_tokens(text: str, record: dict) -> str:
-    import re
+def restore_tokens(text: str, record: dict, *, max_output_chars: int | None = None) -> str:
+    if max_output_chars is not None and (type(max_output_chars) is not int or max_output_chars < 0):
+        raise ValueError("Output character limit must be a nonnegative integer")
     mapping = {item["replacement"]: item["original"] for item in record["replacements"]}
-    pattern = re.compile(r"⟦PD:[A-Z_]+:[0-9a-f]{16}⟧")
-    matches = list(pattern.finditer(text))
-    if not matches or any(match.group() not in mapping for match in matches):
+    found, output_chars = False, len(text)
+    for match in _TOKEN.finditer(text):
+        token = match.group()
+        if token not in mapping:
+            raise ValueError("Unknown or missing token")
+        found = True
+        output_chars += len(mapping[token]) - (match.end() - match.start())
+    if not found:
         raise ValueError("Unknown or missing token")
+    if max_output_chars is not None and output_chars > max_output_chars:
+        # Count the full result before substitution. Repeated tokens must not
+        # turn a bounded request into a much larger allocation and response.
+        raise RestorationTooLarge("Restored text exceeds the output character limit")
     # One pass avoids interpreting original text as another replacement token.
-    return pattern.sub(lambda match: mapping[match.group()], text)
+    return _TOKEN.sub(lambda match: mapping[match.group()], text)

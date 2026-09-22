@@ -37,7 +37,16 @@ def percentile(values: list[float], percent: float) -> float | None:
     return round(ordered[lower] + (ordered[upper] - ordered[lower]) * (position - lower), 3)
 
 
+def validate_options(args: argparse.Namespace) -> None:
+    if not all(math.isfinite(value) and value > 0 for value in (args.rps, args.duration, args.timeout)):
+        raise ValueError("rps, duration and timeout must be finite and positive")
+    if (type(args.concurrency) is not int or not 1 <= args.concurrency <= 8192
+            or args.rps * args.duration > 10_000_000 or args.duration > 3600 or args.timeout > 120):
+        raise ValueError("Benchmark exceeds bounded rate, duration, concurrency or timeout settings")
+
+
 async def benchmark(args: argparse.Namespace) -> dict:
+    validate_options(args)
     latencies: list[float] = []
     errors: Counter[str] = Counter()
     statuses: Counter[str] = Counter()
@@ -58,7 +67,9 @@ async def benchmark(args: argparse.Namespace) -> dict:
             started = time.perf_counter()
             counters["requests_attempted"] += 1
             try:
-                async with client.post(args.url.rstrip("/") + "/process", json={"payload": payload, "payload_id": payload_id}) as response:
+                async with client.post(args.url.rstrip("/") + "/process",
+                                       json={"payload": payload, "payload_id": payload_id},
+                                       allow_redirects=False) as response:
                     statuses[str(response.status)] += 1
                     if response.status != 200:
                         errors[f"http_{response.status}"] += 1
@@ -166,8 +177,10 @@ def main() -> None:
     parser.add_argument("--api-key")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    if args.rps <= 0 or args.duration <= 0 or args.concurrency < 1 or args.timeout <= 0:
-        parser.error("rps, duration, concurrency and timeout must be positive")
+    try:
+        validate_options(args)
+    except ValueError as error:
+        parser.error(str(error))
     try:
         import uvloop
     except ImportError:

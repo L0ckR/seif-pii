@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import base64
 import ipaddress
+import math
 import os
 import re
 from dataclasses import dataclass, field
@@ -74,8 +75,13 @@ class Policy:
     def __post_init__(self) -> None:
         # YAML and programmatic policies share strict validation: a quoted
         # "false", number or null must never silently change protection policy.
-        if type(self.masking_enabled) is not bool:
-            raise ValueError("masking_enabled must be a boolean")
+        for name in ("enabled", "allow_unmask", "masking_enabled"):
+            if type(getattr(self, name)) is not bool:
+                raise ValueError(f"{name} must be a boolean")
+        for name in ("min_types", "rps"):
+            value = getattr(self, name)
+            if type(value) is not int or value < 1:
+                raise ValueError(f"{name} must be a positive integer")
 
 
 @dataclass
@@ -94,11 +100,26 @@ class Settings:
     max_body_bytes: int = 12_100_000
     max_inflight_body_bytes: int = 64 * 1024 * 1024
     max_inflight: int = 128
+    request_body_timeout_seconds: float = 30.0
     cpu_workers: int = 4
     ner_url: str = field(default="", repr=False)
     ner_token: str = field(default="", repr=False)
     ner_timeout_seconds: float = 20.0
     policies: dict[str, Policy] = field(default_factory=lambda: {"demo": Policy()})
+
+    def __post_init__(self) -> None:
+        if type(self.demo) is not bool:
+            raise ValueError("demo must be a boolean")
+        for name in (
+            "ttl_seconds", "max_records", "max_store_bytes", "max_payload_chars", "max_body_bytes",
+            "max_inflight_body_bytes", "max_inflight", "cpu_workers",
+        ):
+            value = getattr(self, name)
+            if type(value) is not int or value < 1:
+                raise ValueError(f"{name} must be a positive integer")
+        timeout = self.request_body_timeout_seconds
+        if type(timeout) not in (int, float) or not math.isfinite(timeout) or timeout <= 0:
+            raise ValueError("request_body_timeout_seconds must be a positive finite number")
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -150,6 +171,7 @@ class Settings:
             sentinel_password=sentinel_password,
             ttl_seconds=int(os.getenv("SEIF_TTL_SECONDS", "900")),
             cpu_workers=int(os.getenv("SEIF_CPU_WORKERS", "4")),
+            request_body_timeout_seconds=float(os.getenv("SEIF_REQUEST_BODY_TIMEOUT_SECONDS", "30")),
             ner_url=os.getenv("SEIF_NER_URL", ""),
             ner_token=os.getenv("SEIF_NER_TOKEN", ""),
             ner_timeout_seconds=float(os.getenv("SEIF_NER_TIMEOUT_SECONDS", "20")),

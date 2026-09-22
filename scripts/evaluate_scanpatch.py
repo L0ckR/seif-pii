@@ -72,11 +72,11 @@ def load_rows(folder):
         fields = [row[key] for key in ("entity_starts", "entity_ends", "entity_labels", "entity_texts")]
         if len({len(values) for values in fields}) != 1:
             raise RuntimeError("Annotation lengths differ; do not repair using predictions.")
-        for start, end, kind, value in zip(*fields):
+        for start, end, kind, value in zip(*fields, strict=True):
             if (kind not in set(GOLD_MAP) | OTHER_LABELS or not 0 <= start < end <= len(row["text"])
                     or row["text"][start:end] != value):
                 raise RuntimeError("Original span validation failed; no report published.")
-        row["fine_gold"] = set(zip(row["entity_labels"], row["entity_starts"], row["entity_ends"]))
+        row["fine_gold"] = set(zip(row["entity_labels"], row["entity_starts"], row["entity_ends"], strict=True))
     return rows
 
 

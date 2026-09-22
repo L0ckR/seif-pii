@@ -126,7 +126,7 @@ def main():
                             stop_reason = 'record_limit'
                             break
                         blobs = client.mget(batch)
-                        for key, blob in zip(batch, blobs):
+                        for key, blob in zip(batch, blobs, strict=True):
                             seen_keys.add(key)
                             stats['source_records_seen'] += 1
                             if blob is None:

@@ -1,0 +1,97 @@
+{
+  "scope": "Local code-review regression validation; no claim of a new external analyzer score",
+  "python": "3.14.7",
+  "gil_enabled": false,
+  "tests": {
+    "tests": 886,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "tests_seconds": 20.886,
+  "real_redis_and_sentinel_failover_included": true,
+  "ruff_rules": [
+    "E4",
+    "E7",
+    "E9",
+    "F",
+    "I",
+    "B"
+  ],
+  "ruff": "passed",
+  "diff_check": "passed",
+  "demo_checks": {
+    "examples": 3,
+    "modes": 3,
+    "all_exact_roundtrip": true,
+    "client_role_visible": true
+  },
+  "load": {
+    "label": "attempt-2-review-1000-60s",
+    "target_rps": 1000,
+    "duration_seconds": 60,
+    "passed": true,
+    "achieved_rps": 999.867,
+    "counts": {
+      "pairs_offered": 30000,
+      "pairs_dispatched": 30000,
+      "pairs_dropped_client_capacity": 0,
+      "pairs_dropped_client_deadline": 0,
+      "pairs_verified": 30000,
+      "pairs_mask_failed": 0,
+      "pairs_unmask_failed": 0,
+      "pairs_roundtrip_mismatch": 0,
+      "pairs_mask_changed": 18752,
+      "pairs_mask_unchanged": 11248,
+      "requests_attempted": 60000,
+      "requests_successful": 60000,
+      "http_requests_offered": 60000,
+      "http_requests_not_attempted": 0
+    },
+    "latency_ms": {
+      "count": 60000,
+      "p50": 6.607,
+      "p95": 15.969,
+      "p99": 21.971,
+      "max": 87.598,
+      "over_500ms": 0,
+      "over_1000ms": 0
+    },
+    "capture": {
+      "submitted": 60000,
+      "written": 60000,
+      "dropped": 0,
+      "write_errors": 0
+    }
+  },
+  "load_configuration": {
+    "api_workers": 3,
+    "ner_workers": 8,
+    "recording_enabled": true,
+    "same_host_loopback": true,
+    "corpus_cases": 446,
+    "max_input_characters": 995,
+    "request_mix": "50% mask, 50% reverse; exact restoration of every pair",
+    "storage": "3 Redis + 3 Sentinel; isolated from public service",
+    "meaning": "60-second regression check, not a repeated 300-second capacity confirmation"
+  },
+  "source_sha256": {
+    "seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+    "seif/app.py": "f744d7bcc4b6ba515935bc0f83dbd7a1475f7f23aca35c4d20e587de15368b03",
+    "seif/config.py": "de35e12ca073a432f87798950685d49340641bad4303f8094e86667e929b0f07",
+    "seif/detector.py": "e220569a02798d03094c0c65c8cae093ce08593d7334a740c28a0eb279c650e6",
+    "seif/ner.py": "c6454ec976086be8a4d666694499c785d6a21d8a322dd2259e52893cc48095a5",
+    "seif/request_capture.py": "a3372c5f022b328f454272a47deef47e9960ea3624b30e831db8415d8d4533ce",
+    "seif/transform.py": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+    "seif/vault.py": "3f8ef93f831cd100cbe9fdd6f020cc49269acfba90f83a445afdc9c3327e356b",
+    "scripts/ner_service.py": "c5fc9fe8e03104165a5ad01e8116b43cc0b93e1c86f9efb77629101c4c72d903",
+    "scripts/benchmark_corpus.py": "11e3e41f6f673be43fa6626fed9f409e3c3b1a7a2ba7475b574b59c274a01151",
+    "scripts/package.py": "82dc148c640d54f2d27522f65c522ef5f28b64e2f900f3f341968c6a5579b353"
+  },
+  "limitations": [
+    "External analyzer issue details and scoring scale are unavailable; resubmission is required.",
+    "RPS includes both directions on short texts; does not demonstrate that rate through Cloudflare or on long documents.",
+    "First warmup recording delta included 15 preceding demo requests before status flush. Original reports retained privately; quiescent baseline established and both stages repeated.",
+    "Detector accuracy on the organizer gold is not measured by these checks."
+  ]
+}

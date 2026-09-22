@@ -30,7 +30,7 @@ from .config import Settings
 from .detector import TYPES, detect, merge_ner_candidates, validate_extra_rule
 from .ner import NerClient, validate_ner_settings
 from .request_capture import RequestCapture
-from .transform import mask, restore_exact, restore_tokens
+from .transform import RestorationTooLarge, mask, restore_exact, restore_tokens
 from .vault import Vault, VaultFull
 
 LOG = logging.getLogger("seif.audit")
@@ -131,6 +131,8 @@ class Boundary:
                 return await error(429, "busy", "Сервис занят; повторите запрос.", {"Retry-After": "1"})(scope, receive, safe_send)
             try:
                 content_length = int(headers.get(b"content-length", b"0"))
+                if content_length < 0:
+                    raise ValueError
             except ValueError:
                 return await error(400, "invalid_request", "Некорректный размер запроса.")(scope, receive, safe_send)
             if content_length > self.settings.max_body_bytes:
@@ -140,20 +142,31 @@ class Boundary:
                     return await error(429, "body_budget", "Память обработки запросов занята; повторите запрос.", {"Retry-After": "1"})(scope, receive, safe_send)
                 # Bound even chunked bodies before JSON parsing.
                 body = bytearray()
-                while True:
-                    message = await receive()
-                    if message["type"] == "http.disconnect":
-                        return
-                    chunk = message.get("body", b"")
-                    if held_body_bytes + len(chunk) > self.settings.max_body_bytes:
-                        return await error(413, "too_large", "Превышен размер запроса.")(scope, receive, safe_send)
-                    if self.buffered_bytes + len(chunk) > self.settings.max_inflight_body_bytes:
-                        return await error(429, "body_budget", "Память обработки запросов занята; повторите запрос.", {"Retry-After": "1"})(scope, receive, safe_send)
-                    self.buffered_bytes += len(chunk)
-                    held_body_bytes += len(chunk)
-                    body.extend(chunk)
-                    if not message.get("more_body", False):
-                        break
+                body_error = None
+                try:
+                    # One deadline for the whole upload: trickling bytes must not
+                    # retain an in-flight slot or the shared body budget forever.
+                    async with asyncio.timeout(self.settings.request_body_timeout_seconds):
+                        while True:
+                            message = await receive()
+                            if message["type"] == "http.disconnect":
+                                return
+                            chunk = message.get("body", b"")
+                            if held_body_bytes + len(chunk) > self.settings.max_body_bytes:
+                                body_error = error(413, "too_large", "Превышен размер запроса.")
+                                break
+                            if self.buffered_bytes + len(chunk) > self.settings.max_inflight_body_bytes:
+                                body_error = error(429, "body_budget", "Память обработки запросов занята; повторите запрос.", {"Retry-After": "1"})
+                                break
+                            self.buffered_bytes += len(chunk)
+                            held_body_bytes += len(chunk)
+                            body.extend(chunk)
+                            if not message.get("more_body", False):
+                                break
+                except TimeoutError:
+                    return await error(408, "request_timeout", "Истекло время получения запроса.")(scope, receive, safe_send)
+                if body_error is not None:
+                    return await body_error(scope, receive, safe_send)
                 request_body, body_complete = bytes(body), True
                 delivered = False
 
@@ -187,11 +200,8 @@ class Boundary:
 def create_app(settings: Settings | None = None) -> FastAPI:
     settings = settings or Settings.from_env()
     validate_ner_settings(settings.ner_url, settings.ner_token, settings.ner_timeout_seconds)
-    ner = NerClient(settings.ner_url, settings.ner_token, settings.ner_timeout_seconds) if settings.ner_url else None
     if settings.ttl_seconds < 1 or settings.max_records < 1 or len(settings.encryption_key) != 32:
         raise ValueError("Invalid vault settings")
-    vault, registry = Vault(settings), CollectorRegistry()
-    cpu_pool = ThreadPoolExecutor(max_workers=settings.cpu_workers, thread_name_prefix="seif-detect")
     large_inflight = 0
     # Detect invalid plugin rules on startup, before any sensitive request arrives.
     for policy in settings.policies.values():
@@ -206,6 +216,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         known_types = set(TYPES) | {rule["type"] for rule in policy.extra_rules}
         if (set(policy.types) | set(policy.required_types)) - known_types:
             raise ValueError("Unknown entity type in system policy")
+    # Validation can fail synchronously, before lifespan cleanup exists.
+    # Allocate clients and the worker pool only after all policies are valid.
+    ner = NerClient(settings.ner_url, settings.ner_token, settings.ner_timeout_seconds) if settings.ner_url else None
+    vault, registry = Vault(settings), CollectorRegistry()
+    cpu_pool = ThreadPoolExecutor(max_workers=settings.cpu_workers, thread_name_prefix="seif-detect")
     detected = Counter("seif_entities_total", "Detected entity types, never values", ["type"], registry=registry)
     chars = Counter("seif_input_characters_total", "Processed input Unicode characters", registry=registry)
     tokens = Counter("seif_input_tokens_estimated_total", "Estimated tokens = characters / 4, not a model tokenizer", registry=registry)
@@ -327,7 +342,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                             result = restore_exact(record)
                         elif operation == "unmask" and record["mode"] == "token":
                             try:
-                                result = restore_tokens(body.payload, record)
+                                result = restore_tokens(body.payload, record, max_output_chars=settings.max_payload_chars)
+                            except RestorationTooLarge:
+                                fail(413, "too_large", "Превышен лимит восстановленного текста.")
                             except ValueError:
                                 fail(409, "unknown_token", "Токен не принадлежит этому запросу или отсутствует.")
                         else:

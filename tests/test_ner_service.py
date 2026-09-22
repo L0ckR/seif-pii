@@ -141,6 +141,103 @@ def test_auth_failure_does_not_read_body():
     asyncio.run(run())
 
 
+def test_anonymous_health_post_does_not_reserve_capacity_or_read_body():
+    async def run():
+        sent = []
+
+        async def forbidden(*_args):
+            raise AssertionError("Anonymous health POST must not read its body or call the app.")
+
+        async def send(message):
+            sent.append(message)
+
+        boundary = Boundary(forbidden, NerSettings(token="test-service-key"))
+        await boundary({"type": "http", "path": "/health", "method": "POST", "headers": []}, forbidden, send)
+        assert sent[0]["status"] == 401
+        assert boundary.inflight == 0
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("drip_feed", [False, True])
+def test_incomplete_authenticated_upload_times_out_and_releases_capacity(monkeypatch, caplog, drip_feed):
+    monkeypatch.setattr("scripts.ner_service.BODY_READ_TIMEOUT_SECONDS", 0.02)
+
+    async def run():
+        sent, received = [], 0
+        calls = 0
+
+        async def app(_scope, _receive, send):
+            nonlocal calls
+            calls += 1
+            await send({"type": "http.response.start", "status": 200, "headers": []})
+            await send({"type": "http.response.body", "body": b"ok"})
+
+        async def stalled_receive():
+            nonlocal received
+            received += 1
+            if received == 1:
+                return {"type": "http.request", "body": b'{"text":"private@example.invalid', "more_body": True}
+            if drip_feed:
+                await asyncio.sleep(0.005)
+                return {"type": "http.request", "body": b"a", "more_body": True}
+            await asyncio.Event().wait()
+
+        async def send(message):
+            sent.append(message)
+
+        boundary = Boundary(app, NerSettings(token="test-service-key", max_http_inflight=1))
+        await asyncio.wait_for(boundary({
+            "type": "http", "path": "/analyze", "method": "POST",
+            "headers": [(b"authorization", b"Bearer test-service-key")],
+        }, stalled_receive, send), timeout=1)
+        assert sent[0]["status"] == 408
+        assert calls == boundary.inflight == 0
+        assert b"private@" not in sent[1]["body"]
+        sent.clear()
+        await boundary({"type": "http", "path": "/health", "method": "GET", "headers": []}, stalled_receive, send)
+        assert sent[0]["status"] == 200
+        assert calls == 1
+        assert boundary.inflight == 0
+
+    asyncio.run(run())
+    assert "private@" not in caplog.text
+
+
+def test_ner_settings_repr_does_not_include_shared_credential():
+    assert "test-service-key" not in repr(NerSettings(token="test-service-key"))
+
+
+def test_upload_deadline_cannot_interrupt_an_oversized_body_response(monkeypatch):
+    monkeypatch.setattr("scripts.ner_service.BODY_READ_TIMEOUT_SECONDS", 0.01)
+    monkeypatch.setattr("scripts.ner_service.MAX_BODY_BYTES", 8)
+
+    async def run():
+        sent = []
+
+        async def forbidden(*_args):
+            raise AssertionError("An oversized upload must not call the app.")
+
+        async def receive():
+            return {"type": "http.request", "body": b"x" * 9, "more_body": True}
+
+        async def slow_send(message):
+            sent.append(message)
+            if message["type"] == "http.response.start" and message["status"] == 413:
+                await asyncio.sleep(0.03)
+
+        boundary = Boundary(forbidden, NerSettings(token="test-service-key"))
+        await asyncio.wait_for(boundary({
+            "type": "http", "path": "/analyze", "method": "POST",
+            "headers": [(b"authorization", b"Bearer test-service-key")],
+        }, receive, slow_send), timeout=1)
+        assert [message["status"] for message in sent if message["type"] == "http.response.start"] == [413]
+        assert sent[-1]["type"] == "http.response.body"
+        assert boundary.inflight == 0
+
+    asyncio.run(run())
+
+
 @pytest.mark.parametrize("bad_span", [span(-1, 2), span(0, 100), span(0, 2, score=float("nan")),
                                      span(True, 2), span(0, 2, score=1.2)])
 def test_invalid_model_offsets_and_scores_fail_closed(bad_span):

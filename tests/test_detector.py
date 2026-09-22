@@ -125,7 +125,7 @@ def test_unicode_offsets_and_deterministic_sorted_nonoverlap():
     spans = detect(text)
     assert spans == detect(text)
     assert all(isinstance(s, Span) and 0 <= s.start < s.end <= len(text) for s in spans)
-    assert all(a.end <= b.start for a, b in zip(spans, spans[1:]))
+    assert all(a.end <= b.start for a, b in zip(spans, spans[1:], strict=False))
     assert text[spans[0].start : spans[0].end] == "Иванов Иван Иванович"
     assert spans[0].start == 2
 

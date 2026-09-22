@@ -81,7 +81,7 @@ class NerClient:
                         content.extend(part)
                     if json.loads(content).get("status") != "ok":
                         raise NerUnavailable("NER is unavailable")
-        except (httpx.HTTPError, TimeoutError, ValueError, TypeError, AttributeError):
+        except (httpx.HTTPError, TimeoutError, ValueError, TypeError, AttributeError, RecursionError):
             raise NerUnavailable("NER is unavailable") from None
 
     async def _chunk(self, offset: int, text: str, total_length: int) -> list[Span]:

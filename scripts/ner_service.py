@@ -15,7 +15,7 @@ import math
 import os
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import asynccontextmanager
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
@@ -26,11 +26,12 @@ from starlette.exceptions import HTTPException
 LOG = logging.getLogger("seif.ner")
 MAX_TEXT_CHARS = 20_000
 MAX_BODY_BYTES = 128 * 1024
+BODY_READ_TIMEOUT_SECONDS = 5.0
 
 
 @dataclass(frozen=True)
 class NerSettings:
-    token: str = ""
+    token: str = field(default="", repr=False)
     demo: bool = False
     max_http_inflight: int = 16
     max_model_jobs: int = 4
@@ -67,7 +68,8 @@ class Boundary:
         headers = dict(scope.get("headers", []))
         # Kubelet may probe anonymously; a gateway's supplied credential must
         # still be validated so readiness detects a mismatched shared secret.
-        if (scope.get("path") != "/health" or b"authorization" in headers) and not self.settings.demo:
+        anonymous_probe = scope.get("path") == "/health" and scope.get("method") == "GET"
+        if (not anonymous_probe or b"authorization" in headers) and not self.settings.demo:
             expected = b"Bearer " + self.settings.token.encode("utf-8")
             if not self.settings.token or not hmac.compare_digest(headers.get(b"authorization", b""), expected):
                 return await error(401, "unauthorized", "Authentication required.")(scope, receive, send)
@@ -93,16 +95,26 @@ class Boundary:
                 return await error(413, "too_large", "Request body is too large.")(scope, receive, send)
             if scope["method"] == "POST":
                 body = bytearray()
-                while True:
-                    message = await receive()
-                    if message["type"] == "http.disconnect":
-                        return
-                    chunk = message.get("body", b"")
-                    if len(body) + len(chunk) > MAX_BODY_BYTES:
-                        return await error(413, "too_large", "Request body is too large.")(scope, receive, send)
-                    body.extend(chunk)
-                    if not message.get("more_body", False):
-                        break
+                body_too_large = False
+                try:
+                    # Bound the entire upload, including clients that drip-feed
+                    # small chunks without ever finishing an authenticated body.
+                    async with asyncio.timeout(BODY_READ_TIMEOUT_SECONDS):
+                        while True:
+                            message = await receive()
+                            if message["type"] == "http.disconnect":
+                                return
+                            chunk = message.get("body", b"")
+                            if len(body) + len(chunk) > MAX_BODY_BYTES:
+                                body_too_large = True
+                                break
+                            body.extend(chunk)
+                            if not message.get("more_body", False):
+                                break
+                except TimeoutError:
+                    return await error(408, "request_timeout", "Request body timed out.")(scope, receive, send)
+                if body_too_large:
+                    return await error(413, "too_large", "Request body is too large.")(scope, receive, send)
                 delivered = False
 
                 async def bounded_receive():
