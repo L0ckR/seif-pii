@@ -1,0 +1,8 @@
+{
+  "cases": 446,
+  "identical_span_cases": 446,
+  "changed_cases": [],
+  "matched_spans": 232,
+  "maximum_score_difference_on_matched_spans": 4.410743713378906e-06,
+  "mean_score_difference_on_matched_spans": 2.5871498831387225e-07
+}

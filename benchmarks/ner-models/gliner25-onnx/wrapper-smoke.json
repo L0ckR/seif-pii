@@ -1,0 +1,399 @@
+{
+  "synthetic_only": true,
+  "fixtures": [
+    {
+      "fixture": "empty",
+      "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "characters": 0,
+      "native_spans": 0,
+      "onnx_spans": 0,
+      "span_identity_equal": true,
+      "max_score_delta": 0.0
+    },
+    {
+      "fixture": "names_address",
+      "text_sha256": "a66c6421da8fe1a94a3657ce2aabc9bc7b96e3efdb4daefaa692a1bc74d8d92b",
+      "characters": 59,
+      "native_spans": 2,
+      "onnx_spans": 2,
+      "span_identity_equal": true,
+      "max_score_delta": 0.0
+    },
+    {
+      "fixture": "unicode",
+      "text_sha256": "90ad224570081849c427bed974b34d068281ee252e5d70f2a965ea14b8313deb",
+      "characters": 59,
+      "native_spans": 3,
+      "onnx_spans": 3,
+      "span_identity_equal": true,
+      "max_score_delta": 1.1920928955078125e-07
+    },
+    {
+      "fixture": "markers",
+      "text_sha256": "a1aefa7e258f059f465f4676f5727de19ba595555737a4894d629897c45fa552",
+      "characters": 69,
+      "native_spans": 2,
+      "onnx_spans": 2,
+      "span_identity_equal": true,
+      "max_score_delta": 0.0
+    },
+    {
+      "fixture": "long_tail",
+      "text_sha256": "453179e03f71038b0c8f4c62be79fbbdec84ef8d16f2d15095a8f1c4ce0b2683",
+      "characters": 3900,
+      "native_spans": 2,
+      "onnx_spans": 2,
+      "span_identity_equal": true,
+      "max_score_delta": 0.0
+    }
+  ],
+  "all_span_identities_equal": true,
+  "metadata": {
+    "model": "DanKau/gliner2.5-multi-v1-onnx",
+    "revision": "481ad683a5420349c20f7ccc992efd25f9f3b809",
+    "native_revision": "a221b77a8baf4a613b8f8652661d41fa10a5641e",
+    "onnx_files_sha256": {
+      "onnx/encoder.onnx": "ab5f77ea6df6de0c8e5be3038d3bd55bb2dfe28b37dfbd2b1248cf17c6073579",
+      "onnx/boundary.onnx": "131f64aa024ea46a991de880562ffc94c02f8fa7886b8afe03c55d927c9e33e2",
+      "config.json": "dca03c3cfc6144e1c08409ac5be48377edfaea7bc48dbda5b57dd8fd9f5d4fbb",
+      "gliner2_config.json": "96089e65559fbd5d4484063cd165c50522ba65954d9710e3f44459233cb083db",
+      "tokenizer.json": "c62446df87ae18ec98b133f8f84fc449a07cc89bbf8ef192a4cb5f9c53777a7a",
+      "tokenizer_config.json": "db8ff95e236160a65fb6139babdf12dcaec4759bd0225af09b26eca8aa97d017"
+    },
+    "native_files_sha256": {
+      "config.json": "8b59a0f426a65859c89cd1ea850c3529c09aa3be3a6fafd8eddfdd17b1bf0146",
+      "encoder_config/config.json": "fa4f9ef2903b5369ab172333aae4574e6a476511d7465845cf59f8360ee18716",
+      "model.safetensors": "c1ff4ec0bc00031c15530b8f3c33d3677f27949e6a0cb52e1247a6224b6c5395",
+      "tokenizer.json": "c62446df87ae18ec98b133f8f84fc449a07cc89bbf8ef192a4cb5f9c53777a7a",
+      "tokenizer_config.json": "0bf3ea0873234bd9bfdd3853c440395009ac6365a925b91654daed5396d655e1"
+    },
+    "schema": "described-names",
+    "threshold": 0.8,
+    "overlap_policy": "flat",
+    "device": "cuda",
+    "dtype": "float32",
+    "cpu_threads": 4,
+    "inter_op_threads": 1,
+    "torch_threads": 4,
+    "cuda_tf32": false,
+    "runtime": "ORT encoder + boundary; native GLiNER2 CPU Torch preprocessing and decoding",
+    "io": "CPU NumPy inputs/outputs; CUDA includes host/device copies at both sessions",
+    "native_checkpoint_required_at_startup": true,
+    "classification_records_relations_supported": false,
+    "encoder": {
+      "providers": [
+        "CUDAExecutionProvider",
+        "CPUExecutionProvider"
+      ],
+      "provider_options": {
+        "CPUExecutionProvider": {},
+        "CUDAExecutionProvider": {
+          "sdpa_kernel": "0",
+          "use_tf32": "0",
+          "fuse_conv_bias": "0",
+          "prefer_nhwc": "0",
+          "tunable_op_max_tuning_duration_ms": "0",
+          "tunable_op_enable": "0",
+          "tunable_op_tuning_enable": "0",
+          "enable_cudnn": "1",
+          "use_ep_level_unified_stream": "0",
+          "device_id": "0",
+          "has_user_compute_stream": "0",
+          "gpu_external_empty_cache": "0",
+          "cudnn_conv_algo_search": "EXHAUSTIVE",
+          "cudnn_conv1d_pad_to_nc1d": "0",
+          "gpu_mem_limit": "18446744073709551615",
+          "gpu_external_alloc": "0",
+          "gpu_external_free": "0",
+          "arena_extend_strategy": "kNextPowerOfTwo",
+          "do_copy_in_default_stream": "1",
+          "enable_cuda_graph": "0",
+          "user_compute_stream": "0",
+          "cudnn_conv_use_max_workspace": "1"
+        }
+      },
+      "inputs": [
+        {
+          "name": "input_ids",
+          "type": "tensor(int64)",
+          "shape": [
+            "batch",
+            "sequence"
+          ]
+        },
+        {
+          "name": "attention_mask",
+          "type": "tensor(int64)",
+          "shape": [
+            "batch",
+            "sequence"
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "hidden_states",
+          "type": "tensor(float)",
+          "shape": [
+            "batch",
+            "sequence",
+            768
+          ]
+        }
+      ]
+    },
+    "boundary": {
+      "providers": [
+        "CUDAExecutionProvider",
+        "CPUExecutionProvider"
+      ],
+      "provider_options": {
+        "CPUExecutionProvider": {},
+        "CUDAExecutionProvider": {
+          "sdpa_kernel": "0",
+          "use_tf32": "0",
+          "fuse_conv_bias": "0",
+          "prefer_nhwc": "0",
+          "tunable_op_max_tuning_duration_ms": "0",
+          "tunable_op_enable": "0",
+          "tunable_op_tuning_enable": "0",
+          "enable_cudnn": "1",
+          "use_ep_level_unified_stream": "0",
+          "device_id": "0",
+          "has_user_compute_stream": "0",
+          "gpu_external_empty_cache": "0",
+          "cudnn_conv_algo_search": "EXHAUSTIVE",
+          "cudnn_conv1d_pad_to_nc1d": "0",
+          "gpu_mem_limit": "18446744073709551615",
+          "gpu_external_alloc": "0",
+          "gpu_external_free": "0",
+          "arena_extend_strategy": "kNextPowerOfTwo",
+          "do_copy_in_default_stream": "1",
+          "enable_cuda_graph": "0",
+          "user_compute_stream": "0",
+          "cudnn_conv_use_max_workspace": "1"
+        }
+      },
+      "inputs": [
+        {
+          "name": "token_states",
+          "type": "tensor(float)",
+          "shape": [
+            "batch",
+            "words",
+            768
+          ]
+        },
+        {
+          "name": "text_mask",
+          "type": "tensor(bool)",
+          "shape": [
+            "batch",
+            "words"
+          ]
+        },
+        {
+          "name": "query_states",
+          "type": "tensor(float)",
+          "shape": [
+            "batch",
+            "queries",
+            768
+          ]
+        },
+        {
+          "name": "query_mask",
+          "type": "tensor(bool)",
+          "shape": [
+            "batch",
+            "queries"
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "pair_logits",
+          "type": "tensor(float)",
+          "shape": [
+            "batch",
+            "queries",
+            "queries"
+          ]
+        },
+        {
+          "name": "candidate_indices",
+          "type": "tensor(int64)",
+          "shape": [
+            "batch",
+            "queries",
+            "Expandcandidate_indices_dim_2",
+            2
+          ]
+        },
+        {
+          "name": "candidate_valid",
+          "type": "tensor(bool)",
+          "shape": [
+            "batch",
+            "queries",
+            "Expandcandidate_valid_dim_2"
+          ]
+        },
+        {
+          "name": "null_logits",
+          "type": "tensor(float)",
+          "shape": [
+            "batch",
+            "queries"
+          ]
+        }
+      ]
+    },
+    "packages": {
+      "gliner2": "2.0.0",
+      "torch": "2.14.0",
+      "onnxruntime-gpu": "1.30.0",
+      "numpy": "2.5.3",
+      "transformers": "4.57.6",
+      "tokenizers": "0.22.2"
+    }
+  },
+  "profile_node_summary": {
+    "encoder": {
+      "provider_node_events": {
+        "CUDAExecutionProvider": 4290,
+        "CPUExecutionProvider": 4590
+      },
+      "provider_operations": {
+        "CUDAExecutionProvider": {
+          "Unsqueeze": 40,
+          "Squeeze": 70,
+          "Mul": 20,
+          "Cast": 30,
+          "Gather": 5,
+          "LayerNormalization": 125,
+          "MatMul": 480,
+          "Add": 610,
+          "Reshape": 600,
+          "Shape": 610,
+          "Transpose": 360,
+          "Tile": 120,
+          "MemcpyFromHost": 180,
+          "FusedMatMul": 120,
+          "Range": 5,
+          "Sub": 5,
+          "Sign": 5,
+          "Abs": 5,
+          "Greater": 5,
+          "Less": 5,
+          "And": 5,
+          "Where": 70,
+          "Div": 190,
+          "Log": 5,
+          "Ceil": 5,
+          "LessOrEqual": 5,
+          "Slice": 5,
+          "Identity": 60,
+          "If": 60,
+          "Neg": 60,
+          "Clip": 65,
+          "Expand": 120,
+          "GatherElements": 120,
+          "Softmax": 60,
+          "BiasGelu": 60
+        },
+        "CPUExecutionProvider": {
+          "Slice": 850,
+          "Squeeze": 850,
+          "Unsqueeze": 970,
+          "Gather": 300,
+          "Concat": 540,
+          "Div": 60,
+          "Cast": 180,
+          "Mul": 180,
+          "Sqrt": 180,
+          "Reshape": 120,
+          "Equal": 180,
+          "Where": 120,
+          "Not": 60
+        }
+      }
+    },
+    "boundary": {
+      "provider_node_events": {
+        "CUDAExecutionProvider": 2885,
+        "CPUExecutionProvider": 970
+      },
+      "provider_operations": {
+        "CUDAExecutionProvider": {
+          "Unsqueeze": 290,
+          "Shape": 285,
+          "Cast": 65,
+          "ReduceSum": 30,
+          "Range": 60,
+          "LessOrEqual": 15,
+          "ConstantOfShape": 70,
+          "Reshape": 160,
+          "Slice": 100,
+          "Add": 290,
+          "Expand": 180,
+          "Concat": 70,
+          "ScatterND": 30,
+          "MemcpyFromHost": 85,
+          "Gather": 30,
+          "Clip": 105,
+          "MatMul": 160,
+          "LayerNormalization": 30,
+          "Split": 15,
+          "Squeeze": 50,
+          "Transpose": 60,
+          "Equal": 20,
+          "Sub": 45,
+          "Abs": 10,
+          "And": 50,
+          "Or": 10,
+          "Where": 120,
+          "Mul": 110,
+          "Softmax": 10,
+          "IsNaN": 10,
+          "QuickGelu": 5,
+          "Einsum": 20,
+          "ReduceMax": 10,
+          "Greater": 10,
+          "TopK": 30,
+          "GatherElements": 145,
+          "Div": 45,
+          "Not": 10,
+          "Mod": 5,
+          "Less": 5,
+          "Xor": 5,
+          "Sqrt": 10,
+          "CumSum": 10,
+          "Log": 5,
+          "BiasGelu": 5
+        },
+        "CPUExecutionProvider": {
+          "Gather": 260,
+          "Unsqueeze": 130,
+          "Add": 15,
+          "Concat": 160,
+          "Slice": 35,
+          "Equal": 95,
+          "Where": 95,
+          "Reshape": 65,
+          "Cast": 10,
+          "Sqrt": 20,
+          "Div": 20,
+          "Mul": 15,
+          "Sub": 45,
+          "Less": 5
+        }
+      }
+    }
+  },
+  "profile_paths": [
+    "local-data/gliner25-onnx/smoke-profile/encoder_2026-09-22_22-30-02_657.json",
+    "local-data/gliner25-onnx/smoke-profile/boundary_2026-09-22_22-30-05_734.json"
+  ],
+  "note": "Same descriptions/.8/native processor/null gate/flat decoder. Small fixture parity does not establish corpus parity. CUDA sessions may use CPU shape/control ops; CUDA node events prove actual GPU execution."
+}

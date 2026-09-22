@@ -1,0 +1,306 @@
+{
+  "schema_version": 1,
+  "verified_at_utc": "2026-09-22T19:24:46.151024+00:00",
+  "sources": {
+    "export_base": "https://huggingface.co/api/models/fastino/gliner2.5-multi-v1/revision/aaecfe45db1d828c963717054ccb868e8ad1f1d5?blobs=true",
+    "native_baseline": "https://huggingface.co/api/models/fastino/gliner2.5-multi-v1/revision/a221b77a8baf4a613b8f8652661d41fa10a5641e?blobs=true",
+    "onnx_export": "https://huggingface.co/api/models/DanKau/gliner2.5-multi-v1-onnx/revision/481ad683a5420349c20f7ccc992efd25f9f3b809?blobs=true"
+  },
+  "api_response_sha256": {
+    "export_base": "df3287585d27ea18924ebd38a472a2567eeace0104dbc512b63532c9516828f8",
+    "native_baseline": "b91ff437811e384d2b43fab3f4990ee7ef95fa1f7bed09b7d891c8e9e1c786bc",
+    "onnx_export": "4fb0e10ad8e2fe12376adb17bcdcb996f771b7786b6f5c276533420208384901"
+  },
+  "native_repo": "fastino/gliner2.5-multi-v1",
+  "export_base_revision": "aaecfe45db1d828c963717054ccb868e8ad1f1d5",
+  "native_baseline_revision": "a221b77a8baf4a613b8f8652661d41fa10a5641e",
+  "onnx_repo": "DanKau/gliner2.5-multi-v1-onnx",
+  "onnx_revision": "481ad683a5420349c20f7ccc992efd25f9f3b809",
+  "metadata": {
+    "export_base": {
+      "config.json": {
+        "blobId": "c4c540f52d2e48b5ca2582c6fc23f72b5ae9c79c",
+        "size": 3151
+      },
+      "encoder_config/config.json": {
+        "blobId": "0bb5e495baad2e7fdc35500f0072d5f2d957ed5a",
+        "size": 857
+      },
+      "model.safetensors": {
+        "blobId": "058ee36213f2851edaef1bcc213ff71f7e045a7b",
+        "size": 1149461028,
+        "lfs": {
+          "sha256": "c1ff4ec0bc00031c15530b8f3c33d3677f27949e6a0cb52e1247a6224b6c5395",
+          "size": 1149461028,
+          "pointerSize": 135
+        }
+      },
+      "tokenizer.json": {
+        "blobId": "68f13318410c91def2c27f608b69446f28254bf9",
+        "size": 16035853,
+        "lfs": {
+          "sha256": "c62446df87ae18ec98b133f8f84fc449a07cc89bbf8ef192a4cb5f9c53777a7a",
+          "size": 16035853,
+          "pointerSize": 133
+        }
+      },
+      "tokenizer_config.json": {
+        "blobId": "5efd586306801b08ca13390b0619a94c943046e4",
+        "size": 645
+      }
+    },
+    "native_baseline": {
+      "config.json": {
+        "blobId": "c4c540f52d2e48b5ca2582c6fc23f72b5ae9c79c",
+        "size": 3151
+      },
+      "encoder_config/config.json": {
+        "blobId": "0bb5e495baad2e7fdc35500f0072d5f2d957ed5a",
+        "size": 857
+      },
+      "model.safetensors": {
+        "blobId": "058ee36213f2851edaef1bcc213ff71f7e045a7b",
+        "size": 1149461028,
+        "lfs": {
+          "sha256": "c1ff4ec0bc00031c15530b8f3c33d3677f27949e6a0cb52e1247a6224b6c5395",
+          "size": 1149461028,
+          "pointerSize": 135
+        }
+      },
+      "tokenizer.json": {
+        "blobId": "68f13318410c91def2c27f608b69446f28254bf9",
+        "size": 16035853,
+        "lfs": {
+          "sha256": "c62446df87ae18ec98b133f8f84fc449a07cc89bbf8ef192a4cb5f9c53777a7a",
+          "size": 16035853,
+          "pointerSize": 133
+        }
+      },
+      "tokenizer_config.json": {
+        "blobId": "5efd586306801b08ca13390b0619a94c943046e4",
+        "size": 645
+      }
+    },
+    "onnx_export": {
+      ".export_meta.json": {
+        "blobId": "4406decc6fa30240a394b81660d72542f2e687d6",
+        "size": 156
+      },
+      "config.json": {
+        "blobId": "376dbc5a14069f30f5e596d33d81054e555fc938",
+        "size": 64
+      },
+      "gliner2_config.json": {
+        "blobId": "0a1eadaa82c03cdcfe083ea98cac6d9a33aa03e2",
+        "size": 470
+      },
+      "onnx/boundary.onnx": {
+        "blobId": "b889919810e01a78c067eb9c4cfbfd3adfd5f87f",
+        "size": 4923085,
+        "lfs": {
+          "sha256": "131f64aa024ea46a991de880562ffc94c02f8fa7886b8afe03c55d927c9e33e2",
+          "size": 4923085,
+          "pointerSize": 132
+        }
+      },
+      "onnx/classifier.onnx": {
+        "blobId": "2f40f51fbe07a73907c9b6b04bea3589b24b83d5",
+        "size": 4731354,
+        "lfs": {
+          "sha256": "128e79e1bedef6f2d3886e04199e31e69650b54a5834dc97fb8a41001bbf91d7",
+          "size": 4731354,
+          "pointerSize": 132
+        }
+      },
+      "onnx/encoder.onnx": {
+        "blobId": "3888e4400154dc50d6fb7ce0e41ad705ae6cfcbd",
+        "size": 1111055950,
+        "lfs": {
+          "sha256": "ab5f77ea6df6de0c8e5be3038d3bd55bb2dfe28b37dfbd2b1248cf17c6073579",
+          "size": 1111055950,
+          "pointerSize": 135
+        }
+      },
+      "tokenizer.json": {
+        "blobId": "68f13318410c91def2c27f608b69446f28254bf9",
+        "size": 16035853,
+        "lfs": {
+          "sha256": "c62446df87ae18ec98b133f8f84fc449a07cc89bbf8ef192a4cb5f9c53777a7a",
+          "size": 16035853,
+          "pointerSize": 133
+        }
+      },
+      "tokenizer_config.json": {
+        "blobId": "c047cbb1759c2f36567d8a178e182be21a7e91cf",
+        "size": 677
+      }
+    }
+  },
+  "checks": {
+    "all_five_native_artifacts_identical_between_revisions": true,
+    "onnx_tokenizer_json_identical_to_native": true,
+    "tokenizer_config_semantic_diff": {
+      "is_local": {
+        "native": true,
+        "onnx": false
+      }
+    }
+  },
+  "tokenizer_configs": {
+    "native_baseline": {
+      "source": "https://huggingface.co/fastino/gliner2.5-multi-v1/resolve/a221b77a8baf4a613b8f8652661d41fa10a5641e/tokenizer_config.json",
+      "sha256": "0bf3ea0873234bd9bfdd3853c440395009ac6365a925b91654daed5396d655e1"
+    },
+    "onnx_export": {
+      "source": "https://huggingface.co/DanKau/gliner2.5-multi-v1-onnx/resolve/481ad683a5420349c20f7ccc992efd25f9f3b809/tokenizer_config.json",
+      "sha256": "db8ff95e236160a65fb6139babdf12dcaec4759bd0225af09b26eca8aa97d017"
+    }
+  },
+  "interpretation": [
+    "HF LFS SHA256 identifies large file bytes; blobId identifies Git-stored file content.",
+    "ONNX tensors are a different serialization; equal numerical predictions must be established separately by the fixed parity benchmark.",
+    "Use frozen native processor/decoder, preserving descriptions, token routing, abstention and weighted interval scheduling.",
+    "Tokenizer config difference is only is_local plus serialization whitespace; native tokenizer assets are used by the parity adapter."
+  ],
+  "downloaded_graph_contracts": {
+    "encoder": {
+      "opsets": {
+        "onnx": 18
+      },
+      "inputs": [
+        {
+          "name": "input_ids",
+          "dtype": "INT64",
+          "declared_shape": [
+            "batch",
+            "sequence"
+          ]
+        },
+        {
+          "name": "attention_mask",
+          "dtype": "INT64",
+          "declared_shape": [
+            "batch",
+            "sequence"
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "hidden_states",
+          "dtype": "FLOAT",
+          "declared_shape": [
+            "batch",
+            "sequence",
+            768
+          ]
+        }
+      ]
+    },
+    "boundary": {
+      "opsets": {
+        "onnx": 18
+      },
+      "inputs": [
+        {
+          "name": "token_states",
+          "dtype": "FLOAT",
+          "declared_shape": [
+            "batch",
+            "words",
+            768
+          ]
+        },
+        {
+          "name": "text_mask",
+          "dtype": "BOOL",
+          "declared_shape": [
+            "batch",
+            "words"
+          ]
+        },
+        {
+          "name": "query_states",
+          "dtype": "FLOAT",
+          "declared_shape": [
+            "batch",
+            "queries",
+            768
+          ]
+        },
+        {
+          "name": "query_mask",
+          "dtype": "BOOL",
+          "declared_shape": [
+            "batch",
+            "queries"
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "pair_logits",
+          "dtype": "FLOAT",
+          "declared_shape": [
+            "batch",
+            "queries",
+            "queries"
+          ]
+        },
+        {
+          "name": "candidate_indices",
+          "dtype": "INT64",
+          "declared_shape": [
+            "batch",
+            "queries",
+            "Expandcandidate_indices_dim_2",
+            "Expandcandidate_indices_dim_3"
+          ]
+        },
+        {
+          "name": "candidate_valid",
+          "dtype": "BOOL",
+          "declared_shape": [
+            "batch",
+            "queries",
+            "Expandcandidate_valid_dim_2"
+          ]
+        },
+        {
+          "name": "null_logits",
+          "dtype": "FLOAT",
+          "declared_shape": [
+            "batch",
+            "queries"
+          ]
+        }
+      ]
+    },
+    "classifier": {
+      "opsets": {
+        "onnx": 18
+      },
+      "inputs": [
+        {
+          "name": "hidden_state",
+          "dtype": "FLOAT",
+          "declared_shape": [
+            "batch",
+            768
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "logit",
+          "dtype": "FLOAT",
+          "declared_shape": [
+            "batch",
+            1
+          ]
+        }
+      ]
+    }
+  },
+  "graph_contract_notice": "Read graph declarations only, no inference. Boundary pair_logits labels both second and third symbolic axes queries; runtime must validate actual candidate dimension against indices and valid mask instead of trusting those symbolic names."
+}
