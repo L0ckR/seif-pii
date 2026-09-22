@@ -268,10 +268,13 @@ def main() -> int:
             result = stop(directory)
         else:
             result = snapshot(directory)
+    except json.JSONDecodeError:
+        print("Local topology state is unavailable or invalid; no unrelated process was changed.", file=sys.stderr)
+        return 1
     except (ValueError, RuntimeError) as exc:
         print(str(exc), file=sys.stderr)
         return 1
-    except (OSError, KeyError, json.JSONDecodeError):
+    except (OSError, KeyError):
         print("Local topology state is unavailable or invalid; no unrelated process was changed.", file=sys.stderr)
         return 1
     print(json.dumps(result, ensure_ascii=False, indent=2))
