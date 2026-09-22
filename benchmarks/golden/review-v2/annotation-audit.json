@@ -1,0 +1,2499 @@
+{
+  "schema_version": 1,
+  "review_scope": "All 76 hybrid baseline mismatches, independently reviewed against immutable texts, existing annotation policy and hackathon assignment; detector implementation was not inspected.",
+  "review_limitations": [
+    "This is an independent AI review, not human adjudication or official organizer ground truth.",
+    "Classifications are recommendations; golden v1 and its uncertainty flags were not changed.",
+    "Case summaries deliberately distinguish label mismatch from objectively demonstrated privacy failure.",
+    "No held-out data was created; improvements informed by this audit remain in-sample."
+  ],
+  "source_sha256": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46",
+  "baseline_errors_sha256": "f056e5c7789af04f2c53fee5f106fbc198630f3d9d0604e38f9c7e5441fd369d",
+  "totals": {
+    "cases": 76,
+    "golden_uncertain": 62,
+    "false_negative_cases": 53,
+    "false_positive_cases": 24,
+    "false_negative_chars": 522,
+    "false_positive_chars": 342
+  },
+  "categories": {
+    "annotation_policy_review": {
+      "cases": 13,
+      "golden_uncertain": 13,
+      "false_negative_chars": 57,
+      "false_positive_chars": 84
+    },
+    "confirmed_detection_miss": {
+      "cases": 11,
+      "golden_uncertain": 1,
+      "false_negative_chars": 110,
+      "false_positive_chars": 0
+    },
+    "confirmed_overmask": {
+      "cases": 15,
+      "golden_uncertain": 11,
+      "false_negative_chars": 0,
+      "false_positive_chars": 228
+    },
+    "context_ambiguity": {
+      "cases": 36,
+      "golden_uncertain": 36,
+      "false_negative_chars": 337,
+      "false_positive_chars": 20
+    },
+    "mixed_confirmed_and_ambiguous": {
+      "cases": 1,
+      "golden_uncertain": 1,
+      "false_negative_chars": 18,
+      "false_positive_chars": 10
+    }
+  },
+  "external_primary_reference": {
+    "url": "https://www.nalog.gov.ru/rn77/terms/7756931/",
+    "scope": "FTS describes 12 digits for individual INN and 10 digits for organizational INN. No personal-number lookup was performed."
+  },
+  "policy_inconsistencies_or_underdetermination": [
+    {
+      "case_ids": [
+        "org_0160",
+        "org_0043",
+        "org_0258",
+        "org_0405"
+      ],
+      "finding": "Same bare passport-like format, but org_0160 is negative solely because personal meaning is unconfirmed; positive cases also lack personal context. A trailing 00 is not enough to prove non-personal meaning."
+    },
+    {
+      "case_ids": [
+        "org_0418",
+        "org_0245",
+        "org_0359",
+        "org_0172"
+      ],
+      "finding": "Valid individual INN is negative without a label and positive with a label, whereas less-specific passport-shaped digits are often positive without labels. This is a policy asymmetry, not proof that the detector should expose an unlabeled INN."
+    },
+    {
+      "case_ids": [
+        "org_0064",
+        "org_0131",
+        "org_0161",
+        "org_0206",
+        "org_0241",
+        "org_0422",
+        "org_0118",
+        "org_0145",
+        "org_0322",
+        "org_0429"
+      ],
+      "finding": "Decimal suffix .0 is accepted as serialization for phone numbers but makes valid 12-digit INN examples negative under the current labels. A uniform suffix heuristic cannot satisfy both intents."
+    },
+    {
+      "case_ids": [
+        "org_0259",
+        "org_0299"
+      ],
+      "finding": "Unlabeled 16-digit number with Luhn sum 69 is assumed to be a card. The label does not demonstrate that arbitrary invalid card-shaped numbers should be detected."
+    },
+    {
+      "case_ids": [
+        "org_0416",
+        "org_0249",
+        "org_0019"
+      ],
+      "finding": "Bare writer-name matches are public-person negatives; the same surname is personal in an heir context. Global name allowlists would be unsafe."
+    }
+  ],
+  "groups": [
+    {
+      "key": "clear_field_or_name_miss",
+      "category": "confirmed_detection_miss",
+      "ids": [
+        "org_0054",
+        "org_0109",
+        "org_0113",
+        "org_0114",
+        "org_0172",
+        "org_0198",
+        "org_0251",
+        "org_0255",
+        "org_0261",
+        "org_0300",
+        "org_0325"
+      ],
+      "reason": "Пропущено личное значение в явном поле/предложении либо узнаваемое двусоставное имя; основание следует из текста и протокола.",
+      "recommended_action": "Расширить ограниченные контекстом грамматики полей, морфологию и транслитерацию имён, повторные упоминания и границы значений; добавить независимые положительные и отрицательные примеры.",
+      "generalization_risk": "Не считать любое латинское словосочетание именем; не подменять общий словарь перечнем фамилий golden."
+    },
+    {
+      "key": "clear_overmask_or_boundary",
+      "category": "confirmed_overmask",
+      "ids": [
+        "org_0037",
+        "org_0045",
+        "org_0068",
+        "org_0078",
+        "org_0178",
+        "org_0267",
+        "org_0292",
+        "org_0301",
+        "org_0380",
+        "org_0388"
+      ],
+      "reason": "Замаскированы неперсональные данные по протоколу либо служебные слова за границей личного значения.",
+      "recommended_action": "Ограничить захват значений пунктуацией и синтаксисом, отделять юрисдикцию документа от гражданства, использовать корпоративный и публичный контекст.",
+      "generalization_risk": "Контекст важнее списка исключённых строк/имён; не распространять правила корпоративного ИНН РФ на любые номера СНГ или телефонные значения."
+    },
+    {
+      "key": "driver_issue_date_scope",
+      "category": "confirmed_overmask",
+      "ids": [
+        "org_0009"
+      ],
+      "reason": "Протокол v1 явно включает дату выдачи паспорта, но исключает дату выдачи водительского удостоверения. Детектор смешал типы документа.",
+      "recommended_action": "Связывать дату с ближайшим установленным типом документа. В строгом профиле ТЗ не маскировать дату выдачи ВУ как PASSPORT_DATE.",
+      "generalization_risk": "В расширенной политике приватности такую дату может быть разумно защищать; не объявлять её в принципе неперсональной."
+    },
+    {
+      "key": "full_address_ownership_unknown",
+      "category": "context_ambiguity",
+      "ids": [
+        "org_0004",
+        "org_0084",
+        "org_0162",
+        "org_0180",
+        "org_0192"
+      ],
+      "reason": "Адресный формат узнаваем, но принадлежность физическому лицу не задана; golden сам фиксирует неоднозначность. Основной технический пробел — неполный захват компонентов/сокращений.",
+      "recommended_action": "Исправить разбор топонимических сокращений, проспекта, микрорайона, корпуса и муниципальных компонентов; сохранять исключение явно деловых адресов.",
+      "generalization_risk": "Одинаковый адрес может быть адресом человека или организации. По одной строке установить владельца невозможно; политика без контекста должна быть явной."
+    },
+    {
+      "key": "document_context_weak_but_present",
+      "category": "context_ambiguity",
+      "ids": [
+        "org_0018",
+        "org_0048",
+        "org_0094",
+        "org_0187",
+        "org_0272",
+        "org_0297",
+        "org_0335",
+        "org_0423",
+        "org_0427",
+        "org_0442"
+      ],
+      "reason": "Есть орган выдачи, слово «документ», «удостоверение» либо сочетание серии и номера, но точный тип и/или личный владелец не названы.",
+      "recommended_action": "Сопоставлять серию и номер в пределах ограниченного фрагмента и распознавать обобщённые личные документы; сохранять отдельные значения и служебные слова.",
+      "generalization_risk": "Серия/номер бывают у неперсональных объектов. Тип PASSPORT/DRIVER_LICENSE в golden иногда лишь предположение; требуются контрпримеры с техникой/товарами/сертификатами."
+    },
+    {
+      "key": "bare_document_ambiguous",
+      "category": "context_ambiguity",
+      "ids": [
+        "org_0043",
+        "org_0127",
+        "org_0143",
+        "org_0154",
+        "org_0171",
+        "org_0258",
+        "org_0286",
+        "org_0339",
+        "org_0381",
+        "org_0405",
+        "org_0445"
+      ],
+      "reason": "Положительная метка выведена только из похожего на документ расположения цифр. Тот же формат допускает товарный или произвольный идентификатор.",
+      "recommended_action": "Разделить распознавание формата и уверенность в личном документе; новые общие эвристики проверять вместе с отрицательными org_0160, org_0086, org_0287 и шаблонами.",
+      "generalization_risk": "Org_0160 с тем же форматом отрицательный без объективного дополнительного признака. Правило «не оканчивается на 00» или список точных номеров будет подгонкой."
+    },
+    {
+      "key": "standalone_name_ambiguous",
+      "category": "context_ambiguity",
+      "ids": [
+        "org_0101",
+        "org_0122",
+        "org_0202",
+        "org_0246",
+        "org_0260",
+        "org_0340",
+        "org_0355",
+        "org_0389",
+        "org_0409"
+      ],
+      "reason": "Изолированное имя, фамилия или отчество не задаёт референта. Golden принимает личную трактовку, но отмечает неопределённость.",
+      "recommended_action": "Можно использовать внешний независимый словарь имён и склонений с режимом маскирования изолированных значений; обязательно проверить омонимы и организации.",
+      "generalization_risk": "«Петрович» может быть обращением к человеку, фамилией или названием компании. Заучивание трёх токенов не доказывает качество на русском/СНГ."
+    },
+    {
+      "key": "placeholder_date",
+      "category": "annotation_policy_review",
+      "ids": [
+        "org_0072",
+        "org_0201",
+        "org_0231"
+      ],
+      "reason": "Явное поле личной даты содержит «Mмм», не являющееся установленным названием месяца. Это может быть заглушка, опечатка или данные выгрузки; golden защищает всё значение.",
+      "recommended_action": "Принимать ограниченный по длине некорректный текст в явно обозначенном личном поле согласно отдельной политике; не добавлять специальную строку «Mмм» в календарь.",
+      "generalization_risk": "Заглушки сами по себе не идентифицируют человека. Нельзя размывать общую грамматику дат ради трёх артефактов разметки."
+    },
+    {
+      "key": "partial_pan_policy",
+      "category": "annotation_policy_review",
+      "ids": [
+        "org_0142"
+      ],
+      "reason": "Явно названы последние четыре цифры карты, а не полный номер. Защита частичных реквизитов — настройка политики; v1 требует защиты имеющегося фрагмента.",
+      "recommended_action": "Добавить контекстную поддержку частичных реквизитов с явными словами «последние/первые N цифр»; не маскировать все четырёхзначные числа.",
+      "generalization_risk": "Правило влияет на удобство обсуждения уже усечённых реквизитов; решение следует закрепить в профиле системы."
+    },
+    {
+      "key": "invalid_unlabelled_pan",
+      "category": "annotation_policy_review",
+      "ids": [
+        "org_0259",
+        "org_0299"
+      ],
+      "reason": "Первое 16-значное число объявлено картой без контекста и не проходит Luhn (сумма 69). Короткая соседняя группа сознательно оставлена открытой.",
+      "recommended_action": "Не отменять checksum для всех безконтекстных 16-значных чисел ради этих двух примеров. Некорректные значения защищать при явном карточном контексте.",
+      "generalization_risk": "Номер заказа той же длины неотличим по форме; золотая метка здесь отражает догадку annotator, а не доказательство номера карты."
+    },
+    {
+      "key": "decimal_personal_inn_policy",
+      "category": "annotation_policy_review",
+      "ids": [
+        "org_0064",
+        "org_0131",
+        "org_0161",
+        "org_0206",
+        "org_0241",
+        "org_0422"
+      ],
+      "reason": "Целая часть каждого значения проходит обе контрольные цифры 12-значного ИНН, но отрицательная метка объясняется отсутствием контекста и хвостом .0.",
+      "recommended_action": "Сохранить защиту сильного сигнала идентификатора либо вводить явно документированную политику числовых выгрузок после ручного решения; отрицательные оценки v1 показывать честно.",
+      "generalization_risk": "Подавление любого .0 ухудшит уже положительные телефоны org_0118/org_0145/org_0322/org_0429 и защиту ИНН при табличной сериализации."
+    },
+    {
+      "key": "decimal_nonpersonal_ten_digit",
+      "category": "confirmed_overmask",
+      "ids": [
+        "org_0108",
+        "org_0232",
+        "org_0240",
+        "org_0395"
+      ],
+      "reason": "Без контекста поля десятизначная целая часть десятичного числа не даёт достаточного личного сигнала. Для ИНН РФ десять цифр означают организацию.",
+      "recommended_action": "Отличать ИНН организации от ИНН физлица и не извлекать телефон из произвольного десятичного числа без внятного телефонного формата.",
+      "generalization_risk": "Это не правило «любое число с .0 отрицательно»: в корпусе есть положительные телефоны с тем же суффиксом."
+    },
+    {
+      "key": "public_person_homonym",
+      "category": "context_ambiguity",
+      "ids": [
+        "org_0416"
+      ],
+      "reason": "Фамилия и имя совпадают с известным писателем, но явного биографического/литературного контекста нет; v1 выбирает публичную фигуру.",
+      "recommended_action": "Учитывать контекст публичной персоны и сохранять защиту при указании клиента/наследника. Org_0019 прямо требует защиты той же фамилии в личном контексте.",
+      "generalization_risk": "Постоянное исключение имени нарушит приватность тёзки. Без контекста публичный референт не доказан."
+    },
+    {
+      "key": "standalone_valid_personal_inn",
+      "category": "annotation_policy_review",
+      "ids": [
+        "org_0418"
+      ],
+      "reason": "Двенадцатизначный номер проходит обе контрольные цифры ИНН и совпадает с ИНН в нескольких положительных примерах, но v1 считает его отрицательным без метки поля.",
+      "recommended_action": "Не отключать защиту checksum-valid ИНН ради единственного false positive. Вынести политику standalone ИНН на человеческое согласование в будущем v2.",
+      "generalization_risk": "Отсутствие слова ИНН не устраняет возможность утечки идентификатора; формальная 100% подгонка может ухудшить практическую защиту."
+    },
+    {
+      "key": "mixed_long_context",
+      "category": "mixed_confirmed_and_ambiguous",
+      "ids": [
+        "org_0324"
+      ],
+      "reason": "Подтверждены пропуск явно названного ИНН поручителя и лишняя маска слова «проживания». Отдельно неоднозначен «индекс» в просьбе о подтверждении суммы: v1 трактует его как почтовый.",
+      "recommended_action": "Исправить связь роли поручителя с ИНН и границу метки «Город проживания». Почтовый индекс распознавать по адресному контексту, а неоднозначную часть оценивать отдельно.",
+      "generalization_risk": "Разметка всего случая uncertain не означает, что все его части сомнительны; нельзя потерять очевидный ИНН из-за неопределённости одного индекса."
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "org_0004",
+      "category": "context_ambiguity",
+      "group": "full_address_ownership_unknown",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 1,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 1,
+          "text": "с"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Адресный формат узнаваем, но принадлежность физическому лицу не задана; golden сам фиксирует неоднозначность. Основной технический пробел — неполный захват компонентов/сокращений.",
+      "case_specific_observation": "Не захвачено «с.» в полном адресе: один буквенно-цифровой символ влияет на exact match, хотя содержательный адрес скрыт.",
+      "recommended_action": "Исправить разбор топонимических сокращений, проспекта, микрорайона, корпуса и муниципальных компонентов; сохранять исключение явно деловых адресов.",
+      "generalization_risk": "Одинаковый адрес может быть адресом человека или организации. По одной строке установить владельца невозможно; политика без контекста должна быть явной."
+    },
+    {
+      "case_id": "org_0009",
+      "category": "confirmed_overmask",
+      "group": "driver_issue_date_scope",
+      "golden_uncertain": false,
+      "golden_confidence": "high",
+      "golden_decision": "positive",
+      "false_negative_chars": 0,
+      "false_positive_chars": 8,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 42,
+          "end": 44,
+          "text": "02"
+        },
+        {
+          "start": 45,
+          "end": 47,
+          "text": "05"
+        },
+        {
+          "start": 48,
+          "end": 52,
+          "text": "2015"
+        }
+      ],
+      "reason": "Протокол v1 явно включает дату выдачи паспорта, но исключает дату выдачи водительского удостоверения. Детектор смешал типы документа.",
+      "case_specific_observation": "",
+      "recommended_action": "Связывать дату с ближайшим установленным типом документа. В строгом профиле ТЗ не маскировать дату выдачи ВУ как PASSPORT_DATE.",
+      "generalization_risk": "В расширенной политике приватности такую дату может быть разумно защищать; не объявлять её в принципе неперсональной."
+    },
+    {
+      "case_id": "org_0018",
+      "category": "context_ambiguity",
+      "group": "document_context_weak_but_present",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 26,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 7,
+          "end": 9,
+          "text": "МО"
+        },
+        {
+          "start": 10,
+          "end": 13,
+          "text": "МВД"
+        },
+        {
+          "start": 22,
+          "end": 31,
+          "text": "Тушинское"
+        },
+        {
+          "start": 42,
+          "end": 45,
+          "text": "УВД"
+        },
+        {
+          "start": 47,
+          "end": 56,
+          "text": "Тушинское"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Есть орган выдачи, слово «документ», «удостоверение» либо сочетание серии и номера, но точный тип и/или личный владелец не названы.",
+      "case_specific_observation": "Нужно выделять два наименования органа выдачи раздельно, оставляя «Выдала», скобки и «ранее» открытыми.",
+      "recommended_action": "Сопоставлять серию и номер в пределах ограниченного фрагмента и распознавать обобщённые личные документы; сохранять отдельные значения и служебные слова.",
+      "generalization_risk": "Серия/номер бывают у неперсональных объектов. Тип PASSPORT/DRIVER_LICENSE в golden иногда лишь предположение; требуются контрпримеры с техникой/товарами/сертификатами."
+    },
+    {
+      "case_id": "org_0037",
+      "category": "confirmed_overmask",
+      "group": "clear_overmask_or_boundary",
+      "golden_uncertain": true,
+      "golden_confidence": "low",
+      "golden_decision": "negative",
+      "false_negative_chars": 0,
+      "false_positive_chars": 11,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 0,
+          "end": 11,
+          "text": "70000000000"
+        }
+      ],
+      "reason": "Замаскированы неперсональные данные по протоколу либо служебные слова за границей личного значения.",
+      "case_specific_observation": "Форма 70000000000.0 не является достаточным телефонным сигналом; однотипные нули требуют проверки валидности префикса/длины.",
+      "recommended_action": "Ограничить захват значений пунктуацией и синтаксисом, отделять юрисдикцию документа от гражданства, использовать корпоративный и публичный контекст.",
+      "generalization_risk": "Контекст важнее списка исключённых строк/имён; не распространять правила корпоративного ИНН РФ на любые номера СНГ или телефонные значения."
+    },
+    {
+      "case_id": "org_0043",
+      "category": "context_ambiguity",
+      "group": "bare_document_ambiguous",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 10,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 4,
+          "text": "4509"
+        },
+        {
+          "start": 5,
+          "end": 11,
+          "text": "123456"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Положительная метка выведена только из похожего на документ расположения цифр. Тот же формат допускает товарный или произвольный идентификатор.",
+      "case_specific_observation": "",
+      "recommended_action": "Разделить распознавание формата и уверенность в личном документе; новые общие эвристики проверять вместе с отрицательными org_0160, org_0086, org_0287 и шаблонами.",
+      "generalization_risk": "Org_0160 с тем же форматом отрицательный без объективного дополнительного признака. Правило «не оканчивается на 00» или список точных номеров будет подгонкой."
+    },
+    {
+      "case_id": "org_0045",
+      "category": "confirmed_overmask",
+      "group": "clear_overmask_or_boundary",
+      "golden_uncertain": false,
+      "golden_confidence": "high",
+      "golden_decision": "negative",
+      "false_negative_chars": 0,
+      "false_positive_chars": 10,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 0,
+          "end": 10,
+          "text": "1000000002"
+        }
+      ],
+      "reason": "Замаскированы неперсональные данные по протоколу либо служебные слова за границей личного значения.",
+      "case_specific_observation": "",
+      "recommended_action": "Ограничить захват значений пунктуацией и синтаксисом, отделять юрисдикцию документа от гражданства, использовать корпоративный и публичный контекст.",
+      "generalization_risk": "Контекст важнее списка исключённых строк/имён; не распространять правила корпоративного ИНН РФ на любые номера СНГ или телефонные значения."
+    },
+    {
+      "case_id": "org_0048",
+      "category": "context_ambiguity",
+      "group": "document_context_weak_but_present",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 10,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 6,
+          "end": 10,
+          "text": "4509"
+        },
+        {
+          "start": 19,
+          "end": 25,
+          "text": "123456"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Есть орган выдачи, слово «документ», «удостоверение» либо сочетание серии и номера, но точный тип и/или личный владелец не названы.",
+      "case_specific_observation": "",
+      "recommended_action": "Сопоставлять серию и номер в пределах ограниченного фрагмента и распознавать обобщённые личные документы; сохранять отдельные значения и служебные слова.",
+      "generalization_risk": "Серия/номер бывают у неперсональных объектов. Тип PASSPORT/DRIVER_LICENSE в golden иногда лишь предположение; требуются контрпримеры с техникой/товарами/сертификатами."
+    },
+    {
+      "case_id": "org_0054",
+      "category": "confirmed_detection_miss",
+      "group": "clear_field_or_name_miss",
+      "golden_uncertain": false,
+      "golden_confidence": "high",
+      "golden_decision": "positive",
+      "false_negative_chars": 15,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 75,
+          "end": 79,
+          "text": "УМВД"
+        },
+        {
+          "start": 87,
+          "end": 89,
+          "text": "по"
+        },
+        {
+          "start": 90,
+          "end": 91,
+          "text": "г"
+        },
+        {
+          "start": 100,
+          "end": 102,
+          "text": "12"
+        },
+        {
+          "start": 103,
+          "end": 105,
+          "text": "03"
+        },
+        {
+          "start": 106,
+          "end": 110,
+          "text": "2015"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Пропущено личное значение в явном поле/предложении либо узнаваемое двусоставное имя; основание следует из текста и протокола.",
+      "case_specific_observation": "В явно паспортном контексте частично открыт орган выдачи и полностью открыта следующая дата.",
+      "recommended_action": "Расширить ограниченные контекстом грамматики полей, морфологию и транслитерацию имён, повторные упоминания и границы значений; добавить независимые положительные и отрицательные примеры.",
+      "generalization_risk": "Не считать любое латинское словосочетание именем; не подменять общий словарь перечнем фамилий golden."
+    },
+    {
+      "case_id": "org_0064",
+      "category": "annotation_policy_review",
+      "group": "decimal_personal_inn_policy",
+      "golden_uncertain": true,
+      "golden_confidence": "low",
+      "golden_decision": "negative",
+      "false_negative_chars": 0,
+      "false_positive_chars": 12,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 0,
+          "end": 12,
+          "text": "500405678951"
+        }
+      ],
+      "reason": "Целая часть каждого значения проходит обе контрольные цифры 12-значного ИНН, но отрицательная метка объясняется отсутствием контекста и хвостом .0.",
+      "case_specific_observation": "",
+      "recommended_action": "Сохранить защиту сильного сигнала идентификатора либо вводить явно документированную политику числовых выгрузок после ручного решения; отрицательные оценки v1 показывать честно.",
+      "generalization_risk": "Подавление любого .0 ухудшит уже положительные телефоны org_0118/org_0145/org_0322/org_0429 и защиту ИНН при табличной сериализации."
+    },
+    {
+      "case_id": "org_0068",
+      "category": "confirmed_overmask",
+      "group": "clear_overmask_or_boundary",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 0,
+      "false_positive_chars": 26,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 49,
+          "end": 58,
+          "text": "совпадает"
+        },
+        {
+          "start": 59,
+          "end": 60,
+          "text": "с"
+        },
+        {
+          "start": 61,
+          "end": 70,
+          "text": "указанным"
+        },
+        {
+          "start": 71,
+          "end": 72,
+          "text": "в"
+        },
+        {
+          "start": 73,
+          "end": 79,
+          "text": "анкете"
+        }
+      ],
+      "reason": "Замаскированы неперсональные данные по протоколу либо служебные слова за границей личного значения.",
+      "case_specific_observation": "Слова «совпадает с указанным в анкете» — не часть органа выдачи, даже когда за ними повторяется такой же орган.",
+      "recommended_action": "Ограничить захват значений пунктуацией и синтаксисом, отделять юрисдикцию документа от гражданства, использовать корпоративный и публичный контекст.",
+      "generalization_risk": "Контекст важнее списка исключённых строк/имён; не распространять правила корпоративного ИНН РФ на любые номера СНГ или телефонные значения."
+    },
+    {
+      "case_id": "org_0072",
+      "category": "annotation_policy_review",
+      "group": "placeholder_date",
+      "golden_uncertain": true,
+      "golden_confidence": "low",
+      "golden_decision": "positive",
+      "false_negative_chars": 7,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 49,
+          "end": 51,
+          "text": "15"
+        },
+        {
+          "start": 52,
+          "end": 55,
+          "text": "Mмм"
+        },
+        {
+          "start": 56,
+          "end": 58,
+          "text": "10"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Явное поле личной даты содержит «Mмм», не являющееся установленным названием месяца. Это может быть заглушка, опечатка или данные выгрузки; golden защищает всё значение.",
+      "case_specific_observation": "",
+      "recommended_action": "Принимать ограниченный по длине некорректный текст в явно обозначенном личном поле согласно отдельной политике; не добавлять специальную строку «Mмм» в календарь.",
+      "generalization_risk": "Заглушки сами по себе не идентифицируют человека. Нельзя размывать общую грамматику дат ради трёх артефактов разметки."
+    },
+    {
+      "case_id": "org_0078",
+      "category": "confirmed_overmask",
+      "group": "clear_overmask_or_boundary",
+      "golden_uncertain": false,
+      "golden_confidence": "high",
+      "golden_decision": "negative",
+      "false_negative_chars": 0,
+      "false_positive_chars": 42,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 0,
+          "end": 7,
+          "text": "Николай"
+        },
+        {
+          "start": 8,
+          "end": 18,
+          "text": "Степанович"
+        },
+        {
+          "start": 19,
+          "end": 26,
+          "text": "Гумилев"
+        },
+        {
+          "start": 38,
+          "end": 48,
+          "text": "Кронштадте"
+        },
+        {
+          "start": 49,
+          "end": 51,
+          "text": "15"
+        },
+        {
+          "start": 52,
+          "end": 54,
+          "text": "04"
+        },
+        {
+          "start": 55,
+          "end": 59,
+          "text": "1886"
+        }
+      ],
+      "reason": "Замаскированы неперсональные данные по протоколу либо служебные слова за границей личного значения.",
+      "case_specific_observation": "Биографическое предложение о Николае Гумилёве согласуется с исключением публичных исторических фигур в ТЗ; запрет маскировать фамилию всегда был бы неверным.",
+      "recommended_action": "Ограничить захват значений пунктуацией и синтаксисом, отделять юрисдикцию документа от гражданства, использовать корпоративный и публичный контекст.",
+      "generalization_risk": "Контекст важнее списка исключённых строк/имён; не распространять правила корпоративного ИНН РФ на любые номера СНГ или телефонные значения."
+    },
+    {
+      "case_id": "org_0084",
+      "category": "context_ambiguity",
+      "group": "full_address_ownership_unknown",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 11,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 17,
+          "end": 26,
+          "text": "Раменский"
+        },
+        {
+          "start": 27,
+          "end": 28,
+          "text": "г"
+        },
+        {
+          "start": 33,
+          "end": 34,
+          "text": "д"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Адресный формат узнаваем, но принадлежность физическому лицу не задана; golden сам фиксирует неоднозначность. Основной технический пробел — неполный захват компонентов/сокращений.",
+      "case_specific_observation": "Пропущены муниципальный округ «Раменский г.о.» и адресное «д.»; NER по отдельным топонимам не собирает целый адрес.",
+      "recommended_action": "Исправить разбор топонимических сокращений, проспекта, микрорайона, корпуса и муниципальных компонентов; сохранять исключение явно деловых адресов.",
+      "generalization_risk": "Одинаковый адрес может быть адресом человека или организации. По одной строке установить владельца невозможно; политика без контекста должна быть явной."
+    },
+    {
+      "case_id": "org_0094",
+      "category": "context_ambiguity",
+      "group": "document_context_weak_but_present",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 4,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 6,
+          "end": 10,
+          "text": "1234"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Есть орган выдачи, слово «документ», «удостоверение» либо сочетание серии и номера, но точный тип и/или личный владелец не названы.",
+      "case_specific_observation": "",
+      "recommended_action": "Сопоставлять серию и номер в пределах ограниченного фрагмента и распознавать обобщённые личные документы; сохранять отдельные значения и служебные слова.",
+      "generalization_risk": "Серия/номер бывают у неперсональных объектов. Тип PASSPORT/DRIVER_LICENSE в golden иногда лишь предположение; требуются контрпримеры с техникой/товарами/сертификатами."
+    },
+    {
+      "case_id": "org_0101",
+      "category": "context_ambiguity",
+      "group": "standalone_name_ambiguous",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 6,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 6,
+          "text": "Иванов"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Изолированное имя, фамилия или отчество не задаёт референта. Golden принимает личную трактовку, но отмечает неопределённость.",
+      "case_specific_observation": "",
+      "recommended_action": "Можно использовать внешний независимый словарь имён и склонений с режимом маскирования изолированных значений; обязательно проверить омонимы и организации.",
+      "generalization_risk": "«Петрович» может быть обращением к человеку, фамилией или названием компании. Заучивание трёх токенов не доказывает качество на русском/СНГ."
+    },
+    {
+      "case_id": "org_0108",
+      "category": "confirmed_overmask",
+      "group": "decimal_nonpersonal_ten_digit",
+      "golden_uncertain": true,
+      "golden_confidence": "low",
+      "golden_decision": "negative",
+      "false_negative_chars": 0,
+      "false_positive_chars": 10,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 0,
+          "end": 10,
+          "text": "9999999998"
+        }
+      ],
+      "reason": "Без контекста поля десятизначная целая часть десятичного числа не даёт достаточного личного сигнала. Для ИНН РФ десять цифр означают организацию.",
+      "case_specific_observation": "",
+      "recommended_action": "Отличать ИНН организации от ИНН физлица и не извлекать телефон из произвольного десятичного числа без внятного телефонного формата.",
+      "generalization_risk": "Это не правило «любое число с .0 отрицательно»: в корпусе есть положительные телефоны с тем же суффиксом."
+    },
+    {
+      "case_id": "org_0109",
+      "category": "confirmed_detection_miss",
+      "group": "clear_field_or_name_miss",
+      "golden_uncertain": false,
+      "golden_confidence": "high",
+      "golden_decision": "positive",
+      "false_negative_chars": 12,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 8,
+          "text": "Sidorova"
+        },
+        {
+          "start": 9,
+          "end": 13,
+          "text": "Anna"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Пропущено личное значение в явном поле/предложении либо узнаваемое двусоставное имя; основание следует из текста и протокола.",
+      "case_specific_observation": "Нужна поддержка транслитерированных ФИО; нельзя делать отдельное правило только на Sidorova Anna.",
+      "recommended_action": "Расширить ограниченные контекстом грамматики полей, морфологию и транслитерацию имён, повторные упоминания и границы значений; добавить независимые положительные и отрицательные примеры.",
+      "generalization_risk": "Не считать любое латинское словосочетание именем; не подменять общий словарь перечнем фамилий golden."
+    },
+    {
+      "case_id": "org_0113",
+      "category": "confirmed_detection_miss",
+      "group": "clear_field_or_name_miss",
+      "golden_uncertain": false,
+      "golden_confidence": "high",
+      "golden_decision": "positive",
+      "false_negative_chars": 12,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 39,
+          "end": 47,
+          "text": "SMIRNOVA"
+        },
+        {
+          "start": 48,
+          "end": 52,
+          "text": "ANNA"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Пропущено личное значение в явном поле/предложении либо узнаваемое двусоставное имя; основание следует из текста и протокола.",
+      "case_specific_observation": "«Эмбоссированное имя» является карточным контекстом.",
+      "recommended_action": "Расширить ограниченные контекстом грамматики полей, морфологию и транслитерацию имён, повторные упоминания и границы значений; добавить независимые положительные и отрицательные примеры.",
+      "generalization_risk": "Не считать любое латинское словосочетание именем; не подменять общий словарь перечнем фамилий golden."
+    },
+    {
+      "case_id": "org_0114",
+      "category": "confirmed_detection_miss",
+      "group": "clear_field_or_name_miss",
+      "golden_uncertain": false,
+      "golden_confidence": "high",
+      "golden_decision": "positive",
+      "false_negative_chars": 1,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 63,
+          "end": 64,
+          "text": "г"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Пропущено личное значение в явном поле/предложении либо узнаваемое двусоставное имя; основание следует из текста и протокола.",
+      "case_specific_observation": "Открыто только сокращение «г.» перед местом рождения; граница golden включает его, как value-internal formatting.",
+      "recommended_action": "Расширить ограниченные контекстом грамматики полей, морфологию и транслитерацию имён, повторные упоминания и границы значений; добавить независимые положительные и отрицательные примеры.",
+      "generalization_risk": "Не считать любое латинское словосочетание именем; не подменять общий словарь перечнем фамилий golden."
+    },
+    {
+      "case_id": "org_0122",
+      "category": "context_ambiguity",
+      "group": "standalone_name_ambiguous",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 8,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 8,
+          "text": "Петрович"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Изолированное имя, фамилия или отчество не задаёт референта. Golden принимает личную трактовку, но отмечает неопределённость.",
+      "case_specific_observation": "",
+      "recommended_action": "Можно использовать внешний независимый словарь имён и склонений с режимом маскирования изолированных значений; обязательно проверить омонимы и организации.",
+      "generalization_risk": "«Петрович» может быть обращением к человеку, фамилией или названием компании. Заучивание трёх токенов не доказывает качество на русском/СНГ."
+    },
+    {
+      "case_id": "org_0127",
+      "category": "context_ambiguity",
+      "group": "bare_document_ambiguous",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 10,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 4,
+          "text": "0012"
+        },
+        {
+          "start": 5,
+          "end": 11,
+          "text": "345678"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Положительная метка выведена только из похожего на документ расположения цифр. Тот же формат допускает товарный или произвольный идентификатор.",
+      "case_specific_observation": "",
+      "recommended_action": "Разделить распознавание формата и уверенность в личном документе; новые общие эвристики проверять вместе с отрицательными org_0160, org_0086, org_0287 и шаблонами.",
+      "generalization_risk": "Org_0160 с тем же форматом отрицательный без объективного дополнительного признака. Правило «не оканчивается на 00» или список точных номеров будет подгонкой."
+    },
+    {
+      "case_id": "org_0131",
+      "category": "annotation_policy_review",
+      "group": "decimal_personal_inn_policy",
+      "golden_uncertain": true,
+      "golden_confidence": "low",
+      "golden_decision": "negative",
+      "false_negative_chars": 0,
+      "false_positive_chars": 12,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 0,
+          "end": 12,
+          "text": "111111111130"
+        }
+      ],
+      "reason": "Целая часть каждого значения проходит обе контрольные цифры 12-значного ИНН, но отрицательная метка объясняется отсутствием контекста и хвостом .0.",
+      "case_specific_observation": "",
+      "recommended_action": "Сохранить защиту сильного сигнала идентификатора либо вводить явно документированную политику числовых выгрузок после ручного решения; отрицательные оценки v1 показывать честно.",
+      "generalization_risk": "Подавление любого .0 ухудшит уже положительные телефоны org_0118/org_0145/org_0322/org_0429 и защиту ИНН при табличной сериализации."
+    },
+    {
+      "case_id": "org_0142",
+      "category": "annotation_policy_review",
+      "group": "partial_pan_policy",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 4,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 32,
+          "end": 36,
+          "text": "1234"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Явно названы последние четыре цифры карты, а не полный номер. Защита частичных реквизитов — настройка политики; v1 требует защиты имеющегося фрагмента.",
+      "case_specific_observation": "",
+      "recommended_action": "Добавить контекстную поддержку частичных реквизитов с явными словами «последние/первые N цифр»; не маскировать все четырёхзначные числа.",
+      "generalization_risk": "Правило влияет на удобство обсуждения уже усечённых реквизитов; решение следует закрепить в профиле системы."
+    },
+    {
+      "case_id": "org_0143",
+      "category": "context_ambiguity",
+      "group": "bare_document_ambiguous",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 10,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 2,
+          "text": "12"
+        },
+        {
+          "start": 3,
+          "end": 5,
+          "text": "34"
+        },
+        {
+          "start": 6,
+          "end": 12,
+          "text": "567890"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Положительная метка выведена только из похожего на документ расположения цифр. Тот же формат допускает товарный или произвольный идентификатор.",
+      "case_specific_observation": "",
+      "recommended_action": "Разделить распознавание формата и уверенность в личном документе; новые общие эвристики проверять вместе с отрицательными org_0160, org_0086, org_0287 и шаблонами.",
+      "generalization_risk": "Org_0160 с тем же форматом отрицательный без объективного дополнительного признака. Правило «не оканчивается на 00» или список точных номеров будет подгонкой."
+    },
+    {
+      "case_id": "org_0154",
+      "category": "context_ambiguity",
+      "group": "bare_document_ambiguous",
+      "golden_uncertain": true,
+      "golden_confidence": "low",
+      "golden_decision": "positive",
+      "false_negative_chars": 10,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 4,
+          "text": "7712"
+        },
+        {
+          "start": 5,
+          "end": 11,
+          "text": "345671"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Положительная метка выведена только из похожего на документ расположения цифр. Тот же формат допускает товарный или произвольный идентификатор.",
+      "case_specific_observation": "",
+      "recommended_action": "Разделить распознавание формата и уверенность в личном документе; новые общие эвристики проверять вместе с отрицательными org_0160, org_0086, org_0287 и шаблонами.",
+      "generalization_risk": "Org_0160 с тем же форматом отрицательный без объективного дополнительного признака. Правило «не оканчивается на 00» или список точных номеров будет подгонкой."
+    },
+    {
+      "case_id": "org_0161",
+      "category": "annotation_policy_review",
+      "group": "decimal_personal_inn_policy",
+      "golden_uncertain": true,
+      "golden_confidence": "low",
+      "golden_decision": "negative",
+      "false_negative_chars": 0,
+      "false_positive_chars": 12,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 0,
+          "end": 12,
+          "text": "110000000095"
+        }
+      ],
+      "reason": "Целая часть каждого значения проходит обе контрольные цифры 12-значного ИНН, но отрицательная метка объясняется отсутствием контекста и хвостом .0.",
+      "case_specific_observation": "",
+      "recommended_action": "Сохранить защиту сильного сигнала идентификатора либо вводить явно документированную политику числовых выгрузок после ручного решения; отрицательные оценки v1 показывать честно.",
+      "generalization_risk": "Подавление любого .0 ухудшит уже положительные телефоны org_0118/org_0145/org_0322/org_0429 и защиту ИНН при табличной сериализации."
+    },
+    {
+      "case_id": "org_0162",
+      "category": "context_ambiguity",
+      "group": "full_address_ownership_unknown",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 14,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 22,
+          "end": 23,
+          "text": "г"
+        },
+        {
+          "start": 33,
+          "end": 35,
+          "text": "пр"
+        },
+        {
+          "start": 36,
+          "end": 38,
+          "text": "кт"
+        },
+        {
+          "start": 39,
+          "end": 45,
+          "text": "Победы"
+        },
+        {
+          "start": 47,
+          "end": 48,
+          "text": "д"
+        },
+        {
+          "start": 55,
+          "end": 57,
+          "text": "кв"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Адресный формат узнаваем, но принадлежность физическому лицу не задана; golden сам фиксирует неоднозначность. Основной технический пробел — неполный захват компонентов/сокращений.",
+      "case_specific_observation": "Пропущены тип улицы пр-кт и название Победы вместе с адресными сокращениями.",
+      "recommended_action": "Исправить разбор топонимических сокращений, проспекта, микрорайона, корпуса и муниципальных компонентов; сохранять исключение явно деловых адресов.",
+      "generalization_risk": "Одинаковый адрес может быть адресом человека или организации. По одной строке установить владельца невозможно; политика без контекста должна быть явной."
+    },
+    {
+      "case_id": "org_0171",
+      "category": "context_ambiguity",
+      "group": "bare_document_ambiguous",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 10,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 2,
+          "text": "12"
+        },
+        {
+          "start": 3,
+          "end": 5,
+          "text": "34"
+        },
+        {
+          "start": 6,
+          "end": 12,
+          "text": "567890"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Положительная метка выведена только из похожего на документ расположения цифр. Тот же формат допускает товарный или произвольный идентификатор.",
+      "case_specific_observation": "",
+      "recommended_action": "Разделить распознавание формата и уверенность в личном документе; новые общие эвристики проверять вместе с отрицательными org_0160, org_0086, org_0287 и шаблонами.",
+      "generalization_risk": "Org_0160 с тем же форматом отрицательный без объективного дополнительного признака. Правило «не оканчивается на 00» или список точных номеров будет подгонкой."
+    },
+    {
+      "case_id": "org_0172",
+      "category": "confirmed_detection_miss",
+      "group": "clear_field_or_name_miss",
+      "golden_uncertain": false,
+      "golden_confidence": "high",
+      "golden_decision": "positive",
+      "false_negative_chars": 12,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 5,
+          "end": 9,
+          "text": "7712"
+        },
+        {
+          "start": 10,
+          "end": 14,
+          "text": "3456"
+        },
+        {
+          "start": 15,
+          "end": 19,
+          "text": "7859"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Пропущено личное значение в явном поле/предложении либо узнаваемое двусоставное имя; основание следует из текста и протокола.",
+      "case_specific_observation": "Явно заданный ИНН содержит пробелы внутри; значим полный 12-значный номер.",
+      "recommended_action": "Расширить ограниченные контекстом грамматики полей, морфологию и транслитерацию имён, повторные упоминания и границы значений; добавить независимые положительные и отрицательные примеры.",
+      "generalization_risk": "Не считать любое латинское словосочетание именем; не подменять общий словарь перечнем фамилий golden."
+    },
+    {
+      "case_id": "org_0178",
+      "category": "confirmed_overmask",
+      "group": "clear_overmask_or_boundary",
+      "golden_uncertain": true,
+      "golden_confidence": "low",
+      "golden_decision": "positive",
+      "false_negative_chars": 0,
+      "false_positive_chars": 62,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 12,
+          "end": 17,
+          "text": "есной"
+        },
+        {
+          "start": 19,
+          "end": 20,
+          "text": "В"
+        },
+        {
+          "start": 28,
+          "end": 29,
+          "text": "в"
+        },
+        {
+          "start": 30,
+          "end": 32,
+          "text": "то"
+        },
+        {
+          "start": 33,
+          "end": 38,
+          "text": "время"
+        },
+        {
+          "start": 39,
+          "end": 42,
+          "text": "еще"
+        },
+        {
+          "start": 43,
+          "end": 45,
+          "text": "не"
+        },
+        {
+          "start": 46,
+          "end": 54,
+          "text": "начинали"
+        },
+        {
+          "start": 55,
+          "end": 63,
+          "text": "зеленеть"
+        },
+        {
+          "start": 64,
+          "end": 71,
+          "text": "деревья"
+        },
+        {
+          "start": 73,
+          "end": 74,
+          "text": "с"
+        },
+        {
+          "start": 75,
+          "end": 77,
+          "text": "15"
+        },
+        {
+          "start": 78,
+          "end": 85,
+          "text": "августа"
+        },
+        {
+          "start": 86,
+          "end": 90,
+          "text": "2017"
+        },
+        {
+          "start": 91,
+          "end": 92,
+          "text": "я"
+        },
+        {
+          "start": 93,
+          "end": 97,
+          "text": "живу"
+        },
+        {
+          "start": 98,
+          "end": 99,
+          "text": "в"
+        }
+      ],
+      "reason": "Замаскированы неперсональные данные по протоколу либо служебные слова за границей личного значения.",
+      "case_specific_observation": "Нельзя продолжать birth-place/date span через несколько предложений и обычные слова; «весной» размечать отдельной конкретной датой оснований нет.",
+      "recommended_action": "Ограничить захват значений пунктуацией и синтаксисом, отделять юрисдикцию документа от гражданства, использовать корпоративный и публичный контекст.",
+      "generalization_risk": "Контекст важнее списка исключённых строк/имён; не распространять правила корпоративного ИНН РФ на любые номера СНГ или телефонные значения."
+    },
+    {
+      "case_id": "org_0180",
+      "category": "context_ambiguity",
+      "group": "full_address_ownership_unknown",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 31,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 3,
+          "text": "пгт"
+        },
+        {
+          "start": 4,
+          "end": 6,
+          "text": "им"
+        },
+        {
+          "start": 8,
+          "end": 18,
+          "text": "Воровского"
+        },
+        {
+          "start": 20,
+          "end": 23,
+          "text": "мкр"
+        },
+        {
+          "start": 25,
+          "end": 33,
+          "text": "Заречный"
+        },
+        {
+          "start": 35,
+          "end": 36,
+          "text": "д"
+        },
+        {
+          "start": 41,
+          "end": 42,
+          "text": "к"
+        },
+        {
+          "start": 44,
+          "end": 45,
+          "text": "2"
+        },
+        {
+          "start": 47,
+          "end": 49,
+          "text": "кв"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Адресный формат узнаваем, но принадлежность физическому лицу не задана; golden сам фиксирует неоднозначность. Основной технический пробел — неполный захват компонентов/сокращений.",
+      "case_specific_observation": "Адрес содержит пгт, им., мкр., корпус; регулярная структура адреса богаче улица+дом.",
+      "recommended_action": "Исправить разбор топонимических сокращений, проспекта, микрорайона, корпуса и муниципальных компонентов; сохранять исключение явно деловых адресов.",
+      "generalization_risk": "Одинаковый адрес может быть адресом человека или организации. По одной строке установить владельца невозможно; политика без контекста должна быть явной."
+    },
+    {
+      "case_id": "org_0187",
+      "category": "context_ambiguity",
+      "group": "document_context_weak_but_present",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 4,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 19,
+          "end": 23,
+          "text": "4509"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Есть орган выдачи, слово «документ», «удостоверение» либо сочетание серии и номера, но точный тип и/или личный владелец не названы.",
+      "case_specific_observation": "",
+      "recommended_action": "Сопоставлять серию и номер в пределах ограниченного фрагмента и распознавать обобщённые личные документы; сохранять отдельные значения и служебные слова.",
+      "generalization_risk": "Серия/номер бывают у неперсональных объектов. Тип PASSPORT/DRIVER_LICENSE в golden иногда лишь предположение; требуются контрпримеры с техникой/товарами/сертификатами."
+    },
+    {
+      "case_id": "org_0192",
+      "category": "context_ambiguity",
+      "group": "full_address_ownership_unknown",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 8,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 1,
+          "text": "г"
+        },
+        {
+          "start": 28,
+          "end": 30,
+          "text": "пр"
+        },
+        {
+          "start": 31,
+          "end": 33,
+          "text": "кт"
+        },
+        {
+          "start": 35,
+          "end": 36,
+          "text": "д"
+        },
+        {
+          "start": 42,
+          "end": 44,
+          "text": "кв"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Адресный формат узнаваем, но принадлежность физическому лицу не задана; golden сам фиксирует неоднозначность. Основной технический пробел — неполный захват компонентов/сокращений.",
+      "case_specific_observation": "Нужно поддержать расположение Невский пр-кт после названия и включить служебные части самого адреса.",
+      "recommended_action": "Исправить разбор топонимических сокращений, проспекта, микрорайона, корпуса и муниципальных компонентов; сохранять исключение явно деловых адресов.",
+      "generalization_risk": "Одинаковый адрес может быть адресом человека или организации. По одной строке установить владельца невозможно; политика без контекста должна быть явной."
+    },
+    {
+      "case_id": "org_0198",
+      "category": "confirmed_detection_miss",
+      "group": "clear_field_or_name_miss",
+      "golden_uncertain": false,
+      "golden_confidence": "high",
+      "golden_decision": "positive",
+      "false_negative_chars": 10,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 1,
+          "text": "O"
+        },
+        {
+          "start": 2,
+          "end": 7,
+          "text": "Brien"
+        },
+        {
+          "start": 8,
+          "end": 12,
+          "text": "John"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Пропущено личное значение в явном поле/предложении либо узнаваемое двусоставное имя; основание следует из текста и протокола.",
+      "case_specific_observation": "Апостроф внутри фамилии должен сохраняться как пунктуация и не разрывать персональное значение.",
+      "recommended_action": "Расширить ограниченные контекстом грамматики полей, морфологию и транслитерацию имён, повторные упоминания и границы значений; добавить независимые положительные и отрицательные примеры.",
+      "generalization_risk": "Не считать любое латинское словосочетание именем; не подменять общий словарь перечнем фамилий golden."
+    },
+    {
+      "case_id": "org_0201",
+      "category": "annotation_policy_review",
+      "group": "placeholder_date",
+      "golden_uncertain": true,
+      "golden_confidence": "low",
+      "golden_decision": "positive",
+      "false_negative_chars": 9,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 41,
+          "end": 43,
+          "text": "15"
+        },
+        {
+          "start": 44,
+          "end": 47,
+          "text": "Mмм"
+        },
+        {
+          "start": 48,
+          "end": 52,
+          "text": "1990"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Явное поле личной даты содержит «Mмм», не являющееся установленным названием месяца. Это может быть заглушка, опечатка или данные выгрузки; golden защищает всё значение.",
+      "case_specific_observation": "",
+      "recommended_action": "Принимать ограниченный по длине некорректный текст в явно обозначенном личном поле согласно отдельной политике; не добавлять специальную строку «Mмм» в календарь.",
+      "generalization_risk": "Заглушки сами по себе не идентифицируют человека. Нельзя размывать общую грамматику дат ради трёх артефактов разметки."
+    },
+    {
+      "case_id": "org_0202",
+      "category": "context_ambiguity",
+      "group": "standalone_name_ambiguous",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 4,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 4,
+          "text": "иван"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Изолированное имя, фамилия или отчество не задаёт референта. Golden принимает личную трактовку, но отмечает неопределённость.",
+      "case_specific_observation": "",
+      "recommended_action": "Можно использовать внешний независимый словарь имён и склонений с режимом маскирования изолированных значений; обязательно проверить омонимы и организации.",
+      "generalization_risk": "«Петрович» может быть обращением к человеку, фамилией или названием компании. Заучивание трёх токенов не доказывает качество на русском/СНГ."
+    },
+    {
+      "case_id": "org_0206",
+      "category": "annotation_policy_review",
+      "group": "decimal_personal_inn_policy",
+      "golden_uncertain": true,
+      "golden_confidence": "low",
+      "golden_decision": "negative",
+      "false_negative_chars": 0,
+      "false_positive_chars": 12,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 0,
+          "end": 12,
+          "text": "999900000097"
+        }
+      ],
+      "reason": "Целая часть каждого значения проходит обе контрольные цифры 12-значного ИНН, но отрицательная метка объясняется отсутствием контекста и хвостом .0.",
+      "case_specific_observation": "",
+      "recommended_action": "Сохранить защиту сильного сигнала идентификатора либо вводить явно документированную политику числовых выгрузок после ручного решения; отрицательные оценки v1 показывать честно.",
+      "generalization_risk": "Подавление любого .0 ухудшит уже положительные телефоны org_0118/org_0145/org_0322/org_0429 и защиту ИНН при табличной сериализации."
+    },
+    {
+      "case_id": "org_0231",
+      "category": "annotation_policy_review",
+      "group": "placeholder_date",
+      "golden_uncertain": true,
+      "golden_confidence": "low",
+      "golden_decision": "positive",
+      "false_negative_chars": 5,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 35,
+          "end": 37,
+          "text": "15"
+        },
+        {
+          "start": 38,
+          "end": 41,
+          "text": "Mмм"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Явное поле личной даты содержит «Mмм», не являющееся установленным названием месяца. Это может быть заглушка, опечатка или данные выгрузки; golden защищает всё значение.",
+      "case_specific_observation": "",
+      "recommended_action": "Принимать ограниченный по длине некорректный текст в явно обозначенном личном поле согласно отдельной политике; не добавлять специальную строку «Mмм» в календарь.",
+      "generalization_risk": "Заглушки сами по себе не идентифицируют человека. Нельзя размывать общую грамматику дат ради трёх артефактов разметки."
+    },
+    {
+      "case_id": "org_0232",
+      "category": "confirmed_overmask",
+      "group": "decimal_nonpersonal_ten_digit",
+      "golden_uncertain": true,
+      "golden_confidence": "low",
+      "golden_decision": "negative",
+      "false_negative_chars": 0,
+      "false_positive_chars": 10,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 0,
+          "end": 10,
+          "text": "7712345671"
+        }
+      ],
+      "reason": "Без контекста поля десятизначная целая часть десятичного числа не даёт достаточного личного сигнала. Для ИНН РФ десять цифр означают организацию.",
+      "case_specific_observation": "",
+      "recommended_action": "Отличать ИНН организации от ИНН физлица и не извлекать телефон из произвольного десятичного числа без внятного телефонного формата.",
+      "generalization_risk": "Это не правило «любое число с .0 отрицательно»: в корпусе есть положительные телефоны с тем же суффиксом."
+    },
+    {
+      "case_id": "org_0240",
+      "category": "confirmed_overmask",
+      "group": "decimal_nonpersonal_ten_digit",
+      "golden_uncertain": true,
+      "golden_confidence": "low",
+      "golden_decision": "negative",
+      "false_negative_chars": 0,
+      "false_positive_chars": 10,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 0,
+          "end": 10,
+          "text": "7704000000"
+        }
+      ],
+      "reason": "Без контекста поля десятизначная целая часть десятичного числа не даёт достаточного личного сигнала. Для ИНН РФ десять цифр означают организацию.",
+      "case_specific_observation": "",
+      "recommended_action": "Отличать ИНН организации от ИНН физлица и не извлекать телефон из произвольного десятичного числа без внятного телефонного формата.",
+      "generalization_risk": "Это не правило «любое число с .0 отрицательно»: в корпусе есть положительные телефоны с тем же суффиксом."
+    },
+    {
+      "case_id": "org_0241",
+      "category": "annotation_policy_review",
+      "group": "decimal_personal_inn_policy",
+      "golden_uncertain": true,
+      "golden_confidence": "low",
+      "golden_decision": "negative",
+      "false_negative_chars": 0,
+      "false_positive_chars": 12,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 0,
+          "end": 12,
+          "text": "771234567859"
+        }
+      ],
+      "reason": "Целая часть каждого значения проходит обе контрольные цифры 12-значного ИНН, но отрицательная метка объясняется отсутствием контекста и хвостом .0.",
+      "case_specific_observation": "",
+      "recommended_action": "Сохранить защиту сильного сигнала идентификатора либо вводить явно документированную политику числовых выгрузок после ручного решения; отрицательные оценки v1 показывать честно.",
+      "generalization_risk": "Подавление любого .0 ухудшит уже положительные телефоны org_0118/org_0145/org_0322/org_0429 и защиту ИНН при табличной сериализации."
+    },
+    {
+      "case_id": "org_0246",
+      "category": "context_ambiguity",
+      "group": "standalone_name_ambiguous",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 4,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 4,
+          "text": "ИВАН"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Изолированное имя, фамилия или отчество не задаёт референта. Golden принимает личную трактовку, но отмечает неопределённость.",
+      "case_specific_observation": "",
+      "recommended_action": "Можно использовать внешний независимый словарь имён и склонений с режимом маскирования изолированных значений; обязательно проверить омонимы и организации.",
+      "generalization_risk": "«Петрович» может быть обращением к человеку, фамилией или названием компании. Заучивание трёх токенов не доказывает качество на русском/СНГ."
+    },
+    {
+      "case_id": "org_0251",
+      "category": "confirmed_detection_miss",
+      "group": "clear_field_or_name_miss",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 10,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 6,
+          "text": "PETROV"
+        },
+        {
+          "start": 7,
+          "end": 11,
+          "text": "PETR"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Пропущено личное значение в явном поле/предложении либо узнаваемое двусоставное имя; основание следует из текста и протокола.",
+      "case_specific_observation": "",
+      "recommended_action": "Расширить ограниченные контекстом грамматики полей, морфологию и транслитерацию имён, повторные упоминания и границы значений; добавить независимые положительные и отрицательные примеры.",
+      "generalization_risk": "Не считать любое латинское словосочетание именем; не подменять общий словарь перечнем фамилий golden."
+    },
+    {
+      "case_id": "org_0255",
+      "category": "confirmed_detection_miss",
+      "group": "clear_field_or_name_miss",
+      "golden_uncertain": false,
+      "golden_confidence": "high",
+      "golden_decision": "positive",
+      "false_negative_chars": 12,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 8,
+          "text": "Sidorova"
+        },
+        {
+          "start": 9,
+          "end": 13,
+          "text": "Anna"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Пропущено личное значение в явном поле/предложении либо узнаваемое двусоставное имя; основание следует из текста и протокола.",
+      "case_specific_observation": "Латинское имя сопровождается действием человека и банковской операцией, личный контекст явный.",
+      "recommended_action": "Расширить ограниченные контекстом грамматики полей, морфологию и транслитерацию имён, повторные упоминания и границы значений; добавить независимые положительные и отрицательные примеры.",
+      "generalization_risk": "Не считать любое латинское словосочетание именем; не подменять общий словарь перечнем фамилий golden."
+    },
+    {
+      "case_id": "org_0258",
+      "category": "context_ambiguity",
+      "group": "bare_document_ambiguous",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 10,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 4,
+          "text": "4509"
+        },
+        {
+          "start": 5,
+          "end": 11,
+          "text": "001234"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Положительная метка выведена только из похожего на документ расположения цифр. Тот же формат допускает товарный или произвольный идентификатор.",
+      "case_specific_observation": "",
+      "recommended_action": "Разделить распознавание формата и уверенность в личном документе; новые общие эвристики проверять вместе с отрицательными org_0160, org_0086, org_0287 и шаблонами.",
+      "generalization_risk": "Org_0160 с тем же форматом отрицательный без объективного дополнительного признака. Правило «не оканчивается на 00» или список точных номеров будет подгонкой."
+    },
+    {
+      "case_id": "org_0259",
+      "category": "annotation_policy_review",
+      "group": "invalid_unlabelled_pan",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 16,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 16,
+          "text": "4276380012345678"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Первое 16-значное число объявлено картой без контекста и не проходит Luhn (сумма 69). Короткая соседняя группа сознательно оставлена открытой.",
+      "case_specific_observation": "",
+      "recommended_action": "Не отменять checksum для всех безконтекстных 16-значных чисел ради этих двух примеров. Некорректные значения защищать при явном карточном контексте.",
+      "generalization_risk": "Номер заказа той же длины неотличим по форме; золотая метка здесь отражает догадку annotator, а не доказательство номера карты."
+    },
+    {
+      "case_id": "org_0260",
+      "category": "context_ambiguity",
+      "group": "standalone_name_ambiguous",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 6,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 6,
+          "text": "иванов"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Изолированное имя, фамилия или отчество не задаёт референта. Golden принимает личную трактовку, но отмечает неопределённость.",
+      "case_specific_observation": "",
+      "recommended_action": "Можно использовать внешний независимый словарь имён и склонений с режимом маскирования изолированных значений; обязательно проверить омонимы и организации.",
+      "generalization_risk": "«Петрович» может быть обращением к человеку, фамилией или названием компании. Заучивание трёх токенов не доказывает качество на русском/СНГ."
+    },
+    {
+      "case_id": "org_0261",
+      "category": "confirmed_detection_miss",
+      "group": "clear_field_or_name_miss",
+      "golden_uncertain": false,
+      "golden_confidence": "high",
+      "golden_decision": "positive",
+      "false_negative_chars": 6,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 61,
+          "end": 64,
+          "text": "001"
+        },
+        {
+          "start": 65,
+          "end": 68,
+          "text": "000"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Пропущено личное значение в явном поле/предложении либо узнаваемое двусоставное имя; основание следует из текста и протокола.",
+      "case_specific_observation": "Между меткой кода подразделения и значением стоит связка «стоит», не меняющая тип поля.",
+      "recommended_action": "Расширить ограниченные контекстом грамматики полей, морфологию и транслитерацию имён, повторные упоминания и границы значений; добавить независимые положительные и отрицательные примеры.",
+      "generalization_risk": "Не считать любое латинское словосочетание именем; не подменять общий словарь перечнем фамилий golden."
+    },
+    {
+      "case_id": "org_0267",
+      "category": "confirmed_overmask",
+      "group": "clear_overmask_or_boundary",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "negative",
+      "false_negative_chars": 0,
+      "false_positive_chars": 6,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 58,
+          "end": 64,
+          "text": "Москва"
+        }
+      ],
+      "reason": "Замаскированы неперсональные данные по протоколу либо служебные слова за границей личного значения.",
+      "case_specific_observation": "Весь адрес относится к контрагенту с корпоративным ИНН; закрывать один город без учёта этого контекста противоречит политике v1.",
+      "recommended_action": "Ограничить захват значений пунктуацией и синтаксисом, отделять юрисдикцию документа от гражданства, использовать корпоративный и публичный контекст.",
+      "generalization_risk": "Контекст важнее списка исключённых строк/имён; не распространять правила корпоративного ИНН РФ на любые номера СНГ или телефонные значения."
+    },
+    {
+      "case_id": "org_0272",
+      "category": "context_ambiguity",
+      "group": "document_context_weak_but_present",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 10,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 16,
+          "end": 20,
+          "text": "4509"
+        },
+        {
+          "start": 28,
+          "end": 34,
+          "text": "123456"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Есть орган выдачи, слово «документ», «удостоверение» либо сочетание серии и номера, но точный тип и/или личный владелец не названы.",
+      "case_specific_observation": "",
+      "recommended_action": "Сопоставлять серию и номер в пределах ограниченного фрагмента и распознавать обобщённые личные документы; сохранять отдельные значения и служебные слова.",
+      "generalization_risk": "Серия/номер бывают у неперсональных объектов. Тип PASSPORT/DRIVER_LICENSE в golden иногда лишь предположение; требуются контрпримеры с техникой/товарами/сертификатами."
+    },
+    {
+      "case_id": "org_0286",
+      "category": "context_ambiguity",
+      "group": "bare_document_ambiguous",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 10,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 2,
+          "text": "12"
+        },
+        {
+          "start": 3,
+          "end": 5,
+          "text": "34"
+        },
+        {
+          "start": 6,
+          "end": 12,
+          "text": "560012"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Положительная метка выведена только из похожего на документ расположения цифр. Тот же формат допускает товарный или произвольный идентификатор.",
+      "case_specific_observation": "",
+      "recommended_action": "Разделить распознавание формата и уверенность в личном документе; новые общие эвристики проверять вместе с отрицательными org_0160, org_0086, org_0287 и шаблонами.",
+      "generalization_risk": "Org_0160 с тем же форматом отрицательный без объективного дополнительного признака. Правило «не оканчивается на 00» или список точных номеров будет подгонкой."
+    },
+    {
+      "case_id": "org_0292",
+      "category": "confirmed_overmask",
+      "group": "clear_overmask_or_boundary",
+      "golden_uncertain": true,
+      "golden_confidence": "low",
+      "golden_decision": "negative",
+      "false_negative_chars": 0,
+      "false_positive_chars": 10,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 0,
+          "end": 10,
+          "text": "5024020012"
+        }
+      ],
+      "reason": "Замаскированы неперсональные данные по протоколу либо служебные слова за границей личного значения.",
+      "case_specific_observation": "Номер 5024020012 соответствует длине корпоративного ИНН, но в любом случае без поля личный смысл не установлен.",
+      "recommended_action": "Ограничить захват значений пунктуацией и синтаксисом, отделять юрисдикцию документа от гражданства, использовать корпоративный и публичный контекст.",
+      "generalization_risk": "Контекст важнее списка исключённых строк/имён; не распространять правила корпоративного ИНН РФ на любые номера СНГ или телефонные значения."
+    },
+    {
+      "case_id": "org_0297",
+      "category": "context_ambiguity",
+      "group": "document_context_weak_but_present",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 10,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 23,
+          "end": 25,
+          "text": "22"
+        },
+        {
+          "start": 26,
+          "end": 28,
+          "text": "11"
+        },
+        {
+          "start": 38,
+          "end": 44,
+          "text": "998877"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Есть орган выдачи, слово «документ», «удостоверение» либо сочетание серии и номера, но точный тип и/или личный владелец не названы.",
+      "case_specific_observation": "",
+      "recommended_action": "Сопоставлять серию и номер в пределах ограниченного фрагмента и распознавать обобщённые личные документы; сохранять отдельные значения и служебные слова.",
+      "generalization_risk": "Серия/номер бывают у неперсональных объектов. Тип PASSPORT/DRIVER_LICENSE в golden иногда лишь предположение; требуются контрпримеры с техникой/товарами/сертификатами."
+    },
+    {
+      "case_id": "org_0299",
+      "category": "annotation_policy_review",
+      "group": "invalid_unlabelled_pan",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 16,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 16,
+          "text": "4276380012345678"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Первое 16-значное число объявлено картой без контекста и не проходит Luhn (сумма 69). Короткая соседняя группа сознательно оставлена открытой.",
+      "case_specific_observation": "",
+      "recommended_action": "Не отменять checksum для всех безконтекстных 16-значных чисел ради этих двух примеров. Некорректные значения защищать при явном карточном контексте.",
+      "generalization_risk": "Номер заказа той же длины неотличим по форме; золотая метка здесь отражает догадку annotator, а не доказательство номера карты."
+    },
+    {
+      "case_id": "org_0300",
+      "category": "confirmed_detection_miss",
+      "group": "clear_field_or_name_miss",
+      "golden_uncertain": false,
+      "golden_confidence": "high",
+      "golden_decision": "positive",
+      "false_negative_chars": 10,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 29,
+          "end": 35,
+          "text": "PETROV"
+        },
+        {
+          "start": 36,
+          "end": 40,
+          "text": "PETR"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Пропущено личное значение в явном поле/предложении либо узнаваемое двусоставное имя; основание следует из текста и протокола.",
+      "case_specific_observation": "Явная связка «карта оформлена на держателя» должна выделять имя держателя, сохранив дату оформления карты.",
+      "recommended_action": "Расширить ограниченные контекстом грамматики полей, морфологию и транслитерацию имён, повторные упоминания и границы значений; добавить независимые положительные и отрицательные примеры.",
+      "generalization_risk": "Не считать любое латинское словосочетание именем; не подменять общий словарь перечнем фамилий golden."
+    },
+    {
+      "case_id": "org_0301",
+      "category": "confirmed_overmask",
+      "group": "clear_overmask_or_boundary",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 0,
+      "false_positive_chars": 1,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 43,
+          "end": 44,
+          "text": "в"
+        }
+      ],
+      "reason": "Замаскированы неперсональные данные по протоколу либо служебные слова за границей личного значения.",
+      "case_specific_observation": "Маска захватила предлог «в» перед относительной датой; v1 включает только «прошлом году». Саму относительную дату v1 сознательно принимает.",
+      "recommended_action": "Ограничить захват значений пунктуацией и синтаксисом, отделять юрисдикцию документа от гражданства, использовать корпоративный и публичный контекст.",
+      "generalization_risk": "Контекст важнее списка исключённых строк/имён; не распространять правила корпоративного ИНН РФ на любые номера СНГ или телефонные значения."
+    },
+    {
+      "case_id": "org_0324",
+      "category": "mixed_confirmed_and_ambiguous",
+      "group": "mixed_long_context",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 18,
+      "false_positive_chars": 10,
+      "unmasked_expected_fragments": [
+        {
+          "start": 342,
+          "end": 354,
+          "text": "771234567890"
+        },
+        {
+          "start": 884,
+          "end": 890,
+          "text": "630099"
+        }
+      ],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 975,
+          "end": 985,
+          "text": "проживания"
+        }
+      ],
+      "reason": "Подтверждены пропуск явно названного ИНН поручителя и лишняя маска слова «проживания». Отдельно неоднозначен «индекс» в просьбе о подтверждении суммы: v1 трактует его как почтовый.",
+      "case_specific_observation": "",
+      "recommended_action": "Исправить связь роли поручителя с ИНН и границу метки «Город проживания». Почтовый индекс распознавать по адресному контексту, а неоднозначную часть оценивать отдельно.",
+      "generalization_risk": "Разметка всего случая uncertain не означает, что все его части сомнительны; нельзя потерять очевидный ИНН из-за неопределённости одного индекса."
+    },
+    {
+      "case_id": "org_0325",
+      "category": "confirmed_detection_miss",
+      "group": "clear_field_or_name_miss",
+      "golden_uncertain": false,
+      "golden_confidence": "high",
+      "golden_decision": "positive",
+      "false_negative_chars": 10,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 66,
+          "end": 72,
+          "text": "PETROV"
+        },
+        {
+          "start": 73,
+          "end": 77,
+          "text": "PETR"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Пропущено личное значение в явном поле/предложении либо узнаваемое двусоставное имя; основание следует из текста и протокола.",
+      "case_specific_observation": "Одно и то же имя держателя встречается дважды; протокол требует защиты каждого личного повторения, а не только первого.",
+      "recommended_action": "Расширить ограниченные контекстом грамматики полей, морфологию и транслитерацию имён, повторные упоминания и границы значений; добавить независимые положительные и отрицательные примеры.",
+      "generalization_risk": "Не считать любое латинское словосочетание именем; не подменять общий словарь перечнем фамилий golden."
+    },
+    {
+      "case_id": "org_0335",
+      "category": "context_ambiguity",
+      "group": "document_context_weak_but_present",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 10,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 21,
+          "end": 25,
+          "text": "4509"
+        },
+        {
+          "start": 26,
+          "end": 32,
+          "text": "123456"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Есть орган выдачи, слово «документ», «удостоверение» либо сочетание серии и номера, но точный тип и/или личный владелец не названы.",
+      "case_specific_observation": "",
+      "recommended_action": "Сопоставлять серию и номер в пределах ограниченного фрагмента и распознавать обобщённые личные документы; сохранять отдельные значения и служебные слова.",
+      "generalization_risk": "Серия/номер бывают у неперсональных объектов. Тип PASSPORT/DRIVER_LICENSE в golden иногда лишь предположение; требуются контрпримеры с техникой/товарами/сертификатами."
+    },
+    {
+      "case_id": "org_0339",
+      "category": "context_ambiguity",
+      "group": "bare_document_ambiguous",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 10,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 4,
+          "text": "1234"
+        },
+        {
+          "start": 5,
+          "end": 11,
+          "text": "341212"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Положительная метка выведена только из похожего на документ расположения цифр. Тот же формат допускает товарный или произвольный идентификатор.",
+      "case_specific_observation": "",
+      "recommended_action": "Разделить распознавание формата и уверенность в личном документе; новые общие эвристики проверять вместе с отрицательными org_0160, org_0086, org_0287 и шаблонами.",
+      "generalization_risk": "Org_0160 с тем же форматом отрицательный без объективного дополнительного признака. Правило «не оканчивается на 00» или список точных номеров будет подгонкой."
+    },
+    {
+      "case_id": "org_0340",
+      "category": "context_ambiguity",
+      "group": "standalone_name_ambiguous",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 8,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 8,
+          "text": "петрович"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Изолированное имя, фамилия или отчество не задаёт референта. Golden принимает личную трактовку, но отмечает неопределённость.",
+      "case_specific_observation": "",
+      "recommended_action": "Можно использовать внешний независимый словарь имён и склонений с режимом маскирования изолированных значений; обязательно проверить омонимы и организации.",
+      "generalization_risk": "«Петрович» может быть обращением к человеку, фамилией или названием компании. Заучивание трёх токенов не доказывает качество на русском/СНГ."
+    },
+    {
+      "case_id": "org_0355",
+      "category": "context_ambiguity",
+      "group": "standalone_name_ambiguous",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 4,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 4,
+          "text": "Иван"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Изолированное имя, фамилия или отчество не задаёт референта. Golden принимает личную трактовку, но отмечает неопределённость.",
+      "case_specific_observation": "",
+      "recommended_action": "Можно использовать внешний независимый словарь имён и склонений с режимом маскирования изолированных значений; обязательно проверить омонимы и организации.",
+      "generalization_risk": "«Петрович» может быть обращением к человеку, фамилией или названием компании. Заучивание трёх токенов не доказывает качество на русском/СНГ."
+    },
+    {
+      "case_id": "org_0380",
+      "category": "confirmed_overmask",
+      "group": "clear_overmask_or_boundary",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "negative",
+      "false_negative_chars": 0,
+      "false_positive_chars": 10,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 38,
+          "end": 48,
+          "text": "5024020012"
+        }
+      ],
+      "reason": "Замаскированы неперсональные данные по протоколу либо служебные слова за границей личного значения.",
+      "case_specific_observation": "Реквизиты с десятизначным ИНН без физлица — организационный контекст по v1.",
+      "recommended_action": "Ограничить захват значений пунктуацией и синтаксисом, отделять юрисдикцию документа от гражданства, использовать корпоративный и публичный контекст.",
+      "generalization_risk": "Контекст важнее списка исключённых строк/имён; не распространять правила корпоративного ИНН РФ на любые номера СНГ или телефонные значения."
+    },
+    {
+      "case_id": "org_0381",
+      "category": "context_ambiguity",
+      "group": "bare_document_ambiguous",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 20,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 17,
+          "end": 21,
+          "text": "4509"
+        },
+        {
+          "start": 22,
+          "end": 28,
+          "text": "123456"
+        },
+        {
+          "start": 31,
+          "end": 35,
+          "text": "7710"
+        },
+        {
+          "start": 36,
+          "end": 42,
+          "text": "654321"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Положительная метка выведена только из похожего на документ расположения цифр. Тот же формат допускает товарный или произвольный идентификатор.",
+      "case_specific_observation": "",
+      "recommended_action": "Разделить распознавание формата и уверенность в личном документе; новые общие эвристики проверять вместе с отрицательными org_0160, org_0086, org_0287 и шаблонами.",
+      "generalization_risk": "Org_0160 с тем же форматом отрицательный без объективного дополнительного признака. Правило «не оканчивается на 00» или список точных номеров будет подгонкой."
+    },
+    {
+      "case_id": "org_0388",
+      "category": "confirmed_overmask",
+      "group": "clear_overmask_or_boundary",
+      "golden_uncertain": false,
+      "golden_confidence": "high",
+      "golden_decision": "positive",
+      "false_negative_chars": 0,
+      "false_positive_chars": 2,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 8,
+          "end": 10,
+          "text": "РФ"
+        }
+      ],
+      "reason": "Замаскированы неперсональные данные по протоколу либо служебные слова за границей личного значения.",
+      "case_specific_observation": "«РФ» у слова паспорт описывает тип документа, а не отдельное значение поля гражданства.",
+      "recommended_action": "Ограничить захват значений пунктуацией и синтаксисом, отделять юрисдикцию документа от гражданства, использовать корпоративный и публичный контекст.",
+      "generalization_risk": "Контекст важнее списка исключённых строк/имён; не распространять правила корпоративного ИНН РФ на любые номера СНГ или телефонные значения."
+    },
+    {
+      "case_id": "org_0389",
+      "category": "context_ambiguity",
+      "group": "standalone_name_ambiguous",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 8,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 8,
+          "text": "ПЕТРОВИЧ"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Изолированное имя, фамилия или отчество не задаёт референта. Golden принимает личную трактовку, но отмечает неопределённость.",
+      "case_specific_observation": "",
+      "recommended_action": "Можно использовать внешний независимый словарь имён и склонений с режимом маскирования изолированных значений; обязательно проверить омонимы и организации.",
+      "generalization_risk": "«Петрович» может быть обращением к человеку, фамилией или названием компании. Заучивание трёх токенов не доказывает качество на русском/СНГ."
+    },
+    {
+      "case_id": "org_0395",
+      "category": "confirmed_overmask",
+      "group": "decimal_nonpersonal_ten_digit",
+      "golden_uncertain": true,
+      "golden_confidence": "low",
+      "golden_decision": "negative",
+      "false_negative_chars": 0,
+      "false_positive_chars": 10,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 0,
+          "end": 10,
+          "text": "7707083893"
+        }
+      ],
+      "reason": "Без контекста поля десятизначная целая часть десятичного числа не даёт достаточного личного сигнала. Для ИНН РФ десять цифр означают организацию.",
+      "case_specific_observation": "",
+      "recommended_action": "Отличать ИНН организации от ИНН физлица и не извлекать телефон из произвольного десятичного числа без внятного телефонного формата.",
+      "generalization_risk": "Это не правило «любое число с .0 отрицательно»: в корпусе есть положительные телефоны с тем же суффиксом."
+    },
+    {
+      "case_id": "org_0405",
+      "category": "context_ambiguity",
+      "group": "bare_document_ambiguous",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 10,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 4,
+          "text": "1234"
+        },
+        {
+          "start": 5,
+          "end": 11,
+          "text": "567890"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Положительная метка выведена только из похожего на документ расположения цифр. Тот же формат допускает товарный или произвольный идентификатор.",
+      "case_specific_observation": "",
+      "recommended_action": "Разделить распознавание формата и уверенность в личном документе; новые общие эвристики проверять вместе с отрицательными org_0160, org_0086, org_0287 и шаблонами.",
+      "generalization_risk": "Org_0160 с тем же форматом отрицательный без объективного дополнительного признака. Правило «не оканчивается на 00» или список точных номеров будет подгонкой."
+    },
+    {
+      "case_id": "org_0409",
+      "category": "context_ambiguity",
+      "group": "standalone_name_ambiguous",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 6,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 6,
+          "text": "ИВАНОВ"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Изолированное имя, фамилия или отчество не задаёт референта. Golden принимает личную трактовку, но отмечает неопределённость.",
+      "case_specific_observation": "",
+      "recommended_action": "Можно использовать внешний независимый словарь имён и склонений с режимом маскирования изолированных значений; обязательно проверить омонимы и организации.",
+      "generalization_risk": "«Петрович» может быть обращением к человеку, фамилией или названием компании. Заучивание трёх токенов не доказывает качество на русском/СНГ."
+    },
+    {
+      "case_id": "org_0416",
+      "category": "context_ambiguity",
+      "group": "public_person_homonym",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "negative",
+      "false_negative_chars": 0,
+      "false_positive_chars": 20,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 0,
+          "end": 8,
+          "text": "Салтыков"
+        },
+        {
+          "start": 9,
+          "end": 15,
+          "text": "Щедрин"
+        },
+        {
+          "start": 16,
+          "end": 22,
+          "text": "Михаил"
+        }
+      ],
+      "reason": "Фамилия и имя совпадают с известным писателем, но явного биографического/литературного контекста нет; v1 выбирает публичную фигуру.",
+      "case_specific_observation": "",
+      "recommended_action": "Учитывать контекст публичной персоны и сохранять защиту при указании клиента/наследника. Org_0019 прямо требует защиты той же фамилии в личном контексте.",
+      "generalization_risk": "Постоянное исключение имени нарушит приватность тёзки. Без контекста публичный референт не доказан."
+    },
+    {
+      "case_id": "org_0418",
+      "category": "annotation_policy_review",
+      "group": "standalone_valid_personal_inn",
+      "golden_uncertain": true,
+      "golden_confidence": "low",
+      "golden_decision": "negative",
+      "false_negative_chars": 0,
+      "false_positive_chars": 12,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 0,
+          "end": 12,
+          "text": "771234567859"
+        }
+      ],
+      "reason": "Двенадцатизначный номер проходит обе контрольные цифры ИНН и совпадает с ИНН в нескольких положительных примерах, но v1 считает его отрицательным без метки поля.",
+      "case_specific_observation": "Связанные положительные примеры того же ИНН: org_0150, org_0172, org_0324, org_0359, org_0368, org_0424; отрицательный сгруппированный вариант org_0245.",
+      "recommended_action": "Не отключать защиту checksum-valid ИНН ради единственного false positive. Вынести политику standalone ИНН на человеческое согласование в будущем v2.",
+      "generalization_risk": "Отсутствие слова ИНН не устраняет возможность утечки идентификатора; формальная 100% подгонка может ухудшить практическую защиту."
+    },
+    {
+      "case_id": "org_0422",
+      "category": "annotation_policy_review",
+      "group": "decimal_personal_inn_policy",
+      "golden_uncertain": true,
+      "golden_confidence": "low",
+      "golden_decision": "negative",
+      "false_negative_chars": 0,
+      "false_positive_chars": 12,
+      "unmasked_expected_fragments": [],
+      "unexpectedly_masked_fragments": [
+        {
+          "start": 0,
+          "end": 12,
+          "text": "300000000009"
+        }
+      ],
+      "reason": "Целая часть каждого значения проходит обе контрольные цифры 12-значного ИНН, но отрицательная метка объясняется отсутствием контекста и хвостом .0.",
+      "case_specific_observation": "",
+      "recommended_action": "Сохранить защиту сильного сигнала идентификатора либо вводить явно документированную политику числовых выгрузок после ручного решения; отрицательные оценки v1 показывать честно.",
+      "generalization_risk": "Подавление любого .0 ухудшит уже положительные телефоны org_0118/org_0145/org_0322/org_0429 и защиту ИНН при табличной сериализации."
+    },
+    {
+      "case_id": "org_0423",
+      "category": "context_ambiguity",
+      "group": "document_context_weak_but_present",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 4,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 18,
+          "end": 20,
+          "text": "99"
+        },
+        {
+          "start": 21,
+          "end": 23,
+          "text": "88"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Есть орган выдачи, слово «документ», «удостоверение» либо сочетание серии и номера, но точный тип и/или личный владелец не названы.",
+      "case_specific_observation": "",
+      "recommended_action": "Сопоставлять серию и номер в пределах ограниченного фрагмента и распознавать обобщённые личные документы; сохранять отдельные значения и служебные слова.",
+      "generalization_risk": "Серия/номер бывают у неперсональных объектов. Тип PASSPORT/DRIVER_LICENSE в golden иногда лишь предположение; требуются контрпримеры с техникой/товарами/сертификатами."
+    },
+    {
+      "case_id": "org_0427",
+      "category": "context_ambiguity",
+      "group": "document_context_weak_but_present",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 10,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 5,
+          "end": 9,
+          "text": "4509"
+        },
+        {
+          "start": 12,
+          "end": 18,
+          "text": "123456"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Есть орган выдачи, слово «документ», «удостоверение» либо сочетание серии и номера, но точный тип и/или личный владелец не названы.",
+      "case_specific_observation": "",
+      "recommended_action": "Сопоставлять серию и номер в пределах ограниченного фрагмента и распознавать обобщённые личные документы; сохранять отдельные значения и служебные слова.",
+      "generalization_risk": "Серия/номер бывают у неперсональных объектов. Тип PASSPORT/DRIVER_LICENSE в golden иногда лишь предположение; требуются контрпримеры с техникой/товарами/сертификатами."
+    },
+    {
+      "case_id": "org_0442",
+      "category": "context_ambiguity",
+      "group": "document_context_weak_but_present",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 10,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 7,
+          "end": 11,
+          "text": "4509"
+        },
+        {
+          "start": 20,
+          "end": 26,
+          "text": "123456"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Есть орган выдачи, слово «документ», «удостоверение» либо сочетание серии и номера, но точный тип и/или личный владелец не названы.",
+      "case_specific_observation": "",
+      "recommended_action": "Сопоставлять серию и номер в пределах ограниченного фрагмента и распознавать обобщённые личные документы; сохранять отдельные значения и служебные слова.",
+      "generalization_risk": "Серия/номер бывают у неперсональных объектов. Тип PASSPORT/DRIVER_LICENSE в golden иногда лишь предположение; требуются контрпримеры с техникой/товарами/сертификатами."
+    },
+    {
+      "case_id": "org_0445",
+      "category": "context_ambiguity",
+      "group": "bare_document_ambiguous",
+      "golden_uncertain": true,
+      "golden_confidence": "medium",
+      "golden_decision": "positive",
+      "false_negative_chars": 10,
+      "false_positive_chars": 0,
+      "unmasked_expected_fragments": [
+        {
+          "start": 0,
+          "end": 2,
+          "text": "12"
+        },
+        {
+          "start": 3,
+          "end": 5,
+          "text": "34"
+        },
+        {
+          "start": 6,
+          "end": 12,
+          "text": "567890"
+        }
+      ],
+      "unexpectedly_masked_fragments": [],
+      "reason": "Положительная метка выведена только из похожего на документ расположения цифр. Тот же формат допускает товарный или произвольный идентификатор.",
+      "case_specific_observation": "",
+      "recommended_action": "Разделить распознавание формата и уверенность в личном документе; новые общие эвристики проверять вместе с отрицательными org_0160, org_0086, org_0287 и шаблонами.",
+      "generalization_risk": "Org_0160 с тем же форматом отрицательный без объективного дополнительного признака. Правило «не оканчивается на 00» или список точных номеров будет подгонкой."
+    }
+  ]
+}
