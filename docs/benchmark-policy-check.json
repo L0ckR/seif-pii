@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "method": "open-loop correlation pairs; 2 offered HTTP requests/pair; no retries",
+  "transport": "aiohttp",
+  "event_loop": "uvloop",
+  "target_url": "http://127.0.0.1:8765",
+  "synthetic_data_only": true,
+  "configured_duration_seconds": 30.0,
+  "observed_elapsed_seconds_including_drain": 30.006,
+  "offered_http_rps": 2100.0,
+  "max_concurrent_pairs": 256,
+  "achieved_attempted_http_rps": 2099.59,
+  "achieved_successful_http_rps": 2099.59,
+  "counts": {
+    "pairs_offered": 31500,
+    "pairs_dispatched": 31500,
+    "requests_attempted": 63000,
+    "requests_successful": 63000,
+    "pairs_verified": 31500
+  },
+  "http_statuses": {
+    "200": 63000
+  },
+  "errors": {},
+  "latency_ms_all_attempts": {
+    "p50": 2.805,
+    "p95": 6.583,
+    "p99": 17.995,
+    "max": 164.228
+  },
+  "client_scheduler_max_lag_ms": 7.533,
+  "limitations": [
+    "This is a local synthetic sample, not the organizer's closed evaluation dataset.",
+    "Reported throughput includes request completion after the scheduling window.",
+    "Client drops or significant scheduler lag mean the client could not offer the target load.",
+    "Fast responses do not establish PII detection quality or production availability."
+  ],
+  "implementation": {
+    "source_sha256": {
+      "seif/app.py": "bf4edf72a9525b8f62b2f5cc340ce01a3af761d9a0dfb4f144c2aeb96fe4f164",
+      "seif/config.py": "237ca090b6f9d1d0ad67928987b4bd49c561809432f1ce0385a5d095c66a0ea1",
+      "seif/detector.py": "732dabbdfbec9b37727e247481958a7dbc157cc1cb53409231bf9398100c1508",
+      "seif/ner.py": "26ed11827c38199aab19b1f328779cdfc2ed9e45992c6661677cf0d20225cce2",
+      "scripts/ner_service.py": "a5e405f2f844930bfdafe336f64e184e8dbc0c4d7d3676e4825b1b6e602782a2"
+    },
+    "profile": "rules",
+    "api_workers": 3,
+    "ner_workers": 0,
+    "storage": "Redis Sentinel"
+  }
+}

@@ -2,6 +2,9 @@
 systems:
   demo:
     enabled: true
+    # false keeps access and detection enabled but returns the original text.
+    # Use a YAML boolean, never the quoted string "false".
+    masking_enabled: true
     api_key_env: SEIF_DEMO_API_KEY
     mode: mask
     allow_unmask: true

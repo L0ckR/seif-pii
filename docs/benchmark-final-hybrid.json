@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "method": "open-loop correlation pairs; 2 offered HTTP requests/pair; no retries",
+  "transport": "aiohttp",
+  "event_loop": "uvloop",
+  "target_url": "http://127.0.0.1:8766",
+  "synthetic_data_only": true,
+  "configured_duration_seconds": 300.0,
+  "observed_elapsed_seconds_including_drain": 300.131,
+  "offered_http_rps": 1050.0,
+  "max_concurrent_pairs": 256,
+  "achieved_attempted_http_rps": 1049.54,
+  "achieved_successful_http_rps": 1049.54,
+  "counts": {
+    "pairs_offered": 157500,
+    "pairs_dispatched": 157500,
+    "requests_attempted": 315000,
+    "requests_successful": 315000,
+    "pairs_verified": 157500
+  },
+  "http_statuses": {
+    "200": 315000
+  },
+  "errors": {},
+  "latency_ms_all_attempts": {
+    "p50": 10.242,
+    "p95": 73.799,
+    "p99": 140.365,
+    "max": 481.792
+  },
+  "client_scheduler_max_lag_ms": 16.233,
+  "limitations": [
+    "This is a local synthetic sample, not the organizer's closed evaluation dataset.",
+    "Reported throughput includes request completion after the scheduling window.",
+    "Client drops or significant scheduler lag mean the client could not offer the target load.",
+    "Fast responses do not establish PII detection quality or production availability."
+  ],
+  "implementation": {
+    "source_sha256": {
+      "seif/app.py": "bf4edf72a9525b8f62b2f5cc340ce01a3af761d9a0dfb4f144c2aeb96fe4f164",
+      "seif/config.py": "237ca090b6f9d1d0ad67928987b4bd49c561809432f1ce0385a5d095c66a0ea1",
+      "seif/detector.py": "732dabbdfbec9b37727e247481958a7dbc157cc1cb53409231bf9398100c1508",
+      "seif/ner.py": "26ed11827c38199aab19b1f328779cdfc2ed9e45992c6661677cf0d20225cce2",
+      "scripts/ner_service.py": "a5e405f2f844930bfdafe336f64e184e8dbc0c4d7d3676e4825b1b6e602782a2"
+    },
+    "profile": "hybrid-person-location",
+    "api_workers": 3,
+    "ner_workers": 8,
+    "storage": "3 Redis AOF + 3 Sentinel, one physical host",
+    "audit_logging": "INFO",
+    "runtime": "API CPython3.14.7t GILdisabled; NER CPython3.13.7"
+  }
+}

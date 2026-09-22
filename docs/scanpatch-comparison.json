@@ -1,0 +1,6812 @@
+{
+  "schema_version": 1,
+  "measured_at_utc": "2026-09-22T08:50:41.906645+00:00",
+  "evaluation_status": "first frozen-implementation evaluation of this previously unused mixed-language test",
+  "dataset": {
+    "repository": "scanpatch/pii-ner-corpus-synthetic-controlled",
+    "revision": "6af0587dde068d90d8a1080285159c374b46a09b",
+    "license_in_pinned_card": "MIT",
+    "card_url": "https://huggingface.co/datasets/scanpatch/pii-ner-corpus-synthetic-controlled/blob/6af0587dde068d90d8a1080285159c374b46a09b/README.md",
+    "original_splits": {
+      "train": 4786,
+      "test": 532
+    },
+    "evaluated_split": "entire test, no train download",
+    "language_scope": "Mixed Russian/Ukrainian; source has no row-level language field; no fabricated per-language results",
+    "offered_rows": 532,
+    "gold_empty_rows": 58,
+    "common_whole_cases": 164,
+    "common_case_ids": [
+      "test_0001",
+      "test_0005",
+      "test_0009",
+      "test_0013",
+      "test_0014",
+      "test_0015",
+      "test_0017",
+      "test_0018",
+      "test_0020",
+      "test_0026",
+      "test_0031",
+      "test_0032",
+      "test_0035",
+      "test_0037",
+      "test_0038",
+      "test_0039",
+      "test_0041",
+      "test_0042",
+      "test_0048",
+      "test_0049",
+      "test_0051",
+      "test_0054",
+      "test_0056",
+      "test_0057",
+      "test_0061",
+      "test_0066",
+      "test_0070",
+      "test_0071",
+      "test_0079",
+      "test_0080",
+      "test_0083",
+      "test_0096",
+      "test_0101",
+      "test_0111",
+      "test_0114",
+      "test_0117",
+      "test_0118",
+      "test_0119",
+      "test_0121",
+      "test_0128",
+      "test_0131",
+      "test_0136",
+      "test_0141",
+      "test_0144",
+      "test_0148",
+      "test_0151",
+      "test_0153",
+      "test_0154",
+      "test_0155",
+      "test_0156",
+      "test_0157",
+      "test_0158",
+      "test_0167",
+      "test_0173",
+      "test_0177",
+      "test_0183",
+      "test_0185",
+      "test_0191",
+      "test_0192",
+      "test_0201",
+      "test_0204",
+      "test_0205",
+      "test_0207",
+      "test_0209",
+      "test_0212",
+      "test_0215",
+      "test_0220",
+      "test_0222",
+      "test_0225",
+      "test_0226",
+      "test_0228",
+      "test_0230",
+      "test_0235",
+      "test_0239",
+      "test_0242",
+      "test_0243",
+      "test_0246",
+      "test_0248",
+      "test_0256",
+      "test_0259",
+      "test_0267",
+      "test_0268",
+      "test_0270",
+      "test_0274",
+      "test_0275",
+      "test_0277",
+      "test_0278",
+      "test_0282",
+      "test_0285",
+      "test_0288",
+      "test_0299",
+      "test_0305",
+      "test_0306",
+      "test_0307",
+      "test_0309",
+      "test_0310",
+      "test_0311",
+      "test_0313",
+      "test_0317",
+      "test_0328",
+      "test_0330",
+      "test_0331",
+      "test_0334",
+      "test_0338",
+      "test_0339",
+      "test_0340",
+      "test_0347",
+      "test_0348",
+      "test_0352",
+      "test_0353",
+      "test_0356",
+      "test_0359",
+      "test_0361",
+      "test_0371",
+      "test_0374",
+      "test_0375",
+      "test_0376",
+      "test_0380",
+      "test_0382",
+      "test_0390",
+      "test_0391",
+      "test_0396",
+      "test_0397",
+      "test_0399",
+      "test_0403",
+      "test_0405",
+      "test_0407",
+      "test_0408",
+      "test_0409",
+      "test_0415",
+      "test_0421",
+      "test_0423",
+      "test_0426",
+      "test_0428",
+      "test_0431",
+      "test_0432",
+      "test_0433",
+      "test_0436",
+      "test_0440",
+      "test_0445",
+      "test_0446",
+      "test_0447",
+      "test_0450",
+      "test_0453",
+      "test_0455",
+      "test_0456",
+      "test_0459",
+      "test_0463",
+      "test_0465",
+      "test_0476",
+      "test_0477",
+      "test_0479",
+      "test_0481",
+      "test_0483",
+      "test_0486",
+      "test_0489",
+      "test_0491",
+      "test_0502",
+      "test_0505",
+      "test_0508",
+      "test_0511",
+      "test_0513",
+      "test_0516",
+      "test_0523"
+    ],
+    "offered_case_ids": [
+      "test_0000",
+      "test_0001",
+      "test_0002",
+      "test_0003",
+      "test_0004",
+      "test_0005",
+      "test_0006",
+      "test_0007",
+      "test_0008",
+      "test_0009",
+      "test_0010",
+      "test_0011",
+      "test_0012",
+      "test_0013",
+      "test_0014",
+      "test_0015",
+      "test_0016",
+      "test_0017",
+      "test_0018",
+      "test_0019",
+      "test_0020",
+      "test_0021",
+      "test_0022",
+      "test_0023",
+      "test_0024",
+      "test_0025",
+      "test_0026",
+      "test_0027",
+      "test_0028",
+      "test_0029",
+      "test_0030",
+      "test_0031",
+      "test_0032",
+      "test_0033",
+      "test_0034",
+      "test_0035",
+      "test_0036",
+      "test_0037",
+      "test_0038",
+      "test_0039",
+      "test_0040",
+      "test_0041",
+      "test_0042",
+      "test_0043",
+      "test_0044",
+      "test_0045",
+      "test_0046",
+      "test_0047",
+      "test_0048",
+      "test_0049",
+      "test_0050",
+      "test_0051",
+      "test_0052",
+      "test_0053",
+      "test_0054",
+      "test_0055",
+      "test_0056",
+      "test_0057",
+      "test_0058",
+      "test_0059",
+      "test_0060",
+      "test_0061",
+      "test_0062",
+      "test_0063",
+      "test_0064",
+      "test_0065",
+      "test_0066",
+      "test_0067",
+      "test_0068",
+      "test_0069",
+      "test_0070",
+      "test_0071",
+      "test_0072",
+      "test_0073",
+      "test_0074",
+      "test_0075",
+      "test_0076",
+      "test_0077",
+      "test_0078",
+      "test_0079",
+      "test_0080",
+      "test_0081",
+      "test_0082",
+      "test_0083",
+      "test_0084",
+      "test_0085",
+      "test_0086",
+      "test_0087",
+      "test_0088",
+      "test_0089",
+      "test_0090",
+      "test_0091",
+      "test_0092",
+      "test_0093",
+      "test_0094",
+      "test_0095",
+      "test_0096",
+      "test_0097",
+      "test_0098",
+      "test_0099",
+      "test_0100",
+      "test_0101",
+      "test_0102",
+      "test_0103",
+      "test_0104",
+      "test_0105",
+      "test_0106",
+      "test_0107",
+      "test_0108",
+      "test_0109",
+      "test_0110",
+      "test_0111",
+      "test_0112",
+      "test_0113",
+      "test_0114",
+      "test_0115",
+      "test_0116",
+      "test_0117",
+      "test_0118",
+      "test_0119",
+      "test_0120",
+      "test_0121",
+      "test_0122",
+      "test_0123",
+      "test_0124",
+      "test_0125",
+      "test_0126",
+      "test_0127",
+      "test_0128",
+      "test_0129",
+      "test_0130",
+      "test_0131",
+      "test_0132",
+      "test_0133",
+      "test_0134",
+      "test_0135",
+      "test_0136",
+      "test_0137",
+      "test_0138",
+      "test_0139",
+      "test_0140",
+      "test_0141",
+      "test_0142",
+      "test_0143",
+      "test_0144",
+      "test_0145",
+      "test_0146",
+      "test_0147",
+      "test_0148",
+      "test_0149",
+      "test_0150",
+      "test_0151",
+      "test_0152",
+      "test_0153",
+      "test_0154",
+      "test_0155",
+      "test_0156",
+      "test_0157",
+      "test_0158",
+      "test_0159",
+      "test_0160",
+      "test_0161",
+      "test_0162",
+      "test_0163",
+      "test_0164",
+      "test_0165",
+      "test_0166",
+      "test_0167",
+      "test_0168",
+      "test_0169",
+      "test_0170",
+      "test_0171",
+      "test_0172",
+      "test_0173",
+      "test_0174",
+      "test_0175",
+      "test_0176",
+      "test_0177",
+      "test_0178",
+      "test_0179",
+      "test_0180",
+      "test_0181",
+      "test_0182",
+      "test_0183",
+      "test_0184",
+      "test_0185",
+      "test_0186",
+      "test_0187",
+      "test_0188",
+      "test_0189",
+      "test_0190",
+      "test_0191",
+      "test_0192",
+      "test_0193",
+      "test_0194",
+      "test_0195",
+      "test_0196",
+      "test_0197",
+      "test_0198",
+      "test_0199",
+      "test_0200",
+      "test_0201",
+      "test_0202",
+      "test_0203",
+      "test_0204",
+      "test_0205",
+      "test_0206",
+      "test_0207",
+      "test_0208",
+      "test_0209",
+      "test_0210",
+      "test_0211",
+      "test_0212",
+      "test_0213",
+      "test_0214",
+      "test_0215",
+      "test_0216",
+      "test_0217",
+      "test_0218",
+      "test_0219",
+      "test_0220",
+      "test_0221",
+      "test_0222",
+      "test_0223",
+      "test_0224",
+      "test_0225",
+      "test_0226",
+      "test_0227",
+      "test_0228",
+      "test_0229",
+      "test_0230",
+      "test_0231",
+      "test_0232",
+      "test_0233",
+      "test_0234",
+      "test_0235",
+      "test_0236",
+      "test_0237",
+      "test_0238",
+      "test_0239",
+      "test_0240",
+      "test_0241",
+      "test_0242",
+      "test_0243",
+      "test_0244",
+      "test_0245",
+      "test_0246",
+      "test_0247",
+      "test_0248",
+      "test_0249",
+      "test_0250",
+      "test_0251",
+      "test_0252",
+      "test_0253",
+      "test_0254",
+      "test_0255",
+      "test_0256",
+      "test_0257",
+      "test_0258",
+      "test_0259",
+      "test_0260",
+      "test_0261",
+      "test_0262",
+      "test_0263",
+      "test_0264",
+      "test_0265",
+      "test_0266",
+      "test_0267",
+      "test_0268",
+      "test_0269",
+      "test_0270",
+      "test_0271",
+      "test_0272",
+      "test_0273",
+      "test_0274",
+      "test_0275",
+      "test_0276",
+      "test_0277",
+      "test_0278",
+      "test_0279",
+      "test_0280",
+      "test_0281",
+      "test_0282",
+      "test_0283",
+      "test_0284",
+      "test_0285",
+      "test_0286",
+      "test_0287",
+      "test_0288",
+      "test_0289",
+      "test_0290",
+      "test_0291",
+      "test_0292",
+      "test_0293",
+      "test_0294",
+      "test_0295",
+      "test_0296",
+      "test_0297",
+      "test_0298",
+      "test_0299",
+      "test_0300",
+      "test_0301",
+      "test_0302",
+      "test_0303",
+      "test_0304",
+      "test_0305",
+      "test_0306",
+      "test_0307",
+      "test_0308",
+      "test_0309",
+      "test_0310",
+      "test_0311",
+      "test_0312",
+      "test_0313",
+      "test_0314",
+      "test_0315",
+      "test_0316",
+      "test_0317",
+      "test_0318",
+      "test_0319",
+      "test_0320",
+      "test_0321",
+      "test_0322",
+      "test_0323",
+      "test_0324",
+      "test_0325",
+      "test_0326",
+      "test_0327",
+      "test_0328",
+      "test_0329",
+      "test_0330",
+      "test_0331",
+      "test_0332",
+      "test_0333",
+      "test_0334",
+      "test_0335",
+      "test_0336",
+      "test_0337",
+      "test_0338",
+      "test_0339",
+      "test_0340",
+      "test_0341",
+      "test_0342",
+      "test_0343",
+      "test_0344",
+      "test_0345",
+      "test_0346",
+      "test_0347",
+      "test_0348",
+      "test_0349",
+      "test_0350",
+      "test_0351",
+      "test_0352",
+      "test_0353",
+      "test_0354",
+      "test_0355",
+      "test_0356",
+      "test_0357",
+      "test_0358",
+      "test_0359",
+      "test_0360",
+      "test_0361",
+      "test_0362",
+      "test_0363",
+      "test_0364",
+      "test_0365",
+      "test_0366",
+      "test_0367",
+      "test_0368",
+      "test_0369",
+      "test_0370",
+      "test_0371",
+      "test_0372",
+      "test_0373",
+      "test_0374",
+      "test_0375",
+      "test_0376",
+      "test_0377",
+      "test_0378",
+      "test_0379",
+      "test_0380",
+      "test_0381",
+      "test_0382",
+      "test_0383",
+      "test_0384",
+      "test_0385",
+      "test_0386",
+      "test_0387",
+      "test_0388",
+      "test_0389",
+      "test_0390",
+      "test_0391",
+      "test_0392",
+      "test_0393",
+      "test_0394",
+      "test_0395",
+      "test_0396",
+      "test_0397",
+      "test_0398",
+      "test_0399",
+      "test_0400",
+      "test_0401",
+      "test_0402",
+      "test_0403",
+      "test_0404",
+      "test_0405",
+      "test_0406",
+      "test_0407",
+      "test_0408",
+      "test_0409",
+      "test_0410",
+      "test_0411",
+      "test_0412",
+      "test_0413",
+      "test_0414",
+      "test_0415",
+      "test_0416",
+      "test_0417",
+      "test_0418",
+      "test_0419",
+      "test_0420",
+      "test_0421",
+      "test_0422",
+      "test_0423",
+      "test_0424",
+      "test_0425",
+      "test_0426",
+      "test_0427",
+      "test_0428",
+      "test_0429",
+      "test_0430",
+      "test_0431",
+      "test_0432",
+      "test_0433",
+      "test_0434",
+      "test_0435",
+      "test_0436",
+      "test_0437",
+      "test_0438",
+      "test_0439",
+      "test_0440",
+      "test_0441",
+      "test_0442",
+      "test_0443",
+      "test_0444",
+      "test_0445",
+      "test_0446",
+      "test_0447",
+      "test_0448",
+      "test_0449",
+      "test_0450",
+      "test_0451",
+      "test_0452",
+      "test_0453",
+      "test_0454",
+      "test_0455",
+      "test_0456",
+      "test_0457",
+      "test_0458",
+      "test_0459",
+      "test_0460",
+      "test_0461",
+      "test_0462",
+      "test_0463",
+      "test_0464",
+      "test_0465",
+      "test_0466",
+      "test_0467",
+      "test_0468",
+      "test_0469",
+      "test_0470",
+      "test_0471",
+      "test_0472",
+      "test_0473",
+      "test_0474",
+      "test_0475",
+      "test_0476",
+      "test_0477",
+      "test_0478",
+      "test_0479",
+      "test_0480",
+      "test_0481",
+      "test_0482",
+      "test_0483",
+      "test_0484",
+      "test_0485",
+      "test_0486",
+      "test_0487",
+      "test_0488",
+      "test_0489",
+      "test_0490",
+      "test_0491",
+      "test_0492",
+      "test_0493",
+      "test_0494",
+      "test_0495",
+      "test_0496",
+      "test_0497",
+      "test_0498",
+      "test_0499",
+      "test_0500",
+      "test_0501",
+      "test_0502",
+      "test_0503",
+      "test_0504",
+      "test_0505",
+      "test_0506",
+      "test_0507",
+      "test_0508",
+      "test_0509",
+      "test_0510",
+      "test_0511",
+      "test_0512",
+      "test_0513",
+      "test_0514",
+      "test_0515",
+      "test_0516",
+      "test_0517",
+      "test_0518",
+      "test_0519",
+      "test_0520",
+      "test_0521",
+      "test_0522",
+      "test_0523",
+      "test_0524",
+      "test_0525",
+      "test_0526",
+      "test_0527",
+      "test_0528",
+      "test_0529",
+      "test_0530",
+      "test_0531"
+    ],
+    "file_sha256": {
+      "data/test-00000-of-00001.parquet": "5d44f419692282285ae811bd54b69e57bb44121e31f3628408e203f9416371ba",
+      "README.md": "6a32382e9dbc27e1a0553f5d1dbf8bf57847f81ca3814d98c51b8403c8924d18"
+    },
+    "fine_label_counts": {
+      "address": 180,
+      "address_apartment": 5,
+      "address_city": 232,
+      "address_country": 11,
+      "address_district": 22,
+      "address_geolocation": 45,
+      "address_house": 63,
+      "address_postal_code": 6,
+      "address_region": 20,
+      "address_street": 151,
+      "date": 241,
+      "document_number": 115,
+      "email": 114,
+      "first_name": 285,
+      "ip": 579,
+      "last_name": 203,
+      "middle_name": 105,
+      "military_individual_number": 26,
+      "mobile_phone": 195,
+      "name": 300,
+      "name_initials": 38,
+      "nickname": 33,
+      "organization": 116,
+      "snils": 17,
+      "tin": 26,
+      "vehicle_number": 31
+    },
+    "annotation_validation": "All532 rows passed exact original substring/offset checks; no repairs/exclusions"
+  },
+  "protocol": {
+    "dataset": {
+      "repository": "scanpatch/pii-ner-corpus-synthetic-controlled",
+      "revision": "6af0587dde068d90d8a1080285159c374b46a09b",
+      "license_in_pinned_card": "MIT",
+      "card_url": "https://huggingface.co/datasets/scanpatch/pii-ner-corpus-synthetic-controlled/blob/6af0587dde068d90d8a1080285159c374b46a09b/README.md",
+      "original_splits": {
+        "train": 4786,
+        "test": 532
+      },
+      "evaluated_split": "entire test, no train download",
+      "language_scope": "Mixed Russian/Ukrainian; source has no row-level language field; no fabricated per-language results",
+      "offered_rows": 532,
+      "gold_empty_rows": 58,
+      "common_whole_cases": 164,
+      "common_case_ids": [
+        "test_0001",
+        "test_0005",
+        "test_0009",
+        "test_0013",
+        "test_0014",
+        "test_0015",
+        "test_0017",
+        "test_0018",
+        "test_0020",
+        "test_0026",
+        "test_0031",
+        "test_0032",
+        "test_0035",
+        "test_0037",
+        "test_0038",
+        "test_0039",
+        "test_0041",
+        "test_0042",
+        "test_0048",
+        "test_0049",
+        "test_0051",
+        "test_0054",
+        "test_0056",
+        "test_0057",
+        "test_0061",
+        "test_0066",
+        "test_0070",
+        "test_0071",
+        "test_0079",
+        "test_0080",
+        "test_0083",
+        "test_0096",
+        "test_0101",
+        "test_0111",
+        "test_0114",
+        "test_0117",
+        "test_0118",
+        "test_0119",
+        "test_0121",
+        "test_0128",
+        "test_0131",
+        "test_0136",
+        "test_0141",
+        "test_0144",
+        "test_0148",
+        "test_0151",
+        "test_0153",
+        "test_0154",
+        "test_0155",
+        "test_0156",
+        "test_0157",
+        "test_0158",
+        "test_0167",
+        "test_0173",
+        "test_0177",
+        "test_0183",
+        "test_0185",
+        "test_0191",
+        "test_0192",
+        "test_0201",
+        "test_0204",
+        "test_0205",
+        "test_0207",
+        "test_0209",
+        "test_0212",
+        "test_0215",
+        "test_0220",
+        "test_0222",
+        "test_0225",
+        "test_0226",
+        "test_0228",
+        "test_0230",
+        "test_0235",
+        "test_0239",
+        "test_0242",
+        "test_0243",
+        "test_0246",
+        "test_0248",
+        "test_0256",
+        "test_0259",
+        "test_0267",
+        "test_0268",
+        "test_0270",
+        "test_0274",
+        "test_0275",
+        "test_0277",
+        "test_0278",
+        "test_0282",
+        "test_0285",
+        "test_0288",
+        "test_0299",
+        "test_0305",
+        "test_0306",
+        "test_0307",
+        "test_0309",
+        "test_0310",
+        "test_0311",
+        "test_0313",
+        "test_0317",
+        "test_0328",
+        "test_0330",
+        "test_0331",
+        "test_0334",
+        "test_0338",
+        "test_0339",
+        "test_0340",
+        "test_0347",
+        "test_0348",
+        "test_0352",
+        "test_0353",
+        "test_0356",
+        "test_0359",
+        "test_0361",
+        "test_0371",
+        "test_0374",
+        "test_0375",
+        "test_0376",
+        "test_0380",
+        "test_0382",
+        "test_0390",
+        "test_0391",
+        "test_0396",
+        "test_0397",
+        "test_0399",
+        "test_0403",
+        "test_0405",
+        "test_0407",
+        "test_0408",
+        "test_0409",
+        "test_0415",
+        "test_0421",
+        "test_0423",
+        "test_0426",
+        "test_0428",
+        "test_0431",
+        "test_0432",
+        "test_0433",
+        "test_0436",
+        "test_0440",
+        "test_0445",
+        "test_0446",
+        "test_0447",
+        "test_0450",
+        "test_0453",
+        "test_0455",
+        "test_0456",
+        "test_0459",
+        "test_0463",
+        "test_0465",
+        "test_0476",
+        "test_0477",
+        "test_0479",
+        "test_0481",
+        "test_0483",
+        "test_0486",
+        "test_0489",
+        "test_0491",
+        "test_0502",
+        "test_0505",
+        "test_0508",
+        "test_0511",
+        "test_0513",
+        "test_0516",
+        "test_0523"
+      ],
+      "offered_case_ids": [
+        "test_0000",
+        "test_0001",
+        "test_0002",
+        "test_0003",
+        "test_0004",
+        "test_0005",
+        "test_0006",
+        "test_0007",
+        "test_0008",
+        "test_0009",
+        "test_0010",
+        "test_0011",
+        "test_0012",
+        "test_0013",
+        "test_0014",
+        "test_0015",
+        "test_0016",
+        "test_0017",
+        "test_0018",
+        "test_0019",
+        "test_0020",
+        "test_0021",
+        "test_0022",
+        "test_0023",
+        "test_0024",
+        "test_0025",
+        "test_0026",
+        "test_0027",
+        "test_0028",
+        "test_0029",
+        "test_0030",
+        "test_0031",
+        "test_0032",
+        "test_0033",
+        "test_0034",
+        "test_0035",
+        "test_0036",
+        "test_0037",
+        "test_0038",
+        "test_0039",
+        "test_0040",
+        "test_0041",
+        "test_0042",
+        "test_0043",
+        "test_0044",
+        "test_0045",
+        "test_0046",
+        "test_0047",
+        "test_0048",
+        "test_0049",
+        "test_0050",
+        "test_0051",
+        "test_0052",
+        "test_0053",
+        "test_0054",
+        "test_0055",
+        "test_0056",
+        "test_0057",
+        "test_0058",
+        "test_0059",
+        "test_0060",
+        "test_0061",
+        "test_0062",
+        "test_0063",
+        "test_0064",
+        "test_0065",
+        "test_0066",
+        "test_0067",
+        "test_0068",
+        "test_0069",
+        "test_0070",
+        "test_0071",
+        "test_0072",
+        "test_0073",
+        "test_0074",
+        "test_0075",
+        "test_0076",
+        "test_0077",
+        "test_0078",
+        "test_0079",
+        "test_0080",
+        "test_0081",
+        "test_0082",
+        "test_0083",
+        "test_0084",
+        "test_0085",
+        "test_0086",
+        "test_0087",
+        "test_0088",
+        "test_0089",
+        "test_0090",
+        "test_0091",
+        "test_0092",
+        "test_0093",
+        "test_0094",
+        "test_0095",
+        "test_0096",
+        "test_0097",
+        "test_0098",
+        "test_0099",
+        "test_0100",
+        "test_0101",
+        "test_0102",
+        "test_0103",
+        "test_0104",
+        "test_0105",
+        "test_0106",
+        "test_0107",
+        "test_0108",
+        "test_0109",
+        "test_0110",
+        "test_0111",
+        "test_0112",
+        "test_0113",
+        "test_0114",
+        "test_0115",
+        "test_0116",
+        "test_0117",
+        "test_0118",
+        "test_0119",
+        "test_0120",
+        "test_0121",
+        "test_0122",
+        "test_0123",
+        "test_0124",
+        "test_0125",
+        "test_0126",
+        "test_0127",
+        "test_0128",
+        "test_0129",
+        "test_0130",
+        "test_0131",
+        "test_0132",
+        "test_0133",
+        "test_0134",
+        "test_0135",
+        "test_0136",
+        "test_0137",
+        "test_0138",
+        "test_0139",
+        "test_0140",
+        "test_0141",
+        "test_0142",
+        "test_0143",
+        "test_0144",
+        "test_0145",
+        "test_0146",
+        "test_0147",
+        "test_0148",
+        "test_0149",
+        "test_0150",
+        "test_0151",
+        "test_0152",
+        "test_0153",
+        "test_0154",
+        "test_0155",
+        "test_0156",
+        "test_0157",
+        "test_0158",
+        "test_0159",
+        "test_0160",
+        "test_0161",
+        "test_0162",
+        "test_0163",
+        "test_0164",
+        "test_0165",
+        "test_0166",
+        "test_0167",
+        "test_0168",
+        "test_0169",
+        "test_0170",
+        "test_0171",
+        "test_0172",
+        "test_0173",
+        "test_0174",
+        "test_0175",
+        "test_0176",
+        "test_0177",
+        "test_0178",
+        "test_0179",
+        "test_0180",
+        "test_0181",
+        "test_0182",
+        "test_0183",
+        "test_0184",
+        "test_0185",
+        "test_0186",
+        "test_0187",
+        "test_0188",
+        "test_0189",
+        "test_0190",
+        "test_0191",
+        "test_0192",
+        "test_0193",
+        "test_0194",
+        "test_0195",
+        "test_0196",
+        "test_0197",
+        "test_0198",
+        "test_0199",
+        "test_0200",
+        "test_0201",
+        "test_0202",
+        "test_0203",
+        "test_0204",
+        "test_0205",
+        "test_0206",
+        "test_0207",
+        "test_0208",
+        "test_0209",
+        "test_0210",
+        "test_0211",
+        "test_0212",
+        "test_0213",
+        "test_0214",
+        "test_0215",
+        "test_0216",
+        "test_0217",
+        "test_0218",
+        "test_0219",
+        "test_0220",
+        "test_0221",
+        "test_0222",
+        "test_0223",
+        "test_0224",
+        "test_0225",
+        "test_0226",
+        "test_0227",
+        "test_0228",
+        "test_0229",
+        "test_0230",
+        "test_0231",
+        "test_0232",
+        "test_0233",
+        "test_0234",
+        "test_0235",
+        "test_0236",
+        "test_0237",
+        "test_0238",
+        "test_0239",
+        "test_0240",
+        "test_0241",
+        "test_0242",
+        "test_0243",
+        "test_0244",
+        "test_0245",
+        "test_0246",
+        "test_0247",
+        "test_0248",
+        "test_0249",
+        "test_0250",
+        "test_0251",
+        "test_0252",
+        "test_0253",
+        "test_0254",
+        "test_0255",
+        "test_0256",
+        "test_0257",
+        "test_0258",
+        "test_0259",
+        "test_0260",
+        "test_0261",
+        "test_0262",
+        "test_0263",
+        "test_0264",
+        "test_0265",
+        "test_0266",
+        "test_0267",
+        "test_0268",
+        "test_0269",
+        "test_0270",
+        "test_0271",
+        "test_0272",
+        "test_0273",
+        "test_0274",
+        "test_0275",
+        "test_0276",
+        "test_0277",
+        "test_0278",
+        "test_0279",
+        "test_0280",
+        "test_0281",
+        "test_0282",
+        "test_0283",
+        "test_0284",
+        "test_0285",
+        "test_0286",
+        "test_0287",
+        "test_0288",
+        "test_0289",
+        "test_0290",
+        "test_0291",
+        "test_0292",
+        "test_0293",
+        "test_0294",
+        "test_0295",
+        "test_0296",
+        "test_0297",
+        "test_0298",
+        "test_0299",
+        "test_0300",
+        "test_0301",
+        "test_0302",
+        "test_0303",
+        "test_0304",
+        "test_0305",
+        "test_0306",
+        "test_0307",
+        "test_0308",
+        "test_0309",
+        "test_0310",
+        "test_0311",
+        "test_0312",
+        "test_0313",
+        "test_0314",
+        "test_0315",
+        "test_0316",
+        "test_0317",
+        "test_0318",
+        "test_0319",
+        "test_0320",
+        "test_0321",
+        "test_0322",
+        "test_0323",
+        "test_0324",
+        "test_0325",
+        "test_0326",
+        "test_0327",
+        "test_0328",
+        "test_0329",
+        "test_0330",
+        "test_0331",
+        "test_0332",
+        "test_0333",
+        "test_0334",
+        "test_0335",
+        "test_0336",
+        "test_0337",
+        "test_0338",
+        "test_0339",
+        "test_0340",
+        "test_0341",
+        "test_0342",
+        "test_0343",
+        "test_0344",
+        "test_0345",
+        "test_0346",
+        "test_0347",
+        "test_0348",
+        "test_0349",
+        "test_0350",
+        "test_0351",
+        "test_0352",
+        "test_0353",
+        "test_0354",
+        "test_0355",
+        "test_0356",
+        "test_0357",
+        "test_0358",
+        "test_0359",
+        "test_0360",
+        "test_0361",
+        "test_0362",
+        "test_0363",
+        "test_0364",
+        "test_0365",
+        "test_0366",
+        "test_0367",
+        "test_0368",
+        "test_0369",
+        "test_0370",
+        "test_0371",
+        "test_0372",
+        "test_0373",
+        "test_0374",
+        "test_0375",
+        "test_0376",
+        "test_0377",
+        "test_0378",
+        "test_0379",
+        "test_0380",
+        "test_0381",
+        "test_0382",
+        "test_0383",
+        "test_0384",
+        "test_0385",
+        "test_0386",
+        "test_0387",
+        "test_0388",
+        "test_0389",
+        "test_0390",
+        "test_0391",
+        "test_0392",
+        "test_0393",
+        "test_0394",
+        "test_0395",
+        "test_0396",
+        "test_0397",
+        "test_0398",
+        "test_0399",
+        "test_0400",
+        "test_0401",
+        "test_0402",
+        "test_0403",
+        "test_0404",
+        "test_0405",
+        "test_0406",
+        "test_0407",
+        "test_0408",
+        "test_0409",
+        "test_0410",
+        "test_0411",
+        "test_0412",
+        "test_0413",
+        "test_0414",
+        "test_0415",
+        "test_0416",
+        "test_0417",
+        "test_0418",
+        "test_0419",
+        "test_0420",
+        "test_0421",
+        "test_0422",
+        "test_0423",
+        "test_0424",
+        "test_0425",
+        "test_0426",
+        "test_0427",
+        "test_0428",
+        "test_0429",
+        "test_0430",
+        "test_0431",
+        "test_0432",
+        "test_0433",
+        "test_0434",
+        "test_0435",
+        "test_0436",
+        "test_0437",
+        "test_0438",
+        "test_0439",
+        "test_0440",
+        "test_0441",
+        "test_0442",
+        "test_0443",
+        "test_0444",
+        "test_0445",
+        "test_0446",
+        "test_0447",
+        "test_0448",
+        "test_0449",
+        "test_0450",
+        "test_0451",
+        "test_0452",
+        "test_0453",
+        "test_0454",
+        "test_0455",
+        "test_0456",
+        "test_0457",
+        "test_0458",
+        "test_0459",
+        "test_0460",
+        "test_0461",
+        "test_0462",
+        "test_0463",
+        "test_0464",
+        "test_0465",
+        "test_0466",
+        "test_0467",
+        "test_0468",
+        "test_0469",
+        "test_0470",
+        "test_0471",
+        "test_0472",
+        "test_0473",
+        "test_0474",
+        "test_0475",
+        "test_0476",
+        "test_0477",
+        "test_0478",
+        "test_0479",
+        "test_0480",
+        "test_0481",
+        "test_0482",
+        "test_0483",
+        "test_0484",
+        "test_0485",
+        "test_0486",
+        "test_0487",
+        "test_0488",
+        "test_0489",
+        "test_0490",
+        "test_0491",
+        "test_0492",
+        "test_0493",
+        "test_0494",
+        "test_0495",
+        "test_0496",
+        "test_0497",
+        "test_0498",
+        "test_0499",
+        "test_0500",
+        "test_0501",
+        "test_0502",
+        "test_0503",
+        "test_0504",
+        "test_0505",
+        "test_0506",
+        "test_0507",
+        "test_0508",
+        "test_0509",
+        "test_0510",
+        "test_0511",
+        "test_0512",
+        "test_0513",
+        "test_0514",
+        "test_0515",
+        "test_0516",
+        "test_0517",
+        "test_0518",
+        "test_0519",
+        "test_0520",
+        "test_0521",
+        "test_0522",
+        "test_0523",
+        "test_0524",
+        "test_0525",
+        "test_0526",
+        "test_0527",
+        "test_0528",
+        "test_0529",
+        "test_0530",
+        "test_0531"
+      ],
+      "file_sha256": {
+        "data/test-00000-of-00001.parquet": "5d44f419692282285ae811bd54b69e57bb44121e31f3628408e203f9416371ba",
+        "README.md": "6a32382e9dbc27e1a0553f5d1dbf8bf57847f81ca3814d98c51b8403c8924d18"
+      },
+      "fine_label_counts": {
+        "address": 180,
+        "address_apartment": 5,
+        "address_city": 232,
+        "address_country": 11,
+        "address_district": 22,
+        "address_geolocation": 45,
+        "address_house": 63,
+        "address_postal_code": 6,
+        "address_region": 20,
+        "address_street": 151,
+        "date": 241,
+        "document_number": 115,
+        "email": 114,
+        "first_name": 285,
+        "ip": 579,
+        "last_name": 203,
+        "middle_name": 105,
+        "military_individual_number": 26,
+        "mobile_phone": 195,
+        "name": 300,
+        "name_initials": 38,
+        "nickname": 33,
+        "organization": 116,
+        "snils": 17,
+        "tin": 26,
+        "vehicle_number": 31
+      },
+      "annotation_validation": "All532 rows passed exact original substring/offset checks; no repairs/exclusions"
+    },
+    "mapping": {
+      "gold": {
+        "last_name": "PERSON",
+        "middle_name": "PERSON",
+        "name": "PERSON",
+        "first_name": "PERSON",
+        "name_initials": "PERSON",
+        "address_city": "LOCATION",
+        "address_street": "LOCATION",
+        "address_geolocation": "LOCATION",
+        "address_apartment": "LOCATION",
+        "address_country": "LOCATION",
+        "address_district": "LOCATION",
+        "address_region": "LOCATION",
+        "address_house": "LOCATION",
+        "address_building": "LOCATION",
+        "address": "LOCATION",
+        "address_postal_code": "LOCATION",
+        "email": "EMAIL",
+        "mobile_phone": "PHONE",
+        "tin": "INN",
+        "document_number": "DOCUMENT"
+      },
+      "seif": {
+        "PERSON": "PERSON",
+        "CARDHOLDER": "PERSON",
+        "EMAIL": "EMAIL",
+        "PHONE": "PHONE",
+        "CARD": "CARD",
+        "PASSPORT": "DOCUMENT",
+        "INN": "INN",
+        "DRIVER_LICENSE": "DOCUMENT",
+        "ADDRESS": "LOCATION",
+        "COUNTRY": "LOCATION",
+        "CITY": "LOCATION",
+        "STREET": "LOCATION",
+        "HOUSE": "LOCATION",
+        "APARTMENT": "LOCATION",
+        "POSTAL_CODE": "LOCATION",
+        "BIRTH_PLACE": "LOCATION",
+        "LOCATION": "LOCATION",
+        "FOREIGN_DOCUMENT": "DOCUMENT"
+      },
+      "presidio": {
+        "PERSON": "PERSON",
+        "LOCATION": "LOCATION",
+        "EMAIL_ADDRESS": "EMAIL",
+        "PHONE_NUMBER": "PHONE",
+        "CREDIT_CARD": "CARD"
+      }
+    },
+    "primary": "Whole cases containing only PERSON/LOCATION/EMAIL/PHONE/CARD after coarse mapping, plus all empty-gold cases; typed-character P/R/F1",
+    "card_coverage": "CARD is absent in this corpus; common5 schema has only four positive type categories, not a five-type validation",
+    "merge": "Same coarse category, overlapping spans or whitespace-only gaps; identical gold/prediction transform, including nested name/address annotations; no punctuation normalization",
+    "secondary": "Merged exact spans; raw unmerged diagnostics; PERSON/LOCATION over all532; generic document/tax ID coverage separately",
+    "uncertainty": "2000 paired case bootstrap resamples, fixed seed20260922, one group because no language/domain gold split exists",
+    "model": "Unchanged Presidio2.2.364 + ru_core_news_sm3.8.0, threshold0; fixed Russian configuration, not an optimized Ukrainian baseline",
+    "hybrid": "Rules plus identical Presidio PERSON and LOCATION candidates through the frozen merge_ner_candidates policy",
+    "pdf_overlap": {
+      "names": [
+        "first_name",
+        "last_name",
+        "middle_name",
+        "name",
+        "name_initials"
+      ],
+      "contacts": [
+        "email",
+        "mobile_phone"
+      ],
+      "tax_identifier": [
+        "tin"
+      ],
+      "7_address_labels_with_direct_counterpart": [
+        "address",
+        "address_country",
+        "address_city",
+        "address_street",
+        "address_house",
+        "address_apartment",
+        "address_postal_code"
+      ],
+      "address_components_only_coarse": [
+        "address_region",
+        "address_district",
+        "address_building"
+      ],
+      "geolocation_not_explicit_in_assignment": [
+        "address_geolocation"
+      ],
+      "document_number_is_ambiguous": "Cannot distinguish passport, driving licence, residence document or issue authority from this gold type alone",
+      "no_direct_mapping": [
+        "date",
+        "ip",
+        "military_individual_number",
+        "nickname",
+        "organization",
+        "snils",
+        "vehicle_number"
+      ],
+      "not_tested": [
+        "CARD",
+        "CVV",
+        "PIN",
+        "passport issue date/purpose",
+        "passport issuer",
+        "department code",
+        "citizenship",
+        "birth date/purpose",
+        "cardholder/purpose"
+      ]
+    }
+  },
+  "protocol_sha256": "2152d14d65a3c3076e3f4c8e8e8001e07216e89b628dfbe574478e81207eb4b1",
+  "source_hashes": {
+    "detector": "732dabbdfbec9b37727e247481958a7dbc157cc1cb53409231bf9398100c1508",
+    "evaluator": "a76fc77bb1f1f4f37094eea0ca67ca39e971e7d1f6c8e722b0fb7300fa45cb5f",
+    "presidio_configuration_script": "5ec362a7637c1aa2fd26d130180478eafab0d860bc51a19323daa3eff65648c0"
+  },
+  "presidio_configuration": {
+    "name": "stock Russian spaCy model + upstream generic recognizers adapted to ru",
+    "upstream_english_default": false,
+    "nlp_engine": {
+      "nlp_engine_name": "spacy",
+      "models": [
+        {
+          "lang_code": "ru",
+          "model_name": "ru_core_news_sm"
+        }
+      ],
+      "ner_model_configuration": {
+        "model_to_presidio_entity_mapping": {
+          "PER": "PERSON",
+          "LOC": "LOCATION",
+          "ORG": "ORGANIZATION"
+        },
+        "labels_to_ignore": []
+      }
+    },
+    "spacy_pipeline": [
+      "tok2vec",
+      "morphologizer",
+      "parser",
+      "attribute_ruler",
+      "lemmatizer",
+      "ner"
+    ],
+    "spacy_ner_labels": [
+      "LOC",
+      "ORG",
+      "PER"
+    ],
+    "score_threshold": 0.0,
+    "threshold_selection": "Upstream analyzer default, fixed before measurement; no corpus-based tuning",
+    "context_adaptation": "Russian context words and RU phone region; unchanged upstream patterns, checksums and NER model",
+    "network_during_analysis": "none; tldextract uses bundled public suffix snapshot",
+    "excluded_entities": "URL, IP, crypto, IBAN and country-specific non-Russian IDs are outside this assignment and are not enabled",
+    "custom_russian_identifier_rules": false,
+    "recognizers": [
+      {
+        "name": "SpacyRecognizer",
+        "supported_language": "ru",
+        "supported_entities": [
+          "DATE_TIME",
+          "NRP",
+          "LOCATION",
+          "PERSON",
+          "ORGANIZATION"
+        ],
+        "context": [],
+        "phone_regions": []
+      },
+      {
+        "name": "EmailRecognizer",
+        "supported_language": "ru",
+        "supported_entities": [
+          "EMAIL_ADDRESS"
+        ],
+        "context": [
+          "email",
+          "e-mail",
+          "почта",
+          "электронная"
+        ],
+        "phone_regions": []
+      },
+      {
+        "name": "PhoneRecognizer",
+        "supported_language": "ru",
+        "supported_entities": [
+          "PHONE_NUMBER"
+        ],
+        "context": [
+          "телефон",
+          "тел",
+          "мобильный",
+          "номер",
+          "связь",
+          "контакт"
+        ],
+        "phone_regions": [
+          "RU",
+          "US",
+          "GB",
+          "DE",
+          "FR",
+          "IL",
+          "IN",
+          "CA",
+          "BR"
+        ]
+      },
+      {
+        "name": "CreditCardRecognizer",
+        "supported_language": "ru",
+        "supported_entities": [
+          "CREDIT_CARD"
+        ],
+        "context": [
+          "карта",
+          "карты",
+          "платёжная",
+          "кредитная",
+          "банковская",
+          "card"
+        ],
+        "phone_regions": []
+      },
+      {
+        "name": "DateRecognizer",
+        "supported_language": "ru",
+        "supported_entities": [
+          "DATE_TIME"
+        ],
+        "context": [
+          "дата",
+          "рождение",
+          "рождения",
+          "выдан",
+          "выдача",
+          "выдачи",
+          "родился",
+          "родилась"
+        ],
+        "phone_regions": []
+      }
+    ]
+  },
+  "common_schema_primary": {
+    "case_ids": [
+      "test_0001",
+      "test_0005",
+      "test_0009",
+      "test_0013",
+      "test_0014",
+      "test_0015",
+      "test_0017",
+      "test_0018",
+      "test_0020",
+      "test_0026",
+      "test_0031",
+      "test_0032",
+      "test_0035",
+      "test_0037",
+      "test_0038",
+      "test_0039",
+      "test_0041",
+      "test_0042",
+      "test_0048",
+      "test_0049",
+      "test_0051",
+      "test_0054",
+      "test_0056",
+      "test_0057",
+      "test_0061",
+      "test_0066",
+      "test_0070",
+      "test_0071",
+      "test_0079",
+      "test_0080",
+      "test_0083",
+      "test_0096",
+      "test_0101",
+      "test_0111",
+      "test_0114",
+      "test_0117",
+      "test_0118",
+      "test_0119",
+      "test_0121",
+      "test_0128",
+      "test_0131",
+      "test_0136",
+      "test_0141",
+      "test_0144",
+      "test_0148",
+      "test_0151",
+      "test_0153",
+      "test_0154",
+      "test_0155",
+      "test_0156",
+      "test_0157",
+      "test_0158",
+      "test_0167",
+      "test_0173",
+      "test_0177",
+      "test_0183",
+      "test_0185",
+      "test_0191",
+      "test_0192",
+      "test_0201",
+      "test_0204",
+      "test_0205",
+      "test_0207",
+      "test_0209",
+      "test_0212",
+      "test_0215",
+      "test_0220",
+      "test_0222",
+      "test_0225",
+      "test_0226",
+      "test_0228",
+      "test_0230",
+      "test_0235",
+      "test_0239",
+      "test_0242",
+      "test_0243",
+      "test_0246",
+      "test_0248",
+      "test_0256",
+      "test_0259",
+      "test_0267",
+      "test_0268",
+      "test_0270",
+      "test_0274",
+      "test_0275",
+      "test_0277",
+      "test_0278",
+      "test_0282",
+      "test_0285",
+      "test_0288",
+      "test_0299",
+      "test_0305",
+      "test_0306",
+      "test_0307",
+      "test_0309",
+      "test_0310",
+      "test_0311",
+      "test_0313",
+      "test_0317",
+      "test_0328",
+      "test_0330",
+      "test_0331",
+      "test_0334",
+      "test_0338",
+      "test_0339",
+      "test_0340",
+      "test_0347",
+      "test_0348",
+      "test_0352",
+      "test_0353",
+      "test_0356",
+      "test_0359",
+      "test_0361",
+      "test_0371",
+      "test_0374",
+      "test_0375",
+      "test_0376",
+      "test_0380",
+      "test_0382",
+      "test_0390",
+      "test_0391",
+      "test_0396",
+      "test_0397",
+      "test_0399",
+      "test_0403",
+      "test_0405",
+      "test_0407",
+      "test_0408",
+      "test_0409",
+      "test_0415",
+      "test_0421",
+      "test_0423",
+      "test_0426",
+      "test_0428",
+      "test_0431",
+      "test_0432",
+      "test_0433",
+      "test_0436",
+      "test_0440",
+      "test_0445",
+      "test_0446",
+      "test_0447",
+      "test_0450",
+      "test_0453",
+      "test_0455",
+      "test_0456",
+      "test_0459",
+      "test_0463",
+      "test_0465",
+      "test_0476",
+      "test_0477",
+      "test_0479",
+      "test_0481",
+      "test_0483",
+      "test_0486",
+      "test_0489",
+      "test_0491",
+      "test_0502",
+      "test_0505",
+      "test_0508",
+      "test_0511",
+      "test_0513",
+      "test_0516",
+      "test_0523"
+    ],
+    "types": [
+      "CARD",
+      "EMAIL",
+      "LOCATION",
+      "PERSON",
+      "PHONE"
+    ],
+    "systems": {
+      "seif_fast": {
+        "typed_character_primary": {
+          "precision": 0.840418,
+          "recall": 0.352483,
+          "f1": 0.49666,
+          "f2": 0.39879,
+          "true_positive": 2491,
+          "false_positive": 473,
+          "false_negative": 4576,
+          "cases": 164,
+          "exact_cases": 63,
+          "negative_cases": 58,
+          "negative_cases_with_fp": 3,
+          "by_type": {
+            "EMAIL": {
+              "precision": 0.944065,
+              "recall": 0.836759,
+              "f1": 0.887179,
+              "f2": 0.856224,
+              "true_positive": 692,
+              "false_positive": 41,
+              "false_negative": 135
+            },
+            "LOCATION": {
+              "precision": 0.255446,
+              "recall": 0.064179,
+              "f1": 0.102584,
+              "f2": 0.075483,
+              "true_positive": 129,
+              "false_positive": 376,
+              "false_negative": 1881
+            },
+            "PERSON": {
+              "precision": 0.970902,
+              "recall": 0.317274,
+              "f1": 0.478261,
+              "f2": 0.36664,
+              "true_positive": 1001,
+              "false_positive": 30,
+              "false_negative": 2154
+            },
+            "PHONE": {
+              "precision": 0.96259,
+              "recall": 0.622326,
+              "f1": 0.755932,
+              "f2": 0.66967,
+              "true_positive": 669,
+              "false_positive": 26,
+              "false_negative": 406
+            }
+          }
+        },
+        "merged_exact_span_secondary": {
+          "precision": 0.732919,
+          "recall": 0.264574,
+          "f1": 0.388797,
+          "f2": 0.303342,
+          "true_positive": 118,
+          "false_positive": 43,
+          "false_negative": 328,
+          "cases": 164,
+          "exact_cases": 63,
+          "negative_cases": 58,
+          "negative_cases_with_fp": 3,
+          "by_type": {
+            "EMAIL": {
+              "precision": 0.909091,
+              "recall": 0.789474,
+              "f1": 0.84507,
+              "f2": 0.810811,
+              "true_positive": 30,
+              "false_positive": 3,
+              "false_negative": 8
+            },
+            "LOCATION": {
+              "precision": 0.038462,
+              "recall": 0.007353,
+              "f1": 0.012346,
+              "f2": 0.008772,
+              "true_positive": 1,
+              "false_positive": 25,
+              "false_negative": 135
+            },
+            "PERSON": {
+              "precision": 0.77193,
+              "recall": 0.22449,
+              "f1": 0.347826,
+              "f2": 0.261593,
+              "true_positive": 44,
+              "false_positive": 13,
+              "false_negative": 152
+            },
+            "PHONE": {
+              "precision": 0.955556,
+              "recall": 0.565789,
+              "f1": 0.710744,
+              "f2": 0.616046,
+              "true_positive": 43,
+              "false_positive": 2,
+              "false_negative": 33
+            }
+          },
+          "first_five_error_offsets": [
+            {
+              "id": "test_0001",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  0,
+                  15
+                ],
+                [
+                  "PERSON",
+                  93,
+                  97
+                ],
+                [
+                  "PERSON",
+                  319,
+                  349
+                ],
+                [
+                  "PERSON",
+                  387,
+                  417
+                ],
+                [
+                  "PERSON",
+                  434,
+                  464
+                ],
+                [
+                  "PERSON",
+                  521,
+                  553
+                ]
+              ]
+            },
+            {
+              "id": "test_0005",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  61,
+                  66
+                ]
+              ]
+            },
+            {
+              "id": "test_0013",
+              "false_positive": [
+                [
+                  "LOCATION",
+                  106,
+                  107
+                ],
+                [
+                  "LOCATION",
+                  119,
+                  120
+                ]
+              ],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  218,
+                  226
+                ],
+                [
+                  "LOCATION",
+                  351,
+                  372
+                ],
+                [
+                  "PERSON",
+                  95,
+                  108
+                ],
+                [
+                  "PERSON",
+                  116,
+                  130
+                ]
+              ]
+            },
+            {
+              "id": "test_0014",
+              "false_positive": [
+                [
+                  "EMAIL",
+                  380,
+                  395
+                ]
+              ],
+              "false_negative": []
+            },
+            {
+              "id": "test_0015",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  0,
+                  9
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "presidio_ru": {
+        "typed_character_primary": {
+          "precision": 0.829508,
+          "recall": 0.644404,
+          "f1": 0.725332,
+          "f2": 0.674507,
+          "true_positive": 4554,
+          "false_positive": 936,
+          "false_negative": 2513,
+          "cases": 164,
+          "exact_cases": 68,
+          "negative_cases": 58,
+          "negative_cases_with_fp": 14,
+          "by_type": {
+            "EMAIL": {
+              "precision": 0.919192,
+              "recall": 0.88029,
+              "f1": 0.899321,
+              "f2": 0.887805,
+              "true_positive": 728,
+              "false_positive": 64,
+              "false_negative": 99
+            },
+            "LOCATION": {
+              "precision": 0.812709,
+              "recall": 0.241791,
+              "f1": 0.372699,
+              "f2": 0.281315,
+              "true_positive": 486,
+              "false_positive": 112,
+              "false_negative": 1524
+            },
+            "PERSON": {
+              "precision": 0.785968,
+              "recall": 0.770523,
+              "f1": 0.778169,
+              "f2": 0.773563,
+              "true_positive": 2431,
+              "false_positive": 662,
+              "false_negative": 724
+            },
+            "PHONE": {
+              "precision": 0.902681,
+              "recall": 0.845581,
+              "f1": 0.873199,
+              "f2": 0.856416,
+              "true_positive": 909,
+              "false_positive": 98,
+              "false_negative": 166
+            }
+          }
+        },
+        "merged_exact_span_secondary": {
+          "precision": 0.675393,
+          "recall": 0.578475,
+          "f1": 0.623188,
+          "f2": 0.595568,
+          "true_positive": 258,
+          "false_positive": 124,
+          "false_negative": 188,
+          "cases": 164,
+          "exact_cases": 68,
+          "negative_cases": 58,
+          "negative_cases_with_fp": 14,
+          "by_type": {
+            "EMAIL": {
+              "precision": 0.916667,
+              "recall": 0.868421,
+              "f1": 0.891892,
+              "f2": 0.87766,
+              "true_positive": 33,
+              "false_positive": 3,
+              "false_negative": 5
+            },
+            "LOCATION": {
+              "precision": 0.448276,
+              "recall": 0.191176,
+              "f1": 0.268041,
+              "f2": 0.215947,
+              "true_positive": 26,
+              "false_positive": 32,
+              "false_negative": 110
+            },
+            "PERSON": {
+              "precision": 0.62963,
+              "recall": 0.693878,
+              "f1": 0.660194,
+              "f2": 0.68,
+              "true_positive": 136,
+              "false_positive": 80,
+              "false_negative": 60
+            },
+            "PHONE": {
+              "precision": 0.875,
+              "recall": 0.828947,
+              "f1": 0.851351,
+              "f2": 0.837766,
+              "true_positive": 63,
+              "false_positive": 9,
+              "false_negative": 13
+            }
+          },
+          "first_five_error_offsets": [
+            {
+              "id": "test_0001",
+              "false_positive": [
+                [
+                  "PERSON",
+                  296,
+                  302
+                ]
+              ],
+              "false_negative": [
+                [
+                  "PERSON",
+                  521,
+                  553
+                ]
+              ]
+            },
+            {
+              "id": "test_0009",
+              "false_positive": [
+                [
+                  "PHONE",
+                  366,
+                  377
+                ],
+                [
+                  "PHONE",
+                  386,
+                  399
+                ]
+              ],
+              "false_negative": []
+            },
+            {
+              "id": "test_0013",
+              "false_positive": [
+                [
+                  "LOCATION",
+                  357,
+                  368
+                ],
+                [
+                  "PERSON",
+                  321,
+                  330
+                ]
+              ],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  351,
+                  372
+                ],
+                [
+                  "PERSON",
+                  321,
+                  336
+                ]
+              ]
+            },
+            {
+              "id": "test_0014",
+              "false_positive": [
+                [
+                  "EMAIL",
+                  380,
+                  395
+                ]
+              ],
+              "false_negative": []
+            },
+            {
+              "id": "test_0017",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  88,
+                  99
+                ],
+                [
+                  "LOCATION",
+                  138,
+                  147
+                ],
+                [
+                  "LOCATION",
+                  151,
+                  162
+                ],
+                [
+                  "LOCATION",
+                  193,
+                  214
+                ],
+                [
+                  "LOCATION",
+                  385,
+                  405
+                ],
+                [
+                  "LOCATION",
+                  575,
+                  589
+                ],
+                [
+                  "PHONE",
+                  256,
+                  269
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "seif_hybrid": {
+        "typed_character_primary": {
+          "precision": 0.782546,
+          "recall": 0.616669,
+          "f1": 0.689775,
+          "f2": 0.64397,
+          "true_positive": 4358,
+          "false_positive": 1211,
+          "false_negative": 2709,
+          "cases": 164,
+          "exact_cases": 63,
+          "negative_cases": 58,
+          "negative_cases_with_fp": 16,
+          "by_type": {
+            "EMAIL": {
+              "precision": 0.944065,
+              "recall": 0.836759,
+              "f1": 0.887179,
+              "f2": 0.856224,
+              "true_positive": 692,
+              "false_positive": 41,
+              "false_negative": 135
+            },
+            "LOCATION": {
+              "precision": 0.528846,
+              "recall": 0.273632,
+              "f1": 0.360656,
+              "f2": 0.302863,
+              "true_positive": 550,
+              "false_positive": 490,
+              "false_negative": 1460
+            },
+            "PERSON": {
+              "precision": 0.7891,
+              "recall": 0.775594,
+              "f1": 0.782289,
+              "f2": 0.778258,
+              "true_positive": 2447,
+              "false_positive": 654,
+              "false_negative": 708
+            },
+            "PHONE": {
+              "precision": 0.96259,
+              "recall": 0.622326,
+              "f1": 0.755932,
+              "f2": 0.66967,
+              "true_positive": 669,
+              "false_positive": 26,
+              "false_negative": 406
+            }
+          }
+        },
+        "merged_exact_span_secondary": {
+          "precision": 0.641304,
+          "recall": 0.529148,
+          "f1": 0.579853,
+          "f2": 0.548327,
+          "true_positive": 236,
+          "false_positive": 132,
+          "false_negative": 210,
+          "cases": 164,
+          "exact_cases": 63,
+          "negative_cases": 58,
+          "negative_cases_with_fp": 16,
+          "by_type": {
+            "EMAIL": {
+              "precision": 0.909091,
+              "recall": 0.789474,
+              "f1": 0.84507,
+              "f2": 0.810811,
+              "true_positive": 30,
+              "false_positive": 3,
+              "false_negative": 8
+            },
+            "LOCATION": {
+              "precision": 0.337838,
+              "recall": 0.183824,
+              "f1": 0.238095,
+              "f2": 0.202265,
+              "true_positive": 25,
+              "false_positive": 49,
+              "false_negative": 111
+            },
+            "PERSON": {
+              "precision": 0.638889,
+              "recall": 0.704082,
+              "f1": 0.669903,
+              "f2": 0.69,
+              "true_positive": 138,
+              "false_positive": 78,
+              "false_negative": 58
+            },
+            "PHONE": {
+              "precision": 0.955556,
+              "recall": 0.565789,
+              "f1": 0.710744,
+              "f2": 0.616046,
+              "true_positive": 43,
+              "false_positive": 2,
+              "false_negative": 33
+            }
+          },
+          "first_five_error_offsets": [
+            {
+              "id": "test_0001",
+              "false_positive": [
+                [
+                  "PERSON",
+                  296,
+                  302
+                ]
+              ],
+              "false_negative": [
+                [
+                  "PERSON",
+                  521,
+                  553
+                ]
+              ]
+            },
+            {
+              "id": "test_0013",
+              "false_positive": [
+                [
+                  "LOCATION",
+                  106,
+                  107
+                ],
+                [
+                  "LOCATION",
+                  119,
+                  120
+                ],
+                [
+                  "LOCATION",
+                  357,
+                  368
+                ]
+              ],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  351,
+                  372
+                ],
+                [
+                  "PERSON",
+                  95,
+                  108
+                ],
+                [
+                  "PERSON",
+                  116,
+                  130
+                ]
+              ]
+            },
+            {
+              "id": "test_0014",
+              "false_positive": [
+                [
+                  "EMAIL",
+                  380,
+                  395
+                ]
+              ],
+              "false_negative": []
+            },
+            {
+              "id": "test_0017",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  88,
+                  99
+                ],
+                [
+                  "LOCATION",
+                  138,
+                  147
+                ],
+                [
+                  "LOCATION",
+                  151,
+                  162
+                ],
+                [
+                  "LOCATION",
+                  193,
+                  214
+                ],
+                [
+                  "LOCATION",
+                  385,
+                  405
+                ],
+                [
+                  "LOCATION",
+                  575,
+                  589
+                ]
+              ]
+            },
+            {
+              "id": "test_0018",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  0,
+                  39
+                ]
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "selection": "whole cases: every gold type is allowed; all gold-empty rows retained"
+  },
+  "character_uncertainty": {
+    "method": "2000 paired bootstrap resamples, stratified by dataset domain; fixed seed20260922; percentile95 intervals",
+    "assumption": "Cases are treated as independent within domain; synthetic-template correlations are not modelled, so intervals are conditional diagnostics",
+    "f1_intervals": {
+      "seif_fast": [
+        0.433007,
+        0.554571
+      ],
+      "presidio_ru": [
+        0.662641,
+        0.778922
+      ],
+      "seif_hybrid": [
+        0.621113,
+        0.748694
+      ]
+    },
+    "f1_difference_vs_presidio": {
+      "seif_fast": {
+        "interval95": [
+          -0.300882,
+          -0.156967
+        ],
+        "bootstrap_fraction_greater_than_zero": 0.0
+      },
+      "seif_hybrid": {
+        "interval95": [
+          -0.0835,
+          0.004124
+        ],
+        "bootstrap_fraction_greater_than_zero": 0.0345
+      }
+    }
+  },
+  "exact_uncertainty": {
+    "method": "2000 paired bootstrap resamples, stratified by dataset domain; fixed seed20260922; percentile95 intervals",
+    "assumption": "Cases are treated as independent within domain; synthetic-template correlations are not modelled, so intervals are conditional diagnostics",
+    "f1_intervals": {
+      "seif_fast": [
+        0.326337,
+        0.447933
+      ],
+      "presidio_ru": [
+        0.555927,
+        0.687111
+      ],
+      "seif_hybrid": [
+        0.512808,
+        0.643597
+      ]
+    },
+    "f1_difference_vs_presidio": {
+      "seif_fast": {
+        "interval95": [
+          -0.301117,
+          -0.1658
+        ],
+        "bootstrap_fraction_greater_than_zero": 0.0
+      },
+      "seif_hybrid": {
+        "interval95": [
+          -0.076425,
+          -0.01207
+        ],
+        "bootstrap_fraction_greater_than_zero": 0.0025
+      }
+    }
+  },
+  "person_all_cases": {
+    "case_ids": [
+      "test_0000",
+      "test_0001",
+      "test_0002",
+      "test_0003",
+      "test_0004",
+      "test_0005",
+      "test_0006",
+      "test_0007",
+      "test_0008",
+      "test_0009",
+      "test_0010",
+      "test_0011",
+      "test_0012",
+      "test_0013",
+      "test_0014",
+      "test_0015",
+      "test_0016",
+      "test_0017",
+      "test_0018",
+      "test_0019",
+      "test_0020",
+      "test_0021",
+      "test_0022",
+      "test_0023",
+      "test_0024",
+      "test_0025",
+      "test_0026",
+      "test_0027",
+      "test_0028",
+      "test_0029",
+      "test_0030",
+      "test_0031",
+      "test_0032",
+      "test_0033",
+      "test_0034",
+      "test_0035",
+      "test_0036",
+      "test_0037",
+      "test_0038",
+      "test_0039",
+      "test_0040",
+      "test_0041",
+      "test_0042",
+      "test_0043",
+      "test_0044",
+      "test_0045",
+      "test_0046",
+      "test_0047",
+      "test_0048",
+      "test_0049",
+      "test_0050",
+      "test_0051",
+      "test_0052",
+      "test_0053",
+      "test_0054",
+      "test_0055",
+      "test_0056",
+      "test_0057",
+      "test_0058",
+      "test_0059",
+      "test_0060",
+      "test_0061",
+      "test_0062",
+      "test_0063",
+      "test_0064",
+      "test_0065",
+      "test_0066",
+      "test_0067",
+      "test_0068",
+      "test_0069",
+      "test_0070",
+      "test_0071",
+      "test_0072",
+      "test_0073",
+      "test_0074",
+      "test_0075",
+      "test_0076",
+      "test_0077",
+      "test_0078",
+      "test_0079",
+      "test_0080",
+      "test_0081",
+      "test_0082",
+      "test_0083",
+      "test_0084",
+      "test_0085",
+      "test_0086",
+      "test_0087",
+      "test_0088",
+      "test_0089",
+      "test_0090",
+      "test_0091",
+      "test_0092",
+      "test_0093",
+      "test_0094",
+      "test_0095",
+      "test_0096",
+      "test_0097",
+      "test_0098",
+      "test_0099",
+      "test_0100",
+      "test_0101",
+      "test_0102",
+      "test_0103",
+      "test_0104",
+      "test_0105",
+      "test_0106",
+      "test_0107",
+      "test_0108",
+      "test_0109",
+      "test_0110",
+      "test_0111",
+      "test_0112",
+      "test_0113",
+      "test_0114",
+      "test_0115",
+      "test_0116",
+      "test_0117",
+      "test_0118",
+      "test_0119",
+      "test_0120",
+      "test_0121",
+      "test_0122",
+      "test_0123",
+      "test_0124",
+      "test_0125",
+      "test_0126",
+      "test_0127",
+      "test_0128",
+      "test_0129",
+      "test_0130",
+      "test_0131",
+      "test_0132",
+      "test_0133",
+      "test_0134",
+      "test_0135",
+      "test_0136",
+      "test_0137",
+      "test_0138",
+      "test_0139",
+      "test_0140",
+      "test_0141",
+      "test_0142",
+      "test_0143",
+      "test_0144",
+      "test_0145",
+      "test_0146",
+      "test_0147",
+      "test_0148",
+      "test_0149",
+      "test_0150",
+      "test_0151",
+      "test_0152",
+      "test_0153",
+      "test_0154",
+      "test_0155",
+      "test_0156",
+      "test_0157",
+      "test_0158",
+      "test_0159",
+      "test_0160",
+      "test_0161",
+      "test_0162",
+      "test_0163",
+      "test_0164",
+      "test_0165",
+      "test_0166",
+      "test_0167",
+      "test_0168",
+      "test_0169",
+      "test_0170",
+      "test_0171",
+      "test_0172",
+      "test_0173",
+      "test_0174",
+      "test_0175",
+      "test_0176",
+      "test_0177",
+      "test_0178",
+      "test_0179",
+      "test_0180",
+      "test_0181",
+      "test_0182",
+      "test_0183",
+      "test_0184",
+      "test_0185",
+      "test_0186",
+      "test_0187",
+      "test_0188",
+      "test_0189",
+      "test_0190",
+      "test_0191",
+      "test_0192",
+      "test_0193",
+      "test_0194",
+      "test_0195",
+      "test_0196",
+      "test_0197",
+      "test_0198",
+      "test_0199",
+      "test_0200",
+      "test_0201",
+      "test_0202",
+      "test_0203",
+      "test_0204",
+      "test_0205",
+      "test_0206",
+      "test_0207",
+      "test_0208",
+      "test_0209",
+      "test_0210",
+      "test_0211",
+      "test_0212",
+      "test_0213",
+      "test_0214",
+      "test_0215",
+      "test_0216",
+      "test_0217",
+      "test_0218",
+      "test_0219",
+      "test_0220",
+      "test_0221",
+      "test_0222",
+      "test_0223",
+      "test_0224",
+      "test_0225",
+      "test_0226",
+      "test_0227",
+      "test_0228",
+      "test_0229",
+      "test_0230",
+      "test_0231",
+      "test_0232",
+      "test_0233",
+      "test_0234",
+      "test_0235",
+      "test_0236",
+      "test_0237",
+      "test_0238",
+      "test_0239",
+      "test_0240",
+      "test_0241",
+      "test_0242",
+      "test_0243",
+      "test_0244",
+      "test_0245",
+      "test_0246",
+      "test_0247",
+      "test_0248",
+      "test_0249",
+      "test_0250",
+      "test_0251",
+      "test_0252",
+      "test_0253",
+      "test_0254",
+      "test_0255",
+      "test_0256",
+      "test_0257",
+      "test_0258",
+      "test_0259",
+      "test_0260",
+      "test_0261",
+      "test_0262",
+      "test_0263",
+      "test_0264",
+      "test_0265",
+      "test_0266",
+      "test_0267",
+      "test_0268",
+      "test_0269",
+      "test_0270",
+      "test_0271",
+      "test_0272",
+      "test_0273",
+      "test_0274",
+      "test_0275",
+      "test_0276",
+      "test_0277",
+      "test_0278",
+      "test_0279",
+      "test_0280",
+      "test_0281",
+      "test_0282",
+      "test_0283",
+      "test_0284",
+      "test_0285",
+      "test_0286",
+      "test_0287",
+      "test_0288",
+      "test_0289",
+      "test_0290",
+      "test_0291",
+      "test_0292",
+      "test_0293",
+      "test_0294",
+      "test_0295",
+      "test_0296",
+      "test_0297",
+      "test_0298",
+      "test_0299",
+      "test_0300",
+      "test_0301",
+      "test_0302",
+      "test_0303",
+      "test_0304",
+      "test_0305",
+      "test_0306",
+      "test_0307",
+      "test_0308",
+      "test_0309",
+      "test_0310",
+      "test_0311",
+      "test_0312",
+      "test_0313",
+      "test_0314",
+      "test_0315",
+      "test_0316",
+      "test_0317",
+      "test_0318",
+      "test_0319",
+      "test_0320",
+      "test_0321",
+      "test_0322",
+      "test_0323",
+      "test_0324",
+      "test_0325",
+      "test_0326",
+      "test_0327",
+      "test_0328",
+      "test_0329",
+      "test_0330",
+      "test_0331",
+      "test_0332",
+      "test_0333",
+      "test_0334",
+      "test_0335",
+      "test_0336",
+      "test_0337",
+      "test_0338",
+      "test_0339",
+      "test_0340",
+      "test_0341",
+      "test_0342",
+      "test_0343",
+      "test_0344",
+      "test_0345",
+      "test_0346",
+      "test_0347",
+      "test_0348",
+      "test_0349",
+      "test_0350",
+      "test_0351",
+      "test_0352",
+      "test_0353",
+      "test_0354",
+      "test_0355",
+      "test_0356",
+      "test_0357",
+      "test_0358",
+      "test_0359",
+      "test_0360",
+      "test_0361",
+      "test_0362",
+      "test_0363",
+      "test_0364",
+      "test_0365",
+      "test_0366",
+      "test_0367",
+      "test_0368",
+      "test_0369",
+      "test_0370",
+      "test_0371",
+      "test_0372",
+      "test_0373",
+      "test_0374",
+      "test_0375",
+      "test_0376",
+      "test_0377",
+      "test_0378",
+      "test_0379",
+      "test_0380",
+      "test_0381",
+      "test_0382",
+      "test_0383",
+      "test_0384",
+      "test_0385",
+      "test_0386",
+      "test_0387",
+      "test_0388",
+      "test_0389",
+      "test_0390",
+      "test_0391",
+      "test_0392",
+      "test_0393",
+      "test_0394",
+      "test_0395",
+      "test_0396",
+      "test_0397",
+      "test_0398",
+      "test_0399",
+      "test_0400",
+      "test_0401",
+      "test_0402",
+      "test_0403",
+      "test_0404",
+      "test_0405",
+      "test_0406",
+      "test_0407",
+      "test_0408",
+      "test_0409",
+      "test_0410",
+      "test_0411",
+      "test_0412",
+      "test_0413",
+      "test_0414",
+      "test_0415",
+      "test_0416",
+      "test_0417",
+      "test_0418",
+      "test_0419",
+      "test_0420",
+      "test_0421",
+      "test_0422",
+      "test_0423",
+      "test_0424",
+      "test_0425",
+      "test_0426",
+      "test_0427",
+      "test_0428",
+      "test_0429",
+      "test_0430",
+      "test_0431",
+      "test_0432",
+      "test_0433",
+      "test_0434",
+      "test_0435",
+      "test_0436",
+      "test_0437",
+      "test_0438",
+      "test_0439",
+      "test_0440",
+      "test_0441",
+      "test_0442",
+      "test_0443",
+      "test_0444",
+      "test_0445",
+      "test_0446",
+      "test_0447",
+      "test_0448",
+      "test_0449",
+      "test_0450",
+      "test_0451",
+      "test_0452",
+      "test_0453",
+      "test_0454",
+      "test_0455",
+      "test_0456",
+      "test_0457",
+      "test_0458",
+      "test_0459",
+      "test_0460",
+      "test_0461",
+      "test_0462",
+      "test_0463",
+      "test_0464",
+      "test_0465",
+      "test_0466",
+      "test_0467",
+      "test_0468",
+      "test_0469",
+      "test_0470",
+      "test_0471",
+      "test_0472",
+      "test_0473",
+      "test_0474",
+      "test_0475",
+      "test_0476",
+      "test_0477",
+      "test_0478",
+      "test_0479",
+      "test_0480",
+      "test_0481",
+      "test_0482",
+      "test_0483",
+      "test_0484",
+      "test_0485",
+      "test_0486",
+      "test_0487",
+      "test_0488",
+      "test_0489",
+      "test_0490",
+      "test_0491",
+      "test_0492",
+      "test_0493",
+      "test_0494",
+      "test_0495",
+      "test_0496",
+      "test_0497",
+      "test_0498",
+      "test_0499",
+      "test_0500",
+      "test_0501",
+      "test_0502",
+      "test_0503",
+      "test_0504",
+      "test_0505",
+      "test_0506",
+      "test_0507",
+      "test_0508",
+      "test_0509",
+      "test_0510",
+      "test_0511",
+      "test_0512",
+      "test_0513",
+      "test_0514",
+      "test_0515",
+      "test_0516",
+      "test_0517",
+      "test_0518",
+      "test_0519",
+      "test_0520",
+      "test_0521",
+      "test_0522",
+      "test_0523",
+      "test_0524",
+      "test_0525",
+      "test_0526",
+      "test_0527",
+      "test_0528",
+      "test_0529",
+      "test_0530",
+      "test_0531"
+    ],
+    "types": [
+      "PERSON"
+    ],
+    "systems": {
+      "seif_fast": {
+        "typed_character_primary": {
+          "precision": 0.942584,
+          "recall": 0.402687,
+          "f1": 0.564297,
+          "f2": 0.454785,
+          "true_positive": 2758,
+          "false_positive": 168,
+          "false_negative": 4091,
+          "cases": 532,
+          "exact_cases": 363,
+          "negative_cases": 346,
+          "negative_cases_with_fp": 0,
+          "by_type": {
+            "PERSON": {
+              "precision": 0.942584,
+              "recall": 0.402687,
+              "f1": 0.564297,
+              "f2": 0.454785,
+              "true_positive": 2758,
+              "false_positive": 168,
+              "false_negative": 4091
+            }
+          }
+        },
+        "merged_exact_span_secondary": {
+          "precision": 0.796178,
+          "recall": 0.271739,
+          "f1": 0.405186,
+          "f2": 0.312969,
+          "true_positive": 125,
+          "false_positive": 32,
+          "false_negative": 335,
+          "cases": 532,
+          "exact_cases": 363,
+          "negative_cases": 346,
+          "negative_cases_with_fp": 0,
+          "by_type": {
+            "PERSON": {
+              "precision": 0.796178,
+              "recall": 0.271739,
+              "f1": 0.405186,
+              "f2": 0.312969,
+              "true_positive": 125,
+              "false_positive": 32,
+              "false_negative": 335
+            }
+          },
+          "first_five_error_offsets": [
+            {
+              "id": "test_0001",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  0,
+                  15
+                ],
+                [
+                  "PERSON",
+                  93,
+                  97
+                ],
+                [
+                  "PERSON",
+                  319,
+                  349
+                ],
+                [
+                  "PERSON",
+                  387,
+                  417
+                ],
+                [
+                  "PERSON",
+                  434,
+                  464
+                ],
+                [
+                  "PERSON",
+                  521,
+                  553
+                ]
+              ]
+            },
+            {
+              "id": "test_0004",
+              "false_positive": [
+                [
+                  "PERSON",
+                  658,
+                  669
+                ]
+              ],
+              "false_negative": [
+                [
+                  "PERSON",
+                  29,
+                  36
+                ],
+                [
+                  "PERSON",
+                  651,
+                  669
+                ]
+              ]
+            },
+            {
+              "id": "test_0005",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  61,
+                  66
+                ]
+              ]
+            },
+            {
+              "id": "test_0008",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  60,
+                  66
+                ]
+              ]
+            },
+            {
+              "id": "test_0010",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  107,
+                  113
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "presidio_ru": {
+        "typed_character_primary": {
+          "precision": 0.65648,
+          "recall": 0.78099,
+          "f1": 0.713343,
+          "f2": 0.752448,
+          "true_positive": 5349,
+          "false_positive": 2799,
+          "false_negative": 1500,
+          "cases": 532,
+          "exact_cases": 318,
+          "negative_cases": 346,
+          "negative_cases_with_fp": 86,
+          "by_type": {
+            "PERSON": {
+              "precision": 0.65648,
+              "recall": 0.78099,
+              "f1": 0.713343,
+              "f2": 0.752448,
+              "true_positive": 5349,
+              "false_positive": 2799,
+              "false_negative": 1500
+            }
+          }
+        },
+        "merged_exact_span_secondary": {
+          "precision": 0.515924,
+          "recall": 0.704348,
+          "f1": 0.595588,
+          "f2": 0.656402,
+          "true_positive": 324,
+          "false_positive": 304,
+          "false_negative": 136,
+          "cases": 532,
+          "exact_cases": 318,
+          "negative_cases": 346,
+          "negative_cases_with_fp": 86,
+          "by_type": {
+            "PERSON": {
+              "precision": 0.515924,
+              "recall": 0.704348,
+              "f1": 0.595588,
+              "f2": 0.656402,
+              "true_positive": 324,
+              "false_positive": 304,
+              "false_negative": 136
+            }
+          },
+          "first_five_error_offsets": [
+            {
+              "id": "test_0001",
+              "false_positive": [
+                [
+                  "PERSON",
+                  296,
+                  302
+                ]
+              ],
+              "false_negative": [
+                [
+                  "PERSON",
+                  521,
+                  553
+                ]
+              ]
+            },
+            {
+              "id": "test_0003",
+              "false_positive": [
+                [
+                  "PERSON",
+                  469,
+                  478
+                ]
+              ],
+              "false_negative": []
+            },
+            {
+              "id": "test_0004",
+              "false_positive": [
+                [
+                  "PERSON",
+                  403,
+                  414
+                ]
+              ],
+              "false_negative": [
+                [
+                  "PERSON",
+                  651,
+                  669
+                ]
+              ]
+            },
+            {
+              "id": "test_0011",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  27,
+                  35
+                ]
+              ]
+            },
+            {
+              "id": "test_0013",
+              "false_positive": [
+                [
+                  "PERSON",
+                  321,
+                  330
+                ]
+              ],
+              "false_negative": [
+                [
+                  "PERSON",
+                  321,
+                  336
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "seif_hybrid": {
+        "typed_character_primary": {
+          "precision": 0.660795,
+          "recall": 0.788728,
+          "f1": 0.719116,
+          "f2": 0.759326,
+          "true_positive": 5402,
+          "false_positive": 2773,
+          "false_negative": 1447,
+          "cases": 532,
+          "exact_cases": 320,
+          "negative_cases": 346,
+          "negative_cases_with_fp": 85,
+          "by_type": {
+            "PERSON": {
+              "precision": 0.660795,
+              "recall": 0.788728,
+              "f1": 0.719116,
+              "f2": 0.759326,
+              "true_positive": 5402,
+              "false_positive": 2773,
+              "false_negative": 1447
+            }
+          }
+        },
+        "merged_exact_span_secondary": {
+          "precision": 0.519231,
+          "recall": 0.704348,
+          "f1": 0.597786,
+          "f2": 0.657468,
+          "true_positive": 324,
+          "false_positive": 300,
+          "false_negative": 136,
+          "cases": 532,
+          "exact_cases": 320,
+          "negative_cases": 346,
+          "negative_cases_with_fp": 85,
+          "by_type": {
+            "PERSON": {
+              "precision": 0.519231,
+              "recall": 0.704348,
+              "f1": 0.597786,
+              "f2": 0.657468,
+              "true_positive": 324,
+              "false_positive": 300,
+              "false_negative": 136
+            }
+          },
+          "first_five_error_offsets": [
+            {
+              "id": "test_0001",
+              "false_positive": [
+                [
+                  "PERSON",
+                  296,
+                  302
+                ]
+              ],
+              "false_negative": [
+                [
+                  "PERSON",
+                  521,
+                  553
+                ]
+              ]
+            },
+            {
+              "id": "test_0003",
+              "false_positive": [
+                [
+                  "PERSON",
+                  469,
+                  478
+                ]
+              ],
+              "false_negative": []
+            },
+            {
+              "id": "test_0004",
+              "false_positive": [
+                [
+                  "PERSON",
+                  403,
+                  414
+                ],
+                [
+                  "PERSON",
+                  658,
+                  669
+                ]
+              ],
+              "false_negative": [
+                [
+                  "PERSON",
+                  651,
+                  669
+                ]
+              ]
+            },
+            {
+              "id": "test_0011",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  27,
+                  35
+                ]
+              ]
+            },
+            {
+              "id": "test_0013",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  95,
+                  108
+                ],
+                [
+                  "PERSON",
+                  116,
+                  130
+                ]
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "selection": "all aligned cases, filter only types (diagnostic)"
+  },
+  "location_all_cases": {
+    "case_ids": [
+      "test_0000",
+      "test_0001",
+      "test_0002",
+      "test_0003",
+      "test_0004",
+      "test_0005",
+      "test_0006",
+      "test_0007",
+      "test_0008",
+      "test_0009",
+      "test_0010",
+      "test_0011",
+      "test_0012",
+      "test_0013",
+      "test_0014",
+      "test_0015",
+      "test_0016",
+      "test_0017",
+      "test_0018",
+      "test_0019",
+      "test_0020",
+      "test_0021",
+      "test_0022",
+      "test_0023",
+      "test_0024",
+      "test_0025",
+      "test_0026",
+      "test_0027",
+      "test_0028",
+      "test_0029",
+      "test_0030",
+      "test_0031",
+      "test_0032",
+      "test_0033",
+      "test_0034",
+      "test_0035",
+      "test_0036",
+      "test_0037",
+      "test_0038",
+      "test_0039",
+      "test_0040",
+      "test_0041",
+      "test_0042",
+      "test_0043",
+      "test_0044",
+      "test_0045",
+      "test_0046",
+      "test_0047",
+      "test_0048",
+      "test_0049",
+      "test_0050",
+      "test_0051",
+      "test_0052",
+      "test_0053",
+      "test_0054",
+      "test_0055",
+      "test_0056",
+      "test_0057",
+      "test_0058",
+      "test_0059",
+      "test_0060",
+      "test_0061",
+      "test_0062",
+      "test_0063",
+      "test_0064",
+      "test_0065",
+      "test_0066",
+      "test_0067",
+      "test_0068",
+      "test_0069",
+      "test_0070",
+      "test_0071",
+      "test_0072",
+      "test_0073",
+      "test_0074",
+      "test_0075",
+      "test_0076",
+      "test_0077",
+      "test_0078",
+      "test_0079",
+      "test_0080",
+      "test_0081",
+      "test_0082",
+      "test_0083",
+      "test_0084",
+      "test_0085",
+      "test_0086",
+      "test_0087",
+      "test_0088",
+      "test_0089",
+      "test_0090",
+      "test_0091",
+      "test_0092",
+      "test_0093",
+      "test_0094",
+      "test_0095",
+      "test_0096",
+      "test_0097",
+      "test_0098",
+      "test_0099",
+      "test_0100",
+      "test_0101",
+      "test_0102",
+      "test_0103",
+      "test_0104",
+      "test_0105",
+      "test_0106",
+      "test_0107",
+      "test_0108",
+      "test_0109",
+      "test_0110",
+      "test_0111",
+      "test_0112",
+      "test_0113",
+      "test_0114",
+      "test_0115",
+      "test_0116",
+      "test_0117",
+      "test_0118",
+      "test_0119",
+      "test_0120",
+      "test_0121",
+      "test_0122",
+      "test_0123",
+      "test_0124",
+      "test_0125",
+      "test_0126",
+      "test_0127",
+      "test_0128",
+      "test_0129",
+      "test_0130",
+      "test_0131",
+      "test_0132",
+      "test_0133",
+      "test_0134",
+      "test_0135",
+      "test_0136",
+      "test_0137",
+      "test_0138",
+      "test_0139",
+      "test_0140",
+      "test_0141",
+      "test_0142",
+      "test_0143",
+      "test_0144",
+      "test_0145",
+      "test_0146",
+      "test_0147",
+      "test_0148",
+      "test_0149",
+      "test_0150",
+      "test_0151",
+      "test_0152",
+      "test_0153",
+      "test_0154",
+      "test_0155",
+      "test_0156",
+      "test_0157",
+      "test_0158",
+      "test_0159",
+      "test_0160",
+      "test_0161",
+      "test_0162",
+      "test_0163",
+      "test_0164",
+      "test_0165",
+      "test_0166",
+      "test_0167",
+      "test_0168",
+      "test_0169",
+      "test_0170",
+      "test_0171",
+      "test_0172",
+      "test_0173",
+      "test_0174",
+      "test_0175",
+      "test_0176",
+      "test_0177",
+      "test_0178",
+      "test_0179",
+      "test_0180",
+      "test_0181",
+      "test_0182",
+      "test_0183",
+      "test_0184",
+      "test_0185",
+      "test_0186",
+      "test_0187",
+      "test_0188",
+      "test_0189",
+      "test_0190",
+      "test_0191",
+      "test_0192",
+      "test_0193",
+      "test_0194",
+      "test_0195",
+      "test_0196",
+      "test_0197",
+      "test_0198",
+      "test_0199",
+      "test_0200",
+      "test_0201",
+      "test_0202",
+      "test_0203",
+      "test_0204",
+      "test_0205",
+      "test_0206",
+      "test_0207",
+      "test_0208",
+      "test_0209",
+      "test_0210",
+      "test_0211",
+      "test_0212",
+      "test_0213",
+      "test_0214",
+      "test_0215",
+      "test_0216",
+      "test_0217",
+      "test_0218",
+      "test_0219",
+      "test_0220",
+      "test_0221",
+      "test_0222",
+      "test_0223",
+      "test_0224",
+      "test_0225",
+      "test_0226",
+      "test_0227",
+      "test_0228",
+      "test_0229",
+      "test_0230",
+      "test_0231",
+      "test_0232",
+      "test_0233",
+      "test_0234",
+      "test_0235",
+      "test_0236",
+      "test_0237",
+      "test_0238",
+      "test_0239",
+      "test_0240",
+      "test_0241",
+      "test_0242",
+      "test_0243",
+      "test_0244",
+      "test_0245",
+      "test_0246",
+      "test_0247",
+      "test_0248",
+      "test_0249",
+      "test_0250",
+      "test_0251",
+      "test_0252",
+      "test_0253",
+      "test_0254",
+      "test_0255",
+      "test_0256",
+      "test_0257",
+      "test_0258",
+      "test_0259",
+      "test_0260",
+      "test_0261",
+      "test_0262",
+      "test_0263",
+      "test_0264",
+      "test_0265",
+      "test_0266",
+      "test_0267",
+      "test_0268",
+      "test_0269",
+      "test_0270",
+      "test_0271",
+      "test_0272",
+      "test_0273",
+      "test_0274",
+      "test_0275",
+      "test_0276",
+      "test_0277",
+      "test_0278",
+      "test_0279",
+      "test_0280",
+      "test_0281",
+      "test_0282",
+      "test_0283",
+      "test_0284",
+      "test_0285",
+      "test_0286",
+      "test_0287",
+      "test_0288",
+      "test_0289",
+      "test_0290",
+      "test_0291",
+      "test_0292",
+      "test_0293",
+      "test_0294",
+      "test_0295",
+      "test_0296",
+      "test_0297",
+      "test_0298",
+      "test_0299",
+      "test_0300",
+      "test_0301",
+      "test_0302",
+      "test_0303",
+      "test_0304",
+      "test_0305",
+      "test_0306",
+      "test_0307",
+      "test_0308",
+      "test_0309",
+      "test_0310",
+      "test_0311",
+      "test_0312",
+      "test_0313",
+      "test_0314",
+      "test_0315",
+      "test_0316",
+      "test_0317",
+      "test_0318",
+      "test_0319",
+      "test_0320",
+      "test_0321",
+      "test_0322",
+      "test_0323",
+      "test_0324",
+      "test_0325",
+      "test_0326",
+      "test_0327",
+      "test_0328",
+      "test_0329",
+      "test_0330",
+      "test_0331",
+      "test_0332",
+      "test_0333",
+      "test_0334",
+      "test_0335",
+      "test_0336",
+      "test_0337",
+      "test_0338",
+      "test_0339",
+      "test_0340",
+      "test_0341",
+      "test_0342",
+      "test_0343",
+      "test_0344",
+      "test_0345",
+      "test_0346",
+      "test_0347",
+      "test_0348",
+      "test_0349",
+      "test_0350",
+      "test_0351",
+      "test_0352",
+      "test_0353",
+      "test_0354",
+      "test_0355",
+      "test_0356",
+      "test_0357",
+      "test_0358",
+      "test_0359",
+      "test_0360",
+      "test_0361",
+      "test_0362",
+      "test_0363",
+      "test_0364",
+      "test_0365",
+      "test_0366",
+      "test_0367",
+      "test_0368",
+      "test_0369",
+      "test_0370",
+      "test_0371",
+      "test_0372",
+      "test_0373",
+      "test_0374",
+      "test_0375",
+      "test_0376",
+      "test_0377",
+      "test_0378",
+      "test_0379",
+      "test_0380",
+      "test_0381",
+      "test_0382",
+      "test_0383",
+      "test_0384",
+      "test_0385",
+      "test_0386",
+      "test_0387",
+      "test_0388",
+      "test_0389",
+      "test_0390",
+      "test_0391",
+      "test_0392",
+      "test_0393",
+      "test_0394",
+      "test_0395",
+      "test_0396",
+      "test_0397",
+      "test_0398",
+      "test_0399",
+      "test_0400",
+      "test_0401",
+      "test_0402",
+      "test_0403",
+      "test_0404",
+      "test_0405",
+      "test_0406",
+      "test_0407",
+      "test_0408",
+      "test_0409",
+      "test_0410",
+      "test_0411",
+      "test_0412",
+      "test_0413",
+      "test_0414",
+      "test_0415",
+      "test_0416",
+      "test_0417",
+      "test_0418",
+      "test_0419",
+      "test_0420",
+      "test_0421",
+      "test_0422",
+      "test_0423",
+      "test_0424",
+      "test_0425",
+      "test_0426",
+      "test_0427",
+      "test_0428",
+      "test_0429",
+      "test_0430",
+      "test_0431",
+      "test_0432",
+      "test_0433",
+      "test_0434",
+      "test_0435",
+      "test_0436",
+      "test_0437",
+      "test_0438",
+      "test_0439",
+      "test_0440",
+      "test_0441",
+      "test_0442",
+      "test_0443",
+      "test_0444",
+      "test_0445",
+      "test_0446",
+      "test_0447",
+      "test_0448",
+      "test_0449",
+      "test_0450",
+      "test_0451",
+      "test_0452",
+      "test_0453",
+      "test_0454",
+      "test_0455",
+      "test_0456",
+      "test_0457",
+      "test_0458",
+      "test_0459",
+      "test_0460",
+      "test_0461",
+      "test_0462",
+      "test_0463",
+      "test_0464",
+      "test_0465",
+      "test_0466",
+      "test_0467",
+      "test_0468",
+      "test_0469",
+      "test_0470",
+      "test_0471",
+      "test_0472",
+      "test_0473",
+      "test_0474",
+      "test_0475",
+      "test_0476",
+      "test_0477",
+      "test_0478",
+      "test_0479",
+      "test_0480",
+      "test_0481",
+      "test_0482",
+      "test_0483",
+      "test_0484",
+      "test_0485",
+      "test_0486",
+      "test_0487",
+      "test_0488",
+      "test_0489",
+      "test_0490",
+      "test_0491",
+      "test_0492",
+      "test_0493",
+      "test_0494",
+      "test_0495",
+      "test_0496",
+      "test_0497",
+      "test_0498",
+      "test_0499",
+      "test_0500",
+      "test_0501",
+      "test_0502",
+      "test_0503",
+      "test_0504",
+      "test_0505",
+      "test_0506",
+      "test_0507",
+      "test_0508",
+      "test_0509",
+      "test_0510",
+      "test_0511",
+      "test_0512",
+      "test_0513",
+      "test_0514",
+      "test_0515",
+      "test_0516",
+      "test_0517",
+      "test_0518",
+      "test_0519",
+      "test_0520",
+      "test_0521",
+      "test_0522",
+      "test_0523",
+      "test_0524",
+      "test_0525",
+      "test_0526",
+      "test_0527",
+      "test_0528",
+      "test_0529",
+      "test_0530",
+      "test_0531"
+    ],
+    "types": [
+      "LOCATION"
+    ],
+    "systems": {
+      "seif_fast": {
+        "typed_character_primary": {
+          "precision": 0.328399,
+          "recall": 0.083415,
+          "f1": 0.133037,
+          "f2": 0.098042,
+          "true_positive": 599,
+          "false_positive": 1225,
+          "false_negative": 6582,
+          "cases": 532,
+          "exact_cases": 315,
+          "negative_cases": 332,
+          "negative_cases_with_fp": 18,
+          "by_type": {
+            "LOCATION": {
+              "precision": 0.328399,
+              "recall": 0.083415,
+              "f1": 0.133037,
+              "f2": 0.098042,
+              "true_positive": 599,
+              "false_positive": 1225,
+              "false_negative": 6582
+            }
+          }
+        },
+        "merged_exact_span_secondary": {
+          "precision": 0.1625,
+          "recall": 0.027542,
+          "f1": 0.047101,
+          "f2": 0.033028,
+          "true_positive": 13,
+          "false_positive": 67,
+          "false_negative": 459,
+          "cases": 532,
+          "exact_cases": 315,
+          "negative_cases": 332,
+          "negative_cases_with_fp": 18,
+          "by_type": {
+            "LOCATION": {
+              "precision": 0.1625,
+              "recall": 0.027542,
+              "f1": 0.047101,
+              "f2": 0.033028,
+              "true_positive": 13,
+              "false_positive": 67,
+              "false_negative": 459
+            }
+          },
+          "first_five_error_offsets": [
+            {
+              "id": "test_0002",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  50,
+                  95
+                ]
+              ]
+            },
+            {
+              "id": "test_0003",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  47,
+                  52
+                ],
+                [
+                  "LOCATION",
+                  193,
+                  206
+                ],
+                [
+                  "LOCATION",
+                  337,
+                  359
+                ],
+                [
+                  "LOCATION",
+                  460,
+                  478
+                ],
+                [
+                  "LOCATION",
+                  546,
+                  562
+                ],
+                [
+                  "LOCATION",
+                  595,
+                  617
+                ]
+              ]
+            },
+            {
+              "id": "test_0004",
+              "false_positive": [
+                [
+                  "LOCATION",
+                  220,
+                  221
+                ],
+                [
+                  "LOCATION",
+                  438,
+                  444
+                ]
+              ],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  48,
+                  54
+                ],
+                [
+                  "LOCATION",
+                  150,
+                  165
+                ],
+                [
+                  "LOCATION",
+                  196,
+                  198
+                ],
+                [
+                  "LOCATION",
+                  202,
+                  221
+                ],
+                [
+                  "LOCATION",
+                  378,
+                  383
+                ]
+              ]
+            },
+            {
+              "id": "test_0007",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  9,
+                  16
+                ]
+              ]
+            },
+            {
+              "id": "test_0010",
+              "false_positive": [
+                [
+                  "LOCATION",
+                  226,
+                  250
+                ]
+              ],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  209,
+                  272
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "presidio_ru": {
+        "typed_character_primary": {
+          "precision": 0.815052,
+          "recall": 0.230748,
+          "f1": 0.35967,
+          "f2": 0.26937,
+          "true_positive": 1657,
+          "false_positive": 376,
+          "false_negative": 5524,
+          "cases": 532,
+          "exact_cases": 344,
+          "negative_cases": 332,
+          "negative_cases_with_fp": 14,
+          "by_type": {
+            "LOCATION": {
+              "precision": 0.815052,
+              "recall": 0.230748,
+              "f1": 0.35967,
+              "f2": 0.26937,
+              "true_positive": 1657,
+              "false_positive": 376,
+              "false_negative": 5524
+            }
+          }
+        },
+        "merged_exact_span_secondary": {
+          "precision": 0.442105,
+          "recall": 0.177966,
+          "f1": 0.253776,
+          "f2": 0.202117,
+          "true_positive": 84,
+          "false_positive": 106,
+          "false_negative": 388,
+          "cases": 532,
+          "exact_cases": 344,
+          "negative_cases": 332,
+          "negative_cases_with_fp": 14,
+          "by_type": {
+            "LOCATION": {
+              "precision": 0.442105,
+              "recall": 0.177966,
+              "f1": 0.253776,
+              "f2": 0.202117,
+              "true_positive": 84,
+              "false_positive": 106,
+              "false_negative": 388
+            }
+          },
+          "first_five_error_offsets": [
+            {
+              "id": "test_0002",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  50,
+                  95
+                ]
+              ]
+            },
+            {
+              "id": "test_0003",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  337,
+                  359
+                ],
+                [
+                  "LOCATION",
+                  460,
+                  478
+                ],
+                [
+                  "LOCATION",
+                  546,
+                  562
+                ],
+                [
+                  "LOCATION",
+                  595,
+                  617
+                ]
+              ]
+            },
+            {
+              "id": "test_0004",
+              "false_positive": [
+                [
+                  "LOCATION",
+                  72,
+                  77
+                ]
+              ],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  66,
+                  98
+                ],
+                [
+                  "LOCATION",
+                  196,
+                  198
+                ]
+              ]
+            },
+            {
+              "id": "test_0007",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  9,
+                  16
+                ]
+              ]
+            },
+            {
+              "id": "test_0010",
+              "false_positive": [
+                [
+                  "LOCATION",
+                  209,
+                  224
+                ],
+                [
+                  "LOCATION",
+                  230,
+                  245
+                ]
+              ],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  209,
+                  272
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "seif_hybrid": {
+        "typed_character_primary": {
+          "precision": 0.557752,
+          "recall": 0.275031,
+          "f1": 0.368401,
+          "f2": 0.306059,
+          "true_positive": 1975,
+          "false_positive": 1566,
+          "false_negative": 5206,
+          "cases": 532,
+          "exact_cases": 329,
+          "negative_cases": 332,
+          "negative_cases_with_fp": 29,
+          "by_type": {
+            "LOCATION": {
+              "precision": 0.557752,
+              "recall": 0.275031,
+              "f1": 0.368401,
+              "f2": 0.306059,
+              "true_positive": 1975,
+              "false_positive": 1566,
+              "false_negative": 5206
+            }
+          }
+        },
+        "merged_exact_span_secondary": {
+          "precision": 0.393162,
+          "recall": 0.194915,
+          "f1": 0.260623,
+          "f2": 0.216777,
+          "true_positive": 92,
+          "false_positive": 142,
+          "false_negative": 380,
+          "cases": 532,
+          "exact_cases": 329,
+          "negative_cases": 332,
+          "negative_cases_with_fp": 29,
+          "by_type": {
+            "LOCATION": {
+              "precision": 0.393162,
+              "recall": 0.194915,
+              "f1": 0.260623,
+              "f2": 0.216777,
+              "true_positive": 92,
+              "false_positive": 142,
+              "false_negative": 380
+            }
+          },
+          "first_five_error_offsets": [
+            {
+              "id": "test_0002",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  50,
+                  95
+                ]
+              ]
+            },
+            {
+              "id": "test_0003",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  337,
+                  359
+                ],
+                [
+                  "LOCATION",
+                  460,
+                  478
+                ],
+                [
+                  "LOCATION",
+                  546,
+                  562
+                ],
+                [
+                  "LOCATION",
+                  595,
+                  617
+                ]
+              ]
+            },
+            {
+              "id": "test_0004",
+              "false_positive": [
+                [
+                  "LOCATION",
+                  220,
+                  221
+                ],
+                [
+                  "LOCATION",
+                  438,
+                  444
+                ]
+              ],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  196,
+                  198
+                ],
+                [
+                  "LOCATION",
+                  202,
+                  221
+                ]
+              ]
+            },
+            {
+              "id": "test_0007",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  9,
+                  16
+                ]
+              ]
+            },
+            {
+              "id": "test_0010",
+              "false_positive": [
+                [
+                  "LOCATION",
+                  209,
+                  224
+                ],
+                [
+                  "LOCATION",
+                  226,
+                  250
+                ]
+              ],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  209,
+                  272
+                ]
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "selection": "all aligned cases, filter only types (diagnostic)"
+  },
+  "document_tax_diagnostic": {
+    "case_ids": [
+      "test_0000",
+      "test_0001",
+      "test_0002",
+      "test_0003",
+      "test_0004",
+      "test_0005",
+      "test_0006",
+      "test_0007",
+      "test_0008",
+      "test_0009",
+      "test_0010",
+      "test_0011",
+      "test_0012",
+      "test_0013",
+      "test_0014",
+      "test_0015",
+      "test_0016",
+      "test_0017",
+      "test_0018",
+      "test_0019",
+      "test_0020",
+      "test_0021",
+      "test_0022",
+      "test_0023",
+      "test_0024",
+      "test_0025",
+      "test_0026",
+      "test_0027",
+      "test_0028",
+      "test_0029",
+      "test_0030",
+      "test_0031",
+      "test_0032",
+      "test_0033",
+      "test_0034",
+      "test_0035",
+      "test_0036",
+      "test_0037",
+      "test_0038",
+      "test_0039",
+      "test_0040",
+      "test_0041",
+      "test_0042",
+      "test_0043",
+      "test_0044",
+      "test_0045",
+      "test_0046",
+      "test_0047",
+      "test_0048",
+      "test_0049",
+      "test_0050",
+      "test_0051",
+      "test_0052",
+      "test_0053",
+      "test_0054",
+      "test_0055",
+      "test_0056",
+      "test_0057",
+      "test_0058",
+      "test_0059",
+      "test_0060",
+      "test_0061",
+      "test_0062",
+      "test_0063",
+      "test_0064",
+      "test_0065",
+      "test_0066",
+      "test_0067",
+      "test_0068",
+      "test_0069",
+      "test_0070",
+      "test_0071",
+      "test_0072",
+      "test_0073",
+      "test_0074",
+      "test_0075",
+      "test_0076",
+      "test_0077",
+      "test_0078",
+      "test_0079",
+      "test_0080",
+      "test_0081",
+      "test_0082",
+      "test_0083",
+      "test_0084",
+      "test_0085",
+      "test_0086",
+      "test_0087",
+      "test_0088",
+      "test_0089",
+      "test_0090",
+      "test_0091",
+      "test_0092",
+      "test_0093",
+      "test_0094",
+      "test_0095",
+      "test_0096",
+      "test_0097",
+      "test_0098",
+      "test_0099",
+      "test_0100",
+      "test_0101",
+      "test_0102",
+      "test_0103",
+      "test_0104",
+      "test_0105",
+      "test_0106",
+      "test_0107",
+      "test_0108",
+      "test_0109",
+      "test_0110",
+      "test_0111",
+      "test_0112",
+      "test_0113",
+      "test_0114",
+      "test_0115",
+      "test_0116",
+      "test_0117",
+      "test_0118",
+      "test_0119",
+      "test_0120",
+      "test_0121",
+      "test_0122",
+      "test_0123",
+      "test_0124",
+      "test_0125",
+      "test_0126",
+      "test_0127",
+      "test_0128",
+      "test_0129",
+      "test_0130",
+      "test_0131",
+      "test_0132",
+      "test_0133",
+      "test_0134",
+      "test_0135",
+      "test_0136",
+      "test_0137",
+      "test_0138",
+      "test_0139",
+      "test_0140",
+      "test_0141",
+      "test_0142",
+      "test_0143",
+      "test_0144",
+      "test_0145",
+      "test_0146",
+      "test_0147",
+      "test_0148",
+      "test_0149",
+      "test_0150",
+      "test_0151",
+      "test_0152",
+      "test_0153",
+      "test_0154",
+      "test_0155",
+      "test_0156",
+      "test_0157",
+      "test_0158",
+      "test_0159",
+      "test_0160",
+      "test_0161",
+      "test_0162",
+      "test_0163",
+      "test_0164",
+      "test_0165",
+      "test_0166",
+      "test_0167",
+      "test_0168",
+      "test_0169",
+      "test_0170",
+      "test_0171",
+      "test_0172",
+      "test_0173",
+      "test_0174",
+      "test_0175",
+      "test_0176",
+      "test_0177",
+      "test_0178",
+      "test_0179",
+      "test_0180",
+      "test_0181",
+      "test_0182",
+      "test_0183",
+      "test_0184",
+      "test_0185",
+      "test_0186",
+      "test_0187",
+      "test_0188",
+      "test_0189",
+      "test_0190",
+      "test_0191",
+      "test_0192",
+      "test_0193",
+      "test_0194",
+      "test_0195",
+      "test_0196",
+      "test_0197",
+      "test_0198",
+      "test_0199",
+      "test_0200",
+      "test_0201",
+      "test_0202",
+      "test_0203",
+      "test_0204",
+      "test_0205",
+      "test_0206",
+      "test_0207",
+      "test_0208",
+      "test_0209",
+      "test_0210",
+      "test_0211",
+      "test_0212",
+      "test_0213",
+      "test_0214",
+      "test_0215",
+      "test_0216",
+      "test_0217",
+      "test_0218",
+      "test_0219",
+      "test_0220",
+      "test_0221",
+      "test_0222",
+      "test_0223",
+      "test_0224",
+      "test_0225",
+      "test_0226",
+      "test_0227",
+      "test_0228",
+      "test_0229",
+      "test_0230",
+      "test_0231",
+      "test_0232",
+      "test_0233",
+      "test_0234",
+      "test_0235",
+      "test_0236",
+      "test_0237",
+      "test_0238",
+      "test_0239",
+      "test_0240",
+      "test_0241",
+      "test_0242",
+      "test_0243",
+      "test_0244",
+      "test_0245",
+      "test_0246",
+      "test_0247",
+      "test_0248",
+      "test_0249",
+      "test_0250",
+      "test_0251",
+      "test_0252",
+      "test_0253",
+      "test_0254",
+      "test_0255",
+      "test_0256",
+      "test_0257",
+      "test_0258",
+      "test_0259",
+      "test_0260",
+      "test_0261",
+      "test_0262",
+      "test_0263",
+      "test_0264",
+      "test_0265",
+      "test_0266",
+      "test_0267",
+      "test_0268",
+      "test_0269",
+      "test_0270",
+      "test_0271",
+      "test_0272",
+      "test_0273",
+      "test_0274",
+      "test_0275",
+      "test_0276",
+      "test_0277",
+      "test_0278",
+      "test_0279",
+      "test_0280",
+      "test_0281",
+      "test_0282",
+      "test_0283",
+      "test_0284",
+      "test_0285",
+      "test_0286",
+      "test_0287",
+      "test_0288",
+      "test_0289",
+      "test_0290",
+      "test_0291",
+      "test_0292",
+      "test_0293",
+      "test_0294",
+      "test_0295",
+      "test_0296",
+      "test_0297",
+      "test_0298",
+      "test_0299",
+      "test_0300",
+      "test_0301",
+      "test_0302",
+      "test_0303",
+      "test_0304",
+      "test_0305",
+      "test_0306",
+      "test_0307",
+      "test_0308",
+      "test_0309",
+      "test_0310",
+      "test_0311",
+      "test_0312",
+      "test_0313",
+      "test_0314",
+      "test_0315",
+      "test_0316",
+      "test_0317",
+      "test_0318",
+      "test_0319",
+      "test_0320",
+      "test_0321",
+      "test_0322",
+      "test_0323",
+      "test_0324",
+      "test_0325",
+      "test_0326",
+      "test_0327",
+      "test_0328",
+      "test_0329",
+      "test_0330",
+      "test_0331",
+      "test_0332",
+      "test_0333",
+      "test_0334",
+      "test_0335",
+      "test_0336",
+      "test_0337",
+      "test_0338",
+      "test_0339",
+      "test_0340",
+      "test_0341",
+      "test_0342",
+      "test_0343",
+      "test_0344",
+      "test_0345",
+      "test_0346",
+      "test_0347",
+      "test_0348",
+      "test_0349",
+      "test_0350",
+      "test_0351",
+      "test_0352",
+      "test_0353",
+      "test_0354",
+      "test_0355",
+      "test_0356",
+      "test_0357",
+      "test_0358",
+      "test_0359",
+      "test_0360",
+      "test_0361",
+      "test_0362",
+      "test_0363",
+      "test_0364",
+      "test_0365",
+      "test_0366",
+      "test_0367",
+      "test_0368",
+      "test_0369",
+      "test_0370",
+      "test_0371",
+      "test_0372",
+      "test_0373",
+      "test_0374",
+      "test_0375",
+      "test_0376",
+      "test_0377",
+      "test_0378",
+      "test_0379",
+      "test_0380",
+      "test_0381",
+      "test_0382",
+      "test_0383",
+      "test_0384",
+      "test_0385",
+      "test_0386",
+      "test_0387",
+      "test_0388",
+      "test_0389",
+      "test_0390",
+      "test_0391",
+      "test_0392",
+      "test_0393",
+      "test_0394",
+      "test_0395",
+      "test_0396",
+      "test_0397",
+      "test_0398",
+      "test_0399",
+      "test_0400",
+      "test_0401",
+      "test_0402",
+      "test_0403",
+      "test_0404",
+      "test_0405",
+      "test_0406",
+      "test_0407",
+      "test_0408",
+      "test_0409",
+      "test_0410",
+      "test_0411",
+      "test_0412",
+      "test_0413",
+      "test_0414",
+      "test_0415",
+      "test_0416",
+      "test_0417",
+      "test_0418",
+      "test_0419",
+      "test_0420",
+      "test_0421",
+      "test_0422",
+      "test_0423",
+      "test_0424",
+      "test_0425",
+      "test_0426",
+      "test_0427",
+      "test_0428",
+      "test_0429",
+      "test_0430",
+      "test_0431",
+      "test_0432",
+      "test_0433",
+      "test_0434",
+      "test_0435",
+      "test_0436",
+      "test_0437",
+      "test_0438",
+      "test_0439",
+      "test_0440",
+      "test_0441",
+      "test_0442",
+      "test_0443",
+      "test_0444",
+      "test_0445",
+      "test_0446",
+      "test_0447",
+      "test_0448",
+      "test_0449",
+      "test_0450",
+      "test_0451",
+      "test_0452",
+      "test_0453",
+      "test_0454",
+      "test_0455",
+      "test_0456",
+      "test_0457",
+      "test_0458",
+      "test_0459",
+      "test_0460",
+      "test_0461",
+      "test_0462",
+      "test_0463",
+      "test_0464",
+      "test_0465",
+      "test_0466",
+      "test_0467",
+      "test_0468",
+      "test_0469",
+      "test_0470",
+      "test_0471",
+      "test_0472",
+      "test_0473",
+      "test_0474",
+      "test_0475",
+      "test_0476",
+      "test_0477",
+      "test_0478",
+      "test_0479",
+      "test_0480",
+      "test_0481",
+      "test_0482",
+      "test_0483",
+      "test_0484",
+      "test_0485",
+      "test_0486",
+      "test_0487",
+      "test_0488",
+      "test_0489",
+      "test_0490",
+      "test_0491",
+      "test_0492",
+      "test_0493",
+      "test_0494",
+      "test_0495",
+      "test_0496",
+      "test_0497",
+      "test_0498",
+      "test_0499",
+      "test_0500",
+      "test_0501",
+      "test_0502",
+      "test_0503",
+      "test_0504",
+      "test_0505",
+      "test_0506",
+      "test_0507",
+      "test_0508",
+      "test_0509",
+      "test_0510",
+      "test_0511",
+      "test_0512",
+      "test_0513",
+      "test_0514",
+      "test_0515",
+      "test_0516",
+      "test_0517",
+      "test_0518",
+      "test_0519",
+      "test_0520",
+      "test_0521",
+      "test_0522",
+      "test_0523",
+      "test_0524",
+      "test_0525",
+      "test_0526",
+      "test_0527",
+      "test_0528",
+      "test_0529",
+      "test_0530",
+      "test_0531"
+    ],
+    "types": [
+      "DOCUMENT",
+      "INN"
+    ],
+    "systems": {
+      "seif_fast": {
+        "typed_character_primary": {
+          "precision": 0.887006,
+          "recall": 0.102749,
+          "f1": 0.184164,
+          "f2": 0.124821,
+          "true_positive": 157,
+          "false_positive": 20,
+          "false_negative": 1371,
+          "cases": 532,
+          "exact_cases": 441,
+          "negative_cases": 442,
+          "negative_cases_with_fp": 2,
+          "by_type": {
+            "DOCUMENT": {
+              "precision": 1.0,
+              "recall": 0.019857,
+              "f1": 0.038941,
+              "f2": 0.024699,
+              "true_positive": 25,
+              "false_positive": 0,
+              "false_negative": 1234
+            },
+            "INN": {
+              "precision": 0.868421,
+              "recall": 0.490706,
+              "f1": 0.627078,
+              "f2": 0.537459,
+              "true_positive": 132,
+              "false_positive": 20,
+              "false_negative": 137
+            }
+          }
+        },
+        "merged_exact_span_secondary": {
+          "precision": 0.764706,
+          "recall": 0.092199,
+          "f1": 0.164557,
+          "f2": 0.111876,
+          "true_positive": 13,
+          "false_positive": 4,
+          "false_negative": 128,
+          "cases": 532,
+          "exact_cases": 441,
+          "negative_cases": 442,
+          "negative_cases_with_fp": 2,
+          "by_type": {
+            "DOCUMENT": {
+              "precision": 0.5,
+              "recall": 0.008696,
+              "f1": 0.017094,
+              "f2": 0.010823,
+              "true_positive": 1,
+              "false_positive": 1,
+              "false_negative": 114
+            },
+            "INN": {
+              "precision": 0.8,
+              "recall": 0.461538,
+              "f1": 0.585366,
+              "f2": 0.504202,
+              "true_positive": 12,
+              "false_positive": 3,
+              "false_negative": 14
+            }
+          },
+          "first_five_error_offsets": [
+            {
+              "id": "test_0000",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "DOCUMENT",
+                  344,
+                  354
+                ],
+                [
+                  "DOCUMENT",
+                  382,
+                  391
+                ]
+              ]
+            },
+            {
+              "id": "test_0004",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "DOCUMENT",
+                  431,
+                  444
+                ],
+                [
+                  "DOCUMENT",
+                  467,
+                  479
+                ],
+                [
+                  "INN",
+                  467,
+                  479
+                ]
+              ]
+            },
+            {
+              "id": "test_0007",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "DOCUMENT",
+                  122,
+                  135
+                ]
+              ]
+            },
+            {
+              "id": "test_0012",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "DOCUMENT",
+                  223,
+                  235
+                ]
+              ]
+            },
+            {
+              "id": "test_0026",
+              "false_positive": [
+                [
+                  "INN",
+                  176,
+                  186
+                ]
+              ],
+              "false_negative": []
+            }
+          ]
+        }
+      },
+      "presidio_ru": {
+        "typed_character_primary": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "f2": 0.0,
+          "true_positive": 0,
+          "false_positive": 0,
+          "false_negative": 1528,
+          "cases": 532,
+          "exact_cases": 442,
+          "negative_cases": 442,
+          "negative_cases_with_fp": 0,
+          "by_type": {
+            "DOCUMENT": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "f2": 0.0,
+              "true_positive": 0,
+              "false_positive": 0,
+              "false_negative": 1259
+            },
+            "INN": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "f2": 0.0,
+              "true_positive": 0,
+              "false_positive": 0,
+              "false_negative": 269
+            }
+          }
+        },
+        "merged_exact_span_secondary": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "f2": 0.0,
+          "true_positive": 0,
+          "false_positive": 0,
+          "false_negative": 141,
+          "cases": 532,
+          "exact_cases": 442,
+          "negative_cases": 442,
+          "negative_cases_with_fp": 0,
+          "by_type": {
+            "DOCUMENT": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "f2": 0.0,
+              "true_positive": 0,
+              "false_positive": 0,
+              "false_negative": 115
+            },
+            "INN": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "f2": 0.0,
+              "true_positive": 0,
+              "false_positive": 0,
+              "false_negative": 26
+            }
+          },
+          "first_five_error_offsets": [
+            {
+              "id": "test_0000",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "DOCUMENT",
+                  344,
+                  354
+                ],
+                [
+                  "DOCUMENT",
+                  382,
+                  391
+                ],
+                [
+                  "INN",
+                  344,
+                  354
+                ]
+              ]
+            },
+            {
+              "id": "test_0004",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "DOCUMENT",
+                  431,
+                  444
+                ],
+                [
+                  "DOCUMENT",
+                  467,
+                  479
+                ],
+                [
+                  "INN",
+                  467,
+                  479
+                ]
+              ]
+            },
+            {
+              "id": "test_0007",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "DOCUMENT",
+                  122,
+                  135
+                ]
+              ]
+            },
+            {
+              "id": "test_0012",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "DOCUMENT",
+                  223,
+                  235
+                ]
+              ]
+            },
+            {
+              "id": "test_0050",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "DOCUMENT",
+                  265,
+                  273
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "seif_hybrid": {
+        "typed_character_primary": {
+          "precision": 0.887006,
+          "recall": 0.102749,
+          "f1": 0.184164,
+          "f2": 0.124821,
+          "true_positive": 157,
+          "false_positive": 20,
+          "false_negative": 1371,
+          "cases": 532,
+          "exact_cases": 441,
+          "negative_cases": 442,
+          "negative_cases_with_fp": 2,
+          "by_type": {
+            "DOCUMENT": {
+              "precision": 1.0,
+              "recall": 0.019857,
+              "f1": 0.038941,
+              "f2": 0.024699,
+              "true_positive": 25,
+              "false_positive": 0,
+              "false_negative": 1234
+            },
+            "INN": {
+              "precision": 0.868421,
+              "recall": 0.490706,
+              "f1": 0.627078,
+              "f2": 0.537459,
+              "true_positive": 132,
+              "false_positive": 20,
+              "false_negative": 137
+            }
+          }
+        },
+        "merged_exact_span_secondary": {
+          "precision": 0.764706,
+          "recall": 0.092199,
+          "f1": 0.164557,
+          "f2": 0.111876,
+          "true_positive": 13,
+          "false_positive": 4,
+          "false_negative": 128,
+          "cases": 532,
+          "exact_cases": 441,
+          "negative_cases": 442,
+          "negative_cases_with_fp": 2,
+          "by_type": {
+            "DOCUMENT": {
+              "precision": 0.5,
+              "recall": 0.008696,
+              "f1": 0.017094,
+              "f2": 0.010823,
+              "true_positive": 1,
+              "false_positive": 1,
+              "false_negative": 114
+            },
+            "INN": {
+              "precision": 0.8,
+              "recall": 0.461538,
+              "f1": 0.585366,
+              "f2": 0.504202,
+              "true_positive": 12,
+              "false_positive": 3,
+              "false_negative": 14
+            }
+          },
+          "first_five_error_offsets": [
+            {
+              "id": "test_0000",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "DOCUMENT",
+                  344,
+                  354
+                ],
+                [
+                  "DOCUMENT",
+                  382,
+                  391
+                ]
+              ]
+            },
+            {
+              "id": "test_0004",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "DOCUMENT",
+                  431,
+                  444
+                ],
+                [
+                  "DOCUMENT",
+                  467,
+                  479
+                ],
+                [
+                  "INN",
+                  467,
+                  479
+                ]
+              ]
+            },
+            {
+              "id": "test_0007",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "DOCUMENT",
+                  122,
+                  135
+                ]
+              ]
+            },
+            {
+              "id": "test_0012",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "DOCUMENT",
+                  223,
+                  235
+                ]
+              ]
+            },
+            {
+              "id": "test_0026",
+              "false_positive": [
+                [
+                  "INN",
+                  176,
+                  186
+                ]
+              ],
+              "false_negative": []
+            }
+          ]
+        }
+      }
+    },
+    "selection": "all aligned cases, filter only types (diagnostic)"
+  },
+  "unmerged_common_diagnostic": {
+    "case_ids": [
+      "test_0001",
+      "test_0005",
+      "test_0009",
+      "test_0013",
+      "test_0014",
+      "test_0015",
+      "test_0017",
+      "test_0018",
+      "test_0020",
+      "test_0026",
+      "test_0031",
+      "test_0032",
+      "test_0035",
+      "test_0037",
+      "test_0038",
+      "test_0039",
+      "test_0041",
+      "test_0042",
+      "test_0048",
+      "test_0049",
+      "test_0051",
+      "test_0054",
+      "test_0056",
+      "test_0057",
+      "test_0061",
+      "test_0066",
+      "test_0070",
+      "test_0071",
+      "test_0079",
+      "test_0080",
+      "test_0083",
+      "test_0096",
+      "test_0101",
+      "test_0111",
+      "test_0114",
+      "test_0117",
+      "test_0118",
+      "test_0119",
+      "test_0121",
+      "test_0128",
+      "test_0131",
+      "test_0136",
+      "test_0141",
+      "test_0144",
+      "test_0148",
+      "test_0151",
+      "test_0153",
+      "test_0154",
+      "test_0155",
+      "test_0156",
+      "test_0157",
+      "test_0158",
+      "test_0167",
+      "test_0173",
+      "test_0177",
+      "test_0183",
+      "test_0185",
+      "test_0191",
+      "test_0192",
+      "test_0201",
+      "test_0204",
+      "test_0205",
+      "test_0207",
+      "test_0209",
+      "test_0212",
+      "test_0215",
+      "test_0220",
+      "test_0222",
+      "test_0225",
+      "test_0226",
+      "test_0228",
+      "test_0230",
+      "test_0235",
+      "test_0239",
+      "test_0242",
+      "test_0243",
+      "test_0246",
+      "test_0248",
+      "test_0256",
+      "test_0259",
+      "test_0267",
+      "test_0268",
+      "test_0270",
+      "test_0274",
+      "test_0275",
+      "test_0277",
+      "test_0278",
+      "test_0282",
+      "test_0285",
+      "test_0288",
+      "test_0299",
+      "test_0305",
+      "test_0306",
+      "test_0307",
+      "test_0309",
+      "test_0310",
+      "test_0311",
+      "test_0313",
+      "test_0317",
+      "test_0328",
+      "test_0330",
+      "test_0331",
+      "test_0334",
+      "test_0338",
+      "test_0339",
+      "test_0340",
+      "test_0347",
+      "test_0348",
+      "test_0352",
+      "test_0353",
+      "test_0356",
+      "test_0359",
+      "test_0361",
+      "test_0371",
+      "test_0374",
+      "test_0375",
+      "test_0376",
+      "test_0380",
+      "test_0382",
+      "test_0390",
+      "test_0391",
+      "test_0396",
+      "test_0397",
+      "test_0399",
+      "test_0403",
+      "test_0405",
+      "test_0407",
+      "test_0408",
+      "test_0409",
+      "test_0415",
+      "test_0421",
+      "test_0423",
+      "test_0426",
+      "test_0428",
+      "test_0431",
+      "test_0432",
+      "test_0433",
+      "test_0436",
+      "test_0440",
+      "test_0445",
+      "test_0446",
+      "test_0447",
+      "test_0450",
+      "test_0453",
+      "test_0455",
+      "test_0456",
+      "test_0459",
+      "test_0463",
+      "test_0465",
+      "test_0476",
+      "test_0477",
+      "test_0479",
+      "test_0481",
+      "test_0483",
+      "test_0486",
+      "test_0489",
+      "test_0491",
+      "test_0502",
+      "test_0505",
+      "test_0508",
+      "test_0511",
+      "test_0513",
+      "test_0516",
+      "test_0523"
+    ],
+    "types": [
+      "CARD",
+      "EMAIL",
+      "LOCATION",
+      "PERSON",
+      "PHONE"
+    ],
+    "systems": {
+      "seif_fast": {
+        "typed_character_primary": {
+          "precision": 0.840081,
+          "recall": 0.352492,
+          "f1": 0.496609,
+          "f2": 0.398783,
+          "true_positive": 2490,
+          "false_positive": 474,
+          "false_negative": 4574,
+          "cases": 164,
+          "exact_cases": 63,
+          "negative_cases": 58,
+          "negative_cases_with_fp": 3,
+          "by_type": {
+            "EMAIL": {
+              "precision": 0.944065,
+              "recall": 0.836759,
+              "f1": 0.887179,
+              "f2": 0.856224,
+              "true_positive": 692,
+              "false_positive": 41,
+              "false_negative": 135
+            },
+            "LOCATION": {
+              "precision": 0.255446,
+              "recall": 0.064179,
+              "f1": 0.102584,
+              "f2": 0.075483,
+              "true_positive": 129,
+              "false_positive": 376,
+              "false_negative": 1881
+            },
+            "PERSON": {
+              "precision": 0.969932,
+              "recall": 0.317259,
+              "f1": 0.478126,
+              "f2": 0.366596,
+              "true_positive": 1000,
+              "false_positive": 31,
+              "false_negative": 2152
+            },
+            "PHONE": {
+              "precision": 0.96259,
+              "recall": 0.622326,
+              "f1": 0.755932,
+              "f2": 0.66967,
+              "true_positive": 669,
+              "false_positive": 26,
+              "false_negative": 406
+            }
+          }
+        },
+        "merged_exact_span_secondary": {
+          "precision": 0.73913,
+          "recall": 0.164138,
+          "f1": 0.268623,
+          "f2": 0.194381,
+          "true_positive": 119,
+          "false_positive": 42,
+          "false_negative": 606,
+          "cases": 164,
+          "exact_cases": 62,
+          "negative_cases": 58,
+          "negative_cases_with_fp": 3,
+          "by_type": {
+            "EMAIL": {
+              "precision": 0.909091,
+              "recall": 0.789474,
+              "f1": 0.84507,
+              "f2": 0.810811,
+              "true_positive": 30,
+              "false_positive": 3,
+              "false_negative": 8
+            },
+            "LOCATION": {
+              "precision": 0.076923,
+              "recall": 0.010152,
+              "f1": 0.017937,
+              "f2": 0.012285,
+              "true_positive": 2,
+              "false_positive": 24,
+              "false_negative": 195
+            },
+            "PERSON": {
+              "precision": 0.77193,
+              "recall": 0.106796,
+              "f1": 0.187633,
+              "f2": 0.129032,
+              "true_positive": 44,
+              "false_positive": 13,
+              "false_negative": 368
+            },
+            "PHONE": {
+              "precision": 0.955556,
+              "recall": 0.551282,
+              "f1": 0.699187,
+              "f2": 0.602241,
+              "true_positive": 43,
+              "false_positive": 2,
+              "false_negative": 35
+            }
+          },
+          "first_five_error_offsets": [
+            {
+              "id": "test_0001",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  0,
+                  4
+                ],
+                [
+                  "PERSON",
+                  0,
+                  15
+                ],
+                [
+                  "PERSON",
+                  5,
+                  15
+                ],
+                [
+                  "PERSON",
+                  93,
+                  97
+                ],
+                [
+                  "PERSON",
+                  319,
+                  327
+                ],
+                [
+                  "PERSON",
+                  319,
+                  349
+                ],
+                [
+                  "PERSON",
+                  328,
+                  342
+                ],
+                [
+                  "PERSON",
+                  343,
+                  349
+                ],
+                [
+                  "PERSON",
+                  387,
+                  417
+                ],
+                [
+                  "PERSON",
+                  434,
+                  464
+                ],
+                [
+                  "PERSON",
+                  521,
+                  529
+                ],
+                [
+                  "PERSON",
+                  521,
+                  553
+                ],
+                [
+                  "PERSON",
+                  530,
+                  537
+                ],
+                [
+                  "PERSON",
+                  538,
+                  553
+                ]
+              ]
+            },
+            {
+              "id": "test_0005",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  61,
+                  66
+                ]
+              ]
+            },
+            {
+              "id": "test_0013",
+              "false_positive": [
+                [
+                  "LOCATION",
+                  106,
+                  107
+                ],
+                [
+                  "LOCATION",
+                  119,
+                  120
+                ]
+              ],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  218,
+                  226
+                ],
+                [
+                  "LOCATION",
+                  351,
+                  368
+                ],
+                [
+                  "LOCATION",
+                  351,
+                  372
+                ],
+                [
+                  "LOCATION",
+                  370,
+                  372
+                ],
+                [
+                  "PERSON",
+                  60,
+                  64
+                ],
+                [
+                  "PERSON",
+                  65,
+                  74
+                ],
+                [
+                  "PERSON",
+                  75,
+                  83
+                ],
+                [
+                  "PERSON",
+                  95,
+                  108
+                ],
+                [
+                  "PERSON",
+                  104,
+                  108
+                ],
+                [
+                  "PERSON",
+                  116,
+                  121
+                ],
+                [
+                  "PERSON",
+                  116,
+                  130
+                ],
+                [
+                  "PERSON",
+                  331,
+                  336
+                ]
+              ]
+            },
+            {
+              "id": "test_0014",
+              "false_positive": [
+                [
+                  "EMAIL",
+                  380,
+                  395
+                ]
+              ],
+              "false_negative": []
+            },
+            {
+              "id": "test_0015",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  0,
+                  9
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "presidio_ru": {
+        "typed_character_primary": {
+          "precision": 0.828801,
+          "recall": 0.642837,
+          "f1": 0.724069,
+          "f2": 0.67304,
+          "true_positive": 4541,
+          "false_positive": 938,
+          "false_negative": 2523,
+          "cases": 164,
+          "exact_cases": 68,
+          "negative_cases": 58,
+          "negative_cases_with_fp": 14,
+          "by_type": {
+            "EMAIL": {
+              "precision": 0.919192,
+              "recall": 0.88029,
+              "f1": 0.899321,
+              "f2": 0.887805,
+              "true_positive": 728,
+              "false_positive": 64,
+              "false_negative": 99
+            },
+            "LOCATION": {
+              "precision": 0.812709,
+              "recall": 0.241791,
+              "f1": 0.372699,
+              "f2": 0.281315,
+              "true_positive": 486,
+              "false_positive": 112,
+              "false_negative": 1524
+            },
+            "PERSON": {
+              "precision": 0.784555,
+              "recall": 0.767132,
+              "f1": 0.775746,
+              "f2": 0.770554,
+              "true_positive": 2418,
+              "false_positive": 664,
+              "false_negative": 734
+            },
+            "PHONE": {
+              "precision": 0.902681,
+              "recall": 0.845581,
+              "f1": 0.873199,
+              "f2": 0.856416,
+              "true_positive": 909,
+              "false_positive": 98,
+              "false_negative": 166
+            }
+          }
+        },
+        "merged_exact_span_secondary": {
+          "precision": 0.656489,
+          "recall": 0.355862,
+          "f1": 0.461538,
+          "f2": 0.39174,
+          "true_positive": 258,
+          "false_positive": 135,
+          "false_negative": 467,
+          "cases": 164,
+          "exact_cases": 63,
+          "negative_cases": 58,
+          "negative_cases_with_fp": 14,
+          "by_type": {
+            "EMAIL": {
+              "precision": 0.916667,
+              "recall": 0.868421,
+              "f1": 0.891892,
+              "f2": 0.87766,
+              "true_positive": 33,
+              "false_positive": 3,
+              "false_negative": 5
+            },
+            "LOCATION": {
+              "precision": 0.586207,
+              "recall": 0.172589,
+              "f1": 0.266667,
+              "f2": 0.200946,
+              "true_positive": 34,
+              "false_positive": 24,
+              "false_negative": 163
+            },
+            "PERSON": {
+              "precision": 0.563877,
+              "recall": 0.31068,
+              "f1": 0.400626,
+              "f2": 0.341333,
+              "true_positive": 128,
+              "false_positive": 99,
+              "false_negative": 284
+            },
+            "PHONE": {
+              "precision": 0.875,
+              "recall": 0.807692,
+              "f1": 0.84,
+              "f2": 0.820312,
+              "true_positive": 63,
+              "false_positive": 9,
+              "false_negative": 15
+            }
+          },
+          "first_five_error_offsets": [
+            {
+              "id": "test_0001",
+              "false_positive": [
+                [
+                  "PERSON",
+                  296,
+                  302
+                ],
+                [
+                  "PERSON",
+                  387,
+                  393
+                ],
+                [
+                  "PERSON",
+                  394,
+                  417
+                ],
+                [
+                  "PERSON",
+                  434,
+                  448
+                ],
+                [
+                  "PERSON",
+                  449,
+                  464
+                ]
+              ],
+              "false_negative": [
+                [
+                  "PERSON",
+                  0,
+                  4
+                ],
+                [
+                  "PERSON",
+                  5,
+                  15
+                ],
+                [
+                  "PERSON",
+                  319,
+                  327
+                ],
+                [
+                  "PERSON",
+                  328,
+                  342
+                ],
+                [
+                  "PERSON",
+                  343,
+                  349
+                ],
+                [
+                  "PERSON",
+                  387,
+                  417
+                ],
+                [
+                  "PERSON",
+                  434,
+                  464
+                ],
+                [
+                  "PERSON",
+                  521,
+                  529
+                ],
+                [
+                  "PERSON",
+                  521,
+                  553
+                ],
+                [
+                  "PERSON",
+                  530,
+                  537
+                ],
+                [
+                  "PERSON",
+                  538,
+                  553
+                ]
+              ]
+            },
+            {
+              "id": "test_0009",
+              "false_positive": [
+                [
+                  "PHONE",
+                  366,
+                  377
+                ],
+                [
+                  "PHONE",
+                  386,
+                  399
+                ]
+              ],
+              "false_negative": []
+            },
+            {
+              "id": "test_0013",
+              "false_positive": [
+                [
+                  "LOCATION",
+                  357,
+                  368
+                ],
+                [
+                  "PERSON",
+                  321,
+                  330
+                ]
+              ],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  351,
+                  368
+                ],
+                [
+                  "LOCATION",
+                  351,
+                  372
+                ],
+                [
+                  "LOCATION",
+                  370,
+                  372
+                ],
+                [
+                  "PERSON",
+                  60,
+                  64
+                ],
+                [
+                  "PERSON",
+                  65,
+                  74
+                ],
+                [
+                  "PERSON",
+                  75,
+                  83
+                ],
+                [
+                  "PERSON",
+                  104,
+                  108
+                ],
+                [
+                  "PERSON",
+                  116,
+                  121
+                ],
+                [
+                  "PERSON",
+                  321,
+                  336
+                ],
+                [
+                  "PERSON",
+                  331,
+                  336
+                ]
+              ]
+            },
+            {
+              "id": "test_0014",
+              "false_positive": [
+                [
+                  "EMAIL",
+                  380,
+                  395
+                ]
+              ],
+              "false_negative": []
+            },
+            {
+              "id": "test_0017",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  88,
+                  99
+                ],
+                [
+                  "LOCATION",
+                  138,
+                  147
+                ],
+                [
+                  "LOCATION",
+                  151,
+                  162
+                ],
+                [
+                  "LOCATION",
+                  193,
+                  214
+                ],
+                [
+                  "LOCATION",
+                  206,
+                  208
+                ],
+                [
+                  "LOCATION",
+                  209,
+                  214
+                ],
+                [
+                  "LOCATION",
+                  211,
+                  213
+                ],
+                [
+                  "LOCATION",
+                  385,
+                  405
+                ],
+                [
+                  "LOCATION",
+                  575,
+                  589
+                ],
+                [
+                  "LOCATION",
+                  578,
+                  589
+                ],
+                [
+                  "PHONE",
+                  256,
+                  269
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "seif_hybrid": {
+        "typed_character_primary": {
+          "precision": 0.782155,
+          "recall": 0.615515,
+          "f1": 0.688901,
+          "f2": 0.64291,
+          "true_positive": 4348,
+          "false_positive": 1211,
+          "false_negative": 2716,
+          "cases": 164,
+          "exact_cases": 63,
+          "negative_cases": 58,
+          "negative_cases_with_fp": 16,
+          "by_type": {
+            "EMAIL": {
+              "precision": 0.944065,
+              "recall": 0.836759,
+              "f1": 0.887179,
+              "f2": 0.856224,
+              "true_positive": 692,
+              "false_positive": 41,
+              "false_negative": 135
+            },
+            "LOCATION": {
+              "precision": 0.529412,
+              "recall": 0.273134,
+              "f1": 0.360354,
+              "f2": 0.302413,
+              "true_positive": 549,
+              "false_positive": 488,
+              "false_negative": 1461
+            },
+            "PERSON": {
+              "precision": 0.787977,
+              "recall": 0.773477,
+              "f1": 0.78066,
+              "f2": 0.776334,
+              "true_positive": 2438,
+              "false_positive": 656,
+              "false_negative": 714
+            },
+            "PHONE": {
+              "precision": 0.96259,
+              "recall": 0.622326,
+              "f1": 0.755932,
+              "f2": 0.66967,
+              "true_positive": 669,
+              "false_positive": 26,
+              "false_negative": 406
+            }
+          }
+        },
+        "merged_exact_span_secondary": {
+          "precision": 0.637566,
+          "recall": 0.332414,
+          "f1": 0.43699,
+          "f2": 0.367602,
+          "true_positive": 241,
+          "false_positive": 137,
+          "false_negative": 484,
+          "cases": 164,
+          "exact_cases": 58,
+          "negative_cases": 58,
+          "negative_cases_with_fp": 16,
+          "by_type": {
+            "EMAIL": {
+              "precision": 0.909091,
+              "recall": 0.789474,
+              "f1": 0.84507,
+              "f2": 0.810811,
+              "true_positive": 30,
+              "false_positive": 3,
+              "false_negative": 8
+            },
+            "LOCATION": {
+              "precision": 0.467532,
+              "recall": 0.182741,
+              "f1": 0.262774,
+              "f2": 0.208092,
+              "true_positive": 36,
+              "false_positive": 41,
+              "false_negative": 161
+            },
+            "PERSON": {
+              "precision": 0.591928,
+              "recall": 0.320388,
+              "f1": 0.415748,
+              "f2": 0.352753,
+              "true_positive": 132,
+              "false_positive": 91,
+              "false_negative": 280
+            },
+            "PHONE": {
+              "precision": 0.955556,
+              "recall": 0.551282,
+              "f1": 0.699187,
+              "f2": 0.602241,
+              "true_positive": 43,
+              "false_positive": 2,
+              "false_negative": 35
+            }
+          },
+          "first_five_error_offsets": [
+            {
+              "id": "test_0001",
+              "false_positive": [
+                [
+                  "PERSON",
+                  296,
+                  302
+                ],
+                [
+                  "PERSON",
+                  387,
+                  393
+                ],
+                [
+                  "PERSON",
+                  394,
+                  417
+                ],
+                [
+                  "PERSON",
+                  434,
+                  448
+                ],
+                [
+                  "PERSON",
+                  449,
+                  464
+                ]
+              ],
+              "false_negative": [
+                [
+                  "PERSON",
+                  0,
+                  4
+                ],
+                [
+                  "PERSON",
+                  5,
+                  15
+                ],
+                [
+                  "PERSON",
+                  319,
+                  327
+                ],
+                [
+                  "PERSON",
+                  328,
+                  342
+                ],
+                [
+                  "PERSON",
+                  343,
+                  349
+                ],
+                [
+                  "PERSON",
+                  387,
+                  417
+                ],
+                [
+                  "PERSON",
+                  434,
+                  464
+                ],
+                [
+                  "PERSON",
+                  521,
+                  529
+                ],
+                [
+                  "PERSON",
+                  521,
+                  553
+                ],
+                [
+                  "PERSON",
+                  530,
+                  537
+                ],
+                [
+                  "PERSON",
+                  538,
+                  553
+                ]
+              ]
+            },
+            {
+              "id": "test_0013",
+              "false_positive": [
+                [
+                  "LOCATION",
+                  106,
+                  107
+                ],
+                [
+                  "LOCATION",
+                  119,
+                  120
+                ],
+                [
+                  "LOCATION",
+                  357,
+                  368
+                ]
+              ],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  351,
+                  368
+                ],
+                [
+                  "LOCATION",
+                  351,
+                  372
+                ],
+                [
+                  "LOCATION",
+                  370,
+                  372
+                ],
+                [
+                  "PERSON",
+                  60,
+                  64
+                ],
+                [
+                  "PERSON",
+                  65,
+                  74
+                ],
+                [
+                  "PERSON",
+                  75,
+                  83
+                ],
+                [
+                  "PERSON",
+                  95,
+                  108
+                ],
+                [
+                  "PERSON",
+                  104,
+                  108
+                ],
+                [
+                  "PERSON",
+                  116,
+                  121
+                ],
+                [
+                  "PERSON",
+                  116,
+                  130
+                ],
+                [
+                  "PERSON",
+                  331,
+                  336
+                ]
+              ]
+            },
+            {
+              "id": "test_0014",
+              "false_positive": [
+                [
+                  "EMAIL",
+                  380,
+                  395
+                ]
+              ],
+              "false_negative": []
+            },
+            {
+              "id": "test_0017",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  88,
+                  99
+                ],
+                [
+                  "LOCATION",
+                  138,
+                  147
+                ],
+                [
+                  "LOCATION",
+                  151,
+                  162
+                ],
+                [
+                  "LOCATION",
+                  193,
+                  214
+                ],
+                [
+                  "LOCATION",
+                  206,
+                  208
+                ],
+                [
+                  "LOCATION",
+                  209,
+                  214
+                ],
+                [
+                  "LOCATION",
+                  211,
+                  213
+                ],
+                [
+                  "LOCATION",
+                  385,
+                  405
+                ],
+                [
+                  "LOCATION",
+                  575,
+                  589
+                ],
+                [
+                  "LOCATION",
+                  578,
+                  589
+                ]
+              ]
+            },
+            {
+              "id": "test_0018",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "LOCATION",
+                  0,
+                  20
+                ],
+                [
+                  "LOCATION",
+                  0,
+                  39
+                ],
+                [
+                  "LOCATION",
+                  22,
+                  39
+                ]
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "selection": "whole cases: every gold type is allowed; all gold-empty rows retained"
+  },
+  "raw_prediction_sha256": "a2ce5cc52a7df9495e9e0fafcf876e55befa6404e9997dfc0b2054e08a9805ec",
+  "environment": {
+    "python": "3.13.7 (main, Aug 18 2025, 19:20:03) [Clang 20.1.4 ]",
+    "packages": {
+      "DAWG2-Python": "0.9.0",
+      "Jinja2": "3.1.6",
+      "MarkupSafe": "3.0.3",
+      "PyYAML": "6.0.3",
+      "Pygments": "2.21.0",
+      "annotated-doc": "0.0.5",
+      "annotated-types": "0.8.0",
+      "anyio": "4.15.1",
+      "blis": "1.3.3",
+      "catalogue": "2.0.10",
+      "certifi": "2026.7.22",
+      "charset-normalizer": "3.5.1",
+      "click": "8.5.0",
+      "cloudpathlib": "0.25.0",
+      "confection": "1.3.3",
+      "cymem": "2.0.13",
+      "fastapi": "0.141.1",
+      "filelock": "4.0.1",
+      "h11": "0.16.0",
+      "httpcore": "1.0.9",
+      "httptools": "0.8.0",
+      "httpx": "0.28.1",
+      "idna": "3.20",
+      "markdown-it-py": "4.2.0",
+      "mdurl": "0.1.2",
+      "murmurhash": "1.0.15",
+      "numpy": "2.4.6",
+      "packaging": "26.3",
+      "phonenumbers": "9.0.39",
+      "preshed": "3.0.13",
+      "presidio_analyzer": "2.2.364",
+      "pyarrow": "25.0.1",
+      "pydantic": "2.13.5",
+      "pydantic_core": "2.46.5",
+      "pymorphy3": "2.0.6",
+      "pymorphy3-dicts-ru": "2.4.417150.4580142",
+      "python-dotenv": "1.2.3",
+      "regex": "2026.9.10",
+      "requests": "2.34.2",
+      "requests-file": "3.0.1",
+      "rich": "15.0.0",
+      "ru_core_news_sm": "3.8.0",
+      "seif-pii": "1.0.0",
+      "setuptools": "84.0.0",
+      "shellingham": "1.5.4",
+      "smart_open": "8.0.1",
+      "spacy": "3.8.16",
+      "spacy-legacy": "3.0.12",
+      "spacy-loggers": "1.0.5",
+      "srsly": "2.5.3",
+      "starlette": "1.6.0",
+      "thinc": "8.3.13",
+      "tldextract": "5.3.2",
+      "tqdm": "4.70.1",
+      "typer": "0.27.2",
+      "typing-inspection": "0.4.4",
+      "typing_extensions": "4.16.0",
+      "urllib3": "2.8.0",
+      "uvicorn": "0.53.0",
+      "uvloop": "0.22.1",
+      "wasabi": "1.1.3",
+      "watchfiles": "1.3.0",
+      "weasel": "1.0.0",
+      "websockets": "17.1",
+      "wrapt": "2.4.1"
+    }
+  },
+  "limitations": [
+    "External synthetic documents annotated by an LLM under human-verified guidelines; not independent manual gold or representative real traffic.",
+    "RU/UK rows have no language labels. All language claims are mixed-corpus only; ru_core_news_sm is not an optimized Ukrainian model.",
+    "CARD has no gold examples. This cannot validate all five requested common types or all required banking fields.",
+    "Generic LOCATION includes components and coordinates; quality here is not complete personal postal-address extraction or public/private policy compliance.",
+    "Nested name/address gold spans are coarsened and merged symmetrically using a rule frozen before inference; raw granularity diagnostics are separate.",
+    "No threshold, model, pattern, label or merge policy was adjusted after seeing this corpus's predictions. Stop iteration after this final evaluation.",
+    "The original HiveTrace and RedMadRobot first reports remain unchanged; the latter motivated the LOCATION development iteration.",
+    "This is offline detector quality, not HTTP latency, storage, availability or throughput. Corpus text is excluded from the source archive."
+  ]
+}

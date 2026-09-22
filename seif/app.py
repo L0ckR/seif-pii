@@ -142,6 +142,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     large_inflight = 0
     # Detect invalid plugin rules on startup, before any sensitive request arrives.
     for policy in settings.policies.values():
+        if type(policy.masking_enabled) is not bool:
+            raise ValueError("masking_enabled must be a boolean")
         if policy.mode not in policy.allowed_modes or set(policy.allowed_modes) - {"mask", "token", "synthetic"}:
             raise ValueError("Invalid allowed modes")
         if len(policy.extra_rules) > 32:
@@ -325,11 +327,17 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 type_set = {s.type for s in selected}
                 if len(type_set) < policy.min_types or not set(policy.required_types).issubset(type_set):
                     selected = []
+                if not policy.masking_enabled:
+                    # Recognition and NER failures still fail closed. Only the
+                    # transformation selection changes under this explicit policy.
+                    selected = []
                 with stage("transform"):
                     result, replacements = mask(body.payload, selected, mode)
                 record = {"original_hash": fingerprint, "masked_hash": vault.digest(result),
                           "masked": result, "replacements": replacements if policy.allow_unmask else [],
                           "entities": [asdict(s) for s in selected], "mode": mode,
+                          "detected_types": sorted(type_set),
+                          "masking_enabled": policy.masking_enabled,
                           "detector_profile": "hybrid" if ner else "rules"}
                 with stage("vault_write"):
                     record = await vault.put_if_absent(key, record)
@@ -346,13 +354,16 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             tokens.inc(len(body.payload) / 4)
             LOG.info(json.dumps({"event": "processed", "request_id": request.state.request_id,
                                  "system": tenant, "operation": direction, "types": kinds,
+                                 "detected_types": record.get("detected_types", kinds),
                                  "mode": record["mode"], "latency_ms": round(elapsed, 3),
+                                 "masking_enabled": record.get("masking_enabled", True),
                                  "detector_profile": record.get("detector_profile", "rules"),
                                  "stages_ms": stage_times}, ensure_ascii=False))
             if operation == "process":
                 return {"result": result}
             return {"result": result, "payload_id": body.payload_id, "entities": record["entities"],
-                    "types": kinds, "mode": record["mode"], "latency_ms": round(elapsed, 3)}
+                    "types": kinds, "mode": record["mode"], "latency_ms": round(elapsed, 3),
+                    "masking_enabled": record.get("masking_enabled", True)}
         except HTTPException:
             raise
         except VaultFull:

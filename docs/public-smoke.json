@@ -1,0 +1,36 @@
+{
+  "rules": {
+    "url": "https://left-rivers-emotions-doctor.trycloudflare.com",
+    "health": {
+      "status": "ok",
+      "mode": "demo",
+      "storage": "sentinel",
+      "python": "3.14.7",
+      "free_threaded": true,
+      "gil_enabled": false,
+      "detector_profile": "rules"
+    },
+    "ui_status": 200,
+    "process_roundtrip_exact": true,
+    "mask_retry_idempotent": true,
+    "metrics_available": true,
+    "synthetic_data_only": true
+  },
+  "hybrid": {
+    "url": "https://alpha-facility-muze-harmony.trycloudflare.com",
+    "health": {
+      "status": "ok",
+      "mode": "demo",
+      "storage": "sentinel",
+      "python": "3.14.7",
+      "free_threaded": true,
+      "gil_enabled": false,
+      "detector_profile": "hybrid"
+    },
+    "ui_status": 200,
+    "process_roundtrip_exact": true,
+    "mask_retry_idempotent": true,
+    "metrics_available": true,
+    "synthetic_data_only": true
+  }
+}

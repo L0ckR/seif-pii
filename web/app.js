@@ -165,7 +165,9 @@ async function protect() {
     lastResult = { ...data, original, mode: data.mode || mode, restored: false };
     showOutput(data.result);
     const count = renderEntities(original, data.entities, data.payload_id);
-    $("result-status").textContent = count ? `Защищено фрагментов: ${count} · ${Array.from(data.result).length.toLocaleString("ru-RU")} символов` : "Защищаемые сущности не найдены";
+    $("result-status").textContent = data.masking_enabled === false
+      ? "Маскирование отключено политикой системы"
+      : count ? `Защищено фрагментов: ${count} · ${Array.from(data.result).length.toLocaleString("ru-RU")} символов` : "Защищаемые сущности не найдены";
     showTiming(data);
   } catch (error) {
     if (sequence !== operationNumber) return;

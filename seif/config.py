@@ -69,6 +69,13 @@ class Policy:
     allowed_modes: tuple[str, ...] = ("mask", "token", "synthetic")
     extra_rules: tuple[dict, ...] = ()
     rps: int = 1000
+    masking_enabled: bool = True
+
+    def __post_init__(self) -> None:
+        # YAML and programmatic policies share strict validation: a quoted
+        # "false", number or null must never silently change protection policy.
+        if type(self.masking_enabled) is not bool:
+            raise ValueError("masking_enabled must be a boolean")
 
 
 @dataclass
