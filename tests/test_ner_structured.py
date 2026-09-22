@@ -247,3 +247,26 @@ def test_birth_certificate_keeps_precise_class_with_model_components():
     text = "Свидетельство о рождении: IV-АБ 123456"
     spans = merge_ner_candidates(text, detect(text), [candidate(text, "IV-АБ", "BIRTH_CERTIFICATE"), candidate(text, "123456", "BIRTH_CERTIFICATE")])
     assert values(text, spans) == [("BIRTH_CERTIFICATE", "IV-АБ"), ("BIRTH_CERTIFICATE", "123456")]
+
+
+def test_model_specific_driver_type_refines_unowned_series_number_default():
+    text = "Данные моих прав: серия 62 18, номер 654321."
+    base = detect(text)
+    assert {span.type for span in base} == {"PASSPORT"}
+    model = [candidate(text, "62 18", "DRIVER_LICENSE"), candidate(text, "654321", "DRIVER_LICENSE")]
+    result = merge_ner_candidates(text, base, model)
+    assert values(text, result) == [("DRIVER_LICENSE", "62 18"), ("DRIVER_LICENSE", "654321")]
+    assert mask(text, result, "mask")[0] == mask(text, base, "mask")[0]
+
+
+def test_driver_prediction_never_relabels_an_explicit_passport():
+    text = "Паспорт: серия 62 18, номер 654321."
+    model = [candidate(text, "62 18", "DRIVER_LICENSE"), candidate(text, "654321", "DRIVER_LICENSE")]
+    result = merge_ner_candidates(text, detect(text), model)
+    assert {span.type for span in result} == {"PASSPORT"}
+
+
+def test_driver_prediction_cannot_relabel_user_custom_document_rule():
+    text = "62 18"
+    base = [Span(0, len(text), "PASSPORT", 1.0, "custom-rule")]
+    assert merge_ner_candidates(text, base, [candidate(text, text, "DRIVER_LICENSE")]) == base

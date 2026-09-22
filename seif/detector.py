@@ -1015,6 +1015,27 @@ def _preserve_address_tails(text: str, resolved: Sequence[Span], candidates: Ite
     return _resolve([*resolved, *additions]) if additions else list(resolved)
 
 
+def _prefer_document_kind(text: str, candidates: Sequence[Span]) -> list[Span]:
+    kinds: dict[tuple[int, int], set[str]] = {}
+    for span in candidates:
+        if span.reason == "ner-structured" and span.type in {"PASSPORT", "DRIVER_LICENSE"}:
+            kinds.setdefault((span.start, span.end), set()).add(span.type)
+    if not any("DRIVER_LICENSE" in values for values in kinds.values()):
+        return list(candidates)
+    result = []
+    for span in candidates:
+        # A bare series/number pair defaults to PASSPORT in the rule layer.
+        # Specific model evidence may refine that default, but cannot override
+        # an explicitly named passport or a user-supplied custom rule.
+        if (span.type == "PASSPORT" and span.reason not in {"custom-rule", "ner-structured"}
+                and kinds.get((span.start, span.end)) == {"DRIVER_LICENSE"}
+                and _ner_number_owner(text, span.start) != "PASSPORT"
+                and not _has_passport_context(text, span.start)):
+            span = Span(span.start, span.end, "DRIVER_LICENSE", span.confidence, "ner-document-kind")
+        result.append(span)
+    return result
+
+
 def _merge_ner_candidates(
     text: str, base_spans: Sequence[Span], candidates: Sequence[Span], *, allowed_types: frozenset[str]
 ) -> list[Span]:
@@ -1049,7 +1070,7 @@ def _merge_ner_candidates(
     accepted = _accept_ner_candidates(text, candidates, existing, person_starts, person_cover_ends)
     # Keep rule classes on overlaps and retain independently supported address
     # tails. A short street rule must not erase a model's street designator.
-    refined = refine_candidates(text, [*base_spans, *accepted.values()])
+    refined = _prefer_document_kind(text, refine_candidates(text, [*base_spans, *accepted.values()]))
     resolved = _preserve_address_tails(text, _resolve(refined), (
         span for span in refined if span.reason == "ner-location"
     ))
