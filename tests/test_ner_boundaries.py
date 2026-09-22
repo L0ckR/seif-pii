@@ -102,6 +102,41 @@ def test_model_cannot_extend_into_neighboring_protected_span():
     assert preserve_model_boundaries(text, originals, [span(text, text)]) == originals
 
 
+@pytest.mark.parametrize("value,pieces", [
+    ("192.0.2.17", ["192", "17"]),
+    ("192 . 0 . 2 . 17", ["192", "17"]),
+    ("2001:db8:abcd::17", ["2001", "db8", "abcd", "17"]),
+    ("2001 : db8 : abcd : : 17", ["2001", "db8", "abcd", "17"]),
+    ("::ffff:192.0.2.17", ["ffff", "192", "17"]),
+])
+def test_complete_valid_ip_stays_one_address_despite_model_fragments(value, pieces):
+    text = f"🔒 IP: {value}; конец"
+    original = span(text, value, "IP_ADDRESS", "ip-address-format")
+    model = [span(text, piece, "IP_ADDRESS", "ner-structured") for piece in pieces]
+    result = preserve_model_boundaries(text, [original], model)
+    assert result == [original]
+    masked, replacements = mask(text, result, "token")
+    assert masked.count("⟦PD:IP_ADDRESS:") == 1
+    assert restore_exact({"masked": masked, "replacements": replacements}) == text
+
+
+def test_atomic_ip_exception_does_not_conflate_separate_addresses():
+    text = "192.0.2.17 198.51.100.9"
+    original = span(text, text, "IP_ADDRESS")
+    model = [span(text, value, "IP_ADDRESS") for value in text.split()]
+    result = preserve_model_boundaries(text, [original], model)
+    assert [text[item.start:item.end] for item in result] == text.split()
+
+
+def test_atomic_ip_exception_does_not_prevent_document_series_components():
+    text = "Паспорт: 4500 123456"
+    original = span(text, "4500 123456", "PASSPORT")
+    model = [span(text, value, "PASSPORT") for value in ("4500", "123456")]
+    result = preserve_model_boundaries(text, [original], model)
+    assert [text[item.start:item.end] for item in result] == ["4500", "123456"]
+    assert mask(text, result, "mask")[0] == mask(text, [original], "mask")[0]
+
+
 def test_empty_models_and_matching_boundaries_keep_original_values():
     text = "Дина"
     original = span(text, text)

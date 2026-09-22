@@ -11,6 +11,7 @@ import unicodedata
 from bisect import bisect_left, bisect_right
 from collections.abc import Sequence
 from dataclasses import replace
+from ipaddress import ip_address
 from itertools import accumulate
 from typing import TYPE_CHECKING
 
@@ -65,12 +66,26 @@ def _partition(text: str, original: Span, parts: Sequence[Span]) -> list[Span]:
     return result
 
 
+def _atomic_ip(text: str, span: Span) -> bool:
+    if span.type != "IP_ADDRESS":
+        return False
+    # A valid complete network address is one identifier. Native IPv6 groups
+    # must not split it into several purported addresses; they are not IPs.
+    value = text[span.start:span.end].replace(" ", "").replace("\t", "")
+    try:
+        ip_address(value)
+    except ValueError:
+        return False
+    return True
+
+
 def preserve_model_boundaries(text: str, resolved: Sequence[Span], model_candidates: Sequence[Span]) -> list[Span]:
     """Refine already validated spans; preserve coverage, rule type and provenance.
 
     Only wholly contained, unambiguous model components of the same semantic
     family may partition a resolved span. Unmodeled rule remainders retain every
-    protected letter/digit. Explicit custom rules keep their boundaries.
+    protected letter/digit. Explicit custom rules and valid complete IP addresses
+    keep their boundaries; individual hex groups are not independent IPs.
     Inputs are validated by the detector; output retains its non-overlap invariant.
     """
     if not resolved or not model_candidates:
@@ -84,7 +99,8 @@ def preserve_model_boundaries(text: str, resolved: Sequence[Span], model_candida
         last = bisect_left(starts, original.end)
         parts = [span for span in models[first:last] if span.end > original.start]
         unchanged = len(parts) == 1 and (parts[0].start, parts[0].end) == (original.start, original.end)
-        if unchanged or original.reason == "custom-rule" or not parts or not _compatible_parts(text, original, parts):
+        if (unchanged or original.reason == "custom-rule" or not parts
+                or _atomic_ip(text, original) or not _compatible_parts(text, original, parts)):
             output.append(original)
             continue
         # Keep the authoritative rule's type, confidence and reason. Only its
