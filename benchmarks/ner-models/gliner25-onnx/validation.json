@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "full_suite": {
+    "python": "3.14.7t",
+    "passed": 2876,
+    "skipped": 27,
+    "warnings": 2,
+    "seconds": 13.03
+  },
+  "backend_tests": {
+    "python": "3.13.7",
+    "passed": 63,
+    "skipped": 0,
+    "warnings": 2,
+    "seconds": 3.8
+  },
+  "ruff": "PASS",
+  "diff_check": "PASS",
+  "gpu_corpus_cases": 5095,
+  "gpu_corpus_errors": 0,
+  "cpu_corpus_cases": 446,
+  "cpu_corpus_errors": 0,
+  "http_timed_requests": 1784,
+  "http_errors": 0,
+  "http_actual_ner_completed": 1784,
+  "http_reference_matches": 1784,
+  "http_requests_over_500ms": 0,
+  "known_export_edge_case": "Pinned ONNX fails on synthetic !; no fallback or input padding.",
+  "source_sha256": {
+    "seif/gliner_onnx.py": "08118aaf0326e89d7a0ef890a24f7a29728578a713690e930cf7cf48cd12056d",
+    "scripts/compare_onnx.py": "bc3b7a3acc02d1ba755afd4e114b0930966ec44dd78a0bc5658388cadacbd6e5",
+    "benchmarks/ner-models/gliner25-onnx/http_benchmark.py": "0105afcb38d61622c5f76d06a6b09cd8ad02b97058562bd0da0391d49a2556b4"
+  },
+  "report_sha256": {
+    "comparison-gpu.json": "0123d9875641ad6ed03e30c9508e4b3aae6ff81381ec54a985142e59d54d6d74",
+    "protocol.json": "716f0d69a097ce4013e69c3e88997258bc137b9603a445bf07337807faef4e47",
+    "http-cuda-v2.json": "1271fc25d69b15b944dceaa7feee2b75af0bac321fab46aff033ad020267a223",
+    "comparison-cpu.json": "ed2c8fae4c5ab628bdce679e89e8451d3d8f139d0902b3235fbec79eea83f163",
+    "protocol-v2.json": "001fdf2d60b90e5567af3ffbf3841b8057bb9ab88d405f62b9e7f39514711a36",
+    "wrapper-smoke-v2.json": "81e35cae352df42725a75626523c3edb6e59c4af3b1493f62ad0c45fc0efddde",
+    "wrapper-smoke.json": "951f3e9dee4493f1ebfdeb284dfdd67e9cc5dee6f81ebdafaf1df80f7f97957b",
+    "native-cpu-vs-gpu-parity.json": "a406424010edf4ae0835c1cab8d14f6aa06a9f23a976dcbd68605dbc27c95ea6",
+    "native-cpu-selected.meta.json": "d750a4e0d842f5bd48b162a6de98285a316e5a62ff9b945424500b57f22d9556",
+    "provenance.json": "342525215bbecb57078a8b79146279df083722881593ff553e9688017f3b7c20",
+    "http-cuda.json": "e0a0fe7935fda287d81980e23a763156e6833e1b3c0972ba96150ce27a65969c"
+  }
+}

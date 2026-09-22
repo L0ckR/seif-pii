@@ -1,0 +1,3333 @@
+{
+  "schema_version": 1,
+  "protocol_sha256": "001fdf2d60b90e5567af3ffbf3841b8057bb9ab88d405f62b9e7f39514711a36",
+  "protocol": {
+    "schema_version": 1,
+    "prepared_at_utc": "2026-09-22T19:36:04.077933+00:00",
+    "source_sha256": {
+      "seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+      "seif/app.py": "e958559569fae134ace1e54ef02af655dc65a4fc481a93545c315721bc1f8951",
+      "seif/async_callbacks.py": "b5ce7aae9979e6251c827d3e2099a4377266bcb8076606d67dbe86c38fa21ebe",
+      "seif/cardholder_fields.py": "3d80d59636e4b2e1a668325fbb945027b48a37e60aad5297c39b727a51806462",
+      "seif/config.py": "ca9c4e4bc80fcb6847f53f08593b25e5a3b41d6ae5a44ce7c416075ffd7b4b45",
+      "seif/context_filters.py": "c3fbd2c356784e87c481d3ac7d58a8cbf5863d04db96e47d4ef062e348bfd7fb",
+      "seif/detector.py": "e0b09cda385168f401ed1d1aa81ae4b1457d701be977f8f9aee789e444534025",
+      "seif/document_fields.py": "2200ed9f9751ee4894f164a4b43654de6f204c9661da83cdbf7a2a455d46ba51",
+      "seif/gliner_ner.py": "8012d0c3fc83b6c0a0defd4a07735d6e9cd4aa0c5debb1f7c395ddafb7431311",
+      "seif/gliner_onnx.py": "08118aaf0326e89d7a0ef890a24f7a29728578a713690e930cf7cf48cd12056d",
+      "seif/location_fields.py": "2d806e7a35bb7669001e796deba5cbac020dddb2887284390d27becebc43009e",
+      "seif/ner.py": "66c64453390bd851f2283c01bd995145e3a21e4cd23ad9af1f8330a665816068",
+      "seif/person_fields.py": "ca843e9b6f8ef9d4739703e83b1438a96d114dc95782626fa2e89366bf29f08d",
+      "seif/request_capture.py": "ce9d53ed7827992cd5c0c4b10914e3f9becc978cc192263116112c642e506855",
+      "seif/structured_fields.py": "26462106b1a29140a3bbf2b2370feab631145932ee44fbb78ca007b6d1d1218c",
+      "seif/transform.py": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+      "seif/vault.py": "b6b4f59bc911bb0a0c745b6801bcd9a034200e016f321e38c2984206c2946554",
+      "scripts/benchmark.py": "494a3da78f56396517ff3094896dd11d7b61977e440e552e3e986add26db70e5",
+      "scripts/benchmark_corpus.py": "8a47252e2bd2e525373c29e0314694bac4c80627ec656ded68d2fef6f46a4606",
+      "scripts/cache_gliner.py": "80d04e6a1e10f7e2d606d096722a7ebf36c10309d29155a895b4d739ea0dba88",
+      "scripts/capture_requests.py": "0c5ca76522f41df003596830968ef4267cc47f82d368c35a09ccc0bbbb3419e6",
+      "scripts/client_example.py": "4bda224a64ee21d1af48d1beaf3017103f0fafbee50f0677b4c054241392a3bf",
+      "scripts/code_quality.py": "13372c6b78dd751ce5917a49b72ce2a05077b5d4d40747d5c600a5c96a2a54c2",
+      "scripts/compare_ner_models.py": "f520284721d8a85096627c32230eb256ba1375072df4e5d73e6f4da1bdb19652",
+      "scripts/compare_ner_public.py": "a781a7fc73b3ac947f27c14459f1e40aafd7bb8fcc6bdf064bcba14c7ded6286",
+      "scripts/compare_onnx.py": "bc3b7a3acc02d1ba755afd4e114b0930966ec44dd78a0bc5658388cadacbd6e5",
+      "scripts/compare_presidio.py": "e6839cccbeccb27303d69037a7f4d73256a5e89a15b5bb04bafcb5fe86c7e99a",
+      "scripts/evaluate.py": "c50bc7e4f571955be7a76c79c6c15c115d6c7ab5e95829bcbc07e2efc3abe4ff",
+      "scripts/evaluate_annotations.py": "b429e3605b90a9090a8eae0185ee9286708836494235617901fbd6ae4e0d5463",
+      "scripts/evaluate_external.py": "7281551dc7c62ce22b10676f7029de5580b9558f3c1d427a79e2a89497a22e85",
+      "scripts/evaluate_golden.py": "02e1160fbfbb2933e4e90d65573e559962e6b474ab69ddaa1c2c0f66e68226ff",
+      "scripts/evaluate_hybrid.py": "74a96f4a2d1a4a235aa8087e7d23f268b04b3c34dbdf3caa0e0bf134b2312d8c",
+      "scripts/evaluate_location_ablation.py": "4b854f1b42f91af35bd18bf29da50ef52100cb255e2efa93912f710cba4c0956",
+      "scripts/evaluate_redmadrobot.py": "2e94c14034db198cb8718ed8161abe76354c27980f63346e3d34fad439aaa5c4",
+      "scripts/evaluate_scanpatch.py": "49eb2e72da5dd4f36b0efa7fec6f1c1cafca85392b705b8cf3e6f8989511aca8",
+      "scripts/failover_check.py": "9790535a19266f1e11f66ae696e9714cc9d05a1c8e0bf6326344bceab511dde0",
+      "scripts/large_input.py": "5646f5bde88ee5b9f865876a9290fc5a922403248a82320a97a189ae2b10e1d1",
+      "scripts/local_redis.py": "440cbfaecb69ac2c48dbb3101c86b25481904c9e497d55e7770a021c96d2c6d2",
+      "scripts/ner_service.py": "9d2291f08dc6013ba23552f34abe206f93a46fd6afc3da6abfc48e34b0958069",
+      "scripts/package.py": "cf7d2bdc34158b3e28a47a293ecd9c169a32da713abecd3d29e1e69534a488b2",
+      "scripts/runtime_probe.py": "9ac64e8f0f5b3f42f93230038b590e78ed07a9877672c47c1df6dafea648352c",
+      "scripts/serve.py": "7a8e564142d93a4619d9f01eea09e40b3753699c93310f1a92a608ec7e492300"
+    },
+    "input_sha256": {
+      "organizer": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46",
+      "organizer_manifest": "74f6b661ff33cbc88b53fde91cb1103acaa1f6002a4008463d3100b7c9b2305a",
+      "organizer_native": "e7995a07d8ca526ef8691acfc846fce6175e43780902bfcde3b795a139b38074",
+      "organizer_spacy": "1a439aab58c675036f3b05e497f0038904ddcbcb39620991b9bc96ef5ad883dc",
+      "organizer_native_metadata": "533cbac4d6b24eb30c94bce6bd3359baa284fcf378ff640c6fb5958410ba279e",
+      "organizer_spacy_metadata": "3d9365ada2608199929a0af494a9155b530739b3a0ab5537ec087bd52be8e11b",
+      "public_report": "5cd0b4d6dc9441f703ffe3ac76739d0bdaf923d1c6f55e779eff58624a9ee55c",
+      "organizer_report": "01c67188bbfbafc789d2baad47888595af218da299686d775d8f9a7626457ac4",
+      "public_prepared-inputs.jsonl": "b8b80873a507ae3841c1c74143162f8f169c0a68d6509da8509907cf11a20405",
+      "public_protocol.json": "6058374163fc3978ec4a882d19328e96fad1032d61bbac168ad8a3c78df68a27",
+      "public_spacy.jsonl": "27300f63d2818f9d97dc933d59593018a61a83ce77aa2b388605abb33de22496",
+      "public_spacy.meta.json": "261c2f20e95b3740477b5b352a20166fd194d7b7d2863c803e0bf4dcfab26ca3",
+      "public_gliner.jsonl": "d03ec666d738c12e02d885fb02a89d9c66e5ac7d94210edb70b08f619ba5c655",
+      "public_gliner.meta.json": "586d85d66a418436de9961b683685c971e2973a18b9e83ac0b07eebc26e704c0"
+    },
+    "model": "DanKau/gliner2.5-multi-v1-onnx",
+    "revision": "481ad683a5420349c20f7ccc992efd25f9f3b809",
+    "onnx_file_sha256": {
+      ".export_meta.json": "c43826b719bf3d2b92c5f43a7f2b4474d3314ebeaa5e2289797fc7556c29fc58",
+      "config.json": "dca03c3cfc6144e1c08409ac5be48377edfaea7bc48dbda5b57dd8fd9f5d4fbb",
+      "gliner2_config.json": "96089e65559fbd5d4484063cd165c50522ba65954d9710e3f44459233cb083db",
+      "tokenizer.json": "c62446df87ae18ec98b133f8f84fc449a07cc89bbf8ef192a4cb5f9c53777a7a",
+      "tokenizer_config.json": "db8ff95e236160a65fb6139babdf12dcaec4759bd0225af09b26eca8aa97d017",
+      "onnx/encoder.onnx": "ab5f77ea6df6de0c8e5be3038d3bd55bb2dfe28b37dfbd2b1248cf17c6073579",
+      "onnx/boundary.onnx": "131f64aa024ea46a991de880562ffc94c02f8fa7886b8afe03c55d927c9e33e2",
+      "onnx/classifier.onnx": "128e79e1bedef6f2d3886e04199e31e69650b54a5834dc97fb8a41001bbf91d7"
+    },
+    "native_file_sha256": {
+      "config.json": "8b59a0f426a65859c89cd1ea850c3529c09aa3be3a6fafd8eddfdd17b1bf0146",
+      "encoder_config/config.json": "fa4f9ef2903b5369ab172333aae4574e6a476511d7465845cf59f8360ee18716",
+      "model.safetensors": "c1ff4ec0bc00031c15530b8f3c33d3677f27949e6a0cb52e1247a6224b6c5395",
+      "tokenizer.json": "c62446df87ae18ec98b133f8f84fc449a07cc89bbf8ef192a4cb5f9c53777a7a",
+      "tokenizer_config.json": "0bf3ea0873234bd9bfdd3853c440395009ac6365a925b91654daed5396d655e1"
+    },
+    "settings": {
+      "schema": "described-names",
+      "labels": {
+        "person": "Proper names of individual people: given names, surnames, patronymics or initials. Exclude generic roles, job titles, kinship terms, pronouns and numeric identifiers.",
+        "location": "Geographic proper names of cities, settlements, regions and countries. Exclude organizations, institution names, generic facility types and field labels.",
+        "organization": "Names or references to companies, banks, government agencies and other institutions."
+      },
+      "threshold": 0.8,
+      "precision": "FP32",
+      "batch_size": 1,
+      "cpu_threads": 4,
+      "seed": 20260922,
+      "warmup": 5,
+      "word_window": 384,
+      "word_overlap": 64,
+      "overlap_policy": "native flat weighted interval scheduling",
+      "tf32": false
+    },
+    "versions": {
+      "gliner2": "2.0.0",
+      "torch": "2.14.0",
+      "onnxruntime-gpu": "1.30.0",
+      "onnx": "1.23.0",
+      "transformers": "4.57.6",
+      "tokenizers": "0.22.2",
+      "numpy": "2.5.3"
+    },
+    "cases": 5095,
+    "corpus_counts": {
+      "organizer": 446,
+      "pii": 1810,
+      "redmadrobot": 2839
+    },
+    "ordered_membership_sha256": "8c330eeee653b2414824a28e9c45863d5bfeb43965698174a3516a96f00a12e8",
+    "text_sha256": "04d16d733c44eb8917f3138399ebbb8df05a27db9a1399dd86ff1ee2cf93aec9",
+    "gold_sha256": "932cd5d5d3573b043a74c845503e89af7dbbd87fda99316075e3a5dcbd7e1720",
+    "policy": "Full fixed corpora, selected native schema/threshold, no post-evaluation tuning. ONNX CPU/GPU and native CPU/GPU timed separately. Local inference only; no HTTP RPS claim.",
+    "baseline_control": {
+      "organizer_all_aggregates_exact": true,
+      "public_full_masking_all_gold_types_exact": true,
+      "public_typed_all_types_exact": true,
+      "native_and_spacy": true,
+      "cases": 5095
+    }
+  },
+  "candidate_metadata": {
+    "schema_version": 1,
+    "backend": "onnx",
+    "device": "cpu",
+    "scope": "organizer",
+    "cases": 446,
+    "measured_at_utc": "2026-09-22T19:41:23.514140+00:00",
+    "cache_sha256": "67e7dff823998aabb82e5f5bf059117bc65d35d420086ee251795e3aa14a7bad",
+    "protocol_sha256": "001fdf2d60b90e5567af3ffbf3841b8057bb9ab88d405f62b9e7f39514711a36",
+    "settings": {
+      "schema": "described-names",
+      "labels": {
+        "person": "Proper names of individual people: given names, surnames, patronymics or initials. Exclude generic roles, job titles, kinship terms, pronouns and numeric identifiers.",
+        "location": "Geographic proper names of cities, settlements, regions and countries. Exclude organizations, institution names, generic facility types and field labels.",
+        "organization": "Names or references to companies, banks, government agencies and other institutions."
+      },
+      "threshold": 0.8,
+      "precision": "FP32",
+      "batch_size": 1,
+      "cpu_threads": 4,
+      "seed": 20260922,
+      "warmup": 5,
+      "word_window": 384,
+      "word_overlap": 64,
+      "overlap_policy": "native flat weighted interval scheduling",
+      "tf32": false
+    },
+    "versions": {
+      "gliner2": "2.0.0",
+      "torch": "2.14.0",
+      "onnxruntime-gpu": "1.30.0",
+      "onnx": "1.23.0",
+      "transformers": "4.57.6",
+      "tokenizers": "0.22.2",
+      "numpy": "2.5.3"
+    },
+    "source_sha256": {
+      "seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+      "seif/app.py": "e958559569fae134ace1e54ef02af655dc65a4fc481a93545c315721bc1f8951",
+      "seif/async_callbacks.py": "b5ce7aae9979e6251c827d3e2099a4377266bcb8076606d67dbe86c38fa21ebe",
+      "seif/cardholder_fields.py": "3d80d59636e4b2e1a668325fbb945027b48a37e60aad5297c39b727a51806462",
+      "seif/config.py": "ca9c4e4bc80fcb6847f53f08593b25e5a3b41d6ae5a44ce7c416075ffd7b4b45",
+      "seif/context_filters.py": "c3fbd2c356784e87c481d3ac7d58a8cbf5863d04db96e47d4ef062e348bfd7fb",
+      "seif/detector.py": "e0b09cda385168f401ed1d1aa81ae4b1457d701be977f8f9aee789e444534025",
+      "seif/document_fields.py": "2200ed9f9751ee4894f164a4b43654de6f204c9661da83cdbf7a2a455d46ba51",
+      "seif/gliner_ner.py": "8012d0c3fc83b6c0a0defd4a07735d6e9cd4aa0c5debb1f7c395ddafb7431311",
+      "seif/gliner_onnx.py": "08118aaf0326e89d7a0ef890a24f7a29728578a713690e930cf7cf48cd12056d",
+      "seif/location_fields.py": "2d806e7a35bb7669001e796deba5cbac020dddb2887284390d27becebc43009e",
+      "seif/ner.py": "66c64453390bd851f2283c01bd995145e3a21e4cd23ad9af1f8330a665816068",
+      "seif/person_fields.py": "ca843e9b6f8ef9d4739703e83b1438a96d114dc95782626fa2e89366bf29f08d",
+      "seif/request_capture.py": "ce9d53ed7827992cd5c0c4b10914e3f9becc978cc192263116112c642e506855",
+      "seif/structured_fields.py": "26462106b1a29140a3bbf2b2370feab631145932ee44fbb78ca007b6d1d1218c",
+      "seif/transform.py": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+      "seif/vault.py": "b6b4f59bc911bb0a0c745b6801bcd9a034200e016f321e38c2984206c2946554",
+      "scripts/benchmark.py": "494a3da78f56396517ff3094896dd11d7b61977e440e552e3e986add26db70e5",
+      "scripts/benchmark_corpus.py": "8a47252e2bd2e525373c29e0314694bac4c80627ec656ded68d2fef6f46a4606",
+      "scripts/cache_gliner.py": "80d04e6a1e10f7e2d606d096722a7ebf36c10309d29155a895b4d739ea0dba88",
+      "scripts/capture_requests.py": "0c5ca76522f41df003596830968ef4267cc47f82d368c35a09ccc0bbbb3419e6",
+      "scripts/client_example.py": "4bda224a64ee21d1af48d1beaf3017103f0fafbee50f0677b4c054241392a3bf",
+      "scripts/code_quality.py": "13372c6b78dd751ce5917a49b72ce2a05077b5d4d40747d5c600a5c96a2a54c2",
+      "scripts/compare_ner_models.py": "f520284721d8a85096627c32230eb256ba1375072df4e5d73e6f4da1bdb19652",
+      "scripts/compare_ner_public.py": "a781a7fc73b3ac947f27c14459f1e40aafd7bb8fcc6bdf064bcba14c7ded6286",
+      "scripts/compare_onnx.py": "bc3b7a3acc02d1ba755afd4e114b0930966ec44dd78a0bc5658388cadacbd6e5",
+      "scripts/compare_presidio.py": "e6839cccbeccb27303d69037a7f4d73256a5e89a15b5bb04bafcb5fe86c7e99a",
+      "scripts/evaluate.py": "c50bc7e4f571955be7a76c79c6c15c115d6c7ab5e95829bcbc07e2efc3abe4ff",
+      "scripts/evaluate_annotations.py": "b429e3605b90a9090a8eae0185ee9286708836494235617901fbd6ae4e0d5463",
+      "scripts/evaluate_external.py": "7281551dc7c62ce22b10676f7029de5580b9558f3c1d427a79e2a89497a22e85",
+      "scripts/evaluate_golden.py": "02e1160fbfbb2933e4e90d65573e559962e6b474ab69ddaa1c2c0f66e68226ff",
+      "scripts/evaluate_hybrid.py": "74a96f4a2d1a4a235aa8087e7d23f268b04b3c34dbdf3caa0e0bf134b2312d8c",
+      "scripts/evaluate_location_ablation.py": "4b854f1b42f91af35bd18bf29da50ef52100cb255e2efa93912f710cba4c0956",
+      "scripts/evaluate_redmadrobot.py": "2e94c14034db198cb8718ed8161abe76354c27980f63346e3d34fad439aaa5c4",
+      "scripts/evaluate_scanpatch.py": "49eb2e72da5dd4f36b0efa7fec6f1c1cafca85392b705b8cf3e6f8989511aca8",
+      "scripts/failover_check.py": "9790535a19266f1e11f66ae696e9714cc9d05a1c8e0bf6326344bceab511dde0",
+      "scripts/large_input.py": "5646f5bde88ee5b9f865876a9290fc5a922403248a82320a97a189ae2b10e1d1",
+      "scripts/local_redis.py": "440cbfaecb69ac2c48dbb3101c86b25481904c9e497d55e7770a021c96d2c6d2",
+      "scripts/ner_service.py": "9d2291f08dc6013ba23552f34abe206f93a46fd6afc3da6abfc48e34b0958069",
+      "scripts/package.py": "cf7d2bdc34158b3e28a47a293ecd9c169a32da713abecd3d29e1e69534a488b2",
+      "scripts/runtime_probe.py": "9ac64e8f0f5b3f42f93230038b590e78ed07a9877672c47c1df6dafea648352c",
+      "scripts/serve.py": "7a8e564142d93a4619d9f01eea09e40b3753699c93310f1a92a608ec7e492300"
+    },
+    "hardware": {
+      "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+      "logical_cpus": 16,
+      "gpu": null
+    },
+    "timing_by_corpus": {
+      "organizer": {
+        "cases": 446,
+        "summed_call_seconds": 53.0949942250445,
+        "documents_per_second": 8.40003858197286,
+        "p50_ms": 115.60638449736871,
+        "p95_ms": 145.95244800148066,
+        "p99_ms": 181.65132699505193,
+        "max_ms": 497.9159249996883,
+        "mean_ms": 119.04707225346301,
+        "failed_cases": 0,
+        "valid_complete_corpus_measurement": true,
+        "successful_documents_per_second": 8.40003858197286
+      }
+    },
+    "failures_by_corpus": {
+      "organizer": []
+    },
+    "elapsed_seconds_including_cache": 53.118206343002385,
+    "documents_per_second_including_cache": 8.396367850224946,
+    "per_case_latency_ms": [
+      {
+        "case_id": "organizer/org_0001",
+        "latency_ms": 96.32036100083496,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0002",
+        "latency_ms": 117.96763500024099,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0003",
+        "latency_ms": 126.94649799959734,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0004",
+        "latency_ms": 115.82807100057835,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0005",
+        "latency_ms": 103.89839499839582,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0006",
+        "latency_ms": 117.95394500222756,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0007",
+        "latency_ms": 126.0309870049241,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0008",
+        "latency_ms": 119.10388999967836,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0009",
+        "latency_ms": 124.00251100189053,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0010",
+        "latency_ms": 103.70573000545846,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0011",
+        "latency_ms": 131.87879799806979,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0012",
+        "latency_ms": 120.23848900571465,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0013",
+        "latency_ms": 122.38537999655819,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0014",
+        "latency_ms": 133.9650879963301,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0015",
+        "latency_ms": 112.05929500283673,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0016",
+        "latency_ms": 122.25817500439007,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0017",
+        "latency_ms": 127.75047899776837,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0018",
+        "latency_ms": 135.99990899820114,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0019",
+        "latency_ms": 116.30757300008554,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0020",
+        "latency_ms": 122.65455900342204,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0021",
+        "latency_ms": 132.87978299922543,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0022",
+        "latency_ms": 124.1671750030946,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0023",
+        "latency_ms": 95.83125799690606,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0024",
+        "latency_ms": 127.93634799891151,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0025",
+        "latency_ms": 110.2340439974796,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0026",
+        "latency_ms": 103.64708400447853,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0027",
+        "latency_ms": 97.58971499832114,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0028",
+        "latency_ms": 113.91853500390425,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0029",
+        "latency_ms": 108.85834500368219,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0030",
+        "latency_ms": 115.40643299667863,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0031",
+        "latency_ms": 99.93297400069423,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0032",
+        "latency_ms": 157.6407139946241,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0033",
+        "latency_ms": 144.21880299778422,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0034",
+        "latency_ms": 198.53412900556577,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0035",
+        "latency_ms": 130.2520360040944,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0036",
+        "latency_ms": 136.53839500329923,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0037",
+        "latency_ms": 129.20149300043704,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0038",
+        "latency_ms": 181.65132699505193,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0039",
+        "latency_ms": 130.09169799624942,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0040",
+        "latency_ms": 135.5839109965018,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0041",
+        "latency_ms": 130.73477600119077,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0042",
+        "latency_ms": 133.3972919965163,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0043",
+        "latency_ms": 95.96720300032757,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0044",
+        "latency_ms": 115.85386699880473,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0045",
+        "latency_ms": 129.6576999957324,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0046",
+        "latency_ms": 137.4155720041017,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0047",
+        "latency_ms": 136.77816600102233,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0048",
+        "latency_ms": 106.97879000508692,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0049",
+        "latency_ms": 133.05963300081203,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0050",
+        "latency_ms": 128.17169800109696,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0051",
+        "latency_ms": 134.56370600033551,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0052",
+        "latency_ms": 118.32503400364658,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0053",
+        "latency_ms": 164.48517100070603,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0054",
+        "latency_ms": 134.04257900401717,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0055",
+        "latency_ms": 109.69916699832538,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0056",
+        "latency_ms": 117.03340600070078,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0057",
+        "latency_ms": 108.19472000002861,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0058",
+        "latency_ms": 133.29911699838703,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0059",
+        "latency_ms": 122.33505000040168,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0060",
+        "latency_ms": 122.60584499745164,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0061",
+        "latency_ms": 116.5594339981908,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0062",
+        "latency_ms": 113.63838800025405,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0063",
+        "latency_ms": 148.25625999947079,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0064",
+        "latency_ms": 103.45136599789839,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0065",
+        "latency_ms": 125.8598280037404,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0066",
+        "latency_ms": 105.49495800660225,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0067",
+        "latency_ms": 103.67284600215498,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0068",
+        "latency_ms": 134.6739250002429,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0069",
+        "latency_ms": 115.75411800004076,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0070",
+        "latency_ms": 106.37776299699908,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0071",
+        "latency_ms": 123.0907209974248,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0072",
+        "latency_ms": 107.10977000417188,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0073",
+        "latency_ms": 96.59934000228532,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0074",
+        "latency_ms": 113.82831700029783,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0075",
+        "latency_ms": 114.82423100096639,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0076",
+        "latency_ms": 115.18373499711743,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0077",
+        "latency_ms": 110.87952600064455,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0078",
+        "latency_ms": 112.47835899848724,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0079",
+        "latency_ms": 122.20923599670641,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0080",
+        "latency_ms": 133.7460050053778,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0081",
+        "latency_ms": 113.39496399887139,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0082",
+        "latency_ms": 113.1088699985412,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0083",
+        "latency_ms": 126.03869199665496,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0084",
+        "latency_ms": 130.47566999739502,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0085",
+        "latency_ms": 98.64016499341233,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0086",
+        "latency_ms": 110.67642199486727,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0087",
+        "latency_ms": 121.39320900314488,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0088",
+        "latency_ms": 113.15817099966807,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0089",
+        "latency_ms": 123.7889069961966,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0090",
+        "latency_ms": 110.00181499548489,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0091",
+        "latency_ms": 108.18115300207864,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0092",
+        "latency_ms": 122.14203600160545,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0093",
+        "latency_ms": 104.6552160041756,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0094",
+        "latency_ms": 111.08162400341826,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0095",
+        "latency_ms": 124.8914230018272,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0096",
+        "latency_ms": 142.6747619989328,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0097",
+        "latency_ms": 108.93212500377558,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0098",
+        "latency_ms": 137.0944829977816,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0099",
+        "latency_ms": 110.37235300318571,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0100",
+        "latency_ms": 122.24855599924922,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0101",
+        "latency_ms": 106.89645000093151,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0102",
+        "latency_ms": 166.5145160004613,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0103",
+        "latency_ms": 101.39583300042432,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0104",
+        "latency_ms": 136.00468899676343,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0105",
+        "latency_ms": 123.26427600055467,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0106",
+        "latency_ms": 111.86817200359656,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0107",
+        "latency_ms": 120.21685499348678,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0108",
+        "latency_ms": 110.72875399986515,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0109",
+        "latency_ms": 111.18497399729677,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0110",
+        "latency_ms": 112.05753100512084,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0111",
+        "latency_ms": 144.29505899897777,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0112",
+        "latency_ms": 169.72813499887707,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0113",
+        "latency_ms": 128.94405300176004,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0114",
+        "latency_ms": 178.66156300442526,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0115",
+        "latency_ms": 129.78327800374245,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0116",
+        "latency_ms": 142.2705090008094,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0117",
+        "latency_ms": 112.55935299413977,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0118",
+        "latency_ms": 110.10510000050999,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0119",
+        "latency_ms": 122.32688999938546,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0120",
+        "latency_ms": 127.66613900021184,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0121",
+        "latency_ms": 109.79650800436502,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0122",
+        "latency_ms": 106.80203999800142,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0123",
+        "latency_ms": 125.86543400539085,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0124",
+        "latency_ms": 132.41706199914915,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0125",
+        "latency_ms": 138.16105300065828,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0126",
+        "latency_ms": 132.03769800020382,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0127",
+        "latency_ms": 112.54488299891818,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0128",
+        "latency_ms": 103.29335699498188,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0129",
+        "latency_ms": 104.61758199380711,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0130",
+        "latency_ms": 115.71440699481172,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0131",
+        "latency_ms": 101.2163289997261,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0132",
+        "latency_ms": 106.11193400109187,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0133",
+        "latency_ms": 100.8114200012642,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0134",
+        "latency_ms": 117.10006999783218,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0135",
+        "latency_ms": 104.87173999717925,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0136",
+        "latency_ms": 110.11465000046883,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0137",
+        "latency_ms": 99.1913329999079,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0138",
+        "latency_ms": 113.5779679971165,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0139",
+        "latency_ms": 114.39010400499683,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0140",
+        "latency_ms": 109.8833950018161,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0141",
+        "latency_ms": 109.21639500156743,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0142",
+        "latency_ms": 104.89705600048183,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0143",
+        "latency_ms": 105.32445800345158,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0144",
+        "latency_ms": 107.58631699718535,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0145",
+        "latency_ms": 125.2174510009354,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0146",
+        "latency_ms": 122.33718600327848,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0147",
+        "latency_ms": 112.32378299609991,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0148",
+        "latency_ms": 108.3729520032648,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0149",
+        "latency_ms": 111.7902559999493,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0150",
+        "latency_ms": 128.87671399948886,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0151",
+        "latency_ms": 109.89684599917382,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0152",
+        "latency_ms": 130.07845199899748,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0153",
+        "latency_ms": 117.02636599511607,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0154",
+        "latency_ms": 119.37826999928802,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0155",
+        "latency_ms": 121.55311799870105,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0156",
+        "latency_ms": 115.5702179967193,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0157",
+        "latency_ms": 121.7856369985384,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0158",
+        "latency_ms": 133.97011000051862,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0159",
+        "latency_ms": 132.45562500378583,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0160",
+        "latency_ms": 153.1673610006692,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0161",
+        "latency_ms": 109.1694990027463,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0162",
+        "latency_ms": 129.51638600497972,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0163",
+        "latency_ms": 136.94041399867274,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0164",
+        "latency_ms": 115.61074899509549,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0165",
+        "latency_ms": 124.14937500579981,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0166",
+        "latency_ms": 133.50545599678298,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0167",
+        "latency_ms": 109.43053299706662,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0168",
+        "latency_ms": 114.49993400310632,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0169",
+        "latency_ms": 116.52127300476423,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0170",
+        "latency_ms": 123.99510099930922,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0171",
+        "latency_ms": 101.92465000000084,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0172",
+        "latency_ms": 123.2509809997282,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0173",
+        "latency_ms": 124.16571500216378,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0174",
+        "latency_ms": 130.39873100206023,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0175",
+        "latency_ms": 116.5616680009407,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0176",
+        "latency_ms": 116.32790500152623,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0177",
+        "latency_ms": 120.04678499943111,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0178",
+        "latency_ms": 152.61930799897527,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0179",
+        "latency_ms": 115.1692310013459,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0180",
+        "latency_ms": 143.79827000084333,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0181",
+        "latency_ms": 128.7440950036398,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0182",
+        "latency_ms": 134.95898299879627,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0183",
+        "latency_ms": 105.02221399656264,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0184",
+        "latency_ms": 141.66708599805133,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0185",
+        "latency_ms": 121.0890959991957,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0186",
+        "latency_ms": 115.43759800406406,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0187",
+        "latency_ms": 97.42684999946505,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0188",
+        "latency_ms": 113.60319799860008,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0189",
+        "latency_ms": 106.46496299887076,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0190",
+        "latency_ms": 139.54779200139455,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0191",
+        "latency_ms": 131.1051070006215,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0192",
+        "latency_ms": 124.66629900154658,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0193",
+        "latency_ms": 130.42988499364583,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0194",
+        "latency_ms": 127.23176999861607,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0195",
+        "latency_ms": 108.72841099626385,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0196",
+        "latency_ms": 100.38204199372558,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0197",
+        "latency_ms": 129.46338899928378,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0198",
+        "latency_ms": 108.12834499665769,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0199",
+        "latency_ms": 115.89915100194048,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0200",
+        "latency_ms": 111.43561299832072,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0201",
+        "latency_ms": 114.14680500456598,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0202",
+        "latency_ms": 109.13833000086015,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0203",
+        "latency_ms": 130.88333099585725,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0204",
+        "latency_ms": 128.66393999865977,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0205",
+        "latency_ms": 108.51375599304447,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0206",
+        "latency_ms": 126.19360100507038,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0207",
+        "latency_ms": 123.56442300369963,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0208",
+        "latency_ms": 172.78155899839476,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0209",
+        "latency_ms": 115.6263669981854,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0210",
+        "latency_ms": 110.05749500327511,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0211",
+        "latency_ms": 114.39339299977291,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0212",
+        "latency_ms": 105.78692499984754,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0213",
+        "latency_ms": 112.76672200619942,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0214",
+        "latency_ms": 107.27362699981313,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0215",
+        "latency_ms": 138.20320699596778,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0216",
+        "latency_ms": 118.25282499921741,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0217",
+        "latency_ms": 114.10607300058473,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0218",
+        "latency_ms": 112.02859599870862,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0219",
+        "latency_ms": 120.57787799858488,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0220",
+        "latency_ms": 109.52645300130825,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0221",
+        "latency_ms": 120.02642500010552,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0222",
+        "latency_ms": 122.06772100034868,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0223",
+        "latency_ms": 106.14142900158186,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0224",
+        "latency_ms": 112.19932400126709,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0225",
+        "latency_ms": 112.68141100299545,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0226",
+        "latency_ms": 143.24638200196205,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0227",
+        "latency_ms": 109.47334799857344,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0228",
+        "latency_ms": 90.07354099594522,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0229",
+        "latency_ms": 112.91963999974541,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0230",
+        "latency_ms": 103.85278399917297,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0231",
+        "latency_ms": 107.46150199702242,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0232",
+        "latency_ms": 91.9931969983736,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0233",
+        "latency_ms": 110.4939770011697,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0234",
+        "latency_ms": 124.04776200128254,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0235",
+        "latency_ms": 118.2787340003415,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0236",
+        "latency_ms": 101.78256600192981,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0237",
+        "latency_ms": 95.44224999990547,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0238",
+        "latency_ms": 110.57527099910658,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0239",
+        "latency_ms": 103.4186739998404,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0240",
+        "latency_ms": 102.90240599715617,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0241",
+        "latency_ms": 105.54153400153155,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0242",
+        "latency_ms": 109.90616300114198,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0243",
+        "latency_ms": 107.04330100270454,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0244",
+        "latency_ms": 131.7432750001899,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0245",
+        "latency_ms": 108.1103609976708,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0246",
+        "latency_ms": 106.87609699380118,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0247",
+        "latency_ms": 133.90803599759238,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0248",
+        "latency_ms": 100.50439300539438,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0249",
+        "latency_ms": 106.50840899324976,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0250",
+        "latency_ms": 104.06109100586036,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0251",
+        "latency_ms": 93.65702000650344,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0252",
+        "latency_ms": 98.80149400123628,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0253",
+        "latency_ms": 107.7102829949581,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0254",
+        "latency_ms": 100.50571800093167,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0255",
+        "latency_ms": 109.7827590056113,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0256",
+        "latency_ms": 104.43826299888315,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0257",
+        "latency_ms": 107.90697299671592,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0258",
+        "latency_ms": 109.30994599766564,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0259",
+        "latency_ms": 105.5649940026342,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0260",
+        "latency_ms": 110.21399099990958,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0261",
+        "latency_ms": 127.47631000092952,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0262",
+        "latency_ms": 109.14220700215083,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0263",
+        "latency_ms": 117.27122800220968,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0264",
+        "latency_ms": 130.52269999752752,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0265",
+        "latency_ms": 107.60280399699695,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0266",
+        "latency_ms": 123.12339599884581,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0267",
+        "latency_ms": 122.36235899763415,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0268",
+        "latency_ms": 98.16705300181638,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0269",
+        "latency_ms": 115.41187600232661,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0270",
+        "latency_ms": 145.95244800148066,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0271",
+        "latency_ms": 91.27273000194691,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0272",
+        "latency_ms": 110.03413200523937,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0273",
+        "latency_ms": 96.71963500295533,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0274",
+        "latency_ms": 99.0214539997396,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0275",
+        "latency_ms": 110.98204700101633,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0276",
+        "latency_ms": 117.19598899799166,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0277",
+        "latency_ms": 108.02860600233544,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0278",
+        "latency_ms": 113.06716199760558,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0279",
+        "latency_ms": 104.56177800369915,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0280",
+        "latency_ms": 107.29960999742616,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0281",
+        "latency_ms": 107.66428699571406,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0282",
+        "latency_ms": 105.05686499527656,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0283",
+        "latency_ms": 127.60686500405427,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0284",
+        "latency_ms": 110.74536399974022,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0285",
+        "latency_ms": 107.50289400311885,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0286",
+        "latency_ms": 104.90227500122273,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0287",
+        "latency_ms": 107.90532200189773,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0288",
+        "latency_ms": 145.02765700308373,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0289",
+        "latency_ms": 117.94804500095779,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0290",
+        "latency_ms": 101.31046299648006,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0291",
+        "latency_ms": 116.58529099804582,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0292",
+        "latency_ms": 93.45303499867441,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0293",
+        "latency_ms": 96.81437900144374,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0294",
+        "latency_ms": 112.65740099770483,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0295",
+        "latency_ms": 105.29309900448425,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0296",
+        "latency_ms": 125.7133840044844,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0297",
+        "latency_ms": 128.00354499631794,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0298",
+        "latency_ms": 123.74197900498984,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0299",
+        "latency_ms": 99.81480799615383,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0300",
+        "latency_ms": 125.27612099802354,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0301",
+        "latency_ms": 114.61175900331,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0302",
+        "latency_ms": 116.64188100257888,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0303",
+        "latency_ms": 106.25833900121506,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0304",
+        "latency_ms": 96.76920399942901,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0305",
+        "latency_ms": 95.52804999839282,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0306",
+        "latency_ms": 121.16244000208098,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0307",
+        "latency_ms": 117.89718000363791,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0308",
+        "latency_ms": 91.6256299969973,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0309",
+        "latency_ms": 130.61905300128274,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0310",
+        "latency_ms": 98.62353900098242,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0311",
+        "latency_ms": 91.01639399887063,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0312",
+        "latency_ms": 96.76114399917424,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0313",
+        "latency_ms": 107.05649200099288,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0314",
+        "latency_ms": 122.075045001111,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0315",
+        "latency_ms": 116.80937100027222,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0316",
+        "latency_ms": 125.10333999671275,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0317",
+        "latency_ms": 116.68557099619647,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0318",
+        "latency_ms": 147.02977200067835,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0319",
+        "latency_ms": 105.11291700095171,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0320",
+        "latency_ms": 110.6352999995579,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0321",
+        "latency_ms": 112.93708899756894,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0322",
+        "latency_ms": 102.23943099845201,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0323",
+        "latency_ms": 98.78182399552315,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0324",
+        "latency_ms": 497.9159249996883,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0325",
+        "latency_ms": 124.84840099932626,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0326",
+        "latency_ms": 117.7440360042965,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0327",
+        "latency_ms": 101.64381399954436,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0328",
+        "latency_ms": 109.66322500462411,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0329",
+        "latency_ms": 116.57050999929197,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0330",
+        "latency_ms": 100.75674799736589,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0331",
+        "latency_ms": 100.33930999634322,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0332",
+        "latency_ms": 116.03793899848824,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0333",
+        "latency_ms": 107.90688799897907,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0334",
+        "latency_ms": 111.88924500311259,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0335",
+        "latency_ms": 114.44308999489294,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0336",
+        "latency_ms": 108.08444199938094,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0337",
+        "latency_ms": 109.99203400569968,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0338",
+        "latency_ms": 94.77607699955115,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0339",
+        "latency_ms": 102.85834699607221,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0340",
+        "latency_ms": 88.94372600479983,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0341",
+        "latency_ms": 135.94641600502655,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0342",
+        "latency_ms": 108.75790900172433,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0343",
+        "latency_ms": 118.875684995146,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0344",
+        "latency_ms": 105.54199900070671,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0345",
+        "latency_ms": 118.8923590016202,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0346",
+        "latency_ms": 111.249907000456,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0347",
+        "latency_ms": 121.37384800007567,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0348",
+        "latency_ms": 99.59318300388986,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0349",
+        "latency_ms": 96.88302800350357,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0350",
+        "latency_ms": 91.79512099944986,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0351",
+        "latency_ms": 127.5302189969807,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0352",
+        "latency_ms": 111.5794340003049,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0353",
+        "latency_ms": 115.60201999964193,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0354",
+        "latency_ms": 120.2938969945535,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0355",
+        "latency_ms": 95.5971529983799,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0356",
+        "latency_ms": 111.59023600339424,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0357",
+        "latency_ms": 104.5232090036734,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0358",
+        "latency_ms": 105.42140499455854,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0359",
+        "latency_ms": 112.84763900039252,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0360",
+        "latency_ms": 117.66296499990858,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0361",
+        "latency_ms": 130.95267600147054,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0362",
+        "latency_ms": 102.13358200417133,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0363",
+        "latency_ms": 110.16239800665062,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0364",
+        "latency_ms": 102.79830299987225,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0365",
+        "latency_ms": 113.4047810046468,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0366",
+        "latency_ms": 114.8754989990266,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0367",
+        "latency_ms": 157.93796700017992,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0368",
+        "latency_ms": 129.50934899708955,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0369",
+        "latency_ms": 133.67684200056829,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0370",
+        "latency_ms": 130.00680999539327,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0371",
+        "latency_ms": 96.72749799938174,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0372",
+        "latency_ms": 113.92589400202269,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0373",
+        "latency_ms": 182.81685200054199,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0374",
+        "latency_ms": 147.91311300359666,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0375",
+        "latency_ms": 164.50098900531884,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0376",
+        "latency_ms": 140.50223500089487,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0377",
+        "latency_ms": 131.06512100057444,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0378",
+        "latency_ms": 130.22095499763964,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0379",
+        "latency_ms": 129.35671899322188,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0380",
+        "latency_ms": 129.17284500144888,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0381",
+        "latency_ms": 160.5253109955811,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0382",
+        "latency_ms": 156.90032000566134,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0383",
+        "latency_ms": 128.45396799821174,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0384",
+        "latency_ms": 125.11332899885019,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0385",
+        "latency_ms": 116.48149200482294,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0386",
+        "latency_ms": 121.08009900111938,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0387",
+        "latency_ms": 120.03985900082625,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0388",
+        "latency_ms": 108.99922800308559,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0389",
+        "latency_ms": 91.61084700463107,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0390",
+        "latency_ms": 121.645475999685,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0391",
+        "latency_ms": 135.30634500057204,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0392",
+        "latency_ms": 127.7876699969056,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0393",
+        "latency_ms": 147.7008589936304,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0394",
+        "latency_ms": 165.25472899957094,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0395",
+        "latency_ms": 139.9914009962231,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0396",
+        "latency_ms": 114.6543089998886,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0397",
+        "latency_ms": 134.76311300473753,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0398",
+        "latency_ms": 134.61165799526498,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0399",
+        "latency_ms": 144.62633000221103,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0400",
+        "latency_ms": 119.25798300217139,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0401",
+        "latency_ms": 119.76094100100454,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0402",
+        "latency_ms": 190.2770610031439,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0403",
+        "latency_ms": 127.42712800536538,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0404",
+        "latency_ms": 108.33779999666149,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0405",
+        "latency_ms": 98.03254200232914,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0406",
+        "latency_ms": 116.22099199303193,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0407",
+        "latency_ms": 100.32796000450617,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0408",
+        "latency_ms": 118.87548900267575,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0409",
+        "latency_ms": 124.58157200308051,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0410",
+        "latency_ms": 117.09366800641874,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0411",
+        "latency_ms": 135.2692290020059,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0412",
+        "latency_ms": 112.11493200244149,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0413",
+        "latency_ms": 136.63789400015958,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0414",
+        "latency_ms": 127.7613959973678,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0415",
+        "latency_ms": 120.36313099815743,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0416",
+        "latency_ms": 113.2068029983202,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0417",
+        "latency_ms": 108.54660499899182,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0418",
+        "latency_ms": 93.18904399697203,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0419",
+        "latency_ms": 127.16558900137898,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0420",
+        "latency_ms": 108.06121299538063,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0421",
+        "latency_ms": 111.86423300387105,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0422",
+        "latency_ms": 101.52196499984711,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0423",
+        "latency_ms": 107.74348300037673,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0424",
+        "latency_ms": 122.0571049998398,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0425",
+        "latency_ms": 123.71400599658955,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0426",
+        "latency_ms": 116.91150400292827,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0427",
+        "latency_ms": 116.93735299922992,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0428",
+        "latency_ms": 94.28647899767384,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0429",
+        "latency_ms": 109.74558500311105,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0430",
+        "latency_ms": 102.70178799692076,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0431",
+        "latency_ms": 102.83753299881937,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0432",
+        "latency_ms": 109.6379180016811,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0433",
+        "latency_ms": 114.26866200054064,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0434",
+        "latency_ms": 111.74036999727832,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0435",
+        "latency_ms": 122.50718600262189,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0436",
+        "latency_ms": 121.44311200245284,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0437",
+        "latency_ms": 118.68843599950196,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0438",
+        "latency_ms": 110.21607099974062,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0439",
+        "latency_ms": 117.87570399610559,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0440",
+        "latency_ms": 116.02681499789469,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0441",
+        "latency_ms": 137.4873560052947,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0442",
+        "latency_ms": 115.32218899810687,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0443",
+        "latency_ms": 134.27791099820752,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0444",
+        "latency_ms": 114.70546299824491,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0445",
+        "latency_ms": 116.63478399714222,
+        "error_type": null
+      },
+      {
+        "case_id": "organizer/org_0446",
+        "latency_ms": 118.82024299848126,
+        "error_type": null
+      }
+    ],
+    "timing_scope": "Warm sequential full analyzer calls, batch1, no HTTP/Redis/masking/concurrency; not service RPS.",
+    "adapter": {
+      "model": "DanKau/gliner2.5-multi-v1-onnx",
+      "revision": "481ad683a5420349c20f7ccc992efd25f9f3b809",
+      "native_revision": "a221b77a8baf4a613b8f8652661d41fa10a5641e",
+      "onnx_files_sha256": {
+        "onnx/encoder.onnx": "ab5f77ea6df6de0c8e5be3038d3bd55bb2dfe28b37dfbd2b1248cf17c6073579",
+        "onnx/boundary.onnx": "131f64aa024ea46a991de880562ffc94c02f8fa7886b8afe03c55d927c9e33e2",
+        "config.json": "dca03c3cfc6144e1c08409ac5be48377edfaea7bc48dbda5b57dd8fd9f5d4fbb",
+        "gliner2_config.json": "96089e65559fbd5d4484063cd165c50522ba65954d9710e3f44459233cb083db",
+        "tokenizer.json": "c62446df87ae18ec98b133f8f84fc449a07cc89bbf8ef192a4cb5f9c53777a7a",
+        "tokenizer_config.json": "db8ff95e236160a65fb6139babdf12dcaec4759bd0225af09b26eca8aa97d017"
+      },
+      "native_files_sha256": {
+        "config.json": "8b59a0f426a65859c89cd1ea850c3529c09aa3be3a6fafd8eddfdd17b1bf0146",
+        "encoder_config/config.json": "fa4f9ef2903b5369ab172333aae4574e6a476511d7465845cf59f8360ee18716",
+        "model.safetensors": "c1ff4ec0bc00031c15530b8f3c33d3677f27949e6a0cb52e1247a6224b6c5395",
+        "tokenizer.json": "c62446df87ae18ec98b133f8f84fc449a07cc89bbf8ef192a4cb5f9c53777a7a",
+        "tokenizer_config.json": "0bf3ea0873234bd9bfdd3853c440395009ac6365a925b91654daed5396d655e1"
+      },
+      "schema": "described-names",
+      "threshold": 0.8,
+      "overlap_policy": "flat",
+      "device": "cpu",
+      "dtype": "float32",
+      "cpu_threads": 4,
+      "inter_op_threads": 1,
+      "torch_threads": 4,
+      "cuda_tf32": false,
+      "runtime": "ORT encoder + boundary; native GLiNER2 CPU Torch preprocessing and decoding",
+      "io": "CPU NumPy inputs/outputs; CUDA includes host/device copies at both sessions",
+      "native_checkpoint_required_at_startup": true,
+      "classification_records_relations_supported": false,
+      "encoder": {
+        "providers": [
+          "CPUExecutionProvider"
+        ],
+        "provider_options": {
+          "CPUExecutionProvider": {}
+        },
+        "inputs": [
+          {
+            "name": "input_ids",
+            "type": "tensor(int64)",
+            "shape": [
+              "batch",
+              "sequence"
+            ]
+          },
+          {
+            "name": "attention_mask",
+            "type": "tensor(int64)",
+            "shape": [
+              "batch",
+              "sequence"
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "name": "hidden_states",
+            "type": "tensor(float)",
+            "shape": [
+              "batch",
+              "sequence",
+              768
+            ]
+          }
+        ]
+      },
+      "boundary": {
+        "providers": [
+          "CPUExecutionProvider"
+        ],
+        "provider_options": {
+          "CPUExecutionProvider": {}
+        },
+        "inputs": [
+          {
+            "name": "token_states",
+            "type": "tensor(float)",
+            "shape": [
+              "batch",
+              "words",
+              768
+            ]
+          },
+          {
+            "name": "text_mask",
+            "type": "tensor(bool)",
+            "shape": [
+              "batch",
+              "words"
+            ]
+          },
+          {
+            "name": "query_states",
+            "type": "tensor(float)",
+            "shape": [
+              "batch",
+              "queries",
+              768
+            ]
+          },
+          {
+            "name": "query_mask",
+            "type": "tensor(bool)",
+            "shape": [
+              "batch",
+              "queries"
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "name": "pair_logits",
+            "type": "tensor(float)",
+            "shape": [
+              "batch",
+              "queries",
+              "queries"
+            ]
+          },
+          {
+            "name": "candidate_indices",
+            "type": "tensor(int64)",
+            "shape": [
+              "batch",
+              "queries",
+              "Expandcandidate_indices_dim_2",
+              2
+            ]
+          },
+          {
+            "name": "candidate_valid",
+            "type": "tensor(bool)",
+            "shape": [
+              "batch",
+              "queries",
+              "Expandcandidate_valid_dim_2"
+            ]
+          },
+          {
+            "name": "null_logits",
+            "type": "tensor(float)",
+            "shape": [
+              "batch",
+              "queries"
+            ]
+          }
+        ]
+      },
+      "packages": {
+        "gliner2": "2.0.0",
+        "torch": "2.14.0",
+        "onnxruntime-gpu": "1.30.0",
+        "numpy": "2.5.3",
+        "transformers": "4.57.6",
+        "tokenizers": "0.22.2"
+      }
+    }
+  },
+  "corpora": {
+    "organizer": {
+      "cases": 446,
+      "service_hybrid": {
+        "native": {
+          "unique_case_primary": {
+            "cases": 446,
+            "exact_cases": 423,
+            "positive_cases": 369,
+            "negative_cases": 77,
+            "fully_protected_positive_cases": 353,
+            "false_positive_negative_cases": 7,
+            "uncertain_cases": 117,
+            "character_metrics": {
+              "precision": 0.977782,
+              "recall": 0.971434,
+              "f1": 0.974598,
+              "true_positive": 5237,
+              "false_positive": 119,
+              "false_negative": 154
+            },
+            "exact_case_rate": 0.94843,
+            "fully_protected_positive_rate": 0.95664,
+            "false_positive_negative_rate": 0.090909
+          },
+          "traffic_weighted_secondary": {
+            "cases": 35845,
+            "exact_cases": 33925,
+            "positive_cases": 29605,
+            "negative_cases": 6240,
+            "fully_protected_positive_cases": 28245,
+            "false_positive_negative_cases": 560,
+            "uncertain_cases": 9520,
+            "character_metrics": {
+              "precision": 0.977794,
+              "recall": 0.969651,
+              "f1": 0.973706,
+              "true_positive": 419190,
+              "false_positive": 9520,
+              "false_negative": 13120
+            },
+            "exact_case_rate": 0.946436,
+            "fully_protected_positive_rate": 0.954062,
+            "false_positive_negative_rate": 0.089744
+          },
+          "certain_cases_sensitivity": {
+            "cases": 329,
+            "exact_cases": 328,
+            "positive_cases": 293,
+            "negative_cases": 36,
+            "fully_protected_positive_cases": 293,
+            "false_positive_negative_cases": 1,
+            "uncertain_cases": 0,
+            "character_metrics": {
+              "precision": 0.989771,
+              "recall": 1.0,
+              "f1": 0.994859,
+              "true_positive": 4064,
+              "false_positive": 42,
+              "false_negative": 0
+            },
+            "exact_case_rate": 0.99696,
+            "fully_protected_positive_rate": 1.0,
+            "false_positive_negative_rate": 0.027778
+          },
+          "typed_character_secondary": {
+            "precision": 0.937267,
+            "recall": 0.931182,
+            "f1": 0.934214,
+            "true_positive": 5020,
+            "false_positive": 336,
+            "false_negative": 371
+          },
+          "exact_typed_span_secondary": {
+            "precision": 0.906977,
+            "recall": 0.914712,
+            "f1": 0.910828,
+            "true_positive": 429,
+            "false_positive": 44,
+            "false_negative": 40
+          },
+          "gold_type_coverage": {
+            "ADDRESS": {
+              "gold_characters": 903,
+              "protected_characters": 903,
+              "cases": 28,
+              "fully_protected_cases": 28,
+              "character_recall": 1.0
+            },
+            "BIRTH_DATE": {
+              "gold_characters": 350,
+              "protected_characters": 336,
+              "cases": 40,
+              "fully_protected_cases": 38,
+              "character_recall": 0.96
+            },
+            "BIRTH_PLACE": {
+              "gold_characters": 156,
+              "protected_characters": 156,
+              "cases": 11,
+              "fully_protected_cases": 11,
+              "character_recall": 1.0
+            },
+            "CARD": {
+              "gold_characters": 84,
+              "protected_characters": 52,
+              "cases": 6,
+              "fully_protected_cases": 4,
+              "character_recall": 0.619048
+            },
+            "CARDHOLDER": {
+              "gold_characters": 148,
+              "protected_characters": 148,
+              "cases": 12,
+              "fully_protected_cases": 12,
+              "character_recall": 1.0
+            },
+            "CITIZENSHIP": {
+              "gold_characters": 175,
+              "protected_characters": 175,
+              "cases": 10,
+              "fully_protected_cases": 10,
+              "character_recall": 1.0
+            },
+            "CITY": {
+              "gold_characters": 12,
+              "protected_characters": 12,
+              "cases": 2,
+              "fully_protected_cases": 2,
+              "character_recall": 1.0
+            },
+            "CVV": {
+              "gold_characters": 39,
+              "protected_characters": 39,
+              "cases": 13,
+              "fully_protected_cases": 13,
+              "character_recall": 1.0
+            },
+            "DEPARTMENT_CODE": {
+              "gold_characters": 72,
+              "protected_characters": 72,
+              "cases": 12,
+              "fully_protected_cases": 12,
+              "character_recall": 1.0
+            },
+            "DRIVER_LICENSE": {
+              "gold_characters": 150,
+              "protected_characters": 150,
+              "cases": 14,
+              "fully_protected_cases": 14,
+              "character_recall": 1.0
+            },
+            "EMAIL": {
+              "gold_characters": 322,
+              "protected_characters": 322,
+              "cases": 19,
+              "fully_protected_cases": 19,
+              "character_recall": 1.0
+            },
+            "INN": {
+              "gold_characters": 180,
+              "protected_characters": 180,
+              "cases": 12,
+              "fully_protected_cases": 12,
+              "character_recall": 1.0
+            },
+            "PASSPORT": {
+              "gold_characters": 404,
+              "protected_characters": 304,
+              "cases": 38,
+              "fully_protected_cases": 28,
+              "character_recall": 0.752475
+            },
+            "PASSPORT_DATE": {
+              "gold_characters": 215,
+              "protected_characters": 208,
+              "cases": 27,
+              "fully_protected_cases": 26,
+              "character_recall": 0.967442
+            },
+            "PASSPORT_ISSUER": {
+              "gold_characters": 401,
+              "protected_characters": 401,
+              "cases": 14,
+              "fully_protected_cases": 14,
+              "character_recall": 1.0
+            },
+            "PERSON": {
+              "gold_characters": 1450,
+              "protected_characters": 1449,
+              "cases": 120,
+              "fully_protected_cases": 119,
+              "character_recall": 0.99931
+            },
+            "PHONE": {
+              "gold_characters": 220,
+              "protected_characters": 220,
+              "cases": 19,
+              "fully_protected_cases": 19,
+              "character_recall": 1.0
+            },
+            "PIN": {
+              "gold_characters": 104,
+              "protected_characters": 104,
+              "cases": 25,
+              "fully_protected_cases": 25,
+              "character_recall": 1.0
+            },
+            "POSTAL_CODE": {
+              "gold_characters": 6,
+              "protected_characters": 6,
+              "cases": 1,
+              "fully_protected_cases": 1,
+              "character_recall": 1.0
+            }
+          }
+        },
+        "spacy": {
+          "unique_case_primary": {
+            "cases": 446,
+            "exact_cases": 415,
+            "positive_cases": 369,
+            "negative_cases": 77,
+            "fully_protected_positive_cases": 344,
+            "false_positive_negative_cases": 6,
+            "uncertain_cases": 117,
+            "character_metrics": {
+              "precision": 0.980072,
+              "recall": 0.957893,
+              "f1": 0.968856,
+              "true_positive": 5164,
+              "false_positive": 105,
+              "false_negative": 227
+            },
+            "exact_case_rate": 0.930493,
+            "fully_protected_positive_rate": 0.932249,
+            "false_positive_negative_rate": 0.077922
+          },
+          "traffic_weighted_secondary": {
+            "cases": 35845,
+            "exact_cases": 33285,
+            "positive_cases": 29605,
+            "negative_cases": 6240,
+            "fully_protected_positive_cases": 27525,
+            "false_positive_negative_cases": 480,
+            "uncertain_cases": 9520,
+            "character_metrics": {
+              "precision": 0.980083,
+              "recall": 0.956143,
+              "f1": 0.967965,
+              "true_positive": 413350,
+              "false_positive": 8400,
+              "false_negative": 18960
+            },
+            "exact_case_rate": 0.928581,
+            "fully_protected_positive_rate": 0.929742,
+            "false_positive_negative_rate": 0.076923
+          },
+          "certain_cases_sensitivity": {
+            "cases": 329,
+            "exact_cases": 328,
+            "positive_cases": 293,
+            "negative_cases": 36,
+            "fully_protected_positive_cases": 293,
+            "false_positive_negative_cases": 1,
+            "uncertain_cases": 0,
+            "character_metrics": {
+              "precision": 0.989771,
+              "recall": 1.0,
+              "f1": 0.994859,
+              "true_positive": 4064,
+              "false_positive": 42,
+              "false_negative": 0
+            },
+            "exact_case_rate": 0.99696,
+            "fully_protected_positive_rate": 1.0,
+            "false_positive_negative_rate": 0.027778
+          },
+          "typed_character_secondary": {
+            "precision": 0.942684,
+            "recall": 0.92135,
+            "f1": 0.931895,
+            "true_positive": 4967,
+            "false_positive": 302,
+            "false_negative": 424
+          },
+          "exact_typed_span_secondary": {
+            "precision": 0.929978,
+            "recall": 0.906183,
+            "f1": 0.917927,
+            "true_positive": 425,
+            "false_positive": 32,
+            "false_negative": 44
+          },
+          "gold_type_coverage": {
+            "ADDRESS": {
+              "gold_characters": 903,
+              "protected_characters": 903,
+              "cases": 28,
+              "fully_protected_cases": 28,
+              "character_recall": 1.0
+            },
+            "BIRTH_DATE": {
+              "gold_characters": 350,
+              "protected_characters": 336,
+              "cases": 40,
+              "fully_protected_cases": 38,
+              "character_recall": 0.96
+            },
+            "BIRTH_PLACE": {
+              "gold_characters": 156,
+              "protected_characters": 156,
+              "cases": 11,
+              "fully_protected_cases": 11,
+              "character_recall": 1.0
+            },
+            "CARD": {
+              "gold_characters": 84,
+              "protected_characters": 52,
+              "cases": 6,
+              "fully_protected_cases": 4,
+              "character_recall": 0.619048
+            },
+            "CARDHOLDER": {
+              "gold_characters": 148,
+              "protected_characters": 148,
+              "cases": 12,
+              "fully_protected_cases": 12,
+              "character_recall": 1.0
+            },
+            "CITIZENSHIP": {
+              "gold_characters": 175,
+              "protected_characters": 175,
+              "cases": 10,
+              "fully_protected_cases": 10,
+              "character_recall": 1.0
+            },
+            "CITY": {
+              "gold_characters": 12,
+              "protected_characters": 12,
+              "cases": 2,
+              "fully_protected_cases": 2,
+              "character_recall": 1.0
+            },
+            "CVV": {
+              "gold_characters": 39,
+              "protected_characters": 39,
+              "cases": 13,
+              "fully_protected_cases": 13,
+              "character_recall": 1.0
+            },
+            "DEPARTMENT_CODE": {
+              "gold_characters": 72,
+              "protected_characters": 72,
+              "cases": 12,
+              "fully_protected_cases": 12,
+              "character_recall": 1.0
+            },
+            "DRIVER_LICENSE": {
+              "gold_characters": 150,
+              "protected_characters": 150,
+              "cases": 14,
+              "fully_protected_cases": 14,
+              "character_recall": 1.0
+            },
+            "EMAIL": {
+              "gold_characters": 322,
+              "protected_characters": 322,
+              "cases": 19,
+              "fully_protected_cases": 19,
+              "character_recall": 1.0
+            },
+            "INN": {
+              "gold_characters": 180,
+              "protected_characters": 180,
+              "cases": 12,
+              "fully_protected_cases": 12,
+              "character_recall": 1.0
+            },
+            "PASSPORT": {
+              "gold_characters": 404,
+              "protected_characters": 284,
+              "cases": 38,
+              "fully_protected_cases": 27,
+              "character_recall": 0.70297
+            },
+            "PASSPORT_DATE": {
+              "gold_characters": 215,
+              "protected_characters": 208,
+              "cases": 27,
+              "fully_protected_cases": 26,
+              "character_recall": 0.967442
+            },
+            "PASSPORT_ISSUER": {
+              "gold_characters": 401,
+              "protected_characters": 401,
+              "cases": 14,
+              "fully_protected_cases": 14,
+              "character_recall": 1.0
+            },
+            "PERSON": {
+              "gold_characters": 1450,
+              "protected_characters": 1396,
+              "cases": 120,
+              "fully_protected_cases": 111,
+              "character_recall": 0.962759
+            },
+            "PHONE": {
+              "gold_characters": 220,
+              "protected_characters": 220,
+              "cases": 19,
+              "fully_protected_cases": 19,
+              "character_recall": 1.0
+            },
+            "PIN": {
+              "gold_characters": 104,
+              "protected_characters": 104,
+              "cases": 25,
+              "fully_protected_cases": 25,
+              "character_recall": 1.0
+            },
+            "POSTAL_CODE": {
+              "gold_characters": 6,
+              "protected_characters": 6,
+              "cases": 1,
+              "fully_protected_cases": 1,
+              "character_recall": 1.0
+            }
+          }
+        },
+        "candidate": {
+          "unique_case_primary": {
+            "cases": 446,
+            "exact_cases": 423,
+            "positive_cases": 369,
+            "negative_cases": 77,
+            "fully_protected_positive_cases": 353,
+            "false_positive_negative_cases": 7,
+            "uncertain_cases": 117,
+            "character_metrics": {
+              "precision": 0.977782,
+              "recall": 0.971434,
+              "f1": 0.974598,
+              "true_positive": 5237,
+              "false_positive": 119,
+              "false_negative": 154
+            },
+            "exact_case_rate": 0.94843,
+            "fully_protected_positive_rate": 0.95664,
+            "false_positive_negative_rate": 0.090909
+          },
+          "traffic_weighted_secondary": {
+            "cases": 35845,
+            "exact_cases": 33925,
+            "positive_cases": 29605,
+            "negative_cases": 6240,
+            "fully_protected_positive_cases": 28245,
+            "false_positive_negative_cases": 560,
+            "uncertain_cases": 9520,
+            "character_metrics": {
+              "precision": 0.977794,
+              "recall": 0.969651,
+              "f1": 0.973706,
+              "true_positive": 419190,
+              "false_positive": 9520,
+              "false_negative": 13120
+            },
+            "exact_case_rate": 0.946436,
+            "fully_protected_positive_rate": 0.954062,
+            "false_positive_negative_rate": 0.089744
+          },
+          "certain_cases_sensitivity": {
+            "cases": 329,
+            "exact_cases": 328,
+            "positive_cases": 293,
+            "negative_cases": 36,
+            "fully_protected_positive_cases": 293,
+            "false_positive_negative_cases": 1,
+            "uncertain_cases": 0,
+            "character_metrics": {
+              "precision": 0.989771,
+              "recall": 1.0,
+              "f1": 0.994859,
+              "true_positive": 4064,
+              "false_positive": 42,
+              "false_negative": 0
+            },
+            "exact_case_rate": 0.99696,
+            "fully_protected_positive_rate": 1.0,
+            "false_positive_negative_rate": 0.027778
+          },
+          "typed_character_secondary": {
+            "precision": 0.937267,
+            "recall": 0.931182,
+            "f1": 0.934214,
+            "true_positive": 5020,
+            "false_positive": 336,
+            "false_negative": 371
+          },
+          "exact_typed_span_secondary": {
+            "precision": 0.906977,
+            "recall": 0.914712,
+            "f1": 0.910828,
+            "true_positive": 429,
+            "false_positive": 44,
+            "false_negative": 40
+          },
+          "gold_type_coverage": {
+            "ADDRESS": {
+              "gold_characters": 903,
+              "protected_characters": 903,
+              "cases": 28,
+              "fully_protected_cases": 28,
+              "character_recall": 1.0
+            },
+            "BIRTH_DATE": {
+              "gold_characters": 350,
+              "protected_characters": 336,
+              "cases": 40,
+              "fully_protected_cases": 38,
+              "character_recall": 0.96
+            },
+            "BIRTH_PLACE": {
+              "gold_characters": 156,
+              "protected_characters": 156,
+              "cases": 11,
+              "fully_protected_cases": 11,
+              "character_recall": 1.0
+            },
+            "CARD": {
+              "gold_characters": 84,
+              "protected_characters": 52,
+              "cases": 6,
+              "fully_protected_cases": 4,
+              "character_recall": 0.619048
+            },
+            "CARDHOLDER": {
+              "gold_characters": 148,
+              "protected_characters": 148,
+              "cases": 12,
+              "fully_protected_cases": 12,
+              "character_recall": 1.0
+            },
+            "CITIZENSHIP": {
+              "gold_characters": 175,
+              "protected_characters": 175,
+              "cases": 10,
+              "fully_protected_cases": 10,
+              "character_recall": 1.0
+            },
+            "CITY": {
+              "gold_characters": 12,
+              "protected_characters": 12,
+              "cases": 2,
+              "fully_protected_cases": 2,
+              "character_recall": 1.0
+            },
+            "CVV": {
+              "gold_characters": 39,
+              "protected_characters": 39,
+              "cases": 13,
+              "fully_protected_cases": 13,
+              "character_recall": 1.0
+            },
+            "DEPARTMENT_CODE": {
+              "gold_characters": 72,
+              "protected_characters": 72,
+              "cases": 12,
+              "fully_protected_cases": 12,
+              "character_recall": 1.0
+            },
+            "DRIVER_LICENSE": {
+              "gold_characters": 150,
+              "protected_characters": 150,
+              "cases": 14,
+              "fully_protected_cases": 14,
+              "character_recall": 1.0
+            },
+            "EMAIL": {
+              "gold_characters": 322,
+              "protected_characters": 322,
+              "cases": 19,
+              "fully_protected_cases": 19,
+              "character_recall": 1.0
+            },
+            "INN": {
+              "gold_characters": 180,
+              "protected_characters": 180,
+              "cases": 12,
+              "fully_protected_cases": 12,
+              "character_recall": 1.0
+            },
+            "PASSPORT": {
+              "gold_characters": 404,
+              "protected_characters": 304,
+              "cases": 38,
+              "fully_protected_cases": 28,
+              "character_recall": 0.752475
+            },
+            "PASSPORT_DATE": {
+              "gold_characters": 215,
+              "protected_characters": 208,
+              "cases": 27,
+              "fully_protected_cases": 26,
+              "character_recall": 0.967442
+            },
+            "PASSPORT_ISSUER": {
+              "gold_characters": 401,
+              "protected_characters": 401,
+              "cases": 14,
+              "fully_protected_cases": 14,
+              "character_recall": 1.0
+            },
+            "PERSON": {
+              "gold_characters": 1450,
+              "protected_characters": 1449,
+              "cases": 120,
+              "fully_protected_cases": 119,
+              "character_recall": 0.99931
+            },
+            "PHONE": {
+              "gold_characters": 220,
+              "protected_characters": 220,
+              "cases": 19,
+              "fully_protected_cases": 19,
+              "character_recall": 1.0
+            },
+            "PIN": {
+              "gold_characters": 104,
+              "protected_characters": 104,
+              "cases": 25,
+              "fully_protected_cases": 25,
+              "character_recall": 1.0
+            },
+            "POSTAL_CODE": {
+              "gold_characters": 6,
+              "protected_characters": 6,
+              "cases": 1,
+              "fully_protected_cases": 1,
+              "character_recall": 1.0
+            }
+          }
+        }
+      },
+      "raw_person_candidate": {
+        "gold_types_mapped_to_PERSON": [
+          "CARDHOLDER",
+          "PERSON"
+        ],
+        "candidate_entities_by_type": {
+          "LOCATION": 83,
+          "PERSON": 149
+        },
+        "unique_case_primary": {
+          "cases": 446,
+          "exact_cases": 431,
+          "negative_cases": 315,
+          "false_positive_negative_cases": 5,
+          "character_metrics": {
+            "precision": 0.938294,
+            "recall": 0.970588,
+            "f1": 0.954168,
+            "true_positive": 1551,
+            "false_positive": 102,
+            "false_negative": 47
+          }
+        },
+        "certain_cases_sensitivity": {
+          "cases": 329,
+          "exact_cases": 321,
+          "negative_cases": 220,
+          "false_positive_negative_cases": 2,
+          "character_metrics": {
+            "precision": 0.964989,
+            "recall": 0.988789,
+            "f1": 0.976744,
+            "true_positive": 1323,
+            "false_positive": 48,
+            "false_negative": 15
+          }
+        },
+        "location_metrics": null,
+        "interpretation": "Raw model PERSON candidates before rules and public-entity filtering; PERSON and CARDHOLDER labels are scored together. LOCATION is unscored because the corpus has no matching LOCATION annotation class; structured ADDRESS, BIRTH_PLACE, CITY, and CITIZENSHIP spans are not interchangeable with it."
+      }
+    }
+  },
+  "parity_vs_native": {
+    "organizer": {
+      "cases": 446,
+      "identical_span_cases": 446,
+      "changed_cases": [],
+      "matched_spans": 232,
+      "maximum_score_difference_on_matched_spans": 5.245208740234375e-06,
+      "mean_score_difference_on_matched_spans": 2.6565173576618063e-07
+    }
+  },
+  "limitations": [
+    "Organizer labels are provisional AI silver, not organizer ground truth.",
+    "Corpora already used for rule development; selected GLiNER schema tuned on organizer before this experiment.",
+    "No thresholds or annotations changed for the ONNX export.",
+    "Full masking counts protected alphanumeric positions; typed metrics retain wrong classes.",
+    "No inference speed claim is an HTTP RPS measurement."
+  ]
+}

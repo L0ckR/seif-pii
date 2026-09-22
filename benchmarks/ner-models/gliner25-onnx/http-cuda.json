@@ -1,0 +1,378 @@
+{
+  "schema_version": 1,
+  "status": "FAIL",
+  "started_at_utc": "2026-09-22T19:44:12.753033+00:00",
+  "method": "Closed-loop mask-only /v1/mask; 446 unique texts once per concurrency 1 and 4; fresh IDs.",
+  "configuration": {
+    "device": "cuda",
+    "cpu_threads": 4,
+    "seed": 20260922,
+    "schema": "described-names",
+    "threshold": 0.8,
+    "warmup": 5,
+    "cuda_tf32": false,
+    "api_workers": 1,
+    "ner_workers": 1,
+    "ner_max_model_jobs": 4,
+    "ner_timeout_seconds": 20,
+    "client_timeout_seconds": 30,
+    "capture_enabled": false,
+    "text_cache": false,
+    "storage": "memory"
+  },
+  "limitations": [
+    "Not an open-loop capacity, Redis, capture-enabled or production deployment measurement.",
+    "Restore checks and warmup are excluded; each timed request invokes actual NER.",
+    "Reference comparisons cover masks, ordered typed offsets and type lists, not float score equality.",
+    "Matching frozen predictions is inference parity, not perfect organizer ground truth."
+  ],
+  "provenance": {
+    "source_sha256": {
+      "/home/lockr/projects/seif-pii-gliner-onnx/seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+      "/home/lockr/projects/seif-pii-gliner-onnx/seif/app.py": "e958559569fae134ace1e54ef02af655dc65a4fc481a93545c315721bc1f8951",
+      "/home/lockr/projects/seif-pii-gliner-onnx/seif/async_callbacks.py": "b5ce7aae9979e6251c827d3e2099a4377266bcb8076606d67dbe86c38fa21ebe",
+      "/home/lockr/projects/seif-pii-gliner-onnx/seif/cardholder_fields.py": "3d80d59636e4b2e1a668325fbb945027b48a37e60aad5297c39b727a51806462",
+      "/home/lockr/projects/seif-pii-gliner-onnx/seif/config.py": "ca9c4e4bc80fcb6847f53f08593b25e5a3b41d6ae5a44ce7c416075ffd7b4b45",
+      "/home/lockr/projects/seif-pii-gliner-onnx/seif/context_filters.py": "c3fbd2c356784e87c481d3ac7d58a8cbf5863d04db96e47d4ef062e348bfd7fb",
+      "/home/lockr/projects/seif-pii-gliner-onnx/seif/detector.py": "e0b09cda385168f401ed1d1aa81ae4b1457d701be977f8f9aee789e444534025",
+      "/home/lockr/projects/seif-pii-gliner-onnx/seif/document_fields.py": "2200ed9f9751ee4894f164a4b43654de6f204c9661da83cdbf7a2a455d46ba51",
+      "/home/lockr/projects/seif-pii-gliner-onnx/seif/gliner_ner.py": "8012d0c3fc83b6c0a0defd4a07735d6e9cd4aa0c5debb1f7c395ddafb7431311",
+      "/home/lockr/projects/seif-pii-gliner-onnx/seif/gliner_onnx.py": "08118aaf0326e89d7a0ef890a24f7a29728578a713690e930cf7cf48cd12056d",
+      "/home/lockr/projects/seif-pii-gliner-onnx/seif/location_fields.py": "2d806e7a35bb7669001e796deba5cbac020dddb2887284390d27becebc43009e",
+      "/home/lockr/projects/seif-pii-gliner-onnx/seif/ner.py": "66c64453390bd851f2283c01bd995145e3a21e4cd23ad9af1f8330a665816068",
+      "/home/lockr/projects/seif-pii-gliner-onnx/seif/person_fields.py": "ca843e9b6f8ef9d4739703e83b1438a96d114dc95782626fa2e89366bf29f08d",
+      "/home/lockr/projects/seif-pii-gliner-onnx/seif/request_capture.py": "ce9d53ed7827992cd5c0c4b10914e3f9becc978cc192263116112c642e506855",
+      "/home/lockr/projects/seif-pii-gliner-onnx/seif/structured_fields.py": "26462106b1a29140a3bbf2b2370feab631145932ee44fbb78ca007b6d1d1218c",
+      "/home/lockr/projects/seif-pii-gliner-onnx/seif/transform.py": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+      "/home/lockr/projects/seif-pii-gliner-onnx/seif/vault.py": "b6b4f59bc911bb0a0c745b6801bcd9a034200e016f321e38c2984206c2946554",
+      "/home/lockr/projects/seif-pii-gliner-onnx/benchmarks/ner-models/gliner25-onnx/http_benchmark.py": "b9627bade19d1fae65842bf57c9e3380130ab48f5188de199a20b756f9648a5c",
+      "/home/lockr/projects/seif-pii-gliner-onnx/benchmarks/ner-models/gliner25-multi-v1/http_smoke.py": "a3e36444419e27716d1bd00beec41f9dbd39c720f54720363472c76307472933",
+      "/home/lockr/projects/seif-pii-gliner-onnx/scripts/ner_service.py": "9d2291f08dc6013ba23552f34abe206f93a46fd6afc3da6abfc48e34b0958069",
+      "/home/lockr/projects/seif-pii-gliner-onnx/scripts/evaluate_golden.py": "02e1160fbfbb2933e4e90d65573e559962e6b474ab69ddaa1c2c0f66e68226ff"
+    },
+    "asset_sha256": {
+      "/home/lockr/projects/seif-pii-gliner-onnx/datasets/golden/organizer-v1/cases.jsonl": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46",
+      "/home/lockr/projects/seif-pii-gliner-onnx/datasets/golden/organizer-v1/manifest.json": "74f6b661ff33cbc88b53fde91cb1103acaa1f6002a4008463d3100b7c9b2305a",
+      "/home/lockr/projects/seif-pii-gliner-onnx/benchmarks/ner-models/gliner25-multi-v1/selected-service.jsonl": "e7995a07d8ca526ef8691acfc846fce6175e43780902bfcde3b795a139b38074",
+      "/home/lockr/projects/seif-pii-gliner-onnx/benchmarks/ner-models/gliner25-multi-v1/selected-service.meta.json": "533cbac4d6b24eb30c94bce6bd3359baa284fcf378ff640c6fb5958410ba279e"
+    },
+    "model_file_sha256": {
+      "/home/lockr/.cache/huggingface/hub/models--fastino--gliner2.5-multi-v1/snapshots/a221b77a8baf4a613b8f8652661d41fa10a5641e/config.json": "8b59a0f426a65859c89cd1ea850c3529c09aa3be3a6fafd8eddfdd17b1bf0146",
+      "/home/lockr/.cache/huggingface/hub/models--fastino--gliner2.5-multi-v1/snapshots/a221b77a8baf4a613b8f8652661d41fa10a5641e/encoder_config/config.json": "fa4f9ef2903b5369ab172333aae4574e6a476511d7465845cf59f8360ee18716",
+      "/home/lockr/.cache/huggingface/hub/models--fastino--gliner2.5-multi-v1/snapshots/a221b77a8baf4a613b8f8652661d41fa10a5641e/model.safetensors": "c1ff4ec0bc00031c15530b8f3c33d3677f27949e6a0cb52e1247a6224b6c5395",
+      "/home/lockr/.cache/huggingface/hub/models--fastino--gliner2.5-multi-v1/snapshots/a221b77a8baf4a613b8f8652661d41fa10a5641e/tokenizer.json": "c62446df87ae18ec98b133f8f84fc449a07cc89bbf8ef192a4cb5f9c53777a7a",
+      "/home/lockr/.cache/huggingface/hub/models--fastino--gliner2.5-multi-v1/snapshots/a221b77a8baf4a613b8f8652661d41fa10a5641e/tokenizer_config.json": "0bf3ea0873234bd9bfdd3853c440395009ac6365a925b91654daed5396d655e1",
+      "/home/lockr/.cache/huggingface/hub/models--DanKau--gliner2.5-multi-v1-onnx/snapshots/481ad683a5420349c20f7ccc992efd25f9f3b809/onnx/encoder.onnx": "ab5f77ea6df6de0c8e5be3038d3bd55bb2dfe28b37dfbd2b1248cf17c6073579",
+      "/home/lockr/.cache/huggingface/hub/models--DanKau--gliner2.5-multi-v1-onnx/snapshots/481ad683a5420349c20f7ccc992efd25f9f3b809/onnx/boundary.onnx": "131f64aa024ea46a991de880562ffc94c02f8fa7886b8afe03c55d927c9e33e2",
+      "/home/lockr/.cache/huggingface/hub/models--DanKau--gliner2.5-multi-v1-onnx/snapshots/481ad683a5420349c20f7ccc992efd25f9f3b809/config.json": "dca03c3cfc6144e1c08409ac5be48377edfaea7bc48dbda5b57dd8fd9f5d4fbb",
+      "/home/lockr/.cache/huggingface/hub/models--DanKau--gliner2.5-multi-v1-onnx/snapshots/481ad683a5420349c20f7ccc992efd25f9f3b809/gliner2_config.json": "96089e65559fbd5d4484063cd165c50522ba65954d9710e3f44459233cb083db",
+      "/home/lockr/.cache/huggingface/hub/models--DanKau--gliner2.5-multi-v1-onnx/snapshots/481ad683a5420349c20f7ccc992efd25f9f3b809/tokenizer.json": "c62446df87ae18ec98b133f8f84fc449a07cc89bbf8ef192a4cb5f9c53777a7a",
+      "/home/lockr/.cache/huggingface/hub/models--DanKau--gliner2.5-multi-v1-onnx/snapshots/481ad683a5420349c20f7ccc992efd25f9f3b809/tokenizer_config.json": "db8ff95e236160a65fb6139babdf12dcaec4759bd0225af09b26eca8aa97d017"
+    }
+  },
+  "backends": [
+    {
+      "backend": "torch",
+      "status": "FAIL",
+      "health": {
+        "api": {
+          "status": "ok",
+          "mode": "restricted",
+          "storage": "memory",
+          "python": "3.14.7",
+          "free_threaded": true,
+          "gil_enabled": false,
+          "detector_profile": "hybrid"
+        },
+        "ner": {
+          "status": "ok",
+          "model": "fastino/gliner2.5-multi-v1",
+          "entities": [
+            "PERSON",
+            "LOCATION"
+          ]
+        }
+      },
+      "model": {
+        "backend": "torch",
+        "device": "cuda",
+        "dtype": "torch.float32",
+        "cuda_tf32": false
+      },
+      "phases": [],
+      "error_type": "RemoteDisconnected",
+      "cleanup": [
+        {
+          "service": "api",
+          "exited": true,
+          "return_code": -15,
+          "forced_kill": false
+        },
+        {
+          "service": "ner",
+          "exited": true,
+          "return_code": -15,
+          "forced_kill": false
+        }
+      ],
+      "failure_logs": [
+        "/home/lockr/projects/seif-pii-gliner-onnx/local-data/gliner25-onnx-http/http-cuda-d4e0023861ed1020/torch/api.log",
+        "/home/lockr/projects/seif-pii-gliner-onnx/local-data/gliner25-onnx-http/http-cuda-d4e0023861ed1020/torch/ner.log"
+      ]
+    },
+    {
+      "backend": "onnx",
+      "status": "FAIL",
+      "health": {
+        "api": {
+          "status": "ok",
+          "mode": "restricted",
+          "storage": "memory",
+          "python": "3.14.7",
+          "free_threaded": true,
+          "gil_enabled": false,
+          "detector_profile": "hybrid"
+        },
+        "ner": {
+          "status": "ok",
+          "model": "DanKau/gliner2.5-multi-v1-onnx",
+          "entities": [
+            "PERSON",
+            "LOCATION"
+          ]
+        }
+      },
+      "model": {
+        "model": "DanKau/gliner2.5-multi-v1-onnx",
+        "revision": "481ad683a5420349c20f7ccc992efd25f9f3b809",
+        "native_revision": "a221b77a8baf4a613b8f8652661d41fa10a5641e",
+        "onnx_files_sha256": {
+          "onnx/encoder.onnx": "ab5f77ea6df6de0c8e5be3038d3bd55bb2dfe28b37dfbd2b1248cf17c6073579",
+          "onnx/boundary.onnx": "131f64aa024ea46a991de880562ffc94c02f8fa7886b8afe03c55d927c9e33e2",
+          "config.json": "dca03c3cfc6144e1c08409ac5be48377edfaea7bc48dbda5b57dd8fd9f5d4fbb",
+          "gliner2_config.json": "96089e65559fbd5d4484063cd165c50522ba65954d9710e3f44459233cb083db",
+          "tokenizer.json": "c62446df87ae18ec98b133f8f84fc449a07cc89bbf8ef192a4cb5f9c53777a7a",
+          "tokenizer_config.json": "db8ff95e236160a65fb6139babdf12dcaec4759bd0225af09b26eca8aa97d017"
+        },
+        "native_files_sha256": {
+          "config.json": "8b59a0f426a65859c89cd1ea850c3529c09aa3be3a6fafd8eddfdd17b1bf0146",
+          "encoder_config/config.json": "fa4f9ef2903b5369ab172333aae4574e6a476511d7465845cf59f8360ee18716",
+          "model.safetensors": "c1ff4ec0bc00031c15530b8f3c33d3677f27949e6a0cb52e1247a6224b6c5395",
+          "tokenizer.json": "c62446df87ae18ec98b133f8f84fc449a07cc89bbf8ef192a4cb5f9c53777a7a",
+          "tokenizer_config.json": "0bf3ea0873234bd9bfdd3853c440395009ac6365a925b91654daed5396d655e1"
+        },
+        "schema": "described-names",
+        "threshold": 0.8,
+        "overlap_policy": "flat",
+        "device": "cuda",
+        "dtype": "float32",
+        "cpu_threads": 4,
+        "inter_op_threads": 1,
+        "torch_threads": 4,
+        "cuda_tf32": false,
+        "runtime": "ORT encoder + boundary; native GLiNER2 CPU Torch preprocessing and decoding",
+        "io": "CPU NumPy inputs/outputs; CUDA includes host/device copies at both sessions",
+        "native_checkpoint_required_at_startup": true,
+        "classification_records_relations_supported": false,
+        "encoder": {
+          "providers": [
+            "CUDAExecutionProvider",
+            "CPUExecutionProvider"
+          ],
+          "provider_options": {
+            "CPUExecutionProvider": {},
+            "CUDAExecutionProvider": {
+              "sdpa_kernel": "0",
+              "use_tf32": "0",
+              "fuse_conv_bias": "0",
+              "prefer_nhwc": "0",
+              "tunable_op_max_tuning_duration_ms": "0",
+              "tunable_op_enable": "0",
+              "tunable_op_tuning_enable": "0",
+              "enable_cudnn": "1",
+              "use_ep_level_unified_stream": "0",
+              "device_id": "0",
+              "has_user_compute_stream": "0",
+              "gpu_external_empty_cache": "0",
+              "cudnn_conv_algo_search": "EXHAUSTIVE",
+              "cudnn_conv1d_pad_to_nc1d": "0",
+              "gpu_mem_limit": "18446744073709551615",
+              "gpu_external_alloc": "0",
+              "gpu_external_free": "0",
+              "arena_extend_strategy": "kNextPowerOfTwo",
+              "do_copy_in_default_stream": "1",
+              "enable_cuda_graph": "0",
+              "user_compute_stream": "0",
+              "cudnn_conv_use_max_workspace": "1"
+            }
+          },
+          "inputs": [
+            {
+              "name": "input_ids",
+              "type": "tensor(int64)",
+              "shape": [
+                "batch",
+                "sequence"
+              ]
+            },
+            {
+              "name": "attention_mask",
+              "type": "tensor(int64)",
+              "shape": [
+                "batch",
+                "sequence"
+              ]
+            }
+          ],
+          "outputs": [
+            {
+              "name": "hidden_states",
+              "type": "tensor(float)",
+              "shape": [
+                "batch",
+                "sequence",
+                768
+              ]
+            }
+          ]
+        },
+        "boundary": {
+          "providers": [
+            "CUDAExecutionProvider",
+            "CPUExecutionProvider"
+          ],
+          "provider_options": {
+            "CPUExecutionProvider": {},
+            "CUDAExecutionProvider": {
+              "sdpa_kernel": "0",
+              "use_tf32": "0",
+              "fuse_conv_bias": "0",
+              "prefer_nhwc": "0",
+              "tunable_op_max_tuning_duration_ms": "0",
+              "tunable_op_enable": "0",
+              "tunable_op_tuning_enable": "0",
+              "enable_cudnn": "1",
+              "use_ep_level_unified_stream": "0",
+              "device_id": "0",
+              "has_user_compute_stream": "0",
+              "gpu_external_empty_cache": "0",
+              "cudnn_conv_algo_search": "EXHAUSTIVE",
+              "cudnn_conv1d_pad_to_nc1d": "0",
+              "gpu_mem_limit": "18446744073709551615",
+              "gpu_external_alloc": "0",
+              "gpu_external_free": "0",
+              "arena_extend_strategy": "kNextPowerOfTwo",
+              "do_copy_in_default_stream": "1",
+              "enable_cuda_graph": "0",
+              "user_compute_stream": "0",
+              "cudnn_conv_use_max_workspace": "1"
+            }
+          },
+          "inputs": [
+            {
+              "name": "token_states",
+              "type": "tensor(float)",
+              "shape": [
+                "batch",
+                "words",
+                768
+              ]
+            },
+            {
+              "name": "text_mask",
+              "type": "tensor(bool)",
+              "shape": [
+                "batch",
+                "words"
+              ]
+            },
+            {
+              "name": "query_states",
+              "type": "tensor(float)",
+              "shape": [
+                "batch",
+                "queries",
+                768
+              ]
+            },
+            {
+              "name": "query_mask",
+              "type": "tensor(bool)",
+              "shape": [
+                "batch",
+                "queries"
+              ]
+            }
+          ],
+          "outputs": [
+            {
+              "name": "pair_logits",
+              "type": "tensor(float)",
+              "shape": [
+                "batch",
+                "queries",
+                "queries"
+              ]
+            },
+            {
+              "name": "candidate_indices",
+              "type": "tensor(int64)",
+              "shape": [
+                "batch",
+                "queries",
+                "Expandcandidate_indices_dim_2",
+                2
+              ]
+            },
+            {
+              "name": "candidate_valid",
+              "type": "tensor(bool)",
+              "shape": [
+                "batch",
+                "queries",
+                "Expandcandidate_valid_dim_2"
+              ]
+            },
+            {
+              "name": "null_logits",
+              "type": "tensor(float)",
+              "shape": [
+                "batch",
+                "queries"
+              ]
+            }
+          ]
+        },
+        "packages": {
+          "gliner2": "2.0.0",
+          "torch": "2.14.0",
+          "onnxruntime-gpu": "1.30.0",
+          "numpy": "2.5.3",
+          "transformers": "4.57.6",
+          "tokenizers": "0.22.2"
+        }
+      },
+      "phases": [],
+      "error_type": "RemoteDisconnected",
+      "cleanup": [
+        {
+          "service": "api",
+          "exited": true,
+          "return_code": -15,
+          "forced_kill": false
+        },
+        {
+          "service": "ner",
+          "exited": true,
+          "return_code": -15,
+          "forced_kill": false
+        }
+      ],
+      "failure_logs": [
+        "/home/lockr/projects/seif-pii-gliner-onnx/local-data/gliner25-onnx-http/http-cuda-d4e0023861ed1020/onnx/api.log",
+        "/home/lockr/projects/seif-pii-gliner-onnx/local-data/gliner25-onnx-http/http-cuda-d4e0023861ed1020/onnx/ner.log"
+      ]
+    }
+  ],
+  "finished_at_utc": "2026-09-22T19:45:06.456385+00:00"
+}
