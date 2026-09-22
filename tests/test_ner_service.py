@@ -57,15 +57,17 @@ def test_authentication_health_and_typed_unicode_offsets():
 
 
 def test_startup_requires_token_and_redacts_model_initialization_errors():
+    settings = NerSettings()
     with pytest.raises(RuntimeError, match="SEIF_NER_TOKEN"):
-        with TestClient(create_app(NerSettings(), analyzer_factory=StubAnalyzer)):
+        with TestClient(create_app(settings, analyzer_factory=StubAnalyzer)):
             pass
 
     def broken():
         raise ValueError("private-value@example.invalid")
 
+    settings = NerSettings(demo=True)
     with pytest.raises(RuntimeError, match="initialization failed") as exc:
-        with TestClient(create_app(NerSettings(demo=True), analyzer_factory=broken)):
+        with TestClient(create_app(settings, analyzer_factory=broken)):
             pass
     assert "private-value" not in str(exc.value)
     assert exc.value.__suppress_context__

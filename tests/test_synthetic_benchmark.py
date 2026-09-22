@@ -15,8 +15,9 @@ def options(**updates):
 @pytest.mark.parametrize("name", ["rps", "duration", "timeout"])
 @pytest.mark.parametrize("value", [float("inf"), float("-inf"), float("nan"), 0, -1])
 def test_nonfinite_and_nonpositive_rates_are_rejected_without_network(name, value):
+    opts = options(**{name: value})
     with pytest.raises(ValueError, match="finite and positive"):
-        asyncio.run(benchmark(options(**{name: value})))
+        asyncio.run(benchmark(opts))
 
 
 @pytest.mark.parametrize("changes", [
@@ -24,8 +25,9 @@ def test_nonfinite_and_nonpositive_rates_are_rejected_without_network(name, valu
     {"concurrency": 8193}, {"concurrency": True}, {"concurrency": 2.5},
 ])
 def test_excessive_work_is_rejected(changes):
+    opts = options(**changes)
     with pytest.raises(ValueError, match="bounded"):
-        validate_options(options(**changes))
+        validate_options(opts)
 
 
 def test_normal_five_minute_target_is_valid():

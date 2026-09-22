@@ -53,7 +53,8 @@ def test_complete_unique_cases_and_only_authorized_fields(corpus):
         assert isinstance(row["notes"], str)
         assert type(row["uncertain"]) is bool
         assert row["confidence"] in {"high", "medium", "low"}
-        assert type(row["traffic_weight"]) is int and row["traffic_weight"] > 0
+        assert type(row["traffic_weight"]) is int
+        assert row["traffic_weight"] > 0
 
 
 def test_gold_masks_come_only_from_valid_annotation_spans(corpus):
@@ -65,10 +66,12 @@ def test_gold_masks_come_only_from_valid_annotation_spans(corpus):
         for entity in sorted(spans, key=lambda value: (value["start"], value["end"])):
             assert set(entity) == {"type", "start", "end", "text"}
             start, end = entity["start"], entity["end"]
-            assert type(start) is int and type(end) is int
+            assert type(start) is int
+            assert type(end) is int
             assert previous <= start < end <= len(text)
             assert entity["text"] == text[start:end]
-            assert isinstance(entity["type"], str) and entity["type"]
+            assert isinstance(entity["type"], str)
+            assert entity["type"]
             for index in range(start, end):
                 if text[index].isalnum():
                     expected[index] = "*"

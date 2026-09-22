@@ -37,15 +37,17 @@ def test_corpus_hash_defaults_and_safe_summary(tmp_path):
     {"case_id": "x", "payload": "\ud800"},
 ])
 def test_invalid_corpus_is_rejected_without_disclosing_data(tmp_path, row):
+    path = write_rows(tmp_path, [row])
     with pytest.raises(bench.BenchmarkError, match="Invalid corpus row at line 1") as error:
-        bench.load_corpus(write_rows(tmp_path, [row]))
+        bench.load_corpus(path)
     assert "private" not in str(error.value)
 
 
 def test_duplicate_case_ids_and_duplicate_json_keys_rejected(tmp_path):
     row = {"case_id": "private-id", "payload": "private-text"}
+    path = write_rows(tmp_path, [row, row])
     with pytest.raises(bench.BenchmarkError, match="line 2"):
-        bench.load_corpus(write_rows(tmp_path, [row, row]))
+        bench.load_corpus(path)
     path = tmp_path / "duplicates.jsonl"
     path.write_text('{"case_id":"x","payload":"a","payload":"private-text"}\n')
     with pytest.raises(bench.BenchmarkError, match="line 1"):
@@ -85,8 +87,9 @@ def test_equal_weights_shuffle_each_complete_cycle():
     *[f"http://127.0.0.1:{port}" for port in sorted(bench.PROTECTED_PORTS)],
 ])
 def test_live_or_nonisolated_endpoints_forbidden(url):
+    config = bench.Config(url)
     with pytest.raises(bench.BenchmarkError, match="dedicated loopback"):
-        bench.Config(url).validate()
+        config.validate()
 
 
 @pytest.mark.parametrize("settings", [
@@ -94,8 +97,9 @@ def test_live_or_nonisolated_endpoints_forbidden(url):
     {"rps": 1e308, "duration": 1e308}, {"concurrency": 0}, {"max_response_bytes": 1},
 ])
 def test_numeric_settings_are_bounded(settings):
+    config = bench.Config("http://127.0.0.1:8966", **settings)
     with pytest.raises(bench.BenchmarkError):
-        bench.Config("http://127.0.0.1:8966", **settings).validate()
+        config.validate()
 
 
 @pytest.mark.parametrize("content,error", [
@@ -106,7 +110,8 @@ def test_numeric_settings_are_bounded(settings):
 ])
 def test_success_requires_exact_string_result_contract(content, error):
     result = bench.parse_response(content)
-    assert result.error == error and result.result is None
+    assert result.error == error
+    assert result.result is None
     assert "private" not in repr(result)
 
 
@@ -163,7 +168,8 @@ def test_roundtrip_empty_negative_and_unicode_unique_ids_no_report_leaks(monkeyp
     assert set(Counter(correlation for _, correlation in calls).values()) == {2}
     assert report["latency_ms_all_attempts"]["count"] == 6
     rendered = json.dumps(report, ensure_ascii=False)
-    assert "private-text" not in rendered and "private-token" not in rendered
+    assert "private-text" not in rendered
+    assert "private-token" not in rendered
     assert not any(correlation in rendered for correlation in pairs)
 
 
@@ -245,6 +251,7 @@ def test_completed_task_failure_is_retrieved_and_sanitized(monkeypatch):
     async def pair(_index, _assignment):
         raise RuntimeError("private-text")
 
+    config = tiny_config()
     with pytest.raises(bench.BenchmarkError, match="Pair execution failed") as error:
-        asyncio.run(bench.schedule(tiny_config(), pair, Counter(), lambda index: index))
+        asyncio.run(bench.schedule(config, pair, Counter(), lambda index: index))
     assert "private-text" not in str(error.value)

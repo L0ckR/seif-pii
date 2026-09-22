@@ -90,8 +90,9 @@ def test_person_only_entrypoint_preserves_prior_contract():
     text = "Дина Штольц из Твери"
     person = candidate(text, "Дина Штольц", "PERSON")
     assert merge_person_candidates(text, [], [person]) == merge_ner_candidates(text, [], [person])
+    candidates = [person, candidate(text, "Твери")]
     with pytest.raises(ValueError):
-        merge_person_candidates(text, [], [person, candidate(text, "Твери")])
+        merge_person_candidates(text, [], candidates)
 
 
 @pytest.mark.parametrize(
@@ -104,15 +105,18 @@ def test_person_only_entrypoint_preserves_prior_contract():
 )
 def test_bad_external_location_rejects_the_whole_response(span):
     text = "Адрес банка: Самара."
+    candidates = [candidate(text, "Самара"), span]
     with pytest.raises(ValueError):
-        merge_ner_candidates(text, [], [candidate(text, "Самара"), span])
+        merge_ner_candidates(text, [], candidates)
 
 
 def test_oversized_locations_and_excessive_candidate_counts_fail_closed():
+    span = Span(0, 201, "LOCATION")
     with pytest.raises(ValueError, match="200"):
-        merge_ner_candidates("А" * 201, [], [Span(0, 201, "LOCATION")])
+        merge_ner_candidates("А" * 201, [], [span])
+    spans = [Span(0, 1, "LOCATION")] * 1025
     with pytest.raises(ValueError, match="Too many"):
-        merge_ner_candidates("А", [], [Span(0, 1, "LOCATION")] * 1025)
+        merge_ner_candidates("А", [], spans)
 
 
 def test_duplicate_scores_and_core_provenance_are_deterministic():

@@ -324,8 +324,9 @@ def test_mode_change_for_same_correlation_is_conflict(client):
     Policy(extra_rules=({"type": "CLIENT_ID", "pattern": ".*"},)),
 ])
 def test_invalid_rules_and_unknown_types_fail_at_startup(policy):
+    settings = Settings(demo=True, policies={"demo": policy})
     with pytest.raises(ValueError):
-        create_app(Settings(demo=True, policies={"demo": policy}))
+        create_app(settings)
 
 
 def test_configured_extra_type_has_same_protection_and_roundtrip():

@@ -60,7 +60,8 @@ def test_independent_workers_share_mapping_and_retry_state(redis_context):
         assert restored.json() == {"result": original}
         reverse_retry = a.post("/process", json={"payload": masked, "payload_id": payload_id}, headers=headers)
         assert reverse_retry.json() == restored.json()
-        assert not app_a.state.vault.records and not app_b.state.vault.records
+        assert not app_a.state.vault.records
+        assert not app_b.state.vault.records
         ciphertext = sync_redis.get(key)
         assert ciphertext
         assert b"worker@example.net" not in ciphertext

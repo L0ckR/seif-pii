@@ -62,8 +62,9 @@ def test_health_has_total_deadline_even_when_data_keeps_arriving():
         client = NerClient("http://ner", "test-key", transport=httpx.MockTransport(
             lambda _: httpx.Response(200, stream=stream)))
         try:
+            health = client.health()
             with pytest.raises(NerUnavailable):
-                await asyncio.wait_for(client.health(), timeout=3)
+                await asyncio.wait_for(health, timeout=3)
             assert stream.closed
         finally:
             await client.close()

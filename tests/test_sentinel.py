@@ -148,8 +148,9 @@ def test_vault_uses_master_discovery_and_closes_all_pools(monkeypatch):
     assert options["sentinel_kwargs"]["password"] == "sentinel-secret"
     assert options["socket_timeout"] == options["sentinel_kwargs"]["socket_timeout"] == 2
     first.aclose.side_effect = RuntimeError("test close failure")
+    close = vault.close()
     with pytest.raises(RuntimeError, match="test close failure"):
-        asyncio.run(vault.close())
+        asyncio.run(close)
     primary.aclose.assert_awaited_once()
     first.aclose.assert_awaited_once()
     second.aclose.assert_awaited_once()

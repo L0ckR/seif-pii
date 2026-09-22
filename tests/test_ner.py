@@ -108,24 +108,28 @@ def test_name_context_is_local_and_has_no_new_author_allowlist(text, value, publ
     ],
 )
 def test_malformed_candidate_rejects_entire_merge(candidate):
+    candidates = [person("Дина Штольц", "Дина Штольц"), candidate]
     with pytest.raises(ValueError):
-        merge_person_candidates("Дина Штольц", [], [person("Дина Штольц", "Дина Штольц"), candidate])
+        merge_person_candidates("Дина Штольц", [], candidates)
 
 
 def test_long_names_are_supported_but_oversized_model_spans_are_rejected():
     name = "Анна-Мария-Екатерина " + "Александровна-Владимировна " + "Штольц-Витгенштейн-Берген"
     assert len(name) > 70
     assert merge_person_candidates(name, [], [person(name, name)])
+    span = Span(0, 201, "PERSON")
     with pytest.raises(ValueError, match="200"):
-        merge_person_candidates("я" * 201, [], [Span(0, 201, "PERSON")])
+        merge_person_candidates("я" * 201, [], [span])
 
 
 def test_candidate_count_is_bounded_without_silent_truncation():
+    spans = [Span(0, 1, "PERSON")] * 1025
     with pytest.raises(ValueError, match="Too many"):
-        merge_person_candidates("я", [], [Span(0, 1, "PERSON")] * 1025)
+        merge_person_candidates("я", [], spans)
 
 
 def test_public_exemption_does_not_hide_invalid_response():
     text = "Поэт Антон Чехов."
+    candidates = [person(text, "Антон Чехов"), Span(0, len(text), "PERSON", math.nan)]
     with pytest.raises(ValueError):
-        merge_person_candidates(text, [], [person(text, "Антон Чехов"), Span(0, len(text), "PERSON", math.nan)])
+        merge_person_candidates(text, [], candidates)
