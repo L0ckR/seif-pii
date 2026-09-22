@@ -137,6 +137,8 @@ class NerClient:
         pending = []
         try:
             # Includes waiting for capacity, all chunks and bounded 429 retries.
+            # asyncio.timeout entry/exit and each TaskGroup exit provide
+            # cancellation checkpoints, so no explicit sleep(0) is needed.
             async with asyncio.timeout(self.timeout):
                 for offset, part in chunks(text):
                     pending.append((offset, part))

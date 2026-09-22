@@ -90,7 +90,7 @@ class RequestCapture:
         self._max_queued_bytes = max_queued_bytes
         self._max_disk_bytes = max_disk_bytes
         self._queued_bytes = 0
-        self._counts = dict(submitted=0, written=0, dropped=0, write_errors=0, bytes=0)
+        self._counts = {"submitted": 0, "written": 0, "dropped": 0, "write_errors": 0, "bytes": 0}
         self._disk_limit_reached = False
         self._pid = os.getpid()
         self._filename = f"requests-{self._pid}-{uuid.uuid4().hex}.jsonl"
@@ -169,7 +169,7 @@ class RequestCapture:
         record = dict(metadata)
         try:
             request = json.loads(body)
-        except (ValueError, UnicodeError, RecursionError):
+        except (ValueError, RecursionError):
             record["parse_error"] = True
         else:
             record["request"] = request

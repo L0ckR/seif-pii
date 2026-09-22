@@ -91,7 +91,12 @@ def parse_fixture(marked: str) -> tuple[str, set[tuple[str, int, int]]]:
 
 
 def scores(tp: int, fp: int, fn: int) -> dict:
-    precision = tp / (tp + fp) if tp + fp else (1.0 if fn == 0 else 0.0)
+    if tp + fp:
+        precision = tp / (tp + fp)
+    elif fn == 0:
+        precision = 1.0
+    else:
+        precision = 0.0
     recall = tp / (tp + fn) if tp + fn else 1.0
     f1 = 2 * precision * recall / (precision + recall) if precision + recall else 0.0
     return {"precision": round(precision, 6), "recall": round(recall, 6),

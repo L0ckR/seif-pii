@@ -87,6 +87,7 @@ def parse_bio(row):
             return None, "token_not_exactly_alignable"
         end = start + len(token)
         if label == "O":
+            # Outside tokens produce no span.
             pass
         elif label.startswith("B-") and label[2:] in ALL_FINE:
             spans.append((label[2:], start, end))

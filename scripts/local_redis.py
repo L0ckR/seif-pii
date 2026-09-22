@@ -107,7 +107,7 @@ def snapshot(directory: Path) -> dict:
                         known_sentinels=info["num-other-sentinels"] + 1,
                     )
                     primary_votes.append((info["ip"], int(info["port"])))
-        except (RedisError, OSError, ConnectionError):
+        except (RedisError, OSError):
             item["available"] = False
         else:
             item["available"] = True

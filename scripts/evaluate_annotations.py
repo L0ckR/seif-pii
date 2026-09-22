@@ -42,7 +42,12 @@ def positions(text, entities, *, typed=False):
 
 
 def scores(tp, fp, fn):
-    precision = tp / (tp + fp) if tp + fp else (1.0 if not fn else 0.0)
+    if tp + fp:
+        precision = tp / (tp + fp)
+    elif not fn:
+        precision = 1.0
+    else:
+        precision = 0.0
     recall = tp / (tp + fn) if tp + fn else 1.0
     f1 = 2 * precision * recall / (precision + recall) if precision + recall else 0.0
     return {"precision": round(precision, 6), "recall": round(recall, 6), "f1": round(f1, 6),
@@ -56,7 +61,7 @@ def shape_mask(text, protected):
 def evaluate(inputs, annotations, predictions, weights=None):
     if set(inputs) != set(annotations) or set(inputs) != set(predictions):
         raise ValueError("Inputs, annotations and predictions must cover the same complete case set")
-    weights = weights or {key: 1 for key in inputs}
+    weights = weights or dict.fromkeys(inputs, 1)
     if set(weights) != set(inputs) or any(type(value) is not int or value < 1 for value in weights.values()):
         raise ValueError("Weights must be positive integers for every case")
     totals = Counter()
@@ -79,12 +84,12 @@ def evaluate(inputs, annotations, predictions, weights=None):
         expected, actual = positions(text, gold), positions(text, guessed)
         if prediction["masked"] != shape_mask(text, actual):
             raise ValueError("Frozen spans do not reproduce the actually observed mask")
-        counts = dict(tp=len(expected & actual), fp=len(actual - expected), fn=len(expected - actual),
-                      cases=1, exact_cases=int(expected == actual),
-                      positive_cases=int(bool(expected)), negative_cases=int(not expected),
-                      fully_protected_positive_cases=int(bool(expected) and expected <= actual),
-                      false_positive_negative_cases=int(not expected and bool(actual)),
-                      uncertain_cases=int(label["uncertain"]))
+        counts = {"tp": len(expected & actual), "fp": len(actual - expected), "fn": len(expected - actual),
+                      "cases": 1, "exact_cases": int(expected == actual),
+                      "positive_cases": int(bool(expected)), "negative_cases": int(not expected),
+                      "fully_protected_positive_cases": int(bool(expected) and expected <= actual),
+                      "false_positive_negative_cases": int(not expected and bool(actual)),
+                      "uncertain_cases": int(label["uncertain"])}
         totals.update(counts)
         weighted.update({key: value * weights[case_id] for key, value in counts.items()})
         if not label["uncertain"]:

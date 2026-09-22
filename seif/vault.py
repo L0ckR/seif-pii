@@ -88,7 +88,7 @@ class Vault:
     def _expire(self):
         now = time.monotonic()
         while self.records:
-            _, (expiry, blob) = next(iter(self.records.items()))
+            _, (expiry, _) = next(iter(self.records.items()))
             if expiry > now:
                 break
             _, (_, removed) = self.records.popitem(last=False)

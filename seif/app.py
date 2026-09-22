@@ -488,8 +488,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 await ner.health()
         except Exception:
             return error(503, "storage_unavailable", "Хранилище недоступно.")
+        if vault.sentinel:
+            storage = "sentinel"
+        elif vault.redis:
+            storage = "redis"
+        else:
+            storage = "memory"
         return {"status": "ok", "mode": "demo" if settings.demo else "restricted",
-                "storage": "sentinel" if vault.sentinel else "redis" if vault.redis else "memory", "python": sys.version.split()[0],
+                "storage": storage, "python": sys.version.split()[0],
                 "free_threaded": bool(sysconfig.get_config_var("Py_GIL_DISABLED")),
                 "gil_enabled": getattr(sys, "_is_gil_enabled", lambda: True)(),
                 "detector_profile": "hybrid" if ner else "rules"}

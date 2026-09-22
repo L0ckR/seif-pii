@@ -99,7 +99,7 @@ def load_corpus(path: Path) -> Corpus:
                         raise ValueError
                     identifier.encode("utf-8")
                     payload.encode("utf-8")
-                except (ValueError, TypeError, KeyError, UnicodeError, OverflowError, RecursionError):
+                except (ValueError, TypeError, KeyError, OverflowError, RecursionError):
                     raise BenchmarkError(f"Invalid corpus row at line {line_number}") from None
                 seen.add(identifier)
                 cases.append(Case(payload, float(weight)))
@@ -180,7 +180,7 @@ def parse_response(content: bytes) -> Outcome:
             return Outcome(200, error="invalid_contract")
         body["result"].encode("utf-8")
         return Outcome(200, result=body["result"])
-    except (ValueError, TypeError, UnicodeError, RecursionError):
+    except (ValueError, TypeError, RecursionError):
         return Outcome(200, error="invalid_json")
 
 
@@ -273,10 +273,10 @@ async def schedule(config, pair, counters, on_offer):
 async def run_with_requester(config, corpus, requester):
     """Pure transport boundary makes scheduling and failure tests network-free."""
     config.validate()
-    counters = Counter({key: 0 for key in (
+    counters = Counter(dict.fromkeys((
         "pairs_offered", "pairs_dispatched", "pairs_dropped_client_capacity", "pairs_dropped_client_deadline",
         "pairs_verified", "pairs_mask_failed", "pairs_unmask_failed", "pairs_roundtrip_mismatch",
-        "pairs_mask_changed", "pairs_mask_unchanged", "requests_attempted", "requests_successful")})
+        "pairs_mask_changed", "pairs_mask_unchanged", "requests_attempted", "requests_successful"), 0))
     errors, statuses, visited = Counter(), Counter(), Counter()
     latency = {phase: array("d") for phase in ("mask", "unmask")}
     source = WeightedCycle(corpus.cases, config.seed)
