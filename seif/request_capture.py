@@ -110,26 +110,31 @@ class RequestCapture:
         self._thread = threading.Thread(target=self._run, name="seif-request-capture", daemon=True)
         self._thread.start()
 
+    @staticmethod
+    def _copy_metadata(metadata: dict, body: bytes) -> tuple[dict, int]:
+        if type(body) is not bytes or type(metadata) is not dict or len(metadata) > 64:
+            raise ValueError
+        copied = {}
+        size = len(body) + 512
+        for key, value in metadata.items():
+            if type(key) is not str or len(key) > 128:
+                raise ValueError
+            if value is not None and type(value) not in (str, int, float, bool):
+                raise ValueError
+            if isinstance(value, str) and len(value) > 4096:
+                raise ValueError
+            if type(value) is int and value.bit_length() > 256:
+                raise ValueError
+            if type(value) is float and not math.isfinite(value):
+                raise ValueError
+            copied[key] = value
+            size += 128 + len(key) * 4 + (len(value) * 4 if isinstance(value, str) else 32)
+        return copied, size
+
     def submit(self, metadata: dict, body: bytes) -> bool:
         """Return immediately; do not parse, serialize, log, or access disk here."""
         try:
-            if type(body) is not bytes or type(metadata) is not dict or len(metadata) > 64:
-                raise ValueError
-            copied = {}
-            size = len(body) + 512
-            for key, value in metadata.items():
-                if type(key) is not str or len(key) > 128:
-                    raise ValueError
-                if value is not None and type(value) not in (str, int, float, bool):
-                    raise ValueError
-                if isinstance(value, str) and len(value) > 4096:
-                    raise ValueError
-                if type(value) is int and value.bit_length() > 256:
-                    raise ValueError
-                if type(value) is float and not math.isfinite(value):
-                    raise ValueError
-                copied[key] = value
-                size += 128 + len(key) * 4 + (len(value) * 4 if isinstance(value, str) else 32)
+            copied, size = self._copy_metadata(metadata, body)
             with self._lock:
                 if self._closed or self._queued_bytes + size > self._max_queued_bytes:
                     self._counts["dropped"] += 1
@@ -201,31 +206,33 @@ class RequestCapture:
             except FileNotFoundError:
                 pass
 
-    def _run(self) -> None:
-        published = time.monotonic()
-        while not self._stop.is_set() or not self._queue.empty():
-            try:
-                metadata, body, size = self._queue.get(timeout=0.2)
-            except queue.Empty:
-                pass
-            else:
-                try:
-                    self._write(metadata, body)
-                except Exception:
-                    with self._lock:
-                        self._counts["dropped"] += 1
-                    self._error()
-                finally:
-                    with self._lock:
-                        self._queued_bytes -= size
-                    self._queue.task_done()
-            if time.monotonic() - published >= 0.8:
-                try:
-                    self._stream.flush()
-                    self._publish_status()
-                except Exception:
-                    self._error()
-                published = time.monotonic()
+    def _drain_one(self) -> None:
+        try:
+            metadata, body, size = self._queue.get(timeout=0.2)
+        except queue.Empty:
+            return
+        try:
+            self._write(metadata, body)
+        except Exception:
+            with self._lock:
+                self._counts["dropped"] += 1
+            self._error()
+        finally:
+            with self._lock:
+                self._queued_bytes -= size
+            self._queue.task_done()
+
+    def _publish_periodic(self, published: float) -> float:
+        if time.monotonic() - published < 0.8:
+            return published
+        try:
+            self._stream.flush()
+            self._publish_status()
+        except Exception:
+            self._error()
+        return time.monotonic()
+
+    def _shutdown(self) -> None:
         try:
             self._stream.flush()
             os.fsync(self._stream.fileno())
@@ -241,6 +248,13 @@ class RequestCapture:
             except Exception:
                 self._error()
             os.close(self._dir_fd)
+
+    def _run(self) -> None:
+        published = time.monotonic()
+        while not self._stop.is_set() or not self._queue.empty():
+            self._drain_one()
+            published = self._publish_periodic(published)
+        self._shutdown()
 
     def close(self) -> None:
         """Stop accepting records, drain accepted records, flush and fsync."""
