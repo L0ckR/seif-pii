@@ -251,7 +251,8 @@ class _AppContext:
 
     def __init__(self, settings: Settings):
         self.settings = settings
-        self.ner = NerClient(settings.ner_url, settings.ner_token, settings.ner_timeout_seconds) if settings.ner_url else None
+        self.ner = (NerClient(settings.ner_url, settings.ner_token, settings.ner_timeout_seconds,
+                              max_concurrency=settings.ner_max_concurrency) if settings.ner_url else None)
         self.vault = Vault(settings)
         self.registry = CollectorRegistry()
         self.cpu_pool = ThreadPoolExecutor(max_workers=settings.cpu_workers, thread_name_prefix="seif-detect")

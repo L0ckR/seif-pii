@@ -7,7 +7,9 @@ name = "seif-pii"
 version = "1.0.0"
 description = "СЕЙФ — reversible personal data gateway"
 requires-python = ">=3.12"
-dependencies = ["fastapi==0.141.1", "uvicorn[standard]==0.53.0", "cryptography==50.0.1", "redis==8.1.0", "PyYAML==6.0.3", "regex==2026.9.10", "prometheus-client==0.26.0", "httpx==0.28.1"]
+# httpcore probes sniffio per operation; installing it avoids repeated failed
+# filesystem imports on the NER request path.
+dependencies = ["fastapi==0.141.1", "uvicorn[standard]==0.53.0", "cryptography==50.0.1", "redis==8.1.0", "PyYAML==6.0.3", "regex==2026.9.10", "prometheus-client==0.26.0", "httpx==0.28.1", "sniffio==1.3.1"]
 
 [project.optional-dependencies]
 dev = ["pytest==9.1.1", "httpx==0.28.1", "aiohttp==3.14.3", "ruff==0.16.8"]

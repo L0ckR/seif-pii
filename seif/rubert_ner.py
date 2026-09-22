@@ -177,10 +177,13 @@ class RubertAnalyzer:
 
     model_name = MODEL_NAME
 
-    def __init__(self, runtime, *, runtime_metadata=None, decoder="published", profile="person-location"):
+    def __init__(self, runtime, *, runtime_metadata=None, decoder="published", profile="person-location", batch_size=1):
         if decoder not in {"published", "word"} or profile not in {"person-location", "native"}:
             raise ValueError("Unknown RuBERT decoder or gateway profile.")
         self.runtime = runtime
+        if type(batch_size) is not int or batch_size not in (1, 2, 4, 8, 16, 32) or (batch_size > 1 and decoder != "word"):
+            raise ValueError("Batched RuBERT requires word decoding and a supported batch size.")
+        self.batch_size = batch_size
         self.decoder, self.profile = decoder, profile
         self.supported_entities = NER_ENTITY_TYPES if profile == "native" else LEGACY_NER_TYPES
         self._metadata = {} if runtime_metadata is None else deepcopy(runtime_metadata)
@@ -188,7 +191,7 @@ class RubertAnalyzer:
         self._warmed = False
 
     @classmethod
-    def from_local(cls, model_path, *, device="cuda", warmup=True, decoder="word", profile="native"):
+    def from_local(cls, model_path, *, device="cuda", warmup=True, decoder="word", profile="native", batch_size=1):  # noqa: PLR0913 - preserve existing explicit factory options
         if device != "cuda" or type(warmup) is not bool:
             raise ValueError("RuBERT TensorRT requires device='cuda' and boolean warmup.")
         files = fingerprint_checkpoint(model_path)
@@ -196,10 +199,14 @@ class RubertAnalyzer:
         runtime = _load_runtime(directory)
         _validate_runtime(runtime, directory)
         runtime.backend = _ValidatedBackend(runtime.backend)
+        if batch_size > 1:
+            from seif.rubert_batch import install_batch_backend
+
+            install_batch_backend(runtime, max_batch=batch_size)
         metadata = {
             "model": MODEL_NAME, "revision": MODEL_REVISION, "files_sha256": files,
             "backend": "trt-graph", "device": "cuda", "min_confidence": None if decoder == "word" else 0.3,
-            "decoder": decoder, "gateway_profile": profile, "batch_size": 1,
+            "decoder": decoder, "gateway_profile": profile, "batch_size": batch_size,
             "max_tokens": 512, "overlap_tokens": 128, "native_types": sorted(NATIVE_TYPES),
             "person_labels": sorted(PERSON_TYPES), "location_labels": sorted(LOCATION_TYPES),
             "gateway_merge": ("none; original native boundaries" if profile == "native" else
@@ -209,27 +216,55 @@ class RubertAnalyzer:
             "precision": "published TensorRT FP16 engine with FP32 normalization accumulation; TF32 disabled at build",
             "packages": _package_versions(), "logits_shape_validation": "exact [batch, padded_tokens,43]",
         }
-        analyzer = cls(runtime, runtime_metadata=metadata, decoder=decoder, profile=profile)
+        analyzer = cls(runtime, runtime_metadata=metadata, decoder=decoder, profile=profile, batch_size=batch_size)
         if warmup:
             analyzer.warmup()
         return analyzer
 
     @classmethod
     def from_env(cls):
+        try:
+            cpu_threads = int(os.getenv("SEIF_RUBERT_CPU_THREADS", "4"))
+        except ValueError:
+            raise ValueError("SEIF_RUBERT_CPU_THREADS must be an integer between 1 and 32.") from None
+        if not 1 <= cpu_threads <= 32:
+            raise ValueError("SEIF_RUBERT_CPU_THREADS must be an integer between 1 and 32.")
         import torch
 
-        torch.set_num_threads(4)
+        torch.set_num_threads(cpu_threads)
         torch.backends.cuda.matmul.allow_tf32 = False
         torch.backends.cudnn.allow_tf32 = False
         return cls.from_local(os.getenv("SEIF_RUBERT_MODEL_PATH"),
                               decoder=os.getenv("SEIF_RUBERT_DECODER", "word"),
-                              profile=os.getenv("SEIF_RUBERT_PROFILE", "native"))
+                              profile=os.getenv("SEIF_RUBERT_PROFILE", "native"),
+                              batch_size=int(os.getenv("SEIF_NER_BATCH_SIZE", "1")))
 
     def warmup(self):
         with self._model_lock:
             if not self._warmed:
                 self.runtime.warmup()
+                if self.batch_size > 1:
+                    self._warmup_batches()
                 self._warmed = True
+
+    def _warmup_batches(self):
+        import numpy as np
+
+        tokenizer = self.runtime.tokenizer
+        # Warm the short-document shapes before readiness. Longer shapes are
+        # still supported, with bounded lazy capture/dynamic fallback.
+        for size in (2, 4, 8, 16, 32):
+            if size > self.batch_size:
+                break
+            for length in (32, 64):
+                ids = np.full((size, length), tokenizer.pad_token_id, dtype=np.int64)
+                ids[:, :2] = [tokenizer.cls_token_id, tokenizer.sep_token_id]
+                attention = np.zeros_like(ids)
+                attention[:, :2] = 1
+                logits = self.runtime.backend.run({"input_ids": ids, "attention_mask": attention,
+                                                   "token_type_ids": np.zeros_like(ids)})
+                if logits.shape != (size, length, 43) or not np.isfinite(logits).all():
+                    raise ValueError("Invalid RuBERT batch warmup logits.")
 
     def predict_native(self, text):
         if not isinstance(text, str):
@@ -251,6 +286,27 @@ class RubertAnalyzer:
             return {"native": native, "gateway": None, "gateway_error": str(error)}
         return {"native": native, "gateway": gateway, "gateway_error": None}
 
+    def predict_native_batch(self, texts):
+        from seif.rubert_batch import word_predict_batch
+
+        if (self.decoder != "word" or not isinstance(texts, list)
+                or not 1 <= len(texts) <= self.batch_size or any(not isinstance(text, str) for text in texts)):
+            raise ValueError("Unsupported RuBERT batch request.")
+        with self._model_lock:
+            outputs = word_predict_batch(self.runtime, texts, max_batch=self.batch_size)
+            if not isinstance(outputs, list) or len(outputs) != len(texts):
+                raise ValueError("Invalid RuBERT batch count.")
+            return [validate_native(text, output) for text, output in zip(texts, outputs, strict=True)]
+
+    def analyze_batch(self, *, texts, language, entities, score_threshold):
+        if (language != "ru" or not isinstance(entities, list)
+                or any(not isinstance(kind, str) or kind not in self.supported_entities for kind in entities)
+                or score_threshold != 0.0):
+            raise ValueError("Unsupported RuBERT analyzer request.")
+        native = self.predict_native_batch(texts)
+        return [[GlinerSpan(**item) for item in _gateway_from_validated(text, output, self.profile)
+                 if item["entity_type"] in entities] for text, output in zip(texts, native, strict=True)]
+
     def analyze(self, *, text, language, entities, score_threshold):
         if (not isinstance(text, str) or language != "ru" or not isinstance(entities, list)
                 or any(not isinstance(kind, str) or kind not in self.supported_entities for kind in entities)
@@ -264,4 +320,5 @@ class RubertAnalyzer:
         result = deepcopy(self._metadata)
         result["warmup_complete"] = self._warmed
         result["graph_buckets_captured"] = sorted(getattr(self.runtime.backend, "_bucket_backends", {}))
+        result["batch_graph_shapes"] = getattr(self.runtime.backend, "batch_graph_shapes", [])
         return result

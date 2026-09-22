@@ -113,11 +113,14 @@ class Settings:
     ner_url: str = field(default="", repr=False)
     ner_token: str = field(default="", repr=False)
     ner_timeout_seconds: float = 20.0
+    ner_max_concurrency: int = 4
     policies: dict[str, Policy] = field(default_factory=lambda: {"demo": Policy()})
 
     def __post_init__(self) -> None:
         if type(self.demo) is not bool:
             raise ValueError("demo must be a boolean")
+        if type(self.ner_max_concurrency) is not int or not 1 <= self.ner_max_concurrency <= 256:
+            raise ValueError("ner_max_concurrency must be an integer between 1 and 256")
         for name in (
             "ttl_seconds", "max_records", "max_store_bytes", "max_payload_chars", "max_body_bytes",
             "max_inflight_body_bytes", "max_inflight", "cpu_workers",
@@ -200,5 +203,6 @@ class Settings:
             ner_url=os.getenv("SEIF_NER_URL", ""),
             ner_token=os.getenv("SEIF_NER_TOKEN", ""),
             ner_timeout_seconds=float(os.getenv("SEIF_NER_TIMEOUT_SECONDS", "20")),
+            ner_max_concurrency=int(os.getenv("SEIF_NER_MAX_CONCURRENCY", "4")),
             policies=policies,
         )

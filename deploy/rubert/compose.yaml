@@ -1,0 +1,188 @@
+name: seif-rubert
+
+x-hardening: &hardening
+  restart: unless-stopped
+  read_only: true
+  tmpfs: ["/tmp:size=128m,mode=1777"]
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  pids_limit: 256
+  logging:
+    options:
+      max-size: 10m
+      max-file: "3"
+
+x-api: &api
+  <<: *hardening
+  image: seif-api:rubert-throughput
+  build:
+    context: ../..
+    dockerfile: Dockerfile
+  environment:
+    SEIF_DEMO: "0"
+    SEIF_MASTER_KEY: ${SEIF_MASTER_KEY:?Set the same base64 master key for every API replica}
+    SEIF_DEMO_API_KEY: ${SEIF_DEMO_API_KEY:?Set a random API key}
+    SEIF_REDIS_URL: redis://redis:6379/0
+    SEIF_REDIS_PASSWORD: ${SEIF_REDIS_PASSWORD:?Set a random Redis password}
+    SEIF_NER_URL: http://ner-router:8770
+    SEIF_NER_TOKEN: ${SEIF_NER_TOKEN:?Set a random private NER bearer token}
+    SEIF_NER_TIMEOUT_SECONDS: "20"
+    SEIF_NER_MAX_CONCURRENCY: ${SEIF_NER_MAX_CONCURRENCY:-4}
+    SEIF_WORKERS: ${SEIF_API_WORKERS:-1}
+    SEIF_CPU_WORKERS: ${SEIF_CPU_WORKERS:-4}
+    SEIF_TTL_SECONDS: ${SEIF_TTL_SECONDS:-900}
+  expose: ["8000"]
+  networks: [api-internal, data-internal, ner-internal]
+  depends_on:
+    redis:
+      condition: service_healthy
+    ner-router:
+      condition: service_healthy
+  mem_limit: ${SEIF_API_MEMORY:-1g}
+  stop_grace_period: 45s
+  healthcheck:
+    test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).close()"]
+    interval: 15s
+    timeout: 4s
+    retries: 6
+    start_period: 30s
+
+x-ner: &ner
+  <<: *hardening
+  image: seif-ner:rubert-throughput
+  platform: linux/amd64
+  build:
+    context: ../..
+    dockerfile: deploy/rubert/Dockerfile
+  environment:
+    SEIF_NER_TOKEN: ${SEIF_NER_TOKEN:?Set a random private NER bearer token}
+    SEIF_NER_BACKEND: rubert
+    SEIF_NER_WORKERS: "1"
+    SEIF_NER_MAX_MODEL_JOBS: ${SEIF_NER_MAX_MODEL_JOBS:-4}
+    SEIF_NER_MAX_HTTP_INFLIGHT: ${SEIF_NER_MAX_HTTP_INFLIGHT:-16}
+    SEIF_NER_BATCH_SIZE: ${SEIF_NER_BATCH_SIZE:-1}
+    SEIF_NER_BATCH_WAIT_MS: ${SEIF_NER_BATCH_WAIT_MS:-1.0}
+    SEIF_RUBERT_MODEL_PATH: /models/rubert
+    SEIF_RUBERT_DECODER: word
+    SEIF_RUBERT_PROFILE: native
+    SEIF_RUBERT_CPU_THREADS: ${SEIF_RUBERT_CPU_THREADS:-4}
+    OMP_NUM_THREADS: "1"
+    OPENBLAS_NUM_THREADS: "1"
+    MKL_NUM_THREADS: "1"
+  volumes:
+    - type: bind
+      source: ${SEIF_RUBERT_MODEL_HOST_PATH:?Set the absolute path to the verified local checkpoint}
+      target: /models/rubert
+      read_only: true
+      bind:
+        create_host_path: false
+  expose: ["8770"]
+  networks: [ner-internal]
+  mem_limit: ${SEIF_NER_MEMORY:-4g}
+  stop_grace_period: 45s
+  healthcheck:
+    test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8770/health', timeout=3).close()"]
+    interval: 10s
+    timeout: 4s
+    start_period: 180s
+    retries: 6
+
+services:
+  gateway:
+    <<: *hardening
+    image: haproxy:3.2.23-alpine
+    user: "10001:10001"
+    environment:
+      SEIF_API_PROXY_MAXCONN: ${SEIF_API_PROXY_MAXCONN:-64}
+    ports: ["127.0.0.1:${SEIF_RUBERT_API_PORT:-8785}:8000"]
+    networks: [edge, api-internal]
+    volumes:
+      - ./haproxy-api.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    depends_on:
+      api-1:
+        condition: service_healthy
+      api-2:
+        condition: service_healthy
+    mem_limit: 128m
+    healthcheck:
+      test: [CMD, wget, -q, -T, "3", -O, /dev/null, http://127.0.0.1:8000/health]
+      interval: 15s
+      timeout: 4s
+      retries: 6
+
+  api-1:
+    <<: *api
+  api-2:
+    <<: *api
+
+  ner-router:
+    <<: *hardening
+    image: haproxy:3.2.23-alpine
+    user: "10001:10001"
+    environment:
+      SEIF_NER_TOKEN: ${SEIF_NER_TOKEN:?Set a random private NER bearer token}
+      SEIF_NER_MAX_MODEL_JOBS: ${SEIF_NER_MAX_MODEL_JOBS:-4}
+      SEIF_NER_PROXY_MAXCONN: ${SEIF_NER_PROXY_MAXCONN:-256}
+    expose: ["8770"]
+    networks: [ner-internal]
+    volumes:
+      - ./haproxy-ner.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    depends_on:
+      ner-1:
+        condition: service_healthy
+      ner-2:
+        condition: service_healthy
+    mem_limit: 128m
+    healthcheck:
+      test: [CMD, wget, -q, -T, "3", -O, /dev/null, http://127.0.0.1:8770/health]
+      interval: 10s
+      timeout: 4s
+      retries: 6
+
+  ner-1:
+    <<: *ner
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["${SEIF_NER_GPU_1:-0}"]
+              capabilities: [gpu]
+  ner-2:
+    <<: *ner
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["${SEIF_NER_GPU_2:-0}"]
+              capabilities: [gpu]
+
+  redis:
+    <<: *hardening
+    image: redis:7.4-alpine
+    user: "999:999"
+    environment:
+      REDIS_PASSWORD: ${SEIF_REDIS_PASSWORD:?Set a random Redis password}
+      SEIF_REDIS_MAXMEMORY: ${SEIF_REDIS_MAXMEMORY:-1gb}
+    command:
+      - /bin/sh
+      - -ec
+      - 'exec redis-server --requirepass "$$REDIS_PASSWORD" --save "" --appendonly no --maxmemory "$$SEIF_REDIS_MAXMEMORY" --maxmemory-policy noeviction'
+    expose: ["6379"]
+    networks: [data-internal]
+    mem_limit: ${SEIF_REDIS_MEMORY:-1200m}
+    healthcheck:
+      test: [CMD-SHELL, 'REDISCLI_AUTH="$$REDIS_PASSWORD" redis-cli ping | grep -qx PONG']
+      interval: 5s
+      timeout: 2s
+      retries: 10
+
+networks:
+  edge: {}
+  api-internal:
+    internal: true
+  data-internal:
+    internal: true
+  ner-internal:
+    internal: true

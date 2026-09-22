@@ -46,7 +46,7 @@ def test_comparison_accepts_actual_public_mask_contract(monkeypatch):
     from seif.detector import Span
 
     class FakeNerClient:
-        def __init__(self, *_args):
+        def __init__(self, *_args, max_concurrency=4):
             pass
 
         async def detect(self, _text):

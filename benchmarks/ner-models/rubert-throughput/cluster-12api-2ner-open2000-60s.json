@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "status": "FAIL",
+  "started_at_utc": "2026-09-22T23:40:34.865193+00:00",
+  "configuration": {
+    "replicas": 2,
+    "api_processes_per_replica": 6,
+    "concurrency": [
+      32,
+      64
+    ],
+    "repeats": 20,
+    "cpu_threads": 1,
+    "api_cpu_workers": 1,
+    "api_ner_concurrency": 16,
+    "model_batch_size": 32,
+    "batch_wait_ms": 2.0,
+    "ner_max_jobs": 128,
+    "ner_max_http": 256,
+    "offered_rps": 2000.0,
+    "duration": 60.0,
+    "max_inflight": 256,
+    "total_api_processes": 12,
+    "total_ner_processes": 2,
+    "gpu_count": 1,
+    "storage": "shared authenticated Redis DB0 and common encryption key",
+    "api_metrics": "multiprocess aggregate per API group",
+    "redis_server_executable": "/tmp/seif-redis/runtime/usr/bin/redis-server"
+  },
+  "limitations": [
+    "Single physical GPU; process count does not imply multiple GPUs.",
+    "Round-robin API groups; connection acceptance by Uvicorn workers inside each group.",
+    "Authenticated isolated Redis and one encryption key shared by every API group.",
+    "Cross-worker and cross-group exact restoration are explicitly checked outside timing.",
+    "Redis uses a private Unix socket and no persistence, not production TCP/replication.",
+    "No prediction cache, capture, proxy or public tunnel; mask-only throughput."
+  ],
+  "provenance": {
+    "source_sha256": {
+      "seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+      "seif/app.py": "7a88737bd66790bf8a4bcd510c9670a6b1308830f198d04591260310c63382bd",
+      "seif/async_callbacks.py": "b5ce7aae9979e6251c827d3e2099a4377266bcb8076606d67dbe86c38fa21ebe",
+      "seif/cardholder_fields.py": "3d80d59636e4b2e1a668325fbb945027b48a37e60aad5297c39b727a51806462",
+      "seif/config.py": "1c03f1b90705ab04a783a97b2eca9d49adf53c2329277a3d3903617df885cf28",
+      "seif/context_filters.py": "d2bd0a0303aaae5bb44e6748ae429c5348e34f0f711a46285ed869b657c59fa1",
+      "seif/detector.py": "0fa80ea590895f862be2d44278bf68e75f5ce4a7f8cabb76d079f065f491b98c",
+      "seif/document_fields.py": "2200ed9f9751ee4894f164a4b43654de6f204c9661da83cdbf7a2a455d46ba51",
+      "seif/gliner_ner.py": "8012d0c3fc83b6c0a0defd4a07735d6e9cd4aa0c5debb1f7c395ddafb7431311",
+      "seif/gliner_onnx.py": "08118aaf0326e89d7a0ef890a24f7a29728578a713690e930cf7cf48cd12056d",
+      "seif/location_fields.py": "2d806e7a35bb7669001e796deba5cbac020dddb2887284390d27becebc43009e",
+      "seif/ner.py": "64961aff583473986bf9bcc9cda95e495c2ecea54ffa6aecafcb33eacbef2d5b",
+      "seif/ner_batching.py": "0d1d44fc5c889412d58a74587c5985ac49ba1bf2720a88817a9aa0fc27d97777",
+      "seif/ner_boundaries.py": "0f93e7eeed5125933de09e2e05f8ebb037a477b46d9be93cab7cbb1c750bf815",
+      "seif/ner_contract.py": "83ce1bf1345ece197c74e7477e4524f08f511a5b0fb3218247039efb7e1addb2",
+      "seif/ner_transport.py": "436ae1230801b6d087391077035d90d01981543ee381ef7b976231c96632dff1",
+      "seif/person_fields.py": "ca843e9b6f8ef9d4739703e83b1438a96d114dc95782626fa2e89366bf29f08d",
+      "seif/request_capture.py": "ce9d53ed7827992cd5c0c4b10914e3f9becc978cc192263116112c642e506855",
+      "seif/rubert_batch.py": "b74355817920135f8c9775fd15098631bf6485d3f0c78bbb1e97db3a23343636",
+      "seif/rubert_decoder.py": "303608a624d591c20e0d68730537009a0694f78d614307e46b9cf288063ffe81",
+      "seif/rubert_ner.py": "e27cd8c5aee9f783df5fb9f23254ed563efc4c3fcd1845b5e0935c87124a4aa1",
+      "seif/structured_fields.py": "26462106b1a29140a3bbf2b2370feab631145932ee44fbb78ca007b6d1d1218c",
+      "seif/transform.py": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+      "seif/vault.py": "b6b4f59bc911bb0a0c745b6801bcd9a034200e016f321e38c2984206c2946554",
+      "benchmarks/ner-models/rubert-tensorrt/http_benchmark.py": "9eea7be89cd679130fd1fc2daeb45db704f274f0182cffe6604883fea162d27f",
+      "benchmarks/ner-models/gliner25-onnx/http_benchmark.py": "0105afcb38d61622c5f76d06a6b09cd8ad02b97058562bd0da0391d49a2556b4",
+      "benchmarks/ner-models/gliner25-multi-v1/http_smoke.py": "a3e36444419e27716d1bd00beec41f9dbd39c720f54720363472c76307472933",
+      "scripts/ner_service.py": "ce48b94181d36017d2d1431fcfc5d502cad1f5415f525d9c3a64b1fa3158070c",
+      "scripts/evaluate_golden.py": "02e1160fbfbb2933e4e90d65573e559962e6b474ab69ddaa1c2c0f66e68226ff",
+      "scripts/evaluate_annotations.py": "b429e3605b90a9090a8eae0185ee9286708836494235617901fbd6ae4e0d5463",
+      "benchmarks/ner-models/rubert-upgrade/http_benchmark.py": "6015b2df1fdc7876e6086195a4a64c7d3b6e80ebea6a6881dc176ef08dda7939",
+      "benchmarks/ner-models/rubert-throughput/http_scaling.py": "dbb5657ac576ed5f2d028e51e79103dc15446188366ec3506cc15c0eb8c3a854",
+      "benchmarks/ner-models/rubert-throughput/cluster_scaling.py": "35815d6b424e0fbaf6fddfb0a11a0ce7c741ebf0ac85a113cd3fc474b6d6c30c",
+      "benchmarks/ner-models/rubert-throughput/open_loop.py": "7ce756e5587abdd5ecf33f632e19405e5859b849c72789d5550232bf566638d6"
+    },
+    "asset_sha256": {
+      "/home/lockr/projects/seif-pii-rubert/datasets/golden/organizer-v1/cases.jsonl": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46",
+      "/home/lockr/projects/seif-pii-rubert/datasets/golden/organizer-v1/manifest.json": "74f6b661ff33cbc88b53fde91cb1103acaa1f6002a4008463d3100b7c9b2305a",
+      "/home/lockr/projects/seif-pii-rubert/local-data/rubert-upgrade/run-v2/organizer.jsonl": "c45f68c09cb0c92b3f87f2c9eb085fb186d1d0d4b4a80a55ac049dfc47db1c7d",
+      "/home/lockr/projects/seif-pii-rubert/local-data/rubert-upgrade/run-v2/organizer.meta.json": "7b7bb025376d710bbc5df9320c93ac73aa073d7b34b576cc29891d19bfaf9f59"
+    },
+    "model_file_sha256": {
+      "pii_ner.py": "4591fc8c5580c39dc5121ca649f4a2a4936276ea4c9e82ae144e5c467eb5a5ca",
+      "trt_backend.py": "eafc144a9b698e94dfe155074c7a3ab1063ee7817ab1a285b69639db1c07b424",
+      "model.fp16.engine": "f4d3f4eaa72ed8543b81ef4f6acf216f95be93fe4da8c3be27c8513cb9e80b35",
+      "config.json": "f4eeba88d1503a56d629195c9307d42c1acf4ce53ab88fdaecfc754fd0745cf9",
+      "runtime_config.json": "841420d76f5e7ec4ec7dd781b79987fe0f3facb25cc68896e7c88012f7af1b5d",
+      "tokenizer.json": "f61eee9d0dc18f14c195321a37eadf9e5aeb3a323bc278dec689adeb89dec1b9",
+      "tokenizer_config.json": "ffe381e31042ba94cb077bf7d5b9cee944dbd0c2a85079b095bea7e5a5a6058b"
+    }
+  },
+  "driver_environment": {
+    "python_executable": "/home/lockr/projects/seif-pii/.venv/bin/python",
+    "python_version": "3.14.7 free-threading build (main, Sep  1 2026, 14:17:47) [Clang 22.1.3 ]",
+    "free_threaded": true,
+    "gil_enabled": false
+  },
+  "service": {
+    "status": "FAIL",
+    "phases": [],
+    "redis": {
+      "version": "7.0.15",
+      "transport": "private Unix socket",
+      "authenticated": true,
+      "maxmemory_mb": 512,
+      "persistence": false,
+      "before_load": {
+        "used_memory": 1026824,
+        "used_memory_peak": 1026872,
+        "used_memory_dataset": 150480,
+        "maxmemory": 536870912,
+        "mem_fragmentation_ratio": 15.2,
+        "dbsize": 0,
+        "record_ttl_seconds": 900
+      }
+    },
+    "error_type": "SmokeFailure",
+    "failed_check": "all_api_worker_processes_observed",
+    "cleanup": [
+      {
+        "service": "api-group-0",
+        "return_code": 0,
+        "exited": true,
+        "forced_group_kill": false
+      },
+      {
+        "service": "ner-0",
+        "return_code": -15,
+        "exited": true,
+        "forced_group_kill": false
+      },
+      {
+        "service": "redis",
+        "return_code": 0,
+        "exited": true,
+        "forced_group_kill": false
+      }
+    ],
+    "failure_logs": [
+      "/home/lockr/projects/seif-pii-rubert/local-data/rubert-throughput/cluster-12api-2ner-open2000-60s-174d27278ae08e44/replicas-2/api-0.log",
+      "/home/lockr/projects/seif-pii-rubert/local-data/rubert-throughput/cluster-12api-2ner-open2000-60s-174d27278ae08e44/replicas-2/ner-0.log",
+      "/home/lockr/projects/seif-pii-rubert/local-data/rubert-throughput/cluster-12api-2ner-open2000-60s-174d27278ae08e44/replicas-2/redis.log"
+    ]
+  },
+  "finished_at_utc": "2026-09-22T23:41:14.180346+00:00"
+}

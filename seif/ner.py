@@ -71,20 +71,27 @@ def _entity_values(item: dict, text_length: int) -> tuple[int, int, float, str]:
 
 
 class NerClient:
-    def __init__(self, url: str, token: str, timeout: float = 20.0, *, transport=None):
+    def __init__(self, url: str, token: str, timeout: float = 20.0, *, transport=None, max_concurrency=4):
         validate_ner_settings(url, token, timeout)
+        if type(max_concurrency) is not int or not 1 <= max_concurrency <= 256:
+            raise ValueError("NER concurrency must be an integer between 1 and 256")
+        if transport is None and max_concurrency > 4:
+            from .ner_transport import ShardedNerTransport
+
+            transport = ShardedNerTransport(max_concurrency)
         self.timeout = timeout
         self.client = httpx.AsyncClient(
             base_url=url.rstrip("/") + "/",
             headers={"Authorization": "Bearer " + token},
             timeout=httpx.Timeout(timeout, connect=min(timeout, 2.0)),
-            limits=httpx.Limits(max_connections=8, max_keepalive_connections=8),
+            limits=httpx.Limits(max_connections=max(8, max_concurrency + 1),
+                               max_keepalive_connections=max(8, max_concurrency + 1)),
             follow_redirects=False,
             trust_env=False,
             transport=transport,
         )
         # A process-wide bound, shared by all requests using this app instance.
-        self.capacity = asyncio.Semaphore(4)
+        self.capacity = asyncio.Semaphore(max_concurrency)
 
     async def close(self) -> None:
         await self.client.aclose()

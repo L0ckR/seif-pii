@@ -1,0 +1,135 @@
+{
+  "schema_version": 2,
+  "status": "PASS_CONFIGURATION_AND_STUB_ROUTING_ONLY",
+  "verified_at_utc": "2026-09-22T23:39:52.459300+00:00",
+  "compose_cli_version": "2.39.4",
+  "haproxy_version": "HAProxy version 3.2.23-1feef49 2026/08/27 - https://haproxy.org/",
+  "compose_validation": "Actual Compose parsing/interpolation of default and tuned overlay, using fake local-only secrets",
+  "services": [
+    "api-1",
+    "api-2",
+    "gateway",
+    "ner-1",
+    "ner-2",
+    "ner-router",
+    "redis"
+  ],
+  "only_published_port": "127.0.0.1:8785",
+  "profiles": [
+    {
+      "profile": "default",
+      "api_containers": 2,
+      "api_workers_total": 2,
+      "api_cpu_workers": 4,
+      "ner_replicas": 2,
+      "ner_torch_threads": 4,
+      "ner_batch_size": 1,
+      "ner_batch_wait_ms": 1.0,
+      "ner_concurrency_per_api_worker": 4,
+      "ner_model_jobs_per_replica": 4,
+      "ner_http_capacity_per_replica": 16,
+      "ner_proxy_maxconn": 256,
+      "api_backend_maxconn_per_container": 64,
+      "shared_redis_and_api_configuration": true,
+      "redis_maxmemory": "1gb",
+      "redis_container_memory_limit_bytes": 1258291200
+    },
+    {
+      "profile": "tuned-8api",
+      "api_containers": 2,
+      "api_workers_total": 8,
+      "api_cpu_workers": 1,
+      "ner_replicas": 2,
+      "ner_torch_threads": 1,
+      "ner_batch_size": 32,
+      "ner_batch_wait_ms": 2.0,
+      "ner_concurrency_per_api_worker": 16,
+      "ner_model_jobs_per_replica": 128,
+      "ner_http_capacity_per_replica": 256,
+      "ner_proxy_maxconn": 512,
+      "api_backend_maxconn_per_container": 192,
+      "shared_redis_and_api_configuration": true,
+      "redis_maxmemory": "4gb",
+      "redis_container_memory_limit_bytes": 5368709120
+    }
+  ],
+  "haproxy_checks": [
+    {
+      "profile": "default",
+      "file": "deploy/rubert/haproxy-api.cfg",
+      "exit_code": 0,
+      "expected_dns_notices_outside_docker": 2
+    },
+    {
+      "profile": "default",
+      "file": "deploy/rubert/haproxy-ner.cfg",
+      "exit_code": 0,
+      "expected_dns_notices_outside_docker": 2
+    },
+    {
+      "profile": "tuned-8api",
+      "file": "deploy/rubert/haproxy-api.cfg",
+      "exit_code": 0,
+      "expected_dns_notices_outside_docker": 2
+    },
+    {
+      "profile": "tuned-8api",
+      "file": "deploy/rubert/haproxy-ner.cfg",
+      "exit_code": 0,
+      "expected_dns_notices_outside_docker": 2
+    }
+  ],
+  "keepalive_routing_checks": [
+    {
+      "proxy": "api",
+      "requests": 64,
+      "frontend_tcp_connections": 1,
+      "backend_distribution": {
+        "api-1": 36,
+        "api-2": 28
+      },
+      "backend_tcp_connections_with_post": {
+        "api-1": 1,
+        "api-2": 1
+      },
+      "all_status_200": true,
+      "authentication_or_forwarding_headers_preserved": true,
+      "real_model_used": false,
+      "original_dataset_used": false
+    },
+    {
+      "proxy": "ner",
+      "requests": 64,
+      "frontend_tcp_connections": 1,
+      "backend_distribution": {
+        "ner-1": 32,
+        "ner-2": 32
+      },
+      "backend_tcp_connections_with_post": {
+        "ner-1": 1,
+        "ner-2": 1
+      },
+      "all_status_200": true,
+      "authentication_or_forwarding_headers_preserved": true,
+      "real_model_used": false,
+      "original_dataset_used": false
+    }
+  ],
+  "routing_test_method": "Actual HAProxy binary; source configs with loopback bind and backend addresses substituted; 64 sequential POST requests per configuration through one client TCP connection; real model and Redis absent.",
+  "docker_daemon_used": false,
+  "image_build_tested": false,
+  "gpu_container_startup_tested": false,
+  "compose_end_to_end_or_rps_tested": false,
+  "source_sha256": {
+    "deploy/rubert/Dockerfile": "7c4f35a6357a30033e9ae3f0fe4e0fc80911c7b095468c221bc3dd9e1b487c19",
+    "deploy/rubert/README.md": "50019a35360e25d9a2f41e0d4bc2377dcd9b8860081707878e16a26db928d04a",
+    "deploy/rubert/compose.yaml": "327437badfcbaed22cb346b8fe62f3a2ad03713cfb6bd51ff13c45bc3a4884f7",
+    "deploy/rubert/env.template": "9e92f037b300290c6944f604426a37de96df426ce60d68c5bd19bc4cbd25d029",
+    "deploy/rubert/env.tuned-8api.template": "4bf2b6a2e70540ff14acca07aeb19d6d0fd801e947ce11e2ab6efc78936f87cc",
+    "deploy/rubert/haproxy-api.cfg": "d6257c4f487b4d6e0d133e027ca2042dadad066509caf76a19b11570a464e94a",
+    "deploy/rubert/haproxy-ner.cfg": "4f62c2a77de57906793b4694472c7bf0d060c17f0604ff8aba044b3411928207",
+    "deploy/rubert/requirements-runtime.txt": "de7dc50d76dc573b88efb42339da5a3bd981b53790734f6796c0f0cb1a3dfb75"
+  },
+  "external_constraints_sha256": "a92f9abd924196553466aa2bc5ee1df6bb8cdb507def876fd326a8b3d1443af8",
+  "redis_full_ttl_steady_state_tested": false
+}

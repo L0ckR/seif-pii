@@ -53,6 +53,8 @@ redis==8.1.0
     # via seif-pii (pyproject.toml)
 regex==2026.9.10
     # via seif-pii (pyproject.toml)
+sniffio==1.3.1
+    # via seif-pii (pyproject.toml)
 starlette==1.6.0
     # via fastapi
 typing-extensions==4.16.0

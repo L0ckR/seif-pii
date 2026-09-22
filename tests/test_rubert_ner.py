@@ -225,3 +225,39 @@ def test_logits_guard_keeps_exact_backend_array_and_buckets(numpy, dtype):
     wrapped = adapter._ValidatedBackend(backend)
     assert wrapped.run({"input_ids": np.zeros((1, 8), dtype=np.int64)}) is output
     assert wrapped.buckets == backend.buckets
+
+
+@pytest.mark.parametrize(("configured", "expected"), [(None, 4), ("1", 1), ("4", 4), ("32", 32)])
+def test_from_env_applies_bounded_cpu_threads_before_loading_local_model(monkeypatch, configured, expected):
+    calls = []
+    fake_torch = SimpleNamespace(set_num_threads=calls.append, backends=SimpleNamespace(
+        cuda=SimpleNamespace(matmul=SimpleNamespace(allow_tf32=True)), cudnn=SimpleNamespace(allow_tf32=True),
+    ))
+    monkeypatch.setitem(sys.modules, "torch", fake_torch)
+    monkeypatch.delenv("SEIF_RUBERT_CPU_THREADS", raising=False)
+    if configured is not None:
+        monkeypatch.setenv("SEIF_RUBERT_CPU_THREADS", configured)
+    monkeypatch.setenv("SEIF_RUBERT_MODEL_PATH", "/fixture/model")
+    monkeypatch.setenv("SEIF_RUBERT_DECODER", "word")
+    monkeypatch.setenv("SEIF_RUBERT_PROFILE", "native")
+    monkeypatch.setenv("SEIF_NER_BATCH_SIZE", "16")
+
+    def load(model_path, **options):
+        assert calls == [expected]
+        return model_path, options
+
+    monkeypatch.setattr(adapter.RubertAnalyzer, "from_local", staticmethod(load))
+    assert adapter.RubertAnalyzer.from_env() == (
+        "/fixture/model", {"decoder": "word", "profile": "native", "batch_size": 16},
+    )
+    assert fake_torch.backends.cuda.matmul.allow_tf32 is False
+    assert fake_torch.backends.cudnn.allow_tf32 is False
+
+
+@pytest.mark.parametrize("configured", ["0", "-1", "33", "999", "1.5", "nan", "true", ""])
+def test_from_env_rejects_bad_cpu_threads_before_importing_torch(monkeypatch, configured):
+    monkeypatch.setenv("SEIF_RUBERT_CPU_THREADS", configured)
+    monkeypatch.setitem(sys.modules, "torch", None)
+    monkeypatch.setattr(adapter.RubertAnalyzer, "from_local", lambda *_args, **_kwargs: pytest.fail("model loaded"))
+    with pytest.raises(ValueError, match="SEIF_RUBERT_CPU_THREADS must be an integer between 1 and 32"):
+        adapter.RubertAnalyzer.from_env()

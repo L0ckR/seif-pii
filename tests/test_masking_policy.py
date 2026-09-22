@@ -160,7 +160,7 @@ def test_ner_failure_is_not_bypassed_by_disabling_replacements(monkeypatch):
     calls = []
 
     class BrokenNer:
-        def __init__(self, *args):
+        def __init__(self, *args, max_concurrency=4):
             pass
 
         async def health(self):

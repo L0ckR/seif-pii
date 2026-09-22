@@ -90,7 +90,7 @@ def test_new_type_obeys_consumer_policy_and_restores_exact_original(monkeypatch,
     start = text.index("123")
 
     class FakeNer:
-        def __init__(self, *_args):
+        def __init__(self, *_args, max_concurrency=4):
             pass
 
         async def health(self):

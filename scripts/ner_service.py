@@ -41,11 +41,16 @@ class NerSettings:
     demo: bool = False
     max_http_inflight: int = 16
     max_model_jobs: int = 4
+    batch_size: int = 1
+    batch_wait_ms: float = 1.0
 
     @classmethod
     def from_env(cls):
         return cls(token=os.getenv("SEIF_NER_TOKEN", ""), demo=os.getenv("SEIF_NER_DEMO") == "1",
-                   max_model_jobs=int(os.getenv("SEIF_NER_MAX_MODEL_JOBS", "4")))
+                   max_model_jobs=int(os.getenv("SEIF_NER_MAX_MODEL_JOBS", "4")),
+                   max_http_inflight=int(os.getenv("SEIF_NER_MAX_HTTP_INFLIGHT", "16")),
+                   batch_size=int(os.getenv("SEIF_NER_BATCH_SIZE", "1")),
+                   batch_wait_ms=float(os.getenv("SEIF_NER_BATCH_WAIT_MS", "1")))
 
 
 class AnalyzeRequest(BaseModel):
@@ -199,6 +204,18 @@ def build_analyzer():
 def infer(analyzer, text):
     requested = analyzer_entities(analyzer)
     results = analyzer.analyze(text=text, language="ru", entities=requested, score_threshold=0.0)
+    return _format_results(text, results, requested)
+
+
+def infer_batch(analyzer, texts):
+    requested = analyzer_entities(analyzer)
+    results = analyzer.analyze_batch(texts=texts, language="ru", entities=requested, score_threshold=0.0)
+    if not isinstance(results, list) or len(results) != len(texts):
+        raise ValueError("Invalid model batch count.")
+    return [_format_results(text, result, requested) for text, result in zip(texts, results, strict=True)]
+
+
+def _format_results(text, results, requested):
     if not isinstance(results, list) or len(results) > MAX_ENTITIES:
         raise ValueError("Invalid model result count.")
     entities = []
@@ -226,13 +243,27 @@ def _lifespan(settings, analyzer_factory):
             raise RuntimeError("SEIF_NER_TOKEN is required outside demo mode.")
         if settings.max_http_inflight < 1 or not 1 <= settings.max_model_jobs <= settings.max_http_inflight:
             raise RuntimeError("NER model capacity must be positive and bounded by HTTP capacity.")
+        if (type(settings.batch_size) is not int or settings.batch_size not in (1, 2, 4, 8, 16, 32)
+                or settings.batch_size > settings.max_model_jobs
+                or not math.isfinite(settings.batch_wait_ms) or not 0 <= settings.batch_wait_ms <= 20):
+            raise RuntimeError("Invalid NER batch size, delay or model capacity.")
         # Preload before readiness; avoid logging third-party exception content.
         try:
             app.state.analyzer = analyzer_factory()
             analyzer_entities(app.state.analyzer)
         except Exception:
             raise RuntimeError("NER model initialization failed.") from None
-        pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="seif-ner")
+        app.state.batched = settings.batch_size > 1
+        if app.state.batched:
+            from seif.ner_batching import BatchExecutor
+
+            if not callable(getattr(app.state.analyzer, "analyze_batch", None)):
+                raise RuntimeError("Configured analyzer does not support batching.")
+            pool = BatchExecutor(lambda texts: infer_batch(app.state.analyzer, texts),
+                                 batch_size=settings.batch_size, wait_ms=settings.batch_wait_ms,
+                                 capacity=settings.max_model_jobs)
+        else:
+            pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="seif-ner")
         app.state.pool = pool
         app.state.ready = True
         try:
@@ -287,7 +318,8 @@ async def _run_model(state, text):
     waiter = loop.create_future()
     waiter.add_done_callback(_consume_model_exception)
     try:
-        job = state.pool.submit(infer, state.analyzer, text)
+        job = (state.pool.submit(text) if getattr(state, "batched", False)
+               else state.pool.submit(infer, state.analyzer, text))
     except Exception:
         state.model_inflight -= 1
         return error(503, "unavailable", NER_UNAVAILABLE)

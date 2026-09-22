@@ -1,0 +1,10 @@
+# Transitive versions are constrained by the existing validated TensorRT lock.
+# Evaluation-only datasets, pandas, pytest, ONNX export and benchmarks are omitted.
+torch==2.8.0+cu128
+numpy==2.5.3
+tensorrt-cu12==10.13.3.9
+transformers==4.57.1
+fastapi==0.141.1
+uvicorn==0.53.0
+uvloop==0.22.1
+httptools==0.8.0

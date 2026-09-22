@@ -1,0 +1,1091 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "started_at_utc": "2026-09-22T23:12:28.519103+00:00",
+  "configuration": {
+    "decoder": "word",
+    "profile": "native",
+    "gpu_count": 1,
+    "pipeline_replicas": [
+      1,
+      2
+    ],
+    "concurrency": [
+      16,
+      32
+    ],
+    "stages": [
+      "ner",
+      "mask"
+    ],
+    "repeats": 10,
+    "unique_texts": 446,
+    "cpu_threads_per_ner": 4,
+    "ner_max_jobs": 64,
+    "ner_max_http": 128,
+    "api_cpu_workers_per_replica": 1,
+    "api_ner_concurrency": 32,
+    "model_batch_size": 1,
+    "batch_wait_ms": 1.0,
+    "api_processes_per_replica": 1,
+    "ner_processes_per_replica": 1,
+    "storage": "independent memory vaults; sticky restore",
+    "capture": false,
+    "text_cache": false,
+    "request_retries": false
+  },
+  "limitations": [
+    "Closed-loop local HTTP throughput, not open-loop 2000 RPS endurance or a production SLA.",
+    "Round-robin traffic goes to independent API+NER pipelines on ONE GPU; no shared Redis or load balancer.",
+    "Every timed successful request runs real NER; frozen references are expectations only.",
+    "Mask RPS excludes warmup, restore, direct NER and admin traffic.",
+    "Parity is exact masks/types/offsets against frozen predictions, not perfect ground truth.",
+    "No original texts, model values, secrets or payload IDs are retained in report."
+  ],
+  "provenance": {
+    "source_sha256": {
+      "seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+      "seif/app.py": "7a88737bd66790bf8a4bcd510c9670a6b1308830f198d04591260310c63382bd",
+      "seif/async_callbacks.py": "b5ce7aae9979e6251c827d3e2099a4377266bcb8076606d67dbe86c38fa21ebe",
+      "seif/cardholder_fields.py": "3d80d59636e4b2e1a668325fbb945027b48a37e60aad5297c39b727a51806462",
+      "seif/config.py": "1c03f1b90705ab04a783a97b2eca9d49adf53c2329277a3d3903617df885cf28",
+      "seif/context_filters.py": "d2bd0a0303aaae5bb44e6748ae429c5348e34f0f711a46285ed869b657c59fa1",
+      "seif/detector.py": "0fa80ea590895f862be2d44278bf68e75f5ce4a7f8cabb76d079f065f491b98c",
+      "seif/document_fields.py": "2200ed9f9751ee4894f164a4b43654de6f204c9661da83cdbf7a2a455d46ba51",
+      "seif/gliner_ner.py": "8012d0c3fc83b6c0a0defd4a07735d6e9cd4aa0c5debb1f7c395ddafb7431311",
+      "seif/gliner_onnx.py": "08118aaf0326e89d7a0ef890a24f7a29728578a713690e930cf7cf48cd12056d",
+      "seif/location_fields.py": "2d806e7a35bb7669001e796deba5cbac020dddb2887284390d27becebc43009e",
+      "seif/ner.py": "4b4192ee9f670e8428b6f787bf2e625a4e842b4a2251ebb80b40fd9968565db5",
+      "seif/ner_batching.py": "ff76c9811c18cc7f573a2b9f73e5a6d92a3e0db2990d2bd3899542c34461cf72",
+      "seif/ner_boundaries.py": "0f93e7eeed5125933de09e2e05f8ebb037a477b46d9be93cab7cbb1c750bf815",
+      "seif/ner_contract.py": "83ce1bf1345ece197c74e7477e4524f08f511a5b0fb3218247039efb7e1addb2",
+      "seif/person_fields.py": "ca843e9b6f8ef9d4739703e83b1438a96d114dc95782626fa2e89366bf29f08d",
+      "seif/request_capture.py": "ce9d53ed7827992cd5c0c4b10914e3f9becc978cc192263116112c642e506855",
+      "seif/rubert_batch.py": "b74355817920135f8c9775fd15098631bf6485d3f0c78bbb1e97db3a23343636",
+      "seif/rubert_decoder.py": "303608a624d591c20e0d68730537009a0694f78d614307e46b9cf288063ffe81",
+      "seif/rubert_ner.py": "10aa3ecaf3441837ee3eed8eb7c497b3c298b634ccbb61a88890ca8f10f13861",
+      "seif/structured_fields.py": "26462106b1a29140a3bbf2b2370feab631145932ee44fbb78ca007b6d1d1218c",
+      "seif/transform.py": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+      "seif/vault.py": "b6b4f59bc911bb0a0c745b6801bcd9a034200e016f321e38c2984206c2946554",
+      "benchmarks/ner-models/rubert-tensorrt/http_benchmark.py": "9eea7be89cd679130fd1fc2daeb45db704f274f0182cffe6604883fea162d27f",
+      "benchmarks/ner-models/gliner25-onnx/http_benchmark.py": "0105afcb38d61622c5f76d06a6b09cd8ad02b97058562bd0da0391d49a2556b4",
+      "benchmarks/ner-models/gliner25-multi-v1/http_smoke.py": "a3e36444419e27716d1bd00beec41f9dbd39c720f54720363472c76307472933",
+      "scripts/ner_service.py": "ce48b94181d36017d2d1431fcfc5d502cad1f5415f525d9c3a64b1fa3158070c",
+      "scripts/evaluate_golden.py": "02e1160fbfbb2933e4e90d65573e559962e6b474ab69ddaa1c2c0f66e68226ff",
+      "scripts/evaluate_annotations.py": "b429e3605b90a9090a8eae0185ee9286708836494235617901fbd6ae4e0d5463",
+      "benchmarks/ner-models/rubert-upgrade/http_benchmark.py": "6015b2df1fdc7876e6086195a4a64c7d3b6e80ebea6a6881dc176ef08dda7939",
+      "benchmarks/ner-models/rubert-throughput/http_scaling.py": "e8965ecf27e1758473eaf0a6ae9ba0f5f0ac433058dafae3daa91e033eb8ecf1"
+    },
+    "asset_sha256": {
+      "/home/lockr/projects/seif-pii-rubert/datasets/golden/organizer-v1/cases.jsonl": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46",
+      "/home/lockr/projects/seif-pii-rubert/datasets/golden/organizer-v1/manifest.json": "74f6b661ff33cbc88b53fde91cb1103acaa1f6002a4008463d3100b7c9b2305a",
+      "/home/lockr/projects/seif-pii-rubert/local-data/rubert-upgrade/run-v2/organizer.jsonl": "c45f68c09cb0c92b3f87f2c9eb085fb186d1d0d4b4a80a55ac049dfc47db1c7d",
+      "/home/lockr/projects/seif-pii-rubert/local-data/rubert-upgrade/run-v2/organizer.meta.json": "7b7bb025376d710bbc5df9320c93ac73aa073d7b34b576cc29891d19bfaf9f59"
+    },
+    "model_file_sha256": {
+      "pii_ner.py": "4591fc8c5580c39dc5121ca649f4a2a4936276ea4c9e82ae144e5c467eb5a5ca",
+      "trt_backend.py": "eafc144a9b698e94dfe155074c7a3ab1063ee7817ab1a285b69639db1c07b424",
+      "model.fp16.engine": "f4d3f4eaa72ed8543b81ef4f6acf216f95be93fe4da8c3be27c8513cb9e80b35",
+      "config.json": "f4eeba88d1503a56d629195c9307d42c1acf4ce53ab88fdaecfc754fd0745cf9",
+      "runtime_config.json": "841420d76f5e7ec4ec7dd781b79987fe0f3facb25cc68896e7c88012f7af1b5d",
+      "tokenizer.json": "f61eee9d0dc18f14c195321a37eadf9e5aeb3a323bc278dec689adeb89dec1b9",
+      "tokenizer_config.json": "ffe381e31042ba94cb077bf7d5b9cee944dbd0c2a85079b095bea7e5a5a6058b"
+    }
+  },
+  "driver_environment": {
+    "python_executable": "/home/lockr/projects/seif-pii/.venv/bin/python",
+    "python_version": "3.14.7 free-threading build (main, Sep  1 2026, 14:17:47) [Clang 22.1.3 ]",
+    "free_threaded": true,
+    "gil_enabled": false
+  },
+  "configurations": [
+    {
+      "replicas": 1,
+      "status": "PASS",
+      "phases": [
+        {
+          "stage": "ner",
+          "replicas": 1,
+          "concurrency": 16,
+          "requests": 4460,
+          "elapsed_seconds": 6.203787441998429,
+          "attempted_rps": 718.9156691292599,
+          "successful_rps": 718.9156691292599,
+          "reference_matching_rps": 718.9156691292599,
+          "successful_mask_rps": null,
+          "errors": {},
+          "http_statuses": {
+            "200": 4460
+          },
+          "success_ratio": 1.0,
+          "reference_matches": 4460,
+          "reference_match_ratio": 1.0,
+          "mismatches": {
+            "entities_match": 0
+          },
+          "every_request_completed_real_ner": true,
+          "ner_drained": true,
+          "valid_successful_measurement": true,
+          "latency_ms_all_attempts": {
+            "p50": 22.05232349660946,
+            "p95": 24.37190099590225,
+            "p99": 26.05515700270189,
+            "max": 29.972330994496588,
+            "over_500ms": 0
+          },
+          "per_replica": [
+            {
+              "replica": 0,
+              "attempts": 4460,
+              "ner_counts": {
+                "http_completed": 4460,
+                "model_completed": 4460,
+                "model_started": 4460,
+                "model_active": 0,
+                "http_started": 4460,
+                "model_failed": 0,
+                "http_200": 4460,
+                "http_active": 0
+              },
+              "api_ner_stage_attempts": 0.0,
+              "drained": true,
+              "every_request_completed_real_ner": true
+            }
+          ],
+          "immutable_sources_assets_models": true
+        },
+        {
+          "stage": "ner",
+          "replicas": 1,
+          "concurrency": 32,
+          "requests": 4460,
+          "elapsed_seconds": 6.271520992995647,
+          "attempted_rps": 711.1512510252544,
+          "successful_rps": 711.1512510252544,
+          "reference_matching_rps": 711.1512510252544,
+          "successful_mask_rps": null,
+          "errors": {},
+          "http_statuses": {
+            "200": 4460
+          },
+          "success_ratio": 1.0,
+          "reference_matches": 4460,
+          "reference_match_ratio": 1.0,
+          "mismatches": {
+            "entities_match": 0
+          },
+          "every_request_completed_real_ner": true,
+          "ner_drained": true,
+          "valid_successful_measurement": true,
+          "latency_ms_all_attempts": {
+            "p50": 44.71176250081044,
+            "p95": 48.12936300004367,
+            "p99": 51.95097599789733,
+            "max": 74.39869900554186,
+            "over_500ms": 0
+          },
+          "per_replica": [
+            {
+              "replica": 0,
+              "attempts": 4460,
+              "ner_counts": {
+                "http_completed": 4460,
+                "model_completed": 4460,
+                "model_started": 4460,
+                "model_active": 0,
+                "http_started": 4460,
+                "model_failed": 0,
+                "http_200": 4460,
+                "http_active": 0
+              },
+              "api_ner_stage_attempts": 0.0,
+              "drained": true,
+              "every_request_completed_real_ner": true
+            }
+          ],
+          "immutable_sources_assets_models": true
+        },
+        {
+          "stage": "mask",
+          "replicas": 1,
+          "concurrency": 16,
+          "requests": 4460,
+          "elapsed_seconds": 11.096100944996579,
+          "attempted_rps": 401.942990795437,
+          "successful_rps": 401.942990795437,
+          "reference_matching_rps": 401.942990795437,
+          "successful_mask_rps": 401.942990795437,
+          "errors": {},
+          "http_statuses": {
+            "200": 4460
+          },
+          "success_ratio": 1.0,
+          "reference_matches": 4460,
+          "reference_match_ratio": 1.0,
+          "mismatches": {
+            "mask_match": 0,
+            "entities_match": 0,
+            "types_match": 0
+          },
+          "every_request_completed_real_ner": true,
+          "ner_drained": true,
+          "valid_successful_measurement": true,
+          "latency_ms_all_attempts": {
+            "p50": 30.296682001790032,
+            "p95": 96.72226700058673,
+            "p99": 143.9305929961847,
+            "max": 232.28800300421426,
+            "over_500ms": 0
+          },
+          "per_replica": [
+            {
+              "replica": 0,
+              "attempts": 4460,
+              "ner_counts": {
+                "http_completed": 4460,
+                "model_completed": 4460,
+                "model_started": 4460,
+                "model_active": 0,
+                "http_started": 4460,
+                "model_failed": 0,
+                "http_200": 4460,
+                "http_active": 0
+              },
+              "api_ner_stage_attempts": 4460.0,
+              "drained": true,
+              "every_request_completed_real_ner": true
+            }
+          ],
+          "restore": {
+            "checked": 8,
+            "exact": 8,
+            "sticky_to_source_replica": true,
+            "excluded_from_mask_timing": true
+          },
+          "immutable_sources_assets_models": true
+        },
+        {
+          "stage": "mask",
+          "replicas": 1,
+          "concurrency": 32,
+          "requests": 4460,
+          "elapsed_seconds": 11.627125867998984,
+          "attempted_rps": 383.5857675089881,
+          "successful_rps": 383.5857675089881,
+          "reference_matching_rps": 383.5857675089881,
+          "successful_mask_rps": 383.5857675089881,
+          "errors": {},
+          "http_statuses": {
+            "200": 4460
+          },
+          "success_ratio": 1.0,
+          "reference_matches": 4460,
+          "reference_match_ratio": 1.0,
+          "mismatches": {
+            "mask_match": 0,
+            "entities_match": 0,
+            "types_match": 0
+          },
+          "every_request_completed_real_ner": true,
+          "ner_drained": true,
+          "valid_successful_measurement": true,
+          "latency_ms_all_attempts": {
+            "p50": 62.8203919986845,
+            "p95": 212.91580699471524,
+            "p99": 320.745541001088,
+            "max": 832.1821319987066,
+            "over_500ms": 6
+          },
+          "per_replica": [
+            {
+              "replica": 0,
+              "attempts": 4460,
+              "ner_counts": {
+                "http_completed": 4460,
+                "model_completed": 4460,
+                "model_started": 4460,
+                "model_active": 0,
+                "http_started": 4460,
+                "model_failed": 0,
+                "http_200": 4460,
+                "http_active": 0
+              },
+              "api_ner_stage_attempts": 4460.0,
+              "drained": true,
+              "every_request_completed_real_ner": true
+            }
+          ],
+          "restore": {
+            "checked": 8,
+            "exact": 8,
+            "sticky_to_source_replica": true,
+            "excluded_from_mask_timing": true
+          },
+          "immutable_sources_assets_models": true
+        }
+      ],
+      "health": [
+        {
+          "api": {
+            "status": "ok",
+            "mode": "restricted",
+            "storage": "memory",
+            "python": "3.14.7",
+            "free_threaded": true,
+            "gil_enabled": false,
+            "detector_profile": "hybrid"
+          },
+          "ner": {
+            "status": "ok",
+            "model": "lockR/rubert-base-pii-ner-tensorrt",
+            "entities": [
+              "PERSON",
+              "LOCATION",
+              "EMAIL",
+              "PHONE",
+              "CARD",
+              "PASSPORT",
+              "DRIVER_LICENSE",
+              "INN",
+              "SNILS",
+              "OMS",
+              "IP_ADDRESS",
+              "URL",
+              "MILITARY_ID",
+              "BIRTH_CERTIFICATE"
+            ]
+          }
+        }
+      ],
+      "models": [
+        {
+          "counts": {
+            "model_started": 5,
+            "model_completed": 5,
+            "model_failed": 0,
+            "model_active": 0,
+            "http_started": 5,
+            "http_completed": 5,
+            "http_active": 0,
+            "http_200": 5
+          },
+          "model": {
+            "model": "lockR/rubert-base-pii-ner-tensorrt",
+            "revision": "73be581047bf123dac6505e7b3900ec292942296",
+            "files_sha256": {
+              "pii_ner.py": "4591fc8c5580c39dc5121ca649f4a2a4936276ea4c9e82ae144e5c467eb5a5ca",
+              "trt_backend.py": "eafc144a9b698e94dfe155074c7a3ab1063ee7817ab1a285b69639db1c07b424",
+              "model.fp16.engine": "f4d3f4eaa72ed8543b81ef4f6acf216f95be93fe4da8c3be27c8513cb9e80b35",
+              "config.json": "f4eeba88d1503a56d629195c9307d42c1acf4ce53ab88fdaecfc754fd0745cf9",
+              "runtime_config.json": "841420d76f5e7ec4ec7dd781b79987fe0f3facb25cc68896e7c88012f7af1b5d",
+              "tokenizer.json": "f61eee9d0dc18f14c195321a37eadf9e5aeb3a323bc278dec689adeb89dec1b9",
+              "tokenizer_config.json": "ffe381e31042ba94cb077bf7d5b9cee944dbd0c2a85079b095bea7e5a5a6058b"
+            },
+            "backend": "trt-graph",
+            "device": "cuda",
+            "min_confidence": null,
+            "decoder": "word",
+            "gateway_profile": "native",
+            "batch_size": 1,
+            "max_tokens": 512,
+            "overlap_tokens": 128,
+            "native_types": [
+              "BIRTH_CERTIFICATE",
+              "CITY",
+              "COUNTRY",
+              "CREDIT_CARD",
+              "DISTRICT",
+              "DRIVER_LICENSE",
+              "EMAIL",
+              "FIRST_NAME",
+              "HOUSE",
+              "INN",
+              "IP_ADDRESS",
+              "LAST_NAME",
+              "MIDDLE_NAME",
+              "MILITARY_ID",
+              "OMS",
+              "PASSPORT",
+              "PHONE",
+              "REGION",
+              "SNILS",
+              "STREET",
+              "URL"
+            ],
+            "person_labels": [
+              "FIRST_NAME",
+              "LAST_NAME",
+              "MIDDLE_NAME"
+            ],
+            "location_labels": [
+              "CITY",
+              "COUNTRY",
+              "DISTRICT",
+              "HOUSE",
+              "REGION",
+              "STREET"
+            ],
+            "gateway_merge": "none; original native boundaries",
+            "location_scope": "six address-component types, broader than geographic proper names",
+            "native_predictions": "all21 labels retained before coarse gateway mapping",
+            "precision": "published TensorRT FP16 engine with FP32 normalization accumulation; TF32 disabled at build",
+            "packages": {
+              "torch": "2.8.0+cu128",
+              "numpy": "2.5.3",
+              "transformers": "4.57.1",
+              "tokenizers": "0.22.2",
+              "tensorrt-cu12": "10.13.3.9",
+              "tensorrt-cu12-bindings": "10.13.3.9"
+            },
+            "logits_shape_validation": "exact [batch, padded_tokens,43]",
+            "warmup_complete": true,
+            "graph_buckets_captured": [
+              32,
+              64,
+              128,
+              256,
+              512
+            ],
+            "batch_graph_shapes": []
+          },
+          "server_environment": {
+            "python_executable": "/home/lockr/projects/seif-pii-rubert/.venv/bin/python",
+            "python_version": "3.12.11 (main, Aug 18 2025, 19:19:11) [Clang 20.1.4 ]",
+            "free_threaded": false,
+            "gil_enabled": true,
+            "packages": {
+              "uvicorn": "0.53.0",
+              "uvloop": "0.22.1",
+              "httptools": "0.8.0",
+              "h11": "0.16.0",
+              "httpx": "0.28.1",
+              "fastapi": "0.141.1",
+              "starlette": "1.6.0"
+            },
+            "active_event_loop": "uvloop.Loop",
+            "uvicorn_auto_http_protocol": "uvicorn.protocols.http.httptools_impl.HttpToolsProtocol"
+          }
+        }
+      ],
+      "missing_ner_returns_503": true,
+      "cleanup": [
+        {
+          "service": "api-0",
+          "exited": true,
+          "return_code": -15,
+          "forced_kill": false
+        },
+        {
+          "service": "ner-0",
+          "exited": true,
+          "return_code": -15,
+          "forced_kill": false
+        }
+      ]
+    },
+    {
+      "replicas": 2,
+      "status": "PASS",
+      "phases": [
+        {
+          "stage": "ner",
+          "replicas": 2,
+          "concurrency": 16,
+          "requests": 4460,
+          "elapsed_seconds": 4.226665501999378,
+          "attempted_rps": 1055.205338082762,
+          "successful_rps": 1055.205338082762,
+          "reference_matching_rps": 1055.205338082762,
+          "successful_mask_rps": null,
+          "errors": {},
+          "http_statuses": {
+            "200": 4460
+          },
+          "success_ratio": 1.0,
+          "reference_matches": 4460,
+          "reference_match_ratio": 1.0,
+          "mismatches": {
+            "entities_match": 0
+          },
+          "every_request_completed_real_ner": true,
+          "ner_drained": true,
+          "valid_successful_measurement": true,
+          "latency_ms_all_attempts": {
+            "p50": 14.776941996387905,
+            "p95": 28.754431004927028,
+            "p99": 30.018500998266973,
+            "max": 31.60205500171287,
+            "over_500ms": 0
+          },
+          "per_replica": [
+            {
+              "replica": 0,
+              "attempts": 2230,
+              "ner_counts": {
+                "http_completed": 2230,
+                "model_completed": 2230,
+                "model_started": 2230,
+                "model_active": 0,
+                "http_started": 2230,
+                "model_failed": 0,
+                "http_200": 2230,
+                "http_active": 0
+              },
+              "api_ner_stage_attempts": 0.0,
+              "drained": true,
+              "every_request_completed_real_ner": true
+            },
+            {
+              "replica": 1,
+              "attempts": 2230,
+              "ner_counts": {
+                "http_completed": 2230,
+                "model_completed": 2230,
+                "model_started": 2230,
+                "model_active": 0,
+                "http_started": 2230,
+                "model_failed": 0,
+                "http_200": 2230,
+                "http_active": 0
+              },
+              "api_ner_stage_attempts": 0.0,
+              "drained": true,
+              "every_request_completed_real_ner": true
+            }
+          ],
+          "immutable_sources_assets_models": true
+        },
+        {
+          "stage": "ner",
+          "replicas": 2,
+          "concurrency": 32,
+          "requests": 4460,
+          "elapsed_seconds": 4.39928241999587,
+          "attempted_rps": 1013.8017008701584,
+          "successful_rps": 1013.8017008701584,
+          "reference_matching_rps": 1013.8017008701584,
+          "successful_mask_rps": null,
+          "errors": {},
+          "http_statuses": {
+            "200": 4460
+          },
+          "success_ratio": 1.0,
+          "reference_matches": 4460,
+          "reference_match_ratio": 1.0,
+          "mismatches": {
+            "entities_match": 0
+          },
+          "every_request_completed_real_ner": true,
+          "ner_drained": true,
+          "valid_successful_measurement": true,
+          "latency_ms_all_attempts": {
+            "p50": 30.644003501947736,
+            "p95": 59.76142699364573,
+            "p99": 64.61834500078112,
+            "max": 67.74360899726162,
+            "over_500ms": 0
+          },
+          "per_replica": [
+            {
+              "replica": 0,
+              "attempts": 2230,
+              "ner_counts": {
+                "http_completed": 2230,
+                "model_completed": 2230,
+                "model_started": 2230,
+                "model_active": 0,
+                "http_started": 2230,
+                "model_failed": 0,
+                "http_200": 2230,
+                "http_active": 0
+              },
+              "api_ner_stage_attempts": 0.0,
+              "drained": true,
+              "every_request_completed_real_ner": true
+            },
+            {
+              "replica": 1,
+              "attempts": 2230,
+              "ner_counts": {
+                "http_completed": 2230,
+                "model_completed": 2230,
+                "model_started": 2230,
+                "model_active": 0,
+                "http_started": 2230,
+                "model_failed": 0,
+                "http_200": 2230,
+                "http_active": 0
+              },
+              "api_ner_stage_attempts": 0.0,
+              "drained": true,
+              "every_request_completed_real_ner": true
+            }
+          ],
+          "immutable_sources_assets_models": true
+        },
+        {
+          "stage": "mask",
+          "replicas": 2,
+          "concurrency": 16,
+          "requests": 4460,
+          "elapsed_seconds": 6.134559825004544,
+          "attempted_rps": 727.0285280813439,
+          "successful_rps": 727.0285280813439,
+          "reference_matching_rps": 727.0285280813439,
+          "successful_mask_rps": 727.0285280813439,
+          "errors": {},
+          "http_statuses": {
+            "200": 4460
+          },
+          "success_ratio": 1.0,
+          "reference_matches": 4460,
+          "reference_match_ratio": 1.0,
+          "mismatches": {
+            "mask_match": 0,
+            "entities_match": 0,
+            "types_match": 0
+          },
+          "every_request_completed_real_ner": true,
+          "ner_drained": true,
+          "valid_successful_measurement": true,
+          "latency_ms_all_attempts": {
+            "p50": 13.842388001648942,
+            "p95": 73.1036020006286,
+            "p99": 125.95927599613788,
+            "max": 222.04058399802307,
+            "over_500ms": 0
+          },
+          "per_replica": [
+            {
+              "replica": 0,
+              "attempts": 2230,
+              "ner_counts": {
+                "http_completed": 2230,
+                "model_completed": 2230,
+                "model_started": 2230,
+                "model_active": 0,
+                "http_started": 2230,
+                "model_failed": 0,
+                "http_200": 2230,
+                "http_active": 0
+              },
+              "api_ner_stage_attempts": 2230.0,
+              "drained": true,
+              "every_request_completed_real_ner": true
+            },
+            {
+              "replica": 1,
+              "attempts": 2230,
+              "ner_counts": {
+                "http_completed": 2230,
+                "model_completed": 2230,
+                "model_started": 2230,
+                "model_active": 0,
+                "http_started": 2230,
+                "model_failed": 0,
+                "http_200": 2230,
+                "http_active": 0
+              },
+              "api_ner_stage_attempts": 2230.0,
+              "drained": true,
+              "every_request_completed_real_ner": true
+            }
+          ],
+          "restore": {
+            "checked": 8,
+            "exact": 8,
+            "sticky_to_source_replica": true,
+            "excluded_from_mask_timing": true
+          },
+          "immutable_sources_assets_models": true
+        },
+        {
+          "stage": "mask",
+          "replicas": 2,
+          "concurrency": 32,
+          "requests": 4460,
+          "elapsed_seconds": 6.592549973000132,
+          "attempted_rps": 676.5212274864786,
+          "successful_rps": 676.5212274864786,
+          "reference_matching_rps": 676.5212274864786,
+          "successful_mask_rps": 676.5212274864786,
+          "errors": {},
+          "http_statuses": {
+            "200": 4460
+          },
+          "success_ratio": 1.0,
+          "reference_matches": 4460,
+          "reference_match_ratio": 1.0,
+          "mismatches": {
+            "mask_match": 0,
+            "entities_match": 0,
+            "types_match": 0
+          },
+          "every_request_completed_real_ner": true,
+          "ner_drained": true,
+          "valid_successful_measurement": true,
+          "latency_ms_all_attempts": {
+            "p50": 26.14038850151701,
+            "p95": 161.64428000047337,
+            "p99": 259.4077439935063,
+            "max": 596.4855729980627,
+            "over_500ms": 2
+          },
+          "per_replica": [
+            {
+              "replica": 0,
+              "attempts": 2230,
+              "ner_counts": {
+                "http_completed": 2230,
+                "model_completed": 2230,
+                "model_started": 2230,
+                "model_active": 0,
+                "http_started": 2230,
+                "model_failed": 0,
+                "http_200": 2230,
+                "http_active": 0
+              },
+              "api_ner_stage_attempts": 2230.0,
+              "drained": true,
+              "every_request_completed_real_ner": true
+            },
+            {
+              "replica": 1,
+              "attempts": 2230,
+              "ner_counts": {
+                "http_completed": 2230,
+                "model_completed": 2230,
+                "model_started": 2230,
+                "model_active": 0,
+                "http_started": 2230,
+                "model_failed": 0,
+                "http_200": 2230,
+                "http_active": 0
+              },
+              "api_ner_stage_attempts": 2230.0,
+              "drained": true,
+              "every_request_completed_real_ner": true
+            }
+          ],
+          "restore": {
+            "checked": 8,
+            "exact": 8,
+            "sticky_to_source_replica": true,
+            "excluded_from_mask_timing": true
+          },
+          "immutable_sources_assets_models": true
+        }
+      ],
+      "health": [
+        {
+          "api": {
+            "status": "ok",
+            "mode": "restricted",
+            "storage": "memory",
+            "python": "3.14.7",
+            "free_threaded": true,
+            "gil_enabled": false,
+            "detector_profile": "hybrid"
+          },
+          "ner": {
+            "status": "ok",
+            "model": "lockR/rubert-base-pii-ner-tensorrt",
+            "entities": [
+              "PERSON",
+              "LOCATION",
+              "EMAIL",
+              "PHONE",
+              "CARD",
+              "PASSPORT",
+              "DRIVER_LICENSE",
+              "INN",
+              "SNILS",
+              "OMS",
+              "IP_ADDRESS",
+              "URL",
+              "MILITARY_ID",
+              "BIRTH_CERTIFICATE"
+            ]
+          }
+        },
+        {
+          "api": {
+            "status": "ok",
+            "mode": "restricted",
+            "storage": "memory",
+            "python": "3.14.7",
+            "free_threaded": true,
+            "gil_enabled": false,
+            "detector_profile": "hybrid"
+          },
+          "ner": {
+            "status": "ok",
+            "model": "lockR/rubert-base-pii-ner-tensorrt",
+            "entities": [
+              "PERSON",
+              "LOCATION",
+              "EMAIL",
+              "PHONE",
+              "CARD",
+              "PASSPORT",
+              "DRIVER_LICENSE",
+              "INN",
+              "SNILS",
+              "OMS",
+              "IP_ADDRESS",
+              "URL",
+              "MILITARY_ID",
+              "BIRTH_CERTIFICATE"
+            ]
+          }
+        }
+      ],
+      "models": [
+        {
+          "counts": {
+            "model_started": 5,
+            "model_completed": 5,
+            "model_failed": 0,
+            "model_active": 0,
+            "http_started": 5,
+            "http_completed": 5,
+            "http_active": 0,
+            "http_200": 5
+          },
+          "model": {
+            "model": "lockR/rubert-base-pii-ner-tensorrt",
+            "revision": "73be581047bf123dac6505e7b3900ec292942296",
+            "files_sha256": {
+              "pii_ner.py": "4591fc8c5580c39dc5121ca649f4a2a4936276ea4c9e82ae144e5c467eb5a5ca",
+              "trt_backend.py": "eafc144a9b698e94dfe155074c7a3ab1063ee7817ab1a285b69639db1c07b424",
+              "model.fp16.engine": "f4d3f4eaa72ed8543b81ef4f6acf216f95be93fe4da8c3be27c8513cb9e80b35",
+              "config.json": "f4eeba88d1503a56d629195c9307d42c1acf4ce53ab88fdaecfc754fd0745cf9",
+              "runtime_config.json": "841420d76f5e7ec4ec7dd781b79987fe0f3facb25cc68896e7c88012f7af1b5d",
+              "tokenizer.json": "f61eee9d0dc18f14c195321a37eadf9e5aeb3a323bc278dec689adeb89dec1b9",
+              "tokenizer_config.json": "ffe381e31042ba94cb077bf7d5b9cee944dbd0c2a85079b095bea7e5a5a6058b"
+            },
+            "backend": "trt-graph",
+            "device": "cuda",
+            "min_confidence": null,
+            "decoder": "word",
+            "gateway_profile": "native",
+            "batch_size": 1,
+            "max_tokens": 512,
+            "overlap_tokens": 128,
+            "native_types": [
+              "BIRTH_CERTIFICATE",
+              "CITY",
+              "COUNTRY",
+              "CREDIT_CARD",
+              "DISTRICT",
+              "DRIVER_LICENSE",
+              "EMAIL",
+              "FIRST_NAME",
+              "HOUSE",
+              "INN",
+              "IP_ADDRESS",
+              "LAST_NAME",
+              "MIDDLE_NAME",
+              "MILITARY_ID",
+              "OMS",
+              "PASSPORT",
+              "PHONE",
+              "REGION",
+              "SNILS",
+              "STREET",
+              "URL"
+            ],
+            "person_labels": [
+              "FIRST_NAME",
+              "LAST_NAME",
+              "MIDDLE_NAME"
+            ],
+            "location_labels": [
+              "CITY",
+              "COUNTRY",
+              "DISTRICT",
+              "HOUSE",
+              "REGION",
+              "STREET"
+            ],
+            "gateway_merge": "none; original native boundaries",
+            "location_scope": "six address-component types, broader than geographic proper names",
+            "native_predictions": "all21 labels retained before coarse gateway mapping",
+            "precision": "published TensorRT FP16 engine with FP32 normalization accumulation; TF32 disabled at build",
+            "packages": {
+              "torch": "2.8.0+cu128",
+              "numpy": "2.5.3",
+              "transformers": "4.57.1",
+              "tokenizers": "0.22.2",
+              "tensorrt-cu12": "10.13.3.9",
+              "tensorrt-cu12-bindings": "10.13.3.9"
+            },
+            "logits_shape_validation": "exact [batch, padded_tokens,43]",
+            "warmup_complete": true,
+            "graph_buckets_captured": [
+              32,
+              64,
+              128,
+              256,
+              512
+            ],
+            "batch_graph_shapes": []
+          },
+          "server_environment": {
+            "python_executable": "/home/lockr/projects/seif-pii-rubert/.venv/bin/python",
+            "python_version": "3.12.11 (main, Aug 18 2025, 19:19:11) [Clang 20.1.4 ]",
+            "free_threaded": false,
+            "gil_enabled": true,
+            "packages": {
+              "uvicorn": "0.53.0",
+              "uvloop": "0.22.1",
+              "httptools": "0.8.0",
+              "h11": "0.16.0",
+              "httpx": "0.28.1",
+              "fastapi": "0.141.1",
+              "starlette": "1.6.0"
+            },
+            "active_event_loop": "uvloop.Loop",
+            "uvicorn_auto_http_protocol": "uvicorn.protocols.http.httptools_impl.HttpToolsProtocol"
+          }
+        },
+        {
+          "counts": {
+            "model_started": 5,
+            "model_completed": 5,
+            "model_failed": 0,
+            "model_active": 0,
+            "http_started": 5,
+            "http_completed": 5,
+            "http_active": 0,
+            "http_200": 5
+          },
+          "model": {
+            "model": "lockR/rubert-base-pii-ner-tensorrt",
+            "revision": "73be581047bf123dac6505e7b3900ec292942296",
+            "files_sha256": {
+              "pii_ner.py": "4591fc8c5580c39dc5121ca649f4a2a4936276ea4c9e82ae144e5c467eb5a5ca",
+              "trt_backend.py": "eafc144a9b698e94dfe155074c7a3ab1063ee7817ab1a285b69639db1c07b424",
+              "model.fp16.engine": "f4d3f4eaa72ed8543b81ef4f6acf216f95be93fe4da8c3be27c8513cb9e80b35",
+              "config.json": "f4eeba88d1503a56d629195c9307d42c1acf4ce53ab88fdaecfc754fd0745cf9",
+              "runtime_config.json": "841420d76f5e7ec4ec7dd781b79987fe0f3facb25cc68896e7c88012f7af1b5d",
+              "tokenizer.json": "f61eee9d0dc18f14c195321a37eadf9e5aeb3a323bc278dec689adeb89dec1b9",
+              "tokenizer_config.json": "ffe381e31042ba94cb077bf7d5b9cee944dbd0c2a85079b095bea7e5a5a6058b"
+            },
+            "backend": "trt-graph",
+            "device": "cuda",
+            "min_confidence": null,
+            "decoder": "word",
+            "gateway_profile": "native",
+            "batch_size": 1,
+            "max_tokens": 512,
+            "overlap_tokens": 128,
+            "native_types": [
+              "BIRTH_CERTIFICATE",
+              "CITY",
+              "COUNTRY",
+              "CREDIT_CARD",
+              "DISTRICT",
+              "DRIVER_LICENSE",
+              "EMAIL",
+              "FIRST_NAME",
+              "HOUSE",
+              "INN",
+              "IP_ADDRESS",
+              "LAST_NAME",
+              "MIDDLE_NAME",
+              "MILITARY_ID",
+              "OMS",
+              "PASSPORT",
+              "PHONE",
+              "REGION",
+              "SNILS",
+              "STREET",
+              "URL"
+            ],
+            "person_labels": [
+              "FIRST_NAME",
+              "LAST_NAME",
+              "MIDDLE_NAME"
+            ],
+            "location_labels": [
+              "CITY",
+              "COUNTRY",
+              "DISTRICT",
+              "HOUSE",
+              "REGION",
+              "STREET"
+            ],
+            "gateway_merge": "none; original native boundaries",
+            "location_scope": "six address-component types, broader than geographic proper names",
+            "native_predictions": "all21 labels retained before coarse gateway mapping",
+            "precision": "published TensorRT FP16 engine with FP32 normalization accumulation; TF32 disabled at build",
+            "packages": {
+              "torch": "2.8.0+cu128",
+              "numpy": "2.5.3",
+              "transformers": "4.57.1",
+              "tokenizers": "0.22.2",
+              "tensorrt-cu12": "10.13.3.9",
+              "tensorrt-cu12-bindings": "10.13.3.9"
+            },
+            "logits_shape_validation": "exact [batch, padded_tokens,43]",
+            "warmup_complete": true,
+            "graph_buckets_captured": [
+              32,
+              64,
+              128,
+              256,
+              512
+            ],
+            "batch_graph_shapes": []
+          },
+          "server_environment": {
+            "python_executable": "/home/lockr/projects/seif-pii-rubert/.venv/bin/python",
+            "python_version": "3.12.11 (main, Aug 18 2025, 19:19:11) [Clang 20.1.4 ]",
+            "free_threaded": false,
+            "gil_enabled": true,
+            "packages": {
+              "uvicorn": "0.53.0",
+              "uvloop": "0.22.1",
+              "httptools": "0.8.0",
+              "h11": "0.16.0",
+              "httpx": "0.28.1",
+              "fastapi": "0.141.1",
+              "starlette": "1.6.0"
+            },
+            "active_event_loop": "uvloop.Loop",
+            "uvicorn_auto_http_protocol": "uvicorn.protocols.http.httptools_impl.HttpToolsProtocol"
+          }
+        }
+      ],
+      "missing_ner_returns_503": true,
+      "cleanup": [
+        {
+          "service": "api-1",
+          "exited": true,
+          "return_code": -15,
+          "forced_kill": false
+        },
+        {
+          "service": "ner-1",
+          "exited": true,
+          "return_code": -15,
+          "forced_kill": false
+        },
+        {
+          "service": "api-0",
+          "exited": true,
+          "return_code": -15,
+          "forced_kill": false
+        },
+        {
+          "service": "ner-0",
+          "exited": true,
+          "return_code": -15,
+          "forced_kill": false
+        }
+      ]
+    }
+  ],
+  "finished_at_utc": "2026-09-22T23:13:46.289677+00:00"
+}
