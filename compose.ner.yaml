@@ -16,7 +16,7 @@ services:
     restart: unless-stopped
     environment:
       SEIF_NER_TOKEN: ${SEIF_NER_TOKEN:?Set a random SEIF_NER_TOKEN in your protected environment file}
-      SEIF_NER_WORKERS: "4"
+      SEIF_NER_WORKERS: ${SEIF_NER_WORKERS:-4}
       OMP_NUM_THREADS: "1"
       OPENBLAS_NUM_THREADS: "1"
       MKL_NUM_THREADS: "1"
@@ -27,7 +27,7 @@ services:
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]
     mem_limit: 3g
-    cpus: 4.0
+    cpus: ${SEIF_NER_CPUS:-4.0}
     pids_limit: 256
     stop_grace_period: 45s
     logging:

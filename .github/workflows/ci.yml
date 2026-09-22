@@ -130,6 +130,8 @@ jobs:
               "SEIF_NER_TOKEN": secrets.token_urlsafe(32),
               "SEIF_DEMO": "0",
               "SEIF_WORKERS": "1",
+              "SEIF_NER_WORKERS": "1",
+              "SEIF_NER_CPUS": "1.0",
           }
           destination = archive / ".env"
           with destination.open("x") as stream:
