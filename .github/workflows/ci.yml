@@ -101,3 +101,23 @@ jobs:
         with:
           name: seif-pii-source-${{ matrix.python }}
           path: output/seif-pii-source.zip
+  code-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+          cache: pip
+      - run: pip install -r requirements.lock && pip install -e '.[dev]'
+      - run: ruff check seif tests scripts
+      - run: git diff --check
+      - run: python scripts/package.py
+      - name: Generate GitLab Code Quality reports
+        run: |
+          python scripts/code_quality.py output/seif-pii-source.zip \
+            --ruff .venv/bin/ruff --output local-data/code-analysis/ci
+      - uses: actions/upload-artifact@v4
+        with:
+          name: code-quality-reports
+          path: local-data/code-analysis/ci/*.json
