@@ -1,6 +1,7 @@
 """Measure actual RuBERT TensorRT masking through an isolated local service.
 
-Every phase submits all 446 organizer texts once, with fresh correlation IDs.
+Every phase submits all 446 organizer texts, with fresh correlation IDs.
+Optional repetitions preserve the original text and expected prediction.
 Frozen predictions are correctness expectations only, never an inference cache
 served to the API. Reuses the established HTTP transport, counters and phase
 checks, including idle socket renewal without retrying timed POST requests.
@@ -8,14 +9,17 @@ checks, including idle socket renewal without retrying timed POST requests.
 from __future__ import annotations
 
 import argparse
+import asyncio
 import base64
 import hashlib
 import importlib
+import importlib.metadata
 import json
 import math
 import os
 import secrets
 import sys
+import sysconfig
 import tempfile
 from dataclasses import asdict
 from datetime import datetime, timezone
@@ -49,6 +53,7 @@ def create_ner_app():
     def factory():
         analyzer = RubertAnalyzer.from_local(Path(os.environ["SEIF_RUBERT_HTTP_MODEL"]), device="cuda", warmup=True)
         state["metadata"] = analyzer.metadata()
+        state["server_environment"] = server_environment()
         return common.CountedAnalyzer(analyzer, counts)
 
     app = create_app(analyzer_factory=factory)
@@ -57,7 +62,8 @@ def create_ner_app():
     @app.get("/benchmark-stats")
     async def benchmark_stats():
         # Guarded by the existing private NER authentication boundary.
-        return {"counts": counts.snapshot(), "model": state["metadata"]}
+        return {"counts": counts.snapshot(), "model": state["metadata"],
+                "server_environment": state["server_environment"]}
 
     return app
 
@@ -65,6 +71,27 @@ def create_ner_app():
 def file_digest(path):
     with path.open("rb") as stream:
         return hashlib.file_digest(stream, "sha256").hexdigest()
+
+
+def driver_environment():
+    return {"python_executable": sys.executable, "python_version": sys.version,
+            "free_threaded": bool(sysconfig.get_config_var("Py_GIL_DISABLED")),
+            "gil_enabled": getattr(sys, "_is_gil_enabled", lambda: True)()}
+
+
+def server_environment():
+    from uvicorn.protocols.http.auto import AutoHTTPProtocol
+
+    packages = {}
+    for name in ("uvicorn", "uvloop", "httptools", "h11", "httpx", "fastapi", "starlette"):
+        try:
+            packages[name] = importlib.metadata.version(name)
+        except importlib.metadata.PackageNotFoundError:
+            packages[name] = None
+    loop = type(asyncio.get_running_loop())
+    return {**driver_environment(), "packages": packages,
+            "active_event_loop": f"{loop.__module__}.{loop.__name__}",
+            "uvicorn_auto_http_protocol": f"{AutoHTTPProtocol.__module__}.{AutoHTTPProtocol.__name__}"}
 
 
 def prepare_cases(args):
@@ -93,6 +120,10 @@ def prepare_cases(args):
                          "entities": common.canonical_entities([asdict(span) for span in spans], len(text)),
                          "types": sorted({span.type for span in spans})})
     return prepared
+
+
+def prepare_workload(args):
+    return prepare_cases(args) * args.repeats
 
 
 def launch(args, temporary, children, logs):
@@ -128,7 +159,9 @@ def run_phases(args, api, ner, cases, report):
         status, _body = api.call("/v1/mask", {"payload": "Иван Иванов приехал в Москву.",
                                              "payload_id": "warmup-" + secrets.token_hex(12)})
         require(status == 200, "synthetic_api_warmup_success")
-    report["model"] = common.ner_snapshot(ner)["model"]
+    snapshot = common.ner_snapshot(ner)
+    report["model"] = snapshot["model"]
+    report["ner_server_environment"] = snapshot["server_environment"]
     report["phases"] = []
     for concurrency in args.concurrency:
         print(json.dumps({"backend": BACKEND, "concurrency": concurrency,
@@ -194,12 +227,15 @@ def parse_args():
     parser.add_argument("--api-python", type=Path, default=ROOT.parent / "seif-pii/.venv/bin/python")
     parser.add_argument("--dataset", type=Path, default=ROOT / "datasets/golden/organizer-v1/cases.jsonl")
     parser.add_argument("--concurrency", type=int, nargs="+", choices=(1, 4, 8, 16), default=[1, 4, 8, 16])
+    parser.add_argument("--repeats", type=int, default=1, help="Replay each complete 446-document cycle 1 to 100 times.")
     parser.add_argument("--startup-timeout", type=float, default=300)
     parser.add_argument("--timeout", type=float, default=30)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if args.concurrency != sorted(set(args.concurrency)):
         parser.error("Concurrency phases must be unique and increasing")
+    if not 1 <= args.repeats <= 100:
+        parser.error("Repeats must be between 1 and 100")
     if not 20 < args.timeout <= 120 or not math.isfinite(args.startup_timeout) or args.startup_timeout <= 0:
         parser.error("Client timeout must exceed the fixed 20-second NER deadline and be at most 120 seconds")
     for name in ("model_path", "ner_python", "api_python", "dataset", "reference_cache", "output"):
@@ -214,13 +250,15 @@ def main():
     args = parse_args()
     report = {
         "schema_version": 1, "status": "FAIL", "started_at_utc": datetime.now(timezone.utc).isoformat(),
-        "method": "Closed-loop mask-only /v1/mask; all 446 organizer texts per phase with fresh IDs.",
+        "method": "Closed-loop mask-only /v1/mask; repeated complete 446-text cycles with fresh IDs for every request.",
         "configuration": {"model": MODEL_ID, "model_revision": MODEL_REVISION, "backend": BACKEND,
                           "device": "cuda", "dtype": "engine FP16 with FP32 normalization accumulation",
                           "cpu_threads": THREADS, "seed": SEED, "min_confidence": .3, "batch_size": 1,
                           "max_tokens_per_window": 512, "window_overlap_tokens": 128,
                           "startup_graph_buckets_warmed": [32, 64, 128, 256, 512], "synthetic_api_warmup": 5,
-                          "concurrency": args.concurrency, "api_workers": 1, "ner_workers": 1,
+                          "concurrency": args.concurrency, "corpus_repeats": args.repeats,
+                          "unique_cases": 446, "mask_requests_per_phase": 446 * args.repeats,
+                          "api_workers": 1, "ner_workers": 1,
                           "ner_max_model_jobs": 4, "ner_timeout_seconds": 20,
                           "client_timeout_seconds": args.timeout, "capture_enabled": False,
                           "text_cache": False, "storage": "memory"},
@@ -237,7 +275,8 @@ def main():
     with args.output.open("x", encoding="utf-8") as stream:
         try:
             report["provenance"] = provenance(args)
-            cases = prepare_cases(args)
+            cases = prepare_workload(args)
+            report["driver_environment"] = driver_environment()
             report["service"] = run_service(args, cases)
             require(report["provenance"] == provenance(args), "immutable_sources_assets_models")
             report["status"] = report["service"]["status"]

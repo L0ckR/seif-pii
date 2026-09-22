@@ -1,0 +1,319 @@
+{
+  "measured_at_utc": "2026-09-22T20:54:47.870266+00:00",
+  "method": "Synthetic two-message ASGI response, inherited TCP listener fd; no model/PII/service load.",
+  "python": "/home/lockr/projects/seif-pii-rubert/.venv/bin/python",
+  "configurations": [
+    {
+      "loop": "asyncio",
+      "http_protocol": "h11",
+      "first_request": {
+        "headers_ms": 80.77531000162708,
+        "body_ms": 0.04232899664202705,
+        "total_ms": 80.8176389982691,
+        "server_socket": {
+          "family": 1,
+          "proto": 0,
+          "tcp_nodelay": 0
+        },
+        "client_tcp_nodelay": 1
+      },
+      "reused_samples": [
+        {
+          "headers_ms": 0.48537799739278853,
+          "body_ms": 42.222647003654856,
+          "total_ms": 42.708025001047645,
+          "server_socket": {
+            "family": 1,
+            "proto": 0,
+            "tcp_nodelay": 0
+          },
+          "client_tcp_nodelay": 1
+        },
+        {
+          "headers_ms": 0.7061959986458533,
+          "body_ms": 43.3536170021398,
+          "total_ms": 44.05981300078565,
+          "server_socket": {
+            "family": 1,
+            "proto": 0,
+            "tcp_nodelay": 0
+          },
+          "client_tcp_nodelay": 1
+        },
+        {
+          "headers_ms": 0.6819910049671307,
+          "body_ms": 43.23843099700753,
+          "total_ms": 43.92042200197466,
+          "server_socket": {
+            "family": 1,
+            "proto": 0,
+            "tcp_nodelay": 0
+          },
+          "client_tcp_nodelay": 1
+        },
+        {
+          "headers_ms": 0.7674959997530095,
+          "body_ms": 43.26849200151628,
+          "total_ms": 44.03598800126929,
+          "server_socket": {
+            "family": 1,
+            "proto": 0,
+            "tcp_nodelay": 0
+          },
+          "client_tcp_nodelay": 1
+        },
+        {
+          "headers_ms": 0.7488659975933842,
+          "body_ms": 43.25109199999133,
+          "total_ms": 43.999957997584715,
+          "server_socket": {
+            "family": 1,
+            "proto": 0,
+            "tcp_nodelay": 0
+          },
+          "client_tcp_nodelay": 1
+        }
+      ],
+      "reused_median_ms": {
+        "headers_ms": 0.7061959986458533,
+        "body_ms": 43.25109199999133,
+        "total_ms": 43.999957997584715
+      },
+      "child_stopped": true
+    },
+    {
+      "loop": "asyncio",
+      "http_protocol": "httptools",
+      "first_request": {
+        "headers_ms": 65.2256849934929,
+        "body_ms": 0.1637700042920187,
+        "total_ms": 65.38945499778492,
+        "server_socket": {
+          "family": 1,
+          "proto": 0,
+          "tcp_nodelay": 0
+        },
+        "client_tcp_nodelay": 1
+      },
+      "reused_samples": [
+        {
+          "headers_ms": 0.5489519971888512,
+          "body_ms": 42.24345700640697,
+          "total_ms": 42.79240900359582,
+          "server_socket": {
+            "family": 1,
+            "proto": 0,
+            "tcp_nodelay": 0
+          },
+          "client_tcp_nodelay": 1
+        },
+        {
+          "headers_ms": 0.6383469954016618,
+          "body_ms": 43.23060100432485,
+          "total_ms": 43.868947999726515,
+          "server_socket": {
+            "family": 1,
+            "proto": 0,
+            "tcp_nodelay": 0
+          },
+          "client_tcp_nodelay": 1
+        },
+        {
+          "headers_ms": 0.6451019944506697,
+          "body_ms": 43.392580999352504,
+          "total_ms": 44.03768299380317,
+          "server_socket": {
+            "family": 1,
+            "proto": 0,
+            "tcp_nodelay": 0
+          },
+          "client_tcp_nodelay": 1
+        },
+        {
+          "headers_ms": 0.6512369945994578,
+          "body_ms": 43.4059290055302,
+          "total_ms": 44.057166000129655,
+          "server_socket": {
+            "family": 1,
+            "proto": 0,
+            "tcp_nodelay": 0
+          },
+          "client_tcp_nodelay": 1
+        },
+        {
+          "headers_ms": 0.586627000302542,
+          "body_ms": 43.293571994581725,
+          "total_ms": 43.88019899488427,
+          "server_socket": {
+            "family": 1,
+            "proto": 0,
+            "tcp_nodelay": 0
+          },
+          "client_tcp_nodelay": 1
+        }
+      ],
+      "reused_median_ms": {
+        "headers_ms": 0.6383469954016618,
+        "body_ms": 43.293571994581725,
+        "total_ms": 43.88019899488427
+      },
+      "child_stopped": true
+    },
+    {
+      "loop": "uvloop",
+      "http_protocol": "h11",
+      "first_request": {
+        "headers_ms": 73.8309689986636,
+        "body_ms": 0.024410001060459763,
+        "total_ms": 73.85537899972405,
+        "server_socket": {
+          "family": 1,
+          "proto": 0,
+          "tcp_nodelay": 0
+        },
+        "client_tcp_nodelay": 1
+      },
+      "reused_samples": [
+        {
+          "headers_ms": 0.5167319977772422,
+          "body_ms": 0.013179997040424496,
+          "total_ms": 0.5299119948176667,
+          "server_socket": {
+            "family": 1,
+            "proto": 0,
+            "tcp_nodelay": 0
+          },
+          "client_tcp_nodelay": 1
+        },
+        {
+          "headers_ms": 0.439077994087711,
+          "body_ms": 0.010320000001229346,
+          "total_ms": 0.4493979940889403,
+          "server_socket": {
+            "family": 1,
+            "proto": 0,
+            "tcp_nodelay": 0
+          },
+          "client_tcp_nodelay": 1
+        },
+        {
+          "headers_ms": 0.4445829981705174,
+          "body_ms": 0.010089999705087394,
+          "total_ms": 0.4546729978756048,
+          "server_socket": {
+            "family": 1,
+            "proto": 0,
+            "tcp_nodelay": 0
+          },
+          "client_tcp_nodelay": 1
+        },
+        {
+          "headers_ms": 0.43700200330931693,
+          "body_ms": 0.010179996024817228,
+          "total_ms": 0.44718199933413416,
+          "server_socket": {
+            "family": 1,
+            "proto": 0,
+            "tcp_nodelay": 0
+          },
+          "client_tcp_nodelay": 1
+        },
+        {
+          "headers_ms": 0.44283799797995016,
+          "body_ms": 0.009809999028220773,
+          "total_ms": 0.45264799700817093,
+          "server_socket": {
+            "family": 1,
+            "proto": 0,
+            "tcp_nodelay": 0
+          },
+          "client_tcp_nodelay": 1
+        }
+      ],
+      "reused_median_ms": {
+        "headers_ms": 0.44283799797995016,
+        "body_ms": 0.010179996024817228,
+        "total_ms": 0.45264799700817093
+      },
+      "child_stopped": true
+    },
+    {
+      "loop": "uvloop",
+      "http_protocol": "httptools",
+      "first_request": {
+        "headers_ms": 69.01257800200256,
+        "body_ms": 0.02340000355616212,
+        "total_ms": 69.03597800555872,
+        "server_socket": {
+          "family": 1,
+          "proto": 0,
+          "tcp_nodelay": 0
+        },
+        "client_tcp_nodelay": 1
+      },
+      "reused_samples": [
+        {
+          "headers_ms": 0.43275799544062465,
+          "body_ms": 0.011500000255182385,
+          "total_ms": 0.44425799569580704,
+          "server_socket": {
+            "family": 1,
+            "proto": 0,
+            "tcp_nodelay": 0
+          },
+          "client_tcp_nodelay": 1
+        },
+        {
+          "headers_ms": 0.36066799657419324,
+          "body_ms": 0.011020005331374705,
+          "total_ms": 0.37168800190556794,
+          "server_socket": {
+            "family": 1,
+            "proto": 0,
+            "tcp_nodelay": 0
+          },
+          "client_tcp_nodelay": 1
+        },
+        {
+          "headers_ms": 0.40354299562750384,
+          "body_ms": 0.01172000338556245,
+          "total_ms": 0.4152629990130663,
+          "server_socket": {
+            "family": 1,
+            "proto": 0,
+            "tcp_nodelay": 0
+          },
+          "client_tcp_nodelay": 1
+        },
+        {
+          "headers_ms": 0.3877830022247508,
+          "body_ms": 0.009989998943638057,
+          "total_ms": 0.3977730011683889,
+          "server_socket": {
+            "family": 1,
+            "proto": 0,
+            "tcp_nodelay": 0
+          },
+          "client_tcp_nodelay": 1
+        },
+        {
+          "headers_ms": 0.3782229978241958,
+          "body_ms": 0.010140000085812062,
+          "total_ms": 0.38836299791000783,
+          "server_socket": {
+            "family": 1,
+            "proto": 0,
+            "tcp_nodelay": 0
+          },
+          "client_tcp_nodelay": 1
+        }
+      ],
+      "reused_median_ms": {
+        "headers_ms": 0.3877830022247508,
+        "body_ms": 0.011020005331374705,
+        "total_ms": 0.3977730011683889
+      },
+      "child_stopped": true
+    }
+  ]
+}

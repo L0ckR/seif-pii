@@ -1,0 +1,18 @@
+{
+  "recorded_at_utc": "2026-09-22T20:44:00.774249+00:00",
+  "python": "3.12.11",
+  "packages": {
+    "uvicorn": "0.53.0",
+    "uvloop": "0.22.1",
+    "httptools": "0.8.0",
+    "h11": "0.16.0",
+    "httpx": "0.28.1",
+    "fastapi": "0.141.1",
+    "starlette": "1.6.0",
+    "torch": "2.8.0+cu128",
+    "tensorrt-cu12": "10.13.3.9"
+  },
+  "uvicorn_http_auto_class": "uvicorn.protocols.http.httptools_impl.HttpToolsProtocol",
+  "uvloop_class": "uvloop.Loop",
+  "change": "Only uvloop==0.22.1 and httptools==0.8.0 installed into the experiment NER venv, matching the earlier GLiNER NER serving stack; model and service sources unchanged."
+}

@@ -1,0 +1,322 @@
+{
+  "measured_at_utc": "2026-09-22T20:42:29.705136+00:00",
+  "finished_at_utc": "2026-09-22T20:42:43.628169+00:00",
+  "method": "Actual isolated RuBERT NER/API, synthetic fixture only; eight requests per group, timing header arrival versus response body plus analyzer duration; not capacity.",
+  "ner_stack_at_measurement": {
+    "python": "3.12.11",
+    "uvicorn": "0.53.0",
+    "loop": "asyncio",
+    "http": "h11",
+    "uvloop_installed": false,
+    "httptools_installed": false
+  },
+  "groups": {
+    "ner_reused": {
+      "count": 8,
+      "median": {
+        "total_ms": 47.79638000036357,
+        "send_ms": 0.09385450175614096,
+        "headers_wait_ms": 4.14398899738444,
+        "body_wait_ms": 43.19485800078837,
+        "ner_server_ms": 3.0951330008974764,
+        "client_tcp_nodelay": 1.0
+      },
+      "samples": [
+        {
+          "total_ms": 4.816455999389291,
+          "send_ms": 0.6194580055307597,
+          "headers_wait_ms": 3.684609997435473,
+          "body_wait_ms": 0.5123879964230582,
+          "ner_server_ms": 2.4248810004792176,
+          "api_processing_ms": null,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 47.103208999033086,
+          "send_ms": 0.13112000306136906,
+          "headers_wait_ms": 5.4762379950261675,
+          "body_wait_ms": 41.49585100094555,
+          "ner_server_ms": 4.378572004497983,
+          "api_processing_ms": null,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 51.79982999834465,
+          "send_ms": 0.08620000153314322,
+          "headers_wait_ms": 4.326718000811525,
+          "body_wait_ms": 47.38691199599998,
+          "ner_server_ms": 3.4135969981434755,
+          "api_processing_ms": null,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 44.418363002478145,
+          "send_ms": 0.06477900024037808,
+          "headers_wait_ms": 2.9509689993574284,
+          "body_wait_ms": 41.40261500288034,
+          "ner_server_ms": 2.1534030020120554,
+          "api_processing_ms": null,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 51.47070599923609,
+          "send_ms": 0.1015090019791387,
+          "headers_wait_ms": 4.077054996741936,
+          "body_wait_ms": 47.292142000515014,
+          "ner_server_ms": 2.9831389983883128,
+          "api_processing_ms": null,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 48.13567400560714,
+          "send_ms": 0.07572000322397798,
+          "headers_wait_ms": 4.195602996333037,
+          "body_wait_ms": 43.86435100605013,
+          "ner_server_ms": 3.20712700340664,
+          "api_processing_ms": null,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 47.631895999074914,
+          "send_ms": 0.18113900296157226,
+          "headers_wait_ms": 4.092374998435844,
+          "body_wait_ms": 43.3583819976775,
+          "ner_server_ms": 2.980042998387944,
+          "api_processing_ms": null,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 47.960864001652226,
+          "send_ms": 0.06688899884466082,
+          "headers_wait_ms": 4.862640998908319,
+          "body_wait_ms": 43.03133400389925,
+          "ner_server_ms": 3.871663997415453,
+          "api_processing_ms": null,
+          "client_tcp_nodelay": 1
+        }
+      ]
+    },
+    "ner_fresh": {
+      "count": 8,
+      "median": {
+        "total_ms": 4.795795997779351,
+        "send_ms": 0.5457829975057393,
+        "headers_wait_ms": 3.8187275022210088,
+        "body_wait_ms": 0.27719649733626284,
+        "ner_server_ms": 2.8157144952274393,
+        "client_tcp_nodelay": 1.0
+      },
+      "samples": [
+        {
+          "total_ms": 7.237172998429742,
+          "send_ms": 0.573747995076701,
+          "headers_wait_ms": 6.364746004692279,
+          "body_wait_ms": 0.29867899866076186,
+          "ner_server_ms": 4.8412070027552545,
+          "api_processing_ms": null,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 3.664705000119284,
+          "send_ms": 0.48054800572572276,
+          "headers_wait_ms": 3.0022229984751903,
+          "body_wait_ms": 0.18193399591837078,
+          "ner_server_ms": 2.103161998093128,
+          "api_processing_ms": null,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 3.925696000806056,
+          "send_ms": 0.4480539937503636,
+          "headers_wait_ms": 3.0323130049509928,
+          "body_wait_ms": 0.4453290021046996,
+          "ner_server_ms": 1.8695719991228543,
+          "api_processing_ms": null,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 4.874649996054359,
+          "send_ms": 0.8865659983712249,
+          "headers_wait_ms": 3.7280100004863925,
+          "body_wait_ms": 0.2600739971967414,
+          "ner_server_ms": 2.5202909964718856,
+          "api_processing_ms": null,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 5.530879003345035,
+          "send_ms": 0.5178179999347776,
+          "headers_wait_ms": 4.704061000666115,
+          "body_wait_ms": 0.30900000274414197,
+          "ner_server_ms": 3.6194249987602234,
+          "api_processing_ms": null,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 4.716941999504343,
+          "send_ms": 0.5131779980729334,
+          "headers_wait_ms": 3.909445003955625,
+          "body_wait_ms": 0.29431899747578427,
+          "ner_server_ms": 3.111137993982993,
+          "api_processing_ms": null,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 5.541948004974984,
+          "send_ms": 0.6699670047964901,
+          "headers_wait_ms": 4.629272996680811,
+          "body_wait_ms": 0.2427080034976825,
+          "ner_server_ms": 3.262158003053628,
+          "api_processing_ms": null,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 3.7838049975107424,
+          "send_ms": 0.5751680000685155,
+          "headers_wait_ms": 3.0161980030243285,
+          "body_wait_ms": 0.19243899441789836,
+          "ner_server_ms": 1.8638279943843372,
+          "api_processing_ms": null,
+          "client_tcp_nodelay": 1
+        }
+      ]
+    },
+    "api_reused": {
+      "count": 8,
+      "median": {
+        "total_ms": 54.249023996817414,
+        "send_ms": 0.10273000225424767,
+        "headers_wait_ms": 54.11430399908568,
+        "body_wait_ms": 0.018700000509852543,
+        "ner_server_ms": 0.0,
+        "api_processing_ms": 52.1875,
+        "client_tcp_nodelay": 1.0
+      },
+      "samples": [
+        {
+          "total_ms": 11.920072996872477,
+          "send_ms": 0.6094169948482886,
+          "headers_wait_ms": 11.296586999378633,
+          "body_wait_ms": 0.014069002645555884,
+          "ner_server_ms": 0.0,
+          "api_processing_ms": 9.28,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 50.11393700260669,
+          "send_ms": 0.09073000546777621,
+          "headers_wait_ms": 49.99393699836219,
+          "body_wait_ms": 0.029269998776726425,
+          "ner_server_ms": 0.0,
+          "api_processing_ms": 48.479,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 75.07046999671729,
+          "send_ms": 0.08920000254875049,
+          "headers_wait_ms": 74.963499995647,
+          "body_wait_ms": 0.01776999852154404,
+          "ner_server_ms": 0.0,
+          "api_processing_ms": 73.161,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 52.78056699899025,
+          "send_ms": 0.08277999586425722,
+          "headers_wait_ms": 52.676407001854386,
+          "body_wait_ms": 0.021380001271609217,
+          "ner_server_ms": 0.0,
+          "api_processing_ms": 50.642,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 59.323330999177415,
+          "send_ms": 0.11472999904071912,
+          "headers_wait_ms": 59.163420999539085,
+          "body_wait_ms": 0.04518000059761107,
+          "ner_server_ms": 0.0,
+          "api_processing_ms": 57.269,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 56.176794998464175,
+          "send_ms": 0.27959499857388437,
+          "headers_wait_ms": 55.88010000064969,
+          "body_wait_ms": 0.017099999240599573,
+          "ner_server_ms": 0.0,
+          "api_processing_ms": 54.478,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 52.32958799751941,
+          "send_ms": 0.0849799980642274,
+          "headers_wait_ms": 52.22497799695702,
+          "body_wait_ms": 0.019630002498161048,
+          "ner_server_ms": 0.0,
+          "api_processing_ms": 49.414,
+          "client_tcp_nodelay": 1
+        },
+        {
+          "total_ms": 55.717480994644575,
+          "send_ms": 0.1476199977332726,
+          "headers_wait_ms": 55.55220099631697,
+          "body_wait_ms": 0.017660000594332814,
+          "ner_server_ms": 0.0,
+          "api_processing_ms": 53.733,
+          "client_tcp_nodelay": 1
+        }
+      ]
+    }
+  },
+  "analyzer_call_ms": [
+    2.8622780009754933,
+    1.5158139940467663,
+    2.6912500034086406,
+    1.704983995296061,
+    3.7237049982650205,
+    2.8695479995803908,
+    1.6432339980383404,
+    2.1684719977201894,
+    2.6222860033158213,
+    2.067173001705669,
+    2.959457997349091,
+    3.630045997851994,
+    1.6193839983316138,
+    1.3882800049032085,
+    2.110642999468837,
+    2.828477998264134,
+    2.611709998745937,
+    2.773528998659458,
+    1.327215002675075,
+    2.0781019993592054,
+    1.8549820015323348,
+    9.25348000600934,
+    2.084821004245896,
+    2.5103799998760223,
+    1.8210130001534708,
+    2.089760993840173,
+    2.4814409989630803
+  ],
+  "cleanup": [
+    {
+      "service": "api",
+      "exited": true,
+      "return_code": -15,
+      "forced_kill": false
+    },
+    {
+      "service": "ner",
+      "exited": true,
+      "return_code": -15,
+      "forced_kill": false
+    }
+  ],
+  "observed": "On reused direct NER connections median body wait was approximately 43 ms; fresh connections removed that delay. API processing included waiting for the private NER response.",
+  "source_inspection": {
+    "uvicorn_fd_branch": "socket.fromfd(config.fd, socket.AF_UNIX, socket.SOCK_STREAM)",
+    "cpython_asyncio_tcp_nodelay_guard": "Only AF_INET/AF_INET6 + SOCK_STREAM + IPPROTO_TCP sockets are enabled by _set_nodelay."
+  },
+  "interpretation": "Nagle/delayed-ACK interaction is an inference from code inspection and the measured header/body delay, not a packet-capture finding. The separate model-free transport probe reads actual accepted-socket TCP_NODELAY.",
+  "alignment": "Installed only uvloop==0.22.1 and httptools==0.8.0 in the experiment NER venv; model/service sources unchanged. Both the original and aligned HTTP measurements are retained.",
+  "reproduce_transport_probe": "/home/lockr/projects/seif-pii/.venv/bin/python benchmarks/ner-models/rubert-tensorrt/transport_diagnostic.py --python .venv/bin/python --output <new-json-path>"
+}

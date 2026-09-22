@@ -95,6 +95,8 @@ def test_native_factory_warms_graphs_before_readiness_and_counts_actual_calls(mo
         assert client.post("/analyze", json={"text": "пример"}, headers=headers).status_code == 200
         stats = client.get("/benchmark-stats", headers=headers).json()
     assert stats["model"]["warmed"]
+    assert "uvicorn" in stats["server_environment"]["packages"]
+    assert stats["server_environment"]["python_executable"] == sys.executable
     assert stats["counts"]["model_started"] == stats["counts"]["model_completed"] == 1
     assert stats["counts"]["http_200"] == 1
     assert not torch.backends.cuda.matmul.allow_tf32 and not torch.backends.cudnn.allow_tf32
@@ -118,12 +120,15 @@ def test_selected_phases_use_shared_checked_runner_and_unique_warmup_ids(monkeyp
         return phase
 
     monkeypatch.setattr(bench.common, "run_phase", fake_phase)
-    monkeypatch.setattr(bench.common, "ner_snapshot", lambda _: {"model": {"backend": "trt-graph"}})
+    monkeypatch.setattr(bench.common, "ner_snapshot", lambda _: {
+        "model": {"backend": "trt-graph"}, "server_environment": {"python_version": "test-runtime"},
+    })
     report = {}
     assert bench.run_phases(SimpleNamespace(concurrency=[1, 4, 8, 16]), FakeApi(), object(), [None] * 446, report)
     assert phases == [(446, 1), (446, 4), (446, 8), (446, 16)]
     assert len(offered) == len(set(offered)) == 5
     assert len(report["phases"]) == 4
+    assert report["ner_server_environment"]["python_version"] == "test-runtime"
 
 
 @pytest.mark.parametrize("failure_status,expected", [(503, "PASS"), (200, "FAIL")])
@@ -174,9 +179,47 @@ def test_cli_keeps_venv_symlinks_and_bounded_ordered_concurrency(monkeypatch, tm
     args = bench.parse_args()
     assert args.ner_python == args.api_python == interpreter
     assert args.concurrency == [1, 4, 8, 16]
+    assert args.repeats == 1
     monkeypatch.setattr(sys, "argv", [*argv, "--concurrency", "4", "1"])
     with pytest.raises(SystemExit):
         bench.parse_args()
+    monkeypatch.setattr(sys, "argv", [*argv, "--repeats", "101"])
+    with pytest.raises(SystemExit):
+        bench.parse_args()
+
+
+def test_repeated_workload_preserves_expected_masks_and_uses_fresh_ids(monkeypatch):
+    case = {"case_id": "same-source", "text": "Иван", "expected": "****",
+            "entities": [(0, 4, "PERSON")], "types": ["PERSON"]}
+    monkeypatch.setattr(bench, "prepare_cases", lambda _: [case])
+    cases = bench.prepare_workload(SimpleNamespace(repeats=3))
+    assert len(cases) == 3 and all(row["expected"] == "****" for row in cases)
+    counts, ids = bench.common.Counts(), []
+
+    class FakeNer:
+        def call(self, _path):
+            return 200, {"counts": counts.snapshot(), "model": {}}
+
+    class FakeApi:
+        timeout = 1
+
+        def call(self, path, body=None, *, raw=False):
+            if path == "/metrics":
+                assert raw
+                return 200, f'seif_stage_duration_seconds_count{{stage="ner"}} {len(ids)}\n'
+            if path == "/v1/unmask":
+                assert body["payload_id"] in ids
+                return 200, {"result": "Иван"}
+            assert path == "/v1/mask" and body["payload_id"] not in ids
+            ids.append(body["payload_id"])
+            counts.add(model_started=1, model_completed=1, http_started=1, http_completed=1, http_200=1)
+            return 200, {"result": "****", "payload_id": body["payload_id"], "mode": "mask", "latency_ms": 1,
+                         "masking_enabled": True, "types": ["PERSON"],
+                         "entities": [{"start": 0, "end": 4, "type": "PERSON", "confidence": .9, "reason": "ner"}]}
+
+    report = bench.common.run_phase(FakeApi(), FakeNer(), cases, 1)
+    assert len(set(ids)) == report["mask_requests"] == report["ner_counts"]["model_completed"] == 3
+    assert report["valid_successful_measurement"]
 
 
 def test_provenance_includes_reused_helpers_and_verified_model_hashes(monkeypatch, reference):
