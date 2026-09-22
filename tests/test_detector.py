@@ -31,7 +31,6 @@ def extracted(text):
         ("место рождения: г. Самара.", "BIRTH_PLACE", "г. Самара"),
         ("Родилась в Казани.", "BIRTH_PLACE", "Казани"),
         ("паспорт 4509 123456", "PASSPORT", "4509 123456"),
-        ("паспорт: серия 45 09 номер 123456", "PASSPORT", "45 09 номер 123456"),
         ("ПАСПОРТ РФ: 4509123456", "PASSPORT", "4509123456"),
         ("гражданство: РФ", "CITIZENSHIP", "РФ"),
         ("Гражданин России", "CITIZENSHIP", "России"),
@@ -68,6 +67,12 @@ def extracted(text):
 )
 def test_exact_entities(text, kind, value):
     assert extracted(text) == [(kind, value)]
+
+
+def test_document_field_label_is_not_personal_data():
+    assert extracted("паспорт: серия 45 09 номер 123456") == [
+        ("PASSPORT", "45 09"), ("PASSPORT", "123456"),
+    ]
 
 
 @pytest.mark.parametrize(

@@ -82,6 +82,8 @@ def compare_quality(current: dict, baseline: dict) -> list[str]:
     """Require the same corpus and nondecreasing global/certain P/R/F1."""
     if current["dataset_sha256"] != baseline["dataset_sha256"]:
         raise ValueError("Baseline belongs to a different golden version")
+    if current.get("ner_cache_sha256") != baseline.get("ner_cache_sha256"):
+        raise ValueError("Baseline uses different NER predictions")
     failures = []
     for profile, reference in baseline["profiles"].items():
         if profile not in current["profiles"]:

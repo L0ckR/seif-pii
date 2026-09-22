@@ -15,6 +15,11 @@ from datetime import date
 from functools import lru_cache
 from typing import Iterable
 
+from seif.context_filters import refine_candidates
+from seif.location_fields import location_candidates
+from seif.person_fields import person_candidates
+from seif.structured_fields import structured_candidates
+
 
 @dataclass(frozen=True, slots=True)
 class Span:
@@ -126,7 +131,7 @@ _PUBLIC_NAME = _rx(
     r"\b(?:поэт(?:а|у|ом)?|писател[ьяю]|стихотворени[еяю]|роман|цитат[аыу]|творчеств[ао]|памятник|имени)\b"
 )
 _PUBLIC_NAME_LINK = _rx(
-    r"\b(?:поэт(?:а|у|ом|е)?|писател(?:ь|я|ю|ем|е)|стихотворени[еяю]|"
+    r"\b(?:поэт(?:а|у|ом|е)?|писател(?:ь|я|ю|ем|е)|композитор(?:а|у|ом|е)?|стихотворени[еяю]|"
     r"стих(?:и|ов)|цитат[аыу]|творчеств[ао]|памятник|имени)"
     r"[ \t]*(?:[:—–-][ \t]*)?[«\"']?[ \t]*$"
 )
@@ -748,7 +753,7 @@ def _merge_ner_candidates(
             )
     # LOCATION is less specific than every structured field, including individual
     # address components; overlaps never relabel CITY/STREET/ADDRESS as LOCATION.
-    return _resolve([*base_spans, *accepted.values()])
+    return _resolve(refine_candidates(text, [*base_spans, *accepted.values()]))
 
 
 def merge_person_candidates(text: str, base_spans: Sequence[Span], candidates: Sequence[Span]) -> list[Span]:
@@ -991,4 +996,9 @@ def detect(text: str, *, extra_rules: list[dict] | None = None) -> list[Span]:
                     candidates.append(Span(match.start(), match.end(), rule["type"], 1.0, "custom-rule"))
             except TimeoutError as exc:
                 raise ValueError("Custom detection rule exceeded its time budget") from exc
-    return _resolve(candidates)
+    candidates.extend(Span(*candidate) for candidate in structured_candidates(text))
+    candidates.extend(Span(*candidate) for candidate in location_candidates(text))
+    candidates.extend(Span(*candidate) for candidate in person_candidates(
+        text, given_names=_NAME_FORMS, public_name_guard=_is_public_name,
+    ))
+    return _resolve(refine_candidates(text, candidates))

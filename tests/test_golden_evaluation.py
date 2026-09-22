@@ -71,3 +71,11 @@ def test_reports_are_not_silently_overwritten(tmp_path):
     with pytest.raises(FileExistsError):
         save_json(path, {"f1": 1})
     assert json.loads(path.read_text()) == {"f1": .7}
+
+
+def test_quality_gate_rejects_different_model_predictions():
+    reference = baseline()
+    current = copy.deepcopy(reference)
+    current["ner_cache_sha256"] = "different model output"
+    with pytest.raises(ValueError, match="different NER"):
+        compare_quality(current, reference)

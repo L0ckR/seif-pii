@@ -14,7 +14,7 @@ Run from a private repository checkout:
 
 ```bash
 python scripts/evaluate_golden.py \
-  --baseline benchmarks/golden/baseline-75b52e8.json \
+  --baseline benchmarks/golden/reference-v1.json \
   --output output/golden-quality/current.json
 ```
 
@@ -24,6 +24,12 @@ unique-case character precision/recall/F1, certain-case sensitivity, type covera
 and traffic-weighted secondary metrics. The baseline gate checks precision,
 recall and F1 on the complete and certain-only sets and negative-case false
 positives. Existing result files are never silently overwritten.
+
+`reference-v1.json` is the accepted result after the first tuning pass. CI checks
+both profiles against this stronger reference. The original
+`baseline-75b52e8.json` remains unchanged so the improvement can be reproduced.
+Changing the model cache requires a separate comparison: the regression gate
+rejects different NER predictions instead of attributing model changes to rules.
 
 These are development scores after inspecting the corpus, not held-out evidence
 or the overall hackathon score. Neither the data nor this cache is included in

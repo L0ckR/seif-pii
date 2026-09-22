@@ -13,7 +13,7 @@ import time
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import asynccontextmanager, contextmanager
-from dataclasses import asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from functools import partial
 from pathlib import Path
@@ -88,6 +88,15 @@ def capture_origin(scope, headers):
     }
 
 
+@dataclass(slots=True)
+class BufferedRequestBody:
+    """Request-owned bytes remain reserved until the complete ASGI call ends."""
+
+    held_bytes: int = 0
+    content: bytes = b""
+    complete: bool = False
+
+
 class Boundary:
     """Pure ASGI middleware avoids per-request task overhead and raw access logs."""
     def __init__(self, app, settings, registry, capture=None):
@@ -106,14 +115,13 @@ class Boundary:
         start, request_id, status = time.perf_counter(), uuid.uuid4().hex, 500
         overloaded = self.inflight >= self.settings.max_inflight
         self.inflight += 1
-        held_body_bytes = 0
+        body = BufferedRequestBody()
         scope.setdefault("state", {})["request_id"] = request_id
         headers = dict(scope.get("headers", []))
         capture_this = self.capture is not None and scope["method"] == "POST" and path in {
             "/process", "/v1/mask", "/v1/unmask",
         }
         received_at = datetime.now(timezone.utc).isoformat() if capture_this else None
-        request_body, body_complete = b"", False
 
         async def safe_send(message):
             nonlocal status
@@ -129,59 +137,9 @@ class Boundary:
         try:
             if overloaded:
                 return await error(429, "busy", "Сервис занят; повторите запрос.", {"Retry-After": "1"})(scope, receive, safe_send)
-            try:
-                content_length = int(headers.get(b"content-length", b"0"))
-                if content_length < 0:
-                    raise ValueError
-            except ValueError:
-                return await error(400, "invalid_request", "Некорректный размер запроса.")(scope, receive, safe_send)
-            if content_length > self.settings.max_body_bytes:
-                return await error(413, "too_large", "Превышен размер запроса.")(scope, receive, safe_send)
-            if scope["method"] == "POST":
-                if content_length > self.settings.max_inflight_body_bytes - self.buffered_bytes:
-                    return await error(429, "body_budget", "Память обработки запросов занята; повторите запрос.", {"Retry-After": "1"})(scope, receive, safe_send)
-                # Bound even chunked bodies before JSON parsing.
-                body = bytearray()
-                body_error = None
-                try:
-                    # One deadline for the whole upload: trickling bytes must not
-                    # retain an in-flight slot or the shared body budget forever.
-                    async with asyncio.timeout(self.settings.request_body_timeout_seconds):
-                        while True:
-                            message = await receive()
-                            if message["type"] == "http.disconnect":
-                                return
-                            chunk = message.get("body", b"")
-                            if held_body_bytes + len(chunk) > self.settings.max_body_bytes:
-                                body_error = error(413, "too_large", "Превышен размер запроса.")
-                                break
-                            if self.buffered_bytes + len(chunk) > self.settings.max_inflight_body_bytes:
-                                body_error = error(429, "body_budget", "Память обработки запросов занята; повторите запрос.", {"Retry-After": "1"})
-                                break
-                            self.buffered_bytes += len(chunk)
-                            held_body_bytes += len(chunk)
-                            body.extend(chunk)
-                            if not message.get("more_body", False):
-                                break
-                except TimeoutError:
-                    return await error(408, "request_timeout", "Истекло время получения запроса.")(scope, receive, safe_send)
-                if body_error is not None:
-                    return await body_error(scope, receive, safe_send)
-                request_body, body_complete = bytes(body), True
-                delivered = False
-
-                async def bounded_receive():
-                    nonlocal delivered
-                    if not delivered:
-                        delivered = True
-                        return {"type": "http.request", "body": request_body, "more_body": False}
-                    return await receive()
-
-                await self.app(scope, bounded_receive, safe_send)
-            else:
-                await self.app(scope, receive, safe_send)
+            await self._dispatch_http(scope, receive, safe_send, headers, body)
         finally:
-            self.buffered_bytes -= held_body_bytes
+            self.buffered_bytes -= body.held_bytes
             self.inflight -= 1
             self.count.labels(route, str(status)).inc()
             self.latency.labels(route).observe(time.perf_counter() - start)
@@ -191,10 +149,69 @@ class Boundary:
                     "completed_at": datetime.now(timezone.utc).isoformat(),
                     "request_id": request_id, "route": route, "method": scope["method"],
                     "status_code": status, "elapsed_ms": round((time.perf_counter() - start) * 1000, 3),
-                    "body_complete": body_complete,
+                    "body_complete": body.complete,
                     "operation": scope["state"].get("capture_operation"),
                     **capture_origin(scope, headers),
-                }, request_body)
+                }, body.content)
+
+    def _check_body_size(self, headers, scope):
+        try:
+            content_length = int(headers.get(b"content-length", b"0"))
+            if content_length < 0:
+                raise ValueError
+        except ValueError:
+            return error(400, "invalid_request", "Некорректный размер запроса.")
+        if content_length > self.settings.max_body_bytes:
+            return error(413, "too_large", "Превышен размер запроса.")
+        if scope["method"] == "POST" and content_length > self.settings.max_inflight_body_bytes - self.buffered_bytes:
+            return error(429, "body_budget", "Память обработки запросов занята; повторите запрос.", {"Retry-After": "1"})
+        return None
+
+    async def _read_post_body(self, receive, body):
+        """Collect within one upload deadline; leave response sending to dispatch."""
+        chunks = bytearray()
+        try:
+            async with asyncio.timeout(self.settings.request_body_timeout_seconds):
+                while True:
+                    message = await receive()
+                    if message["type"] == "http.disconnect":
+                        return None
+                    chunk = message.get("body", b"")
+                    if body.held_bytes + len(chunk) > self.settings.max_body_bytes:
+                        return error(413, "too_large", "Превышен размер запроса.")
+                    if self.buffered_bytes + len(chunk) > self.settings.max_inflight_body_bytes:
+                        return error(429, "body_budget", "Память обработки запросов занята; повторите запрос.", {"Retry-After": "1"})
+                    self.buffered_bytes += len(chunk)
+                    body.held_bytes += len(chunk)
+                    chunks.extend(chunk)
+                    if not message.get("more_body", False):
+                        break
+        except TimeoutError:
+            return error(408, "request_timeout", "Истекло время получения запроса.")
+        body.content, body.complete = bytes(chunks), True
+        return None
+
+    async def _dispatch_http(self, scope, receive, send, headers, body):
+        rejected = self._check_body_size(headers, scope)
+        if rejected is not None:
+            return await rejected(scope, receive, send)
+        if scope["method"] != "POST":
+            return await self.app(scope, receive, send)
+        rejected = await self._read_post_body(receive, body)
+        if rejected is not None:
+            return await rejected(scope, receive, send)
+        if not body.complete:
+            return
+        delivered = False
+
+        async def bounded_receive():
+            nonlocal delivered
+            if not delivered:
+                delivered = True
+                return {"type": "http.request", "body": body.content, "more_body": False}
+            return await receive()
+
+        await self.app(scope, bounded_receive, send)
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:

@@ -85,48 +85,7 @@ class Boundary:
             await send(message)
 
         try:
-            try:
-                content_length = int(headers.get(b"content-length", b"0"))
-            except ValueError:
-                return await error(400, "invalid_request", "Invalid request.")(scope, receive, send)
-            if content_length < 0:
-                return await error(400, "invalid_request", "Invalid request.")(scope, receive, send)
-            if content_length > MAX_BODY_BYTES:
-                return await error(413, "too_large", "Request body is too large.")(scope, receive, send)
-            if scope["method"] == "POST":
-                body = bytearray()
-                body_too_large = False
-                try:
-                    # Bound the entire upload, including clients that drip-feed
-                    # small chunks without ever finishing an authenticated body.
-                    async with asyncio.timeout(BODY_READ_TIMEOUT_SECONDS):
-                        while True:
-                            message = await receive()
-                            if message["type"] == "http.disconnect":
-                                return
-                            chunk = message.get("body", b"")
-                            if len(body) + len(chunk) > MAX_BODY_BYTES:
-                                body_too_large = True
-                                break
-                            body.extend(chunk)
-                            if not message.get("more_body", False):
-                                break
-                except TimeoutError:
-                    return await error(408, "request_timeout", "Request body timed out.")(scope, receive, send)
-                if body_too_large:
-                    return await error(413, "too_large", "Request body is too large.")(scope, receive, send)
-                delivered = False
-
-                async def bounded_receive():
-                    nonlocal delivered
-                    if not delivered:
-                        delivered = True
-                        return {"type": "http.request", "body": bytes(body), "more_body": False}
-                    return await receive()
-
-                await self.app(scope, bounded_receive, safe_send)
-            else:
-                await self.app(scope, receive, safe_send)
+            await self._dispatch_http(scope, receive, send, safe_send, headers)
         except Exception:
             # ServerErrorMiddleware re-raises handled exceptions for server logs.
             # Catch here so a third-party exception cannot leak input to Uvicorn.
@@ -135,6 +94,60 @@ class Boundary:
                 return await error(503, "unavailable", "NER temporarily unavailable.")(scope, receive, send)
         finally:
             self.inflight -= 1
+
+    @staticmethod
+    def _check_body_size(headers):
+        try:
+            content_length = int(headers.get(b"content-length", b"0"))
+        except ValueError:
+            return error(400, "invalid_request", "Invalid request.")
+        if content_length < 0:
+            return error(400, "invalid_request", "Invalid request.")
+        if content_length > MAX_BODY_BYTES:
+            return error(413, "too_large", "Request body is too large.")
+        return None
+
+    @staticmethod
+    async def _read_post_body(receive):
+        """Return the buffered body or an error after the upload timeout exits."""
+        body = bytearray()
+        try:
+            async with asyncio.timeout(BODY_READ_TIMEOUT_SECONDS):
+                while True:
+                    message = await receive()
+                    if message["type"] == "http.disconnect":
+                        return None, None
+                    chunk = message.get("body", b"")
+                    if len(body) + len(chunk) > MAX_BODY_BYTES:
+                        return None, error(413, "too_large", "Request body is too large.")
+                    body.extend(chunk)
+                    if not message.get("more_body", False):
+                        break
+        except TimeoutError:
+            return None, error(408, "request_timeout", "Request body timed out.")
+        return body, None
+
+    async def _dispatch_http(self, scope, receive, send, safe_send, headers):
+        rejected = self._check_body_size(headers)
+        if rejected is not None:
+            return await rejected(scope, receive, send)
+        if scope["method"] != "POST":
+            return await self.app(scope, receive, safe_send)
+        body, rejected = await self._read_post_body(receive)
+        if rejected is not None:
+            return await rejected(scope, receive, send)
+        if body is None:
+            return
+        delivered = False
+
+        async def bounded_receive():
+            nonlocal delivered
+            if not delivered:
+                delivered = True
+                return {"type": "http.request", "body": bytes(body), "more_body": False}
+            return await receive()
+
+        await self.app(scope, bounded_receive, safe_send)
 
 
 def build_analyzer():

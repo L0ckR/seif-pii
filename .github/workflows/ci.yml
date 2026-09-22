@@ -94,6 +94,8 @@ jobs:
           SEIF_TEST_REDIS_URL: redis://127.0.0.1:6379/15
           SEIF_TEST_REDIS_SERVER: /usr/bin/redis-server
       - run: python scripts/evaluate.py --output output/evaluation.json
+      - name: Check immutable organizer golden against the accepted reference
+        run: python scripts/evaluate_golden.py --baseline benchmarks/golden/reference-v1.json --output output/golden-quality/ci.json
       - run: python scripts/package.py
       - uses: actions/upload-artifact@v4
         with:

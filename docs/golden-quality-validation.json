@@ -1,0 +1,295 @@
+{
+  "schema_version": 1,
+  "dataset_sha256": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46",
+  "ner_cache_sha256": "c0152894401d87c1848aab145aa5b734b30754c678d66e733545308d596f054f",
+  "tests": {
+    "tests": 1173,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "golden": {
+    "rules": {
+      "before": {
+        "cases": 446,
+        "exact_cases": 172,
+        "positive_cases": 369,
+        "negative_cases": 77,
+        "fully_protected_positive_cases": 156,
+        "false_positive_negative_cases": 28,
+        "uncertain_cases": 117,
+        "character_metrics": {
+          "precision": 0.793317,
+          "recall": 0.594509,
+          "f1": 0.679673,
+          "true_positive": 3205,
+          "false_positive": 835,
+          "false_negative": 2186
+        },
+        "exact_case_rate": 0.38565,
+        "fully_protected_positive_rate": 0.422764,
+        "false_positive_negative_rate": 0.363636
+      },
+      "after": {
+        "cases": 446,
+        "exact_cases": 341,
+        "positive_cases": 369,
+        "negative_cases": 77,
+        "fully_protected_positive_cases": 286,
+        "false_positive_negative_cases": 18,
+        "uncertain_cases": 117,
+        "character_metrics": {
+          "precision": 0.928391,
+          "recall": 0.817659,
+          "f1": 0.869514,
+          "true_positive": 4408,
+          "false_positive": 340,
+          "false_negative": 983
+        },
+        "exact_case_rate": 0.764574,
+        "fully_protected_positive_rate": 0.775068,
+        "false_positive_negative_rate": 0.233766
+      },
+      "certain_cases_after": {
+        "cases": 329,
+        "exact_cases": 295,
+        "positive_cases": 293,
+        "negative_cases": 36,
+        "fully_protected_positive_cases": 262,
+        "false_positive_negative_cases": 2,
+        "uncertain_cases": 0,
+        "character_metrics": {
+          "precision": 0.983936,
+          "recall": 0.904281,
+          "f1": 0.942429,
+          "true_positive": 3675,
+          "false_positive": 60,
+          "false_negative": 389
+        },
+        "exact_case_rate": 0.896657,
+        "fully_protected_positive_rate": 0.894198,
+        "false_positive_negative_rate": 0.055556
+      }
+    },
+    "hybrid": {
+      "before": {
+        "cases": 446,
+        "exact_cases": 219,
+        "positive_cases": 369,
+        "negative_cases": 77,
+        "fully_protected_positive_cases": 208,
+        "false_positive_negative_cases": 31,
+        "uncertain_cases": 117,
+        "character_metrics": {
+          "precision": 0.809836,
+          "recall": 0.733074,
+          "f1": 0.769545,
+          "true_positive": 3952,
+          "false_positive": 928,
+          "false_negative": 1439
+        },
+        "exact_case_rate": 0.491031,
+        "fully_protected_positive_rate": 0.563686,
+        "false_positive_negative_rate": 0.402597
+      },
+      "after": {
+        "cases": 446,
+        "exact_cases": 370,
+        "positive_cases": 369,
+        "negative_cases": 77,
+        "fully_protected_positive_cases": 316,
+        "false_positive_negative_cases": 18,
+        "uncertain_cases": 117,
+        "character_metrics": {
+          "precision": 0.93437,
+          "recall": 0.903172,
+          "f1": 0.918506,
+          "true_positive": 4869,
+          "false_positive": 342,
+          "false_negative": 522
+        },
+        "exact_case_rate": 0.829596,
+        "fully_protected_positive_rate": 0.856369,
+        "false_positive_negative_rate": 0.233766
+      },
+      "certain_cases_after": {
+        "cases": 329,
+        "exact_cases": 315,
+        "positive_cases": 293,
+        "negative_cases": 36,
+        "fully_protected_positive_cases": 283,
+        "false_positive_negative_cases": 2,
+        "uncertain_cases": 0,
+        "character_metrics": {
+          "precision": 0.9846,
+          "recall": 0.975394,
+          "f1": 0.979975,
+          "true_positive": 3964,
+          "false_positive": 62,
+          "false_negative": 100
+        },
+        "exact_case_rate": 0.957447,
+        "fully_protected_positive_rate": 0.96587,
+        "false_positive_negative_rate": 0.055556
+      }
+    }
+  },
+  "case_level_audit": {
+    "rules": {
+      "cases_losing_previously_protected_gold": [],
+      "cases_with_new_false_positive_characters": [],
+      "improved_case_count": 177
+    },
+    "hybrid": {
+      "cases_losing_previously_protected_gold": [],
+      "cases_with_new_false_positive_characters": [],
+      "improved_case_count": 156
+    }
+  },
+  "live_api": {
+    "profile": "hybrid",
+    "base_url": "http://127.0.0.1:8966",
+    "cases": 446,
+    "dataset_sha256": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46",
+    "passed": true
+  },
+  "load": {
+    "completed_at_utc": "2026-09-22T12:26:43.171711+00:00",
+    "kind": "60-second golden-quality regression check, not new capacity-limit confirmation",
+    "passed": true,
+    "phases": [
+      {
+        "label": "warmup",
+        "target_rps": 250,
+        "duration_seconds": 5,
+        "passed": true,
+        "achieved_rps": 250.025,
+        "counts": {
+          "pairs_offered": 625,
+          "pairs_dispatched": 625,
+          "pairs_dropped_client_capacity": 0,
+          "pairs_dropped_client_deadline": 0,
+          "pairs_verified": 625,
+          "pairs_mask_failed": 0,
+          "pairs_unmask_failed": 0,
+          "pairs_roundtrip_mismatch": 0,
+          "pairs_mask_changed": 492,
+          "pairs_mask_unchanged": 133,
+          "requests_attempted": 1250,
+          "requests_successful": 1250,
+          "http_requests_offered": 1250,
+          "http_requests_not_attempted": 0
+        },
+        "latency_ms": {
+          "count": 1250,
+          "p50": 3.922,
+          "p95": 6.77,
+          "p99": 8.14,
+          "max": 24.459,
+          "over_500ms": 0,
+          "over_1000ms": 0
+        },
+        "capture": {
+          "submitted": 1250,
+          "written": 1250,
+          "dropped": 0,
+          "write_errors": 0
+        }
+      },
+      {
+        "label": "review-1000-60s",
+        "target_rps": 1000,
+        "duration_seconds": 60,
+        "passed": true,
+        "achieved_rps": 999.852,
+        "counts": {
+          "pairs_offered": 30000,
+          "pairs_dispatched": 30000,
+          "pairs_dropped_client_capacity": 0,
+          "pairs_dropped_client_deadline": 0,
+          "pairs_verified": 30000,
+          "pairs_mask_failed": 0,
+          "pairs_unmask_failed": 0,
+          "pairs_roundtrip_mismatch": 0,
+          "pairs_mask_changed": 23302,
+          "pairs_mask_unchanged": 6698,
+          "requests_attempted": 60000,
+          "requests_successful": 60000,
+          "http_requests_offered": 60000,
+          "http_requests_not_attempted": 0
+        },
+        "latency_ms": {
+          "count": 60000,
+          "p50": 7.005,
+          "p95": 16.814,
+          "p99": 24.966,
+          "max": 125.374,
+          "over_500ms": 0,
+          "over_1000ms": 0
+        },
+        "capture": {
+          "submitted": 60000,
+          "written": 60000,
+          "dropped": 0,
+          "write_errors": 0
+        }
+      }
+    ]
+  },
+  "source_sha256": {
+    "seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+    "seif/app.py": "e0d8051b406eadfb05484d3a5086b8d616b11a09b8c30984597bac94b607e004",
+    "seif/config.py": "de35e12ca073a432f87798950685d49340641bad4303f8094e86667e929b0f07",
+    "seif/context_filters.py": "d5401c8bb3496f6263eedae9c5dc4079839fc0fa7ee04dd396818753642b60b9",
+    "seif/detector.py": "9a66dd76fb1727dc490d9bf6da8a2b3c56e61981f0fbe8fc62fb9f044310e183",
+    "seif/location_fields.py": "870935e11223c741513c1651902e02cbf5e66b0f0c79187016831b097d1917e0",
+    "seif/ner.py": "c6454ec976086be8a4d666694499c785d6a21d8a322dd2259e52893cc48095a5",
+    "seif/person_fields.py": "b3441e15c3d7392af26649fe1a64e3af662ec089bfe94348d552dd720adfa025",
+    "seif/request_capture.py": "a3372c5f022b328f454272a47deef47e9960ea3624b30e831db8415d8d4533ce",
+    "seif/structured_fields.py": "19315c9e5f4369cd5be2f22b9808f4d188007610fc0825956625f1103731a43c",
+    "seif/transform.py": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+    "seif/vault.py": "3f8ef93f831cd100cbe9fdd6f020cc49269acfba90f83a445afdc9c3327e356b",
+    "scripts/evaluate_golden.py": "b6d0a4499323db490470e612b14436aa5d7650ea0e0ebd96e4af8049a620acda",
+    "scripts/evaluate_annotations.py": "4e58db67fcea5b8237954551aa0f8cf64a7ed4e03071a5b1e41f601df1d66a6f"
+  },
+  "body_boundary_complexity": {
+    "metric": "Ruff C901 cyclomatic complexity",
+    "api_before": 20,
+    "api_after": 6,
+    "ner_before": 21,
+    "ner_after": 9
+  },
+  "external_overall_reports": [
+    {
+      "archive_timestamp": "2026-09-22T11:22:48.245Z",
+      "score": 9089,
+      "issuesTotal": 103,
+      "critical": 77,
+      "major": 24,
+      "minor": 2
+    },
+    {
+      "archive_timestamp": "2026-09-22T11:58:54.692Z",
+      "score": 8868,
+      "issuesTotal": 130,
+      "critical": 97,
+      "major": 26,
+      "minor": 7
+    }
+  ],
+  "external_report_limitations": "Only aggregate counters are supplied. No rules, files, score formula or attribution to detector quality.",
+  "review_prediction_comparison": {
+    "before": "7a25c79",
+    "after": "75b52e8",
+    "cases": 446,
+    "changed_rules_cases": 0,
+    "changed_hybrid_cases": 0
+  },
+  "limitations": [
+    "Golden labels are provisional independent AI annotations, not organizer ground truth.",
+    "After tuning, improvements on this corpus are in-sample development evidence, not independent validation.",
+    "Character P/R/F1 is not the organizer's private span-Levenshtein or code-review score.",
+    "Cached NER isolates rule/merge behavior; this does not measure HTTP availability or RPS.",
+    "The 60-second loopback load is a regression check, not a new five-minute capacity-limit confirmation or a Cloudflare latency result."
+  ]
+}

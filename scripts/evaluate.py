@@ -28,7 +28,7 @@ FIXTURES = [
     ("birth_uppercase", "ДАТА РОЖДЕНИЯ: {{BIRTH_DATE|12 МАРТА 1990 ГОДА}}."),
     ("birth_place", "Место рождения: {{BIRTH_PLACE|г. Казань}}."),
     ("passport_compact", "Паспорт: {{PASSPORT|4509 123456}}."),
-    ("passport_split", "Паспорт: серия {{PASSPORT|4509 номер 123456}}."),
+    ("passport_split", "Паспорт: серия {{PASSPORT|4509}} номер {{PASSPORT|123456}}."),
     ("passport_uppercase", "ПАСПОРТ {{PASSPORT|45 09 123456}}."),
     ("citizenship", "Гражданство: {{CITIZENSHIP|Российская Федерация}}."),
     ("citizenship_lowercase", "гражданство: {{CITIZENSHIP|россия}}."),
