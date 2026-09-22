@@ -7,14 +7,18 @@
     "redmadrobot": 2839
   },
   "inputs_sha256": {
-    "script": "9b3d61bf5c41bf4bec529c1fb5b0958cf1e3f0ba21398e5896532c560bbe3cf5",
+    "script": "12c16d83039922436788f679ed158eaf88f9cd7bf427032cb9616effecc083b3",
     "upstream_paper_score": "4318b536c75986ffbed13d9f3f6a843b4931bf65114d35110a3c915736fac11a",
     "previous_comparison": "1024f810093ea0f63bc93dff9554be9fcbe9d736506067e5f9f954d5b38aeea8",
     "organizer_gold": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46",
     "public_prepared": "b8b80873a507ae3841c1c74143162f8f169c0a68d6509da8509907cf11a20405",
     "public_protocol": "6058374163fc3978ec4a882d19328e96fad1032d61bbac168ad8a3c78df68a27",
     "published_trt_subword_decoder_cache": "45ea40a6d6a8df56b54b5e4bbfa1f0b7fa7b814b624edd50b2c19a7d0f37f465",
-    "published_trt_subword_decoder_metadata": "dbad73187ebe472698c668890ec564621fdeee6e3ce744c4cb47ec8b79cfe79f"
+    "published_trt_subword_decoder_metadata": "dbad73187ebe472698c668890ec564621fdeee6e3ce744c4cb47ec8b79cfe79f",
+    "upstream_word_decoder_trt_backend_cache": "c25021c04a4493d19bffb32a9483b28a6d3bd0c00da11bbdb1fd566c4fa574fe",
+    "upstream_word_decoder_trt_backend_metadata": "ebaad973c0bc862be3cbd510c36d1b72cbad4721bbeed3ea14211d060aa0b101",
+    "upstream_word_decoder_torch_fp32_cache": "12b42278ca10fb8a81856127f0516a92c29c67f552d9bb5420cc27927f18c6ca",
+    "upstream_word_decoder_torch_fp32_metadata": "9535295c39e25a1d3ea2ebb3be1d7c8de67823098d33071d2d7a4d0253dcd065"
   },
   "source_sha256": {
     "scripts/compare_ner_public.py": "a781a7fc73b3ac947f27c14459f1e40aafd7bb8fcc6bdf064bcba14c7ded6286",
@@ -620,6 +624,1232 @@
           "policy": "No corpus tuning, no label changes; all original gold types retained in full masking"
         },
         "protocol_sha256": "7c61be943b1d3f83b37842da3ba55d919dcea44dc57be4682bb80ace63790856"
+      }
+    },
+    "upstream_word_decoder_trt_backend": {
+      "scores": {
+        "organizer": {
+          "cases": 446,
+          "quality_available": true,
+          "full_masking_all_gold_types": {
+            "precision": 0.882759,
+            "recall": 0.736042,
+            "f1": 0.802751,
+            "f2": 0.761349,
+            "true_positive": 3968,
+            "false_positive": 527,
+            "false_negative": 1423,
+            "cases": 446,
+            "exact_cases": 192,
+            "negative_cases": 77,
+            "negative_cases_with_fp": 33,
+            "by_type": {
+              "PII": {
+                "precision": 0.882759,
+                "recall": 0.736042,
+                "f1": 0.802751,
+                "f2": 0.761349,
+                "true_positive": 3968,
+                "false_positive": 527,
+                "false_negative": 1423
+              }
+            }
+          }
+        },
+        "pii": {
+          "cases": 1810,
+          "quality_available": true,
+          "full_masking_all_gold_types": {
+            "precision": 0.985915,
+            "recall": 0.623021,
+            "f1": 0.763542,
+            "f2": 0.672529,
+            "true_positive": 17429,
+            "false_positive": 249,
+            "false_negative": 10546,
+            "cases": 1810,
+            "exact_cases": 1275,
+            "negative_cases": 378,
+            "negative_cases_with_fp": 5,
+            "by_type": {
+              "PII": {
+                "precision": 0.985915,
+                "recall": 0.623021,
+                "f1": 0.763542,
+                "f2": 0.672529,
+                "true_positive": 17429,
+                "false_positive": 249,
+                "false_negative": 10546
+              }
+            }
+          }
+        },
+        "redmadrobot": {
+          "cases": 2839,
+          "quality_available": true,
+          "full_masking_all_gold_types": {
+            "precision": 0.98072,
+            "recall": 0.899417,
+            "f1": 0.938311,
+            "f2": 0.914581,
+            "true_positive": 50460,
+            "false_positive": 992,
+            "false_negative": 5643,
+            "cases": 2839,
+            "exact_cases": 2514,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 12,
+            "by_type": {
+              "PII": {
+                "precision": 0.98072,
+                "recall": 0.899417,
+                "f1": 0.938311,
+                "f2": 0.914581,
+                "true_positive": 50460,
+                "false_positive": 992,
+                "false_negative": 5643
+              }
+            }
+          },
+          "native21_strict": {
+            "precision": 0.9024527242089496,
+            "recall": 0.86056061417604,
+            "f1": 0.881008956315116,
+            "tp": 4820,
+            "fp": 521,
+            "fn": 781,
+            "macro_f1": 0.8741429060372516,
+            "negatives": 371,
+            "negatives_with_fp": 12,
+            "per_type_tp_fp_fn": {
+              "BIRTH_CERTIFICATE": [
+                278,
+                32,
+                63
+              ],
+              "CITY": [
+                300,
+                52,
+                37
+              ],
+              "COUNTRY": [
+                203,
+                8,
+                36
+              ],
+              "CREDIT_CARD": [
+                189,
+                10,
+                14
+              ],
+              "DISTRICT": [
+                137,
+                32,
+                24
+              ],
+              "DRIVER_LICENSE": [
+                297,
+                34,
+                74
+              ],
+              "EMAIL": [
+                218,
+                9,
+                3
+              ],
+              "FIRST_NAME": [
+                450,
+                23,
+                49
+              ],
+              "HOUSE": [
+                151,
+                10,
+                10
+              ],
+              "INN": [
+                231,
+                13,
+                32
+              ],
+              "IP_ADDRESS": [
+                73,
+                68,
+                82
+              ],
+              "LAST_NAME": [
+                390,
+                30,
+                67
+              ],
+              "MIDDLE_NAME": [
+                291,
+                17,
+                17
+              ],
+              "MILITARY_ID": [
+                227,
+                30,
+                51
+              ],
+              "OMS": [
+                154,
+                3,
+                16
+              ],
+              "PASSPORT": [
+                410,
+                39,
+                84
+              ],
+              "PHONE": [
+                153,
+                22,
+                18
+              ],
+              "REGION": [
+                147,
+                30,
+                29
+              ],
+              "SNILS": [
+                178,
+                14,
+                45
+              ],
+              "STREET": [
+                154,
+                20,
+                15
+              ],
+              "URL": [
+                189,
+                25,
+                15
+              ]
+            }
+          },
+          "folded14_raw_strict": {
+            "precision": 0.9123759595581352,
+            "recall": 0.8700232101410462,
+            "f1": 0.8906963991957594,
+            "tp": 4873,
+            "fp": 468,
+            "fn": 728,
+            "macro_f1": 0.8688142148689639,
+            "negatives": 371,
+            "negatives_with_fp": 12,
+            "per_type_tp_fp_fn": {
+              "ADDRESS": [
+                1124,
+                120,
+                119
+              ],
+              "BIRTH_CERTIFICATE": [
+                278,
+                32,
+                63
+              ],
+              "CREDIT_CARD": [
+                189,
+                10,
+                14
+              ],
+              "DRIVER_LICENSE": [
+                297,
+                34,
+                74
+              ],
+              "EMAIL": [
+                218,
+                9,
+                3
+              ],
+              "INN": [
+                231,
+                13,
+                32
+              ],
+              "IP_ADDRESS": [
+                73,
+                68,
+                82
+              ],
+              "MILITARY_ID": [
+                227,
+                30,
+                51
+              ],
+              "OMS": [
+                154,
+                3,
+                16
+              ],
+              "PASSPORT": [
+                410,
+                39,
+                84
+              ],
+              "PERSON": [
+                1152,
+                49,
+                112
+              ],
+              "PHONE": [
+                153,
+                22,
+                18
+              ],
+              "SNILS": [
+                178,
+                14,
+                45
+              ],
+              "URL": [
+                189,
+                25,
+                15
+              ]
+            }
+          },
+          "folded14_prediction_merge_strict": {
+            "precision": 0.7589449541284403,
+            "recall": 0.5907873594001071,
+            "f1": 0.6643911253890171,
+            "tp": 3309,
+            "fp": 1051,
+            "fn": 2292,
+            "macro_f1": 0.7879026624398368,
+            "negatives": 371,
+            "negatives_with_fp": 12,
+            "per_type_tp_fp_fn": {
+              "ADDRESS": [
+                505,
+                321,
+                738
+              ],
+              "BIRTH_CERTIFICATE": [
+                278,
+                32,
+                63
+              ],
+              "CREDIT_CARD": [
+                189,
+                10,
+                14
+              ],
+              "DRIVER_LICENSE": [
+                297,
+                34,
+                74
+              ],
+              "EMAIL": [
+                218,
+                9,
+                3
+              ],
+              "INN": [
+                231,
+                13,
+                32
+              ],
+              "IP_ADDRESS": [
+                73,
+                68,
+                82
+              ],
+              "MILITARY_ID": [
+                227,
+                30,
+                51
+              ],
+              "OMS": [
+                154,
+                3,
+                16
+              ],
+              "PASSPORT": [
+                410,
+                39,
+                84
+              ],
+              "PERSON": [
+                207,
+                431,
+                1057
+              ],
+              "PHONE": [
+                153,
+                22,
+                18
+              ],
+              "SNILS": [
+                178,
+                14,
+                45
+              ],
+              "URL": [
+                189,
+                25,
+                15
+              ]
+            }
+          },
+          "folded14_raw_typed_overlap_one_to_one": {
+            "precision": 0.9677962928290582,
+            "recall": 0.9228709159078736,
+            "f1": 0.9447998537744471,
+            "tp": 5169,
+            "fp": 172,
+            "fn": 432,
+            "macro_f1": 0.9418976862524776,
+            "negatives": 371,
+            "negatives_with_fp": 12,
+            "per_type_tp_fp_fn": {
+              "ADDRESS": [
+                1178,
+                66,
+                65
+              ],
+              "BIRTH_CERTIFICATE": [
+                309,
+                1,
+                32
+              ],
+              "CREDIT_CARD": [
+                195,
+                4,
+                8
+              ],
+              "DRIVER_LICENSE": [
+                326,
+                5,
+                45
+              ],
+              "EMAIL": [
+                221,
+                6,
+                0
+              ],
+              "INN": [
+                239,
+                5,
+                24
+              ],
+              "IP_ADDRESS": [
+                128,
+                13,
+                27
+              ],
+              "MILITARY_ID": [
+                253,
+                4,
+                25
+              ],
+              "OMS": [
+                157,
+                0,
+                13
+              ],
+              "PASSPORT": [
+                435,
+                14,
+                59
+              ],
+              "PERSON": [
+                1175,
+                26,
+                89
+              ],
+              "PHONE": [
+                163,
+                12,
+                8
+              ],
+              "SNILS": [
+                189,
+                3,
+                34
+              ],
+              "URL": [
+                201,
+                13,
+                3
+              ]
+            }
+          },
+          "folded14_prediction_merge_typed_overlap_one_to_one": {
+            "precision": 0.9678899082568807,
+            "recall": 0.7534368862703089,
+            "f1": 0.8473044875012549,
+            "tp": 4220,
+            "fp": 140,
+            "fn": 1381,
+            "macro_f1": 0.9068231617160271,
+            "negatives": 371,
+            "negatives_with_fp": 12,
+            "per_type_tp_fp_fn": {
+              "ADDRESS": [
+                786,
+                40,
+                457
+              ],
+              "BIRTH_CERTIFICATE": [
+                309,
+                1,
+                32
+              ],
+              "CREDIT_CARD": [
+                195,
+                4,
+                8
+              ],
+              "DRIVER_LICENSE": [
+                326,
+                5,
+                45
+              ],
+              "EMAIL": [
+                221,
+                6,
+                0
+              ],
+              "INN": [
+                239,
+                5,
+                24
+              ],
+              "IP_ADDRESS": [
+                128,
+                13,
+                27
+              ],
+              "MILITARY_ID": [
+                253,
+                4,
+                25
+              ],
+              "OMS": [
+                157,
+                0,
+                13
+              ],
+              "PASSPORT": [
+                435,
+                14,
+                59
+              ],
+              "PERSON": [
+                618,
+                20,
+                646
+              ],
+              "PHONE": [
+                163,
+                12,
+                8
+              ],
+              "SNILS": [
+                189,
+                3,
+                34
+              ],
+              "URL": [
+                201,
+                13,
+                3
+              ]
+            }
+          }
+        }
+      },
+      "metadata": {
+        "model_revision": "73be581047bf123dac6505e7b3900ec292942296",
+        "source_model_revision": "c802e8cd26f85d1cf920973ea6f83965a0618d63",
+        "model_sha256": {
+          "pii_ner.py": "4591fc8c5580c39dc5121ca649f4a2a4936276ea4c9e82ae144e5c467eb5a5ca",
+          "trt_backend.py": "eafc144a9b698e94dfe155074c7a3ab1063ee7817ab1a285b69639db1c07b424",
+          "model.fp16.engine": "f4d3f4eaa72ed8543b81ef4f6acf216f95be93fe4da8c3be27c8513cb9e80b35",
+          "config.json": "f4eeba88d1503a56d629195c9307d42c1acf4ce53ab88fdaecfc754fd0745cf9",
+          "runtime_config.json": "841420d76f5e7ec4ec7dd781b79987fe0f3facb25cc68896e7c88012f7af1b5d",
+          "tokenizer.json": "f61eee9d0dc18f14c195321a37eadf9e5aeb3a323bc278dec689adeb89dec1b9",
+          "tokenizer_config.json": "ffe381e31042ba94cb077bf7d5b9cee944dbd0c2a85079b095bea7e5a5a6058b"
+        },
+        "protocol_sha256": "eb5e60245fa30bff2559080a91cab458f9d7ece2ac4bc99ca8d8b35b73adb3d1",
+        "backend": "trt-graph",
+        "decoder": "unmodified pii-guard word-first-subword, center windows, punctuation bridge",
+        "native_types": [
+          "BIRTH_CERTIFICATE",
+          "CITY",
+          "COUNTRY",
+          "CREDIT_CARD",
+          "DISTRICT",
+          "DRIVER_LICENSE",
+          "EMAIL",
+          "FIRST_NAME",
+          "HOUSE",
+          "INN",
+          "IP_ADDRESS",
+          "LAST_NAME",
+          "MIDDLE_NAME",
+          "MILITARY_ID",
+          "OMS",
+          "PASSPORT",
+          "PHONE",
+          "REGION",
+          "SNILS",
+          "STREET",
+          "URL"
+        ],
+        "score": "constant 0.70 arbitration priority, NOT confidence threshold",
+        "upstream_revision": "24230abb72949a9f85499244dd4f15a0ad0cdd9e",
+        "runner_sha256": "416517d2a05215f346e89b08422945f9633635535d89f315c18248974cbe0ff8",
+        "cpu_threads": 4,
+        "tf32": false,
+        "seed": 20260922,
+        "max_tokens": 512,
+        "stride": 128,
+        "packages": {
+          "torch": "2.8.0+cu128",
+          "transformers": "4.57.1",
+          "tokenizers": "0.22.2",
+          "numpy": "2.5.3",
+          "presidio-analyzer": "2.2.362",
+          "spacy": "3.8.16",
+          "tensorrt-cu12": "10.13.3.9"
+        },
+        "policy": "Fixed full original corpora. Native output before engine/rules/normalization. Timings are NOT RPS."
+      }
+    },
+    "upstream_word_decoder_torch_fp32": {
+      "scores": {
+        "organizer": {
+          "cases": 446,
+          "quality_available": true,
+          "full_masking_all_gold_types": {
+            "precision": 0.882759,
+            "recall": 0.736042,
+            "f1": 0.802751,
+            "f2": 0.761349,
+            "true_positive": 3968,
+            "false_positive": 527,
+            "false_negative": 1423,
+            "cases": 446,
+            "exact_cases": 192,
+            "negative_cases": 77,
+            "negative_cases_with_fp": 33,
+            "by_type": {
+              "PII": {
+                "precision": 0.882759,
+                "recall": 0.736042,
+                "f1": 0.802751,
+                "f2": 0.761349,
+                "true_positive": 3968,
+                "false_positive": 527,
+                "false_negative": 1423
+              }
+            }
+          }
+        },
+        "pii": {
+          "cases": 1810,
+          "quality_available": true,
+          "full_masking_all_gold_types": {
+            "precision": 0.985915,
+            "recall": 0.623021,
+            "f1": 0.763542,
+            "f2": 0.672529,
+            "true_positive": 17429,
+            "false_positive": 249,
+            "false_negative": 10546,
+            "cases": 1810,
+            "exact_cases": 1275,
+            "negative_cases": 378,
+            "negative_cases_with_fp": 5,
+            "by_type": {
+              "PII": {
+                "precision": 0.985915,
+                "recall": 0.623021,
+                "f1": 0.763542,
+                "f2": 0.672529,
+                "true_positive": 17429,
+                "false_positive": 249,
+                "false_negative": 10546
+              }
+            }
+          }
+        },
+        "redmadrobot": {
+          "cases": 2839,
+          "quality_available": true,
+          "full_masking_all_gold_types": {
+            "precision": 0.980718,
+            "recall": 0.899346,
+            "f1": 0.938271,
+            "f2": 0.914522,
+            "true_positive": 50456,
+            "false_positive": 992,
+            "false_negative": 5647,
+            "cases": 2839,
+            "exact_cases": 2514,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 12,
+            "by_type": {
+              "PII": {
+                "precision": 0.980718,
+                "recall": 0.899346,
+                "f1": 0.938271,
+                "f2": 0.914522,
+                "true_positive": 50456,
+                "false_positive": 992,
+                "false_negative": 5647
+              }
+            }
+          },
+          "native21_strict": {
+            "precision": 0.9024527242089496,
+            "recall": 0.86056061417604,
+            "f1": 0.881008956315116,
+            "tp": 4820,
+            "fp": 521,
+            "fn": 781,
+            "macro_f1": 0.8741361257780172,
+            "negatives": 371,
+            "negatives_with_fp": 12,
+            "per_type_tp_fp_fn": {
+              "BIRTH_CERTIFICATE": [
+                278,
+                32,
+                63
+              ],
+              "CITY": [
+                300,
+                52,
+                37
+              ],
+              "COUNTRY": [
+                203,
+                8,
+                36
+              ],
+              "CREDIT_CARD": [
+                189,
+                10,
+                14
+              ],
+              "DISTRICT": [
+                137,
+                33,
+                24
+              ],
+              "DRIVER_LICENSE": [
+                297,
+                34,
+                74
+              ],
+              "EMAIL": [
+                218,
+                9,
+                3
+              ],
+              "FIRST_NAME": [
+                450,
+                23,
+                49
+              ],
+              "HOUSE": [
+                151,
+                10,
+                10
+              ],
+              "INN": [
+                231,
+                13,
+                32
+              ],
+              "IP_ADDRESS": [
+                73,
+                68,
+                82
+              ],
+              "LAST_NAME": [
+                390,
+                30,
+                67
+              ],
+              "MIDDLE_NAME": [
+                291,
+                17,
+                17
+              ],
+              "MILITARY_ID": [
+                227,
+                30,
+                51
+              ],
+              "OMS": [
+                154,
+                3,
+                16
+              ],
+              "PASSPORT": [
+                410,
+                39,
+                84
+              ],
+              "PHONE": [
+                153,
+                22,
+                18
+              ],
+              "REGION": [
+                147,
+                29,
+                29
+              ],
+              "SNILS": [
+                178,
+                14,
+                45
+              ],
+              "STREET": [
+                154,
+                20,
+                15
+              ],
+              "URL": [
+                189,
+                25,
+                15
+              ]
+            }
+          },
+          "folded14_raw_strict": {
+            "precision": 0.9123759595581352,
+            "recall": 0.8700232101410462,
+            "f1": 0.8906963991957594,
+            "tp": 4873,
+            "fp": 468,
+            "fn": 728,
+            "macro_f1": 0.8688142148689639,
+            "negatives": 371,
+            "negatives_with_fp": 12,
+            "per_type_tp_fp_fn": {
+              "ADDRESS": [
+                1124,
+                120,
+                119
+              ],
+              "BIRTH_CERTIFICATE": [
+                278,
+                32,
+                63
+              ],
+              "CREDIT_CARD": [
+                189,
+                10,
+                14
+              ],
+              "DRIVER_LICENSE": [
+                297,
+                34,
+                74
+              ],
+              "EMAIL": [
+                218,
+                9,
+                3
+              ],
+              "INN": [
+                231,
+                13,
+                32
+              ],
+              "IP_ADDRESS": [
+                73,
+                68,
+                82
+              ],
+              "MILITARY_ID": [
+                227,
+                30,
+                51
+              ],
+              "OMS": [
+                154,
+                3,
+                16
+              ],
+              "PASSPORT": [
+                410,
+                39,
+                84
+              ],
+              "PERSON": [
+                1152,
+                49,
+                112
+              ],
+              "PHONE": [
+                153,
+                22,
+                18
+              ],
+              "SNILS": [
+                178,
+                14,
+                45
+              ],
+              "URL": [
+                189,
+                25,
+                15
+              ]
+            }
+          },
+          "folded14_prediction_merge_strict": {
+            "precision": 0.7589449541284403,
+            "recall": 0.5907873594001071,
+            "f1": 0.6643911253890171,
+            "tp": 3309,
+            "fp": 1051,
+            "fn": 2292,
+            "macro_f1": 0.7879026624398368,
+            "negatives": 371,
+            "negatives_with_fp": 12,
+            "per_type_tp_fp_fn": {
+              "ADDRESS": [
+                505,
+                321,
+                738
+              ],
+              "BIRTH_CERTIFICATE": [
+                278,
+                32,
+                63
+              ],
+              "CREDIT_CARD": [
+                189,
+                10,
+                14
+              ],
+              "DRIVER_LICENSE": [
+                297,
+                34,
+                74
+              ],
+              "EMAIL": [
+                218,
+                9,
+                3
+              ],
+              "INN": [
+                231,
+                13,
+                32
+              ],
+              "IP_ADDRESS": [
+                73,
+                68,
+                82
+              ],
+              "MILITARY_ID": [
+                227,
+                30,
+                51
+              ],
+              "OMS": [
+                154,
+                3,
+                16
+              ],
+              "PASSPORT": [
+                410,
+                39,
+                84
+              ],
+              "PERSON": [
+                207,
+                431,
+                1057
+              ],
+              "PHONE": [
+                153,
+                22,
+                18
+              ],
+              "SNILS": [
+                178,
+                14,
+                45
+              ],
+              "URL": [
+                189,
+                25,
+                15
+              ]
+            }
+          },
+          "folded14_raw_typed_overlap_one_to_one": {
+            "precision": 0.9677962928290582,
+            "recall": 0.9228709159078736,
+            "f1": 0.9447998537744471,
+            "tp": 5169,
+            "fp": 172,
+            "fn": 432,
+            "macro_f1": 0.9418976862524776,
+            "negatives": 371,
+            "negatives_with_fp": 12,
+            "per_type_tp_fp_fn": {
+              "ADDRESS": [
+                1178,
+                66,
+                65
+              ],
+              "BIRTH_CERTIFICATE": [
+                309,
+                1,
+                32
+              ],
+              "CREDIT_CARD": [
+                195,
+                4,
+                8
+              ],
+              "DRIVER_LICENSE": [
+                326,
+                5,
+                45
+              ],
+              "EMAIL": [
+                221,
+                6,
+                0
+              ],
+              "INN": [
+                239,
+                5,
+                24
+              ],
+              "IP_ADDRESS": [
+                128,
+                13,
+                27
+              ],
+              "MILITARY_ID": [
+                253,
+                4,
+                25
+              ],
+              "OMS": [
+                157,
+                0,
+                13
+              ],
+              "PASSPORT": [
+                435,
+                14,
+                59
+              ],
+              "PERSON": [
+                1175,
+                26,
+                89
+              ],
+              "PHONE": [
+                163,
+                12,
+                8
+              ],
+              "SNILS": [
+                189,
+                3,
+                34
+              ],
+              "URL": [
+                201,
+                13,
+                3
+              ]
+            }
+          },
+          "folded14_prediction_merge_typed_overlap_one_to_one": {
+            "precision": 0.9678899082568807,
+            "recall": 0.7534368862703089,
+            "f1": 0.8473044875012549,
+            "tp": 4220,
+            "fp": 140,
+            "fn": 1381,
+            "macro_f1": 0.9068231617160271,
+            "negatives": 371,
+            "negatives_with_fp": 12,
+            "per_type_tp_fp_fn": {
+              "ADDRESS": [
+                786,
+                40,
+                457
+              ],
+              "BIRTH_CERTIFICATE": [
+                309,
+                1,
+                32
+              ],
+              "CREDIT_CARD": [
+                195,
+                4,
+                8
+              ],
+              "DRIVER_LICENSE": [
+                326,
+                5,
+                45
+              ],
+              "EMAIL": [
+                221,
+                6,
+                0
+              ],
+              "INN": [
+                239,
+                5,
+                24
+              ],
+              "IP_ADDRESS": [
+                128,
+                13,
+                27
+              ],
+              "MILITARY_ID": [
+                253,
+                4,
+                25
+              ],
+              "OMS": [
+                157,
+                0,
+                13
+              ],
+              "PASSPORT": [
+                435,
+                14,
+                59
+              ],
+              "PERSON": [
+                618,
+                20,
+                646
+              ],
+              "PHONE": [
+                163,
+                12,
+                8
+              ],
+              "SNILS": [
+                189,
+                3,
+                34
+              ],
+              "URL": [
+                201,
+                13,
+                3
+              ]
+            }
+          }
+        }
+      },
+      "metadata": {
+        "model_revision": "73be581047bf123dac6505e7b3900ec292942296",
+        "source_model_revision": "c802e8cd26f85d1cf920973ea6f83965a0618d63",
+        "model_sha256": {
+          "config.json": "f4eeba88d1503a56d629195c9307d42c1acf4ce53ab88fdaecfc754fd0745cf9",
+          "tokenizer.json": "f61eee9d0dc18f14c195321a37eadf9e5aeb3a323bc278dec689adeb89dec1b9",
+          "tokenizer_config.json": "ffe381e31042ba94cb077bf7d5b9cee944dbd0c2a85079b095bea7e5a5a6058b",
+          "model.safetensors": "2b9510cd99101c05800c3b4bcaeaebb26d285aa3152e49bea09dc5c2a38d4b16"
+        },
+        "protocol_sha256": "f1b431ddc7fac271367fa5114dcabd7482c2289e5841e393221bb5ac5f81a7c2",
+        "backend": "torch-fp32",
+        "decoder": "unmodified pii-guard word-first-subword, center windows, punctuation bridge",
+        "native_types": [
+          "BIRTH_CERTIFICATE",
+          "CITY",
+          "COUNTRY",
+          "CREDIT_CARD",
+          "DISTRICT",
+          "DRIVER_LICENSE",
+          "EMAIL",
+          "FIRST_NAME",
+          "HOUSE",
+          "INN",
+          "IP_ADDRESS",
+          "LAST_NAME",
+          "MIDDLE_NAME",
+          "MILITARY_ID",
+          "OMS",
+          "PASSPORT",
+          "PHONE",
+          "REGION",
+          "SNILS",
+          "STREET",
+          "URL"
+        ],
+        "score": "constant 0.70 arbitration priority, NOT confidence threshold",
+        "upstream_revision": "24230abb72949a9f85499244dd4f15a0ad0cdd9e",
+        "runner_sha256": "416517d2a05215f346e89b08422945f9633635535d89f315c18248974cbe0ff8",
+        "cpu_threads": 4,
+        "tf32": false,
+        "seed": 20260922,
+        "max_tokens": 512,
+        "stride": 128,
+        "packages": {
+          "torch": "2.8.0+cu128",
+          "transformers": "4.57.1",
+          "tokenizers": "0.22.2",
+          "numpy": "2.5.3",
+          "presidio-analyzer": "2.2.362",
+          "spacy": "3.8.16",
+          "tensorrt-cu12": "10.13.3.9"
+        },
+        "policy": "Fixed full original corpora. Native output before engine/rules/normalization. Timings are NOT RPS."
+      }
+    }
+  },
+  "word_decoder_trt_vs_torch_fp32_span_parity": {
+    "organizer": {
+      "cases": 446,
+      "identical_cases": 446,
+      "left_spans": 547,
+      "right_spans": 547,
+      "added_spans": 0,
+      "removed_spans": 0,
+      "added_by_label": {},
+      "removed_by_label": {}
+    },
+    "pii": {
+      "cases": 1810,
+      "identical_cases": 1810,
+      "left_spans": 1740,
+      "right_spans": 1740,
+      "added_spans": 0,
+      "removed_spans": 0,
+      "added_by_label": {},
+      "removed_by_label": {}
+    },
+    "redmadrobot": {
+      "cases": 2839,
+      "identical_cases": 2837,
+      "left_spans": 5341,
+      "right_spans": 5341,
+      "changed_cases": 2,
+      "added_spans": 2,
+      "removed_spans": 2,
+      "added_by_label": {
+        "DISTRICT": 1,
+        "INN": 1
+      },
+      "removed_by_label": {
+        "REGION": 1,
+        "INN": 1
       }
     }
   },
@@ -1247,6 +2477,7 @@
     "Historical SEIF service uses only mapped PERSON/LOCATION from model plus existing rules; it is not native21 or PII Guard.",
     "Historical RMR service typed metric merges coarse gold and predictions alike, unlike paper prediction-only merge.",
     "83.6/88.9 published card claims are not assumed reproduced by different runtimes or these historical corpus exclusions.",
+    "For word-decoder profiles, model_revision identifies experiment lineage. source_model_revision and model_sha256 identify actual weights; torch-fp32 uses original source-model weights, not a TensorRT engine.",
     "Pinned upstream docs/quality.md separately reports guard87.1 strict on14 families; no original prediction dumps or manifest are tracked.",
     "No new model tuning or inference is performed by this script; no raw texts are written to report."
   ]

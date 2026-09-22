@@ -55,9 +55,17 @@ def load_native(path, rows):
     metadata = json.loads(meta_path.read_text())
     if metadata["cache_sha256"] != sha(path):
         raise ValueError("Prediction cache digest differs")
+    if metadata["model_revision"] != "73be581047bf123dac6505e7b3900ec292942296":
+        raise ValueError("Model lineage differs from the frozen experiment")
+    if metadata.get("upstream_revision", COMMIT) != COMMIT:
+        raise ValueError("Word decoder source revision differs")
     records = [json.loads(line) for line in path.read_text().splitlines()]
     if [r["case_id"] for r in records] != [r["key"] for r in rows]:
         raise ValueError("Prediction coverage/order differs from all 5095 frozen cases")
+    actual_failures = {r["case_id"] for r in records if r.get("inference_error")}
+    recorded_failures = {key for values in metadata["failures_by_corpus"].values() for key in values}
+    if actual_failures != recorded_failures:
+        raise ValueError("Prediction failure metadata differs")
     for row, record in zip(rows, records, strict=True):
         if record["text_sha256"] != hashlib.sha256(row["text"].encode()).hexdigest():
             raise ValueError("Prediction input text differs")
@@ -152,12 +160,38 @@ def historical_summary(corpora):
     return output
 
 
+def span_parity(rows, left, right):
+    output = {}
+    for dataset in ("organizer", "pii", "redmadrobot"):
+        part = [r for r in rows if r["dataset"] == dataset]
+        counts = Counter()
+        added, removed = Counter(), Counter()
+        for row in part:
+            first, second = left[row["key"]], right[row["key"]]
+            if first.get("inference_error") or second.get("inference_error"):
+                counts["unavailable_cases"] += 1
+                continue
+            a = Counter((e["label"], e["start"], e["end"]) for e in first["native"])
+            b = Counter((e["label"], e["start"], e["end"]) for e in second["native"])
+            counts["identical_cases" if a == b else "changed_cases"] += 1
+            counts["left_spans"] += a.total()
+            counts["right_spans"] += b.total()
+            for (label, _start, _end), number in (b - a).items():
+                added[label] += number
+            for (label, _start, _end), number in (a - b).items():
+                removed[label] += number
+        output[dataset] = {"cases": len(part), **counts, "added_spans": added.total(),
+                           "removed_spans": removed.total(), "added_by_label": added, "removed_by_label": removed}
+    return output
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--upstream", type=Path, default=ROOT / "local-data/pii-guard-review/upstream")
     parser.add_argument("--public-run-dir", type=Path, default=ROOT.parent / "seif-pii-gliner/local-data/gliner25-public")
     parser.add_argument("--native-cache", type=Path, default=ROOT / "local-data/rubert-tensorrt/run-v1/rubert.jsonl")
     parser.add_argument("--word-cache", type=Path)
+    parser.add_argument("--fp32-cache", type=Path)
     parser.add_argument("--output", type=Path, default=Path(__file__).with_name("metric-reconciliation.json"))
     args = parser.parse_args()
     public.disable_network()
@@ -170,14 +204,20 @@ def main():
              "previous_comparison": previous_path, "organizer_gold": reference.DATA,
              "public_prepared": args.public_run_dir / "prepared-inputs.jsonl",
              "public_protocol": args.public_run_dir / "protocol.json"}
-    systems = {}
+    systems, caches = {}, {}
     paths = {"published_trt_subword_decoder": args.native_cache}
     if args.word_cache is not None:
         paths["upstream_word_decoder_trt_backend"] = args.word_cache
+    if args.fp32_cache is not None:
+        paths["upstream_word_decoder_torch_fp32"] = args.fp32_cache
     for name, path in paths.items():
         cache, metadata = load_native(path, rows)
+        caches[name] = cache
         systems[name] = {"scores": score_cache(paper, rows, cache), "metadata": {
-            key: metadata[key] for key in ("model", "model_revision", "settings", "protocol_sha256") if key in metadata}}
+            key: metadata[key] for key in ("model", "model_revision", "source_model_revision", "model_sha256",
+                                          "settings", "protocol_sha256", "backend", "decoder", "native_types", "score",
+                                          "upstream_revision", "runner_sha256", "cpu_threads", "tf32", "seed", "max_tokens",
+                                          "stride", "packages", "policy") if key in metadata}}
         files[name + "_cache"] = path
         files[name + "_metadata"] = path.with_suffix(".meta.json")
     # Recompute, then require parity with the already-published full-mask baseline.
@@ -193,6 +233,9 @@ def main():
         "scorer_synthetic_checks": "PASS: exact vs overlap and prediction-only merge preserve original gold",
         "folded14_mapping": paper.NER_LABEL_TO_FAMILY,
         "results": systems,
+        "word_decoder_trt_vs_torch_fp32_span_parity": span_parity(
+            rows, caches["upstream_word_decoder_trt_backend"], caches["upstream_word_decoder_torch_fp32"]
+        ) if args.word_cache is not None and args.fp32_cache is not None else None,
         "historical_service_profiles_separate_protocol": historical_summary(previous["corpora"]),
         "interpretation": [
             "All recomputed metrics retain frozen 2839 RMR rows; two historical alignment exclusions remain. Published card uses 2841.",
@@ -203,6 +246,7 @@ def main():
             "Historical SEIF service uses only mapped PERSON/LOCATION from model plus existing rules; it is not native21 or PII Guard.",
             "Historical RMR service typed metric merges coarse gold and predictions alike, unlike paper prediction-only merge.",
             "83.6/88.9 published card claims are not assumed reproduced by different runtimes or these historical corpus exclusions.",
+            "For word-decoder profiles, model_revision identifies experiment lineage. source_model_revision and model_sha256 identify actual weights; torch-fp32 uses original source-model weights, not a TensorRT engine.",
             "Pinned upstream docs/quality.md separately reports guard87.1 strict on14 families; no original prediction dumps or manifest are tracked.",
             "No new model tuning or inference is performed by this script; no raw texts are written to report."
         ],
