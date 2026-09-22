@@ -10,6 +10,7 @@ It does not require Presidio, pii-guard, or a second copy of the model weights.
 from __future__ import annotations
 
 import re
+import unicodedata
 from itertools import accumulate
 
 NATIVE_TYPES = frozenset({
@@ -62,17 +63,25 @@ def _tokenize(tokenizer, words):
             or any(type(token) is not int or token < 0 for token in ids)):
         raise ValueError(_ALIGNMENT_ERROR)
     counts = [0] * len(words)
-    previous = 0
+    previous = -1
     for owner in owners:
-        if type(owner) is not int or not 0 <= owner < len(words) or not previous <= owner <= previous + 1:
+        if type(owner) is not int or not 0 <= owner < len(words) or owner < previous:
             raise ValueError(_ALIGNMENT_ERROR)
         counts[owner] += 1
         previous = owner
-    if not all(counts):
-        raise ValueError("RuBERT tokenizer omitted a word; refusing partial inference.")
+    for word, count in zip(words, counts, strict=True):
+        if count == 0 and not _bert_ignored_word(word):
+            raise ValueError("RuBERT tokenizer omitted a visible word; refusing partial inference.")
     if max(counts) > _BUDGET:
         raise ValueError("RuBERT word exceeds the 510-subword window; refusing partial inference.")
     return ids, counts
+
+
+def _bert_ignored_word(word):
+    # The pinned fast BertNormalizer removes Unicode category C (including PDF
+    # private-use bullets) and U+FFFD. Keep an O marker for an entirely removed
+    # word; otherwise following IDs shift predictions to incorrect text offsets.
+    return all(character == "\ufffd" or unicodedata.category(character).startswith("C") for character in word)
 
 
 def _window_end(counts, start):
@@ -197,6 +206,8 @@ def _entities(text, tokens, predicted):
 def word_predict(runtime, text):
     """Return all native labels; fail on any truncated or unrepresentable input.
 
+    Known BERT-ignored control-only words retain explicit O markers. Missing
+    visible words fail rather than accepting misaligned or partial predictions.
     Uses argmax without a probability threshold. Scores are means of the winning
     first-subword softmax probabilities, with conservative punctuation imputation;
     they are not calibrated probabilities that an entire entity is correct.
@@ -210,5 +221,10 @@ def word_predict(runtime, text):
     labels = _label_inventory(runtime)
     words = [item[0] for item in tokens]
     ids, counts = _tokenize(runtime.tokenizer, words)
-    predicted = _predict_words(runtime, ids, counts, labels)
+    active = [index for index, count in enumerate(counts) if count]
+    predicted = [("O", 1.0)] * len(words)
+    if active:
+        visible = _predict_words(runtime, ids, [counts[index] for index in active], labels)
+        for index, prediction in zip(active, visible, strict=True):
+            predicted[index] = prediction
     return _entities(text, tokens, _bridge_punctuation(words, predicted))

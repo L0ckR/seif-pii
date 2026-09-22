@@ -177,6 +177,38 @@ def test_unrepresentable_words_fail_before_any_partial_model_response(count):
     assert model.backend.calls == []
 
 
+@pytest.mark.parametrize("ignored", ["\u200d", "\u200c", "\u00ad", "\x00", "\ufffd", "\x00\u200d", "\uf0b7", "\uf0fc"])
+def test_bert_ignored_word_retains_offsets_without_shifting_following_names(ignored):
+    text = f"{ignored} Иван {ignored} Пётр {ignored}"
+    model = runtime({"Иван": "B-FIRST_NAME", "Пётр": "B-FIRST_NAME"}, {ignored: 0})
+    output = decoder.word_predict(model, text)
+    assert values(output) == [("Иван", "FIRST_NAME"), ("Пётр", "FIRST_NAME")]
+    assert [item["start"] for item in output] == [text.index("Иван"), text.index("Пётр")]
+    assert all(text[item["start"]:item["end"]] == item["text"] for item in output)
+
+
+def test_entirely_ignored_input_is_empty_without_inference():
+    model = runtime(counts={"\u200d": 0, "\u200c": 0})
+    assert decoder.word_predict(model, "\u200d \u200c") == []
+    assert model.backend.calls == []
+
+
+def test_invisible_character_inside_visible_word_remains_within_original_span():
+    value = "И\u200dван"
+    model = runtime({value: "B-FIRST_NAME"})
+    output = decoder.word_predict(model, value)
+    assert values(output) == [(value, "FIRST_NAME")]
+    assert (output[0]["start"], output[0]["end"]) == (0, len(value))
+
+
+def test_missing_word_with_visible_character_and_control_still_fails():
+    value = "И\u200dван"
+    model = runtime(counts={value: 0})
+    with pytest.raises(ValueError, match="omitted a visible word"):
+        decoder.word_predict(model, value)
+    assert model.backend.calls == []
+
+
 @pytest.mark.parametrize("text", ["", " \t\n\r\u2003"])
 def test_empty_input_has_no_tokenizer_or_backend_side_effects(text):
     model = runtime()
