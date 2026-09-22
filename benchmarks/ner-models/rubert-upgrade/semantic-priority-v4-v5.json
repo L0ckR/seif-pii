@@ -1,0 +1,246 @@
+{
+  "quality_reports_sha256": {
+    "quality-v4.json": "77000da09ce0a13db771411d2840a2221e1f281b76e97b65dcf2ccf1f0d747f3",
+    "quality-v5.json": "1fe31edd072443ddb9a6cae49d2bdefbe5295d7d3490bcf02fb9ebc1ae728f54"
+  },
+  "prediction_caches_sha256": {
+    "service-v4.jsonl": "b529306ea2b975063344f578d4a59ffdf9bbf44e163b206f906d22ab2e2e07f4",
+    "service-v5.jsonl": "72bc8a41e9138e802695f4d315b5e5e7503dbcbd74360c80c3026cc31435de5b"
+  },
+  "cases": 5095,
+  "coordinate_intervals_identical_all_cases": true,
+  "coordinate_difference_cases": [],
+  "changed_type_cases_by_corpus": {
+    "organizer": 1,
+    "redmadrobot": 26
+  },
+  "type_transitions": {
+    "PASSPORT->DRIVER_LICENSE": 54
+  },
+  "organizer_changes": [
+    {
+      "case_id": "organizer/org_0423",
+      "annotation_uncertain": true,
+      "changes": [
+        {
+          "start": 18,
+          "end": 23,
+          "before": "PASSPORT",
+          "after": "DRIVER_LICENSE",
+          "overlapping_gold_types": [
+            "PASSPORT"
+          ]
+        },
+        {
+          "start": 34,
+          "end": 40,
+          "before": "PASSPORT",
+          "after": "DRIVER_LICENSE",
+          "overlapping_gold_types": [
+            "PASSPORT"
+          ]
+        }
+      ]
+    }
+  ],
+  "source_changes": [
+    "seif/detector.py"
+  ],
+  "full_mask_aggregate_identical_all_profiles_by_corpus": {
+    "organizer": true,
+    "pii": true,
+    "redmadrobot": true
+  },
+  "strict14_before": {
+    "precision": 0.8666788254605143,
+    "recall": 0.8484199250133905,
+    "f1": 0.8574521833273187,
+    "tp": 4752,
+    "fp": 731,
+    "fn": 849,
+    "per_type_tp_fp_fn": {
+      "ADDRESS": [
+        1080,
+        337,
+        163
+      ],
+      "BIRTH_CERTIFICATE": [
+        260,
+        24,
+        81
+      ],
+      "CREDIT_CARD": [
+        185,
+        11,
+        18
+      ],
+      "DRIVER_LICENSE": [
+        232,
+        31,
+        139
+      ],
+      "EMAIL": [
+        219,
+        0,
+        2
+      ],
+      "INN": [
+        205,
+        7,
+        58
+      ],
+      "IP_ADDRESS": [
+        143,
+        33,
+        12
+      ],
+      "MILITARY_ID": [
+        227,
+        30,
+        51
+      ],
+      "OMS": [
+        146,
+        0,
+        24
+      ],
+      "PASSPORT": [
+        410,
+        91,
+        84
+      ],
+      "PERSON": [
+        1147,
+        103,
+        117
+      ],
+      "PHONE": [
+        144,
+        18,
+        27
+      ],
+      "SNILS": [
+        173,
+        14,
+        50
+      ],
+      "UNSUPPORTED:BIRTH_DATE": [
+        0,
+        9,
+        0
+      ],
+      "UNSUPPORTED:PASSPORT_DATE": [
+        0,
+        7,
+        0
+      ],
+      "UNSUPPORTED:PASSPORT_ISSUER": [
+        0,
+        3,
+        0
+      ],
+      "URL": [
+        181,
+        13,
+        23
+      ]
+    }
+  },
+  "strict14_after": {
+    "precision": 0.8754331570308226,
+    "recall": 0.8569898232458489,
+    "f1": 0.8661133164922411,
+    "tp": 4800,
+    "fp": 683,
+    "fn": 801,
+    "per_type_tp_fp_fn": {
+      "ADDRESS": [
+        1080,
+        337,
+        163
+      ],
+      "BIRTH_CERTIFICATE": [
+        260,
+        24,
+        81
+      ],
+      "CREDIT_CARD": [
+        185,
+        11,
+        18
+      ],
+      "DRIVER_LICENSE": [
+        282,
+        33,
+        89
+      ],
+      "EMAIL": [
+        219,
+        0,
+        2
+      ],
+      "INN": [
+        205,
+        7,
+        58
+      ],
+      "IP_ADDRESS": [
+        143,
+        33,
+        12
+      ],
+      "MILITARY_ID": [
+        227,
+        30,
+        51
+      ],
+      "OMS": [
+        146,
+        0,
+        24
+      ],
+      "PASSPORT": [
+        408,
+        41,
+        86
+      ],
+      "PERSON": [
+        1147,
+        103,
+        117
+      ],
+      "PHONE": [
+        144,
+        18,
+        27
+      ],
+      "SNILS": [
+        173,
+        14,
+        50
+      ],
+      "UNSUPPORTED:BIRTH_DATE": [
+        0,
+        9,
+        0
+      ],
+      "UNSUPPORTED:PASSPORT_DATE": [
+        0,
+        7,
+        0
+      ],
+      "UNSUPPORTED:PASSPORT_ISSUER": [
+        0,
+        3,
+        0
+      ],
+      "URL": [
+        181,
+        13,
+        23
+      ]
+    }
+  },
+  "interpretation": "Generic same-range series refinement changes document type only. Two organizer spans conflict with provisional uncertain PASSPORT annotation; no certain organizer cases change. No case-specific exception.",
+  "organizer_annotations_sha256": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46"
+}
