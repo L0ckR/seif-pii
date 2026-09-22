@@ -358,36 +358,38 @@ def test_large_job_cancellation_keeps_cpu_slot_until_thread_finishes(monkeypatch
     app = create_app(Settings(demo=True, cpu_workers=1))
 
     async def scenario():
-        async with app.router.lifespan_context(app):
-            async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
-                first = asyncio.create_task(client.post("/process", json={"payload": "слово " * 3000, "payload_id": "cancel-first"}))
-                try:
-                    assert await asyncio.to_thread(entered.wait, 2)
+        async with (
+            app.router.lifespan_context(app),
+            httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client,
+        ):
+            first = asyncio.create_task(client.post("/process", json={"payload": "слово " * 3000, "payload_id": "cancel-first"}))
+            try:
+                assert await asyncio.to_thread(entered.wait, 2)
+                first.cancel()
+                with pytest.raises(asyncio.CancelledError):
+                    await first
+                # Cancelling HTTP must not free a slot while the CPU job runs.
+                for number in range(4):
+                    response = await client.post("/process", json={"payload": "слово " * 3000, "payload_id": f"cancel-next-{number}"})
+                    assert response.status_code == 429
+                    assert response.json()["error"]["code"] == "cpu_busy"
+                    assert response.headers["Retry-After"] == "1"
+                    assert response.headers["Cache-Control"] == "no-store"
+                assert len(calls) == 1
+                assert (await client.get("/health")).status_code == 200
+                small = await client.post("/process", json={"payload": "Без личных данных.", "payload_id": "small-during-cpu"})
+                assert small.status_code == 200
+                release.set()
+                assert await asyncio.to_thread(finished.wait, 2)
+                await asyncio.sleep(0)
+                recovered = await client.post("/process", json={"payload": "слово " * 3000, "payload_id": "after-cancel"})
+                assert recovered.status_code == 200
+                assert len(calls) == 2
+            finally:
+                release.set()
+                if not first.done():
                     first.cancel()
-                    with pytest.raises(asyncio.CancelledError):
-                        await first
-                    # Cancelling HTTP must not free a slot while the CPU job runs.
-                    for number in range(4):
-                        response = await client.post("/process", json={"payload": "слово " * 3000, "payload_id": f"cancel-next-{number}"})
-                        assert response.status_code == 429
-                        assert response.json()["error"]["code"] == "cpu_busy"
-                        assert response.headers["Retry-After"] == "1"
-                        assert response.headers["Cache-Control"] == "no-store"
-                    assert len(calls) == 1
-                    assert (await client.get("/health")).status_code == 200
-                    small = await client.post("/process", json={"payload": "Без личных данных.", "payload_id": "small-during-cpu"})
-                    assert small.status_code == 200
-                    release.set()
-                    assert await asyncio.to_thread(finished.wait, 2)
-                    await asyncio.sleep(0)
-                    recovered = await client.post("/process", json={"payload": "слово " * 3000, "payload_id": "after-cancel"})
-                    assert recovered.status_code == 200
-                    assert len(calls) == 2
-                finally:
-                    release.set()
-                    if not first.done():
-                        first.cancel()
-                        await asyncio.gather(first, return_exceptions=True)
+                    await asyncio.gather(first, return_exceptions=True)
 
     asyncio.run(scenario())
 
@@ -433,16 +435,18 @@ def test_cancelled_cpu_failure_does_not_reach_unhandled_exception_hook(monkeypat
         unhandled = []
         loop = asyncio.get_running_loop()
         loop.set_exception_handler(lambda _, context: unhandled.append(context))
-        async with app.router.lifespan_context(app):
-            async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
-                request_task = asyncio.create_task(client.post("/process", json={"payload": "слово " * 3000, "payload_id": "detached-failure"}))
-                assert await asyncio.to_thread(entered.wait, 2)
-                request_task.cancel()
-                await asyncio.gather(request_task, return_exceptions=True)
-                del request_task
-                release.set()
-                assert await asyncio.to_thread(finished.wait, 2)
-                await asyncio.sleep(0)
+        async with (
+            app.router.lifespan_context(app),
+            httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client,
+        ):
+            request_task = asyncio.create_task(client.post("/process", json={"payload": "слово " * 3000, "payload_id": "detached-failure"}))
+            assert await asyncio.to_thread(entered.wait, 2)
+            request_task.cancel()
+            await asyncio.gather(request_task, return_exceptions=True)
+            del request_task
+            release.set()
+            assert await asyncio.to_thread(finished.wait, 2)
+            await asyncio.sleep(0)
         gc.collect()
         await asyncio.sleep(0)
         assert not unhandled
@@ -467,14 +471,16 @@ def test_lifespan_drains_cancelled_cpu_job_without_blocking_event_loop(monkeypat
     app = create_app(Settings(demo=True, cpu_workers=1))
 
     async def scenario():
-        async with app.router.lifespan_context(app):
-            async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
-                first = asyncio.create_task(client.post("/process", json={"payload": "слово " * 3000, "payload_id": "shutdown"}))
-                assert await asyncio.to_thread(entered.wait, 2)
-                first.cancel()
-                await asyncio.gather(first, return_exceptions=True)
-                # Only the event loop can release the worker; blocking shutdown fails.
-                asyncio.get_running_loop().call_later(0.05, release.set)
+        async with (
+            app.router.lifespan_context(app),
+            httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client,
+        ):
+            first = asyncio.create_task(client.post("/process", json={"payload": "слово " * 3000, "payload_id": "shutdown"}))
+            assert await asyncio.to_thread(entered.wait, 2)
+            first.cancel()
+            await asyncio.gather(first, return_exceptions=True)
+            # Only the event loop can release the worker; blocking shutdown fails.
+            asyncio.get_running_loop().call_later(0.05, release.set)
         assert release.is_set()
         assert not worker_timed_out
 
@@ -506,9 +512,11 @@ def test_required_free_threading_fails_startup_and_closes_resources(monkeypatch,
         closed.append(True)
 
     monkeypatch.setattr(app.state.vault, "close", close)
-    with pytest.raises(RuntimeError, match="requires a free-threaded Python"):
-        with TestClient(app):
-            pass
+    with (
+        pytest.raises(RuntimeError, match="requires a free-threaded Python"),
+        TestClient(app),
+    ):
+        pass
     assert closed == [True]
 
 
@@ -524,9 +532,11 @@ def test_storage_startup_failure_closes_resources(monkeypatch):
 
     monkeypatch.setattr(app.state.vault, "ping", ping)
     monkeypatch.setattr(app.state.vault, "close", close)
-    with pytest.raises(ConnectionError):
-        with TestClient(app):
-            pass
+    with (
+        pytest.raises(ConnectionError),
+        TestClient(app),
+    ):
+        pass
     assert closed == [True]
 
 

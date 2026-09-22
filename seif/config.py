@@ -155,23 +155,25 @@ class Settings:
         return redis_url, sentinels, sentinel_master, redis_password, sentinel_password
 
     @staticmethod
-    def _load_policies(demo: bool) -> dict[str, Policy]:
+    def _policy(name: str, item: dict, demo: bool) -> Policy:
+        item = dict(item)
+        secret_name = item.pop("api_key_env", "")
+        item["api_key"] = os.getenv(secret_name, "") if secret_name else ""
+        for field_name in ("types", "required_types", "allowed_modes", "extra_rules"):
+            if field_name in item:
+                item[field_name] = tuple(item[field_name])
+        policy = Policy(**item)
+        if policy.mode not in {"mask", "token", "synthetic"} or policy.min_types < 1 or policy.rps < 1:
+            raise ValueError("Invalid system policy")
+        if policy.enabled and not policy.api_key and not (demo and name == "demo"):
+            raise ValueError(f"Missing API key for enabled system: {name}")
+        return policy
+
+    @classmethod
+    def _load_policies(cls, demo: bool) -> dict[str, Policy]:
         path = Path(os.getenv("SEIF_CONFIG", "config/policies.yaml"))
         raw = yaml.safe_load(path.read_text()) if path.exists() else {}
-        policies = {}
-        for name, item in (raw or {}).get("systems", {}).items():
-            item = dict(item)
-            secret_name = item.pop("api_key_env", "")
-            item["api_key"] = os.getenv(secret_name, "") if secret_name else ""
-            for field_name in ("types", "required_types", "allowed_modes", "extra_rules"):
-                if field_name in item:
-                    item[field_name] = tuple(item[field_name])
-            policy = Policy(**item)
-            if policy.mode not in {"mask", "token", "synthetic"} or policy.min_types < 1 or policy.rps < 1:
-                raise ValueError("Invalid system policy")
-            if policy.enabled and not policy.api_key and not (demo and name == "demo"):
-                raise ValueError(f"Missing API key for enabled system: {name}")
-            policies[name] = policy
+        policies = {name: cls._policy(name, item, demo) for name, item in (raw or {}).get("systems", {}).items()}
         if demo:
             policies.setdefault("demo", Policy())
         if not policies:

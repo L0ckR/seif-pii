@@ -197,10 +197,7 @@ def infer(analyzer, text):
     return {"entities": entities}
 
 
-def create_app(settings=None, analyzer_factory=None):
-    settings = settings or NerSettings.from_env()
-    analyzer_factory = analyzer_factory or build_analyzer
-
+def _lifespan(settings, analyzer_factory):
     @asynccontextmanager
     async def lifespan(app):
         if not settings.demo and not settings.token:
@@ -221,24 +218,76 @@ def create_app(settings=None, analyzer_factory=None):
             app.state.ready = False
             await asyncio.to_thread(pool.shutdown, wait=True, cancel_futures=True)
             app.state.analyzer = None
+    return lifespan
 
+
+async def _validation_error(_request, _exc):
+    return error(422, "invalid_request", "Expected one text string of at most 20000 characters.")
+
+
+async def _http_error(_request, exc):
+    return error(exc.status_code, "invalid_request", INVALID_REQUEST)
+
+
+async def _unexpected_error(_request, _exc):
+    LOG.warning("ner_request_failed")
+    return error(503, "unavailable", NER_UNAVAILABLE)
+
+
+def _consume_model_exception(future):
+    if not future.cancelled():
+        future.exception()
+
+
+def _complete_model_job(state, waiter, job):
+    # Runs in the owner event loop only after CPU work really ends. Catching
+    # BaseException transfers cancellation/system exceptions to the owner;
+    # narrowing it would strand the waiter and retain request data indefinitely.
+    state.model_inflight -= 1
+    try:
+        result = job.result()
+    except BaseException as exc:
+        if not waiter.done():
+            waiter.set_exception(exc)
+    else:
+        if not waiter.done():
+            waiter.set_result(result)
+
+
+async def _run_model(state, text):
+    state.model_inflight += 1
+    loop = asyncio.get_running_loop()
+    waiter = loop.create_future()
+    waiter.add_done_callback(_consume_model_exception)
+    try:
+        job = state.pool.submit(infer, state.analyzer, text)
+    except Exception:
+        state.model_inflight -= 1
+        return error(503, "unavailable", NER_UNAVAILABLE)
+    job.add_done_callback(lambda future: loop.call_soon_threadsafe(_complete_model_job, state, waiter, future))
+    try:
+        result = await waiter
+    except asyncio.CancelledError:
+        # Queued jobs can be cancelled. Running CPU work owns capacity until
+        # the concurrent future's completion callback, including after timeout.
+        job.cancel()
+        raise
+    except Exception:
+        LOG.warning("ner_inference_failed")
+        return error(503, "unavailable", NER_UNAVAILABLE)
+    return JSONResponse(result, headers={"Cache-Control": "no-store", "X-Content-Type-Options": "nosniff"})
+
+
+def create_app(settings=None, analyzer_factory=None):
+    settings = settings or NerSettings.from_env()
+    lifespan = _lifespan(settings, analyzer_factory or build_analyzer)
     app = FastAPI(title="СЕЙФ private PERSON/LOCATION NER", lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
     app.state.ready = False
     app.state.model_inflight = 0
     app.add_middleware(Boundary, settings=settings)
-
-    @app.exception_handler(RequestValidationError)
-    async def validation_error(_request, _exc):
-        return error(422, "invalid_request", "Expected one text string of at most 20000 characters.")
-
-    @app.exception_handler(HTTPException)
-    async def http_error(_request, exc):
-        return error(exc.status_code, "invalid_request", INVALID_REQUEST)
-
-    @app.exception_handler(Exception)
-    async def unexpected_error(_request, _exc):
-        LOG.warning("ner_request_failed")
-        return error(503, "unavailable", NER_UNAVAILABLE)
+    app.add_exception_handler(RequestValidationError, _validation_error)
+    app.add_exception_handler(HTTPException, _http_error)
+    app.add_exception_handler(Exception, _unexpected_error)
 
     @app.get("/health")
     async def health():
@@ -255,45 +304,7 @@ def create_app(settings=None, analyzer_factory=None):
             return error(429, "busy", "Model capacity reached.")
         if not body.text:
             return JSONResponse({"entities": []}, headers={"Cache-Control": "no-store"})
-        app.state.model_inflight += 1
-        loop = asyncio.get_running_loop()
-        waiter = loop.create_future()
-
-        def consume(future):
-            if not future.cancelled():
-                future.exception()
-
-        waiter.add_done_callback(consume)
-
-        def complete(job):
-            # This runs in the owner event loop only after CPU work really ends.
-            app.state.model_inflight -= 1
-            try:
-                result = job.result()
-            except BaseException as exc:
-                if not waiter.done():
-                    waiter.set_exception(exc)
-            else:
-                if not waiter.done():
-                    waiter.set_result(result)
-
-        try:
-            job = app.state.pool.submit(infer, app.state.analyzer, body.text)
-        except Exception:
-            app.state.model_inflight -= 1
-            return error(503, "unavailable", NER_UNAVAILABLE)
-        job.add_done_callback(lambda future: loop.call_soon_threadsafe(complete, future))
-        try:
-            result = await waiter
-        except asyncio.CancelledError:
-            # Cancel a queued job if it has not started. Running CPU work still
-            # owns capacity until the concurrent future's completion callback.
-            job.cancel()
-            raise
-        except Exception:
-            LOG.warning("ner_inference_failed")
-            return error(503, "unavailable", NER_UNAVAILABLE)
-        return JSONResponse(result, headers={"Cache-Control": "no-store", "X-Content-Type-Options": "nosniff"})
+        return await _run_model(app.state, body.text)
 
     return app
 

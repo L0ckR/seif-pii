@@ -69,15 +69,45 @@ def load_rows(folder):
         raise RuntimeError("Unexpected test size.")
     for index, row in enumerate(rows):
         row["id"] = f"test_{index:04d}"
-        fields = [row[key] for key in ("entity_starts", "entity_ends", "entity_labels", "entity_texts")]
-        if len({len(values) for values in fields}) != 1:
-            raise RuntimeError("Annotation lengths differ; do not repair using predictions.")
-        for start, end, kind, value in zip(*fields, strict=True):
-            if (kind not in set(GOLD_MAP) | OTHER_LABELS or not 0 <= start < end <= len(row["text"])
-                    or row["text"][start:end] != value):
-                raise RuntimeError("Original span validation failed; no report published.")
-        row["fine_gold"] = set(zip(row["entity_labels"], row["entity_starts"], row["entity_ends"], strict=True))
+        _validate_row(row)
     return rows
+
+
+def _validate_row(row):
+    fields = [row[key] for key in ("entity_starts", "entity_ends", "entity_labels", "entity_texts")]
+    if len({len(values) for values in fields}) != 1:
+        raise RuntimeError("Annotation lengths differ; do not repair using predictions.")
+    for start, end, kind, value in zip(*fields, strict=True):
+        if (kind not in set(GOLD_MAP) | OTHER_LABELS or not 0 <= start < end <= len(row["text"])
+                or row["text"][start:end] != value):
+            raise RuntimeError("Original span validation failed; no report published.")
+    row["fine_gold"] = set(zip(row["entity_labels"], row["entity_starts"], row["entity_ends"], strict=True))
+
+
+def _infer_rows(rows, analyzer, raw_path, truth):
+    from seif.detector import Span, detect, merge_ner_candidates
+
+    predictions = {key: {} for key in ("seif_fast", "presidio_ru", "seif_hybrid")}
+    unmerged, raw_truth = {key: {} for key in predictions}, {}
+    with raw_path.open("w", encoding="utf-8") as stream:
+        for row in rows:
+            key, text = row["id"], row["text"]
+            base = detect(text)
+            upstream = analyzer.analyze(text=text, language="ru", score_threshold=0.0)
+            candidates = [Span(item.start, item.end, item.entity_type, item.score, "ner")
+                          for item in upstream if item.entity_type in {"PERSON", "LOCATION"}]
+            merged = merge_ner_candidates(text, base, candidates)
+            original = {"seif_fast": {(item.type, item.start, item.end) for item in base},
+                        "presidio_ru": {(item.entity_type, item.start, item.end) for item in upstream},
+                        "seif_hybrid": {(item.type, item.start, item.end) for item in merged}}
+            raw_truth[key] = coarsen(row["fine_gold"], GOLD_MAP, keep_unknown=True)
+            for system, spans in original.items():
+                unmerged[system][key] = coarsen(spans, PRESIDIO_MAP if system == "presidio_ru" else LOCAL_MAP)
+                predictions[system][key] = merge_adjacent(text, unmerged[system][key])
+            stream.write(json.dumps({"id": key, "fine_gold": sorted(row["fine_gold"]), "merged_gold": sorted(truth[key]),
+                                     "original_predictions": {system: sorted(spans) for system, spans in original.items()},
+                                     "merged_predictions": {system: sorted(values[key]) for system, values in predictions.items()}}, ensure_ascii=False) + "\n")
+    return predictions, unmerged, raw_truth
 
 
 def main():
@@ -135,8 +165,6 @@ def main():
         return
     if (marker.exists() or args.output.exists()) and not args.repeat:
         parser.error("Prior inference/report exists; use --repeat only for explicitly labelled subsequent runs.")
-    from seif.detector import Span, detect, merge_ner_candidates
-
     source_hash = sha((ROOT / "seif/detector.py").read_bytes())
     first = not marker.exists()
     if first:
@@ -144,27 +172,8 @@ def main():
             json.dump({"started_at_utc": datetime.now(timezone.utc).isoformat(), "detector_sha256": source_hash,
                        "protocol_sha256": sha(protocol_file.read_bytes())}, file)
     analyzer, configuration = build_presidio()
-    predictions = {key: {} for key in ("seif_fast", "presidio_ru", "seif_hybrid")}
-    unmerged, raw_truth = {key: {} for key in predictions}, {}
     raw_path = args.data_dir / ("scanpatch-predictions-first.jsonl" if first else "scanpatch-predictions-repeat.jsonl")
-    with raw_path.open("w", encoding="utf-8") as stream:
-        for row in rows:
-            key, text = row["id"], row["text"]
-            base = detect(text)
-            upstream = analyzer.analyze(text=text, language="ru", score_threshold=0.0)
-            candidates = [Span(item.start, item.end, item.entity_type, item.score, "ner")
-                          for item in upstream if item.entity_type in {"PERSON", "LOCATION"}]
-            merged = merge_ner_candidates(text, base, candidates)
-            original = {"seif_fast": {(item.type, item.start, item.end) for item in base},
-                        "presidio_ru": {(item.entity_type, item.start, item.end) for item in upstream},
-                        "seif_hybrid": {(item.type, item.start, item.end) for item in merged}}
-            raw_truth[key] = coarsen(row["fine_gold"], GOLD_MAP, keep_unknown=True)
-            for system, spans in original.items():
-                unmerged[system][key] = coarsen(spans, PRESIDIO_MAP if system == "presidio_ru" else LOCAL_MAP)
-                predictions[system][key] = merge_adjacent(text, unmerged[system][key])
-            stream.write(json.dumps({"id": key, "fine_gold": sorted(row["fine_gold"]), "merged_gold": sorted(truth[key]),
-                                     "original_predictions": {system: sorted(spans) for system, spans in original.items()},
-                                     "merged_predictions": {system: sorted(values[key]) for system, values in predictions.items()}}, ensure_ascii=False) + "\n")
+    predictions, unmerged, raw_truth = _infer_rows(rows, analyzer, raw_path, truth)
     if sha((ROOT / "seif/detector.py").read_bytes()) != source_hash:
         raise RuntimeError("Detector changed during inference; report not published.")
     primary = score_scope(truth, predictions, COMMON)

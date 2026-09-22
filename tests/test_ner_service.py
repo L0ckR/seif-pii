@@ -58,17 +58,21 @@ def test_authentication_health_and_typed_unicode_offsets():
 
 def test_startup_requires_token_and_redacts_model_initialization_errors():
     settings = NerSettings()
-    with pytest.raises(RuntimeError, match="SEIF_NER_TOKEN"):
-        with TestClient(create_app(settings, analyzer_factory=StubAnalyzer)):
-            pass
+    with (
+        pytest.raises(RuntimeError, match="SEIF_NER_TOKEN"),
+        TestClient(create_app(settings, analyzer_factory=StubAnalyzer)),
+    ):
+        pass
 
     def broken():
         raise ValueError("private-value@example.invalid")
 
     settings = NerSettings(demo=True)
-    with pytest.raises(RuntimeError, match="initialization failed") as exc:
-        with TestClient(create_app(settings, analyzer_factory=broken)):
-            pass
+    with (
+        pytest.raises(RuntimeError, match="initialization failed") as exc,
+        TestClient(create_app(settings, analyzer_factory=broken)),
+    ):
+        pass
     assert "private-value" not in str(exc.value)
     assert exc.value.__suppress_context__
 
@@ -115,12 +119,14 @@ def test_chunked_body_is_bounded_without_content_length():
             yield b"x" * (MAX_BODY_BYTES // 2)
             yield b"x" * (MAX_BODY_BYTES // 2)
 
-        async with app.router.lifespan_context(app):
-            async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://ner") as client:
-                response = await client.post("/analyze", content=body())
-                assert response.status_code == 413
-                assert analyzer.calls == 0
-                assert (await client.post("/analyze", json={"text": "valid"})).status_code == 200
+        async with (
+            app.router.lifespan_context(app),
+            httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://ner") as client,
+        ):
+            response = await client.post("/analyze", content=body())
+            assert response.status_code == 413
+            assert analyzer.calls == 0
+            assert (await client.post("/analyze", json={"text": "valid"})).status_code == 200
 
     asyncio.run(run())
 
@@ -255,10 +261,12 @@ def test_model_exception_is_redacted_and_next_request_recovers(caplog):
             raise RuntimeError(text)
         return [span(0, len(text))]
 
-    with caplog.at_level(logging.WARNING):
-        with TestClient(make_app(StubAnalyzer(callback))) as client:
-            assert client.post("/analyze", json={"text": "secret@example.invalid"}).status_code == 503
-            assert client.post("/analyze", json={"text": "Дина Шварц"}).status_code == 200
+    with (
+        caplog.at_level(logging.WARNING),
+        TestClient(make_app(StubAnalyzer(callback))) as client,
+    ):
+        assert client.post("/analyze", json={"text": "secret@example.invalid"}).status_code == 503
+        assert client.post("/analyze", json={"text": "Дина Шварц"}).status_code == 200
     assert "secret@" not in caplog.text
 
 
@@ -280,24 +288,26 @@ def test_cancelled_http_does_not_release_running_model_capacity(caplog):
 
         app = make_app(StubAnalyzer(callback), max_model_jobs=1)
         try:
-            async with app.router.lifespan_context(app):
-                async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://ner") as client:
-                    task = asyncio.create_task(client.post("/analyze", json={"text": "private@example.invalid"}))
-                    assert await asyncio.to_thread(started.wait, 2)
-                    assert (await client.get("/health")).status_code == 200
-                    assert (await client.post("/analyze", json={"text": "next"})).status_code == 429
-                    task.cancel()
-                    with pytest.raises(asyncio.CancelledError):
-                        await task
-                    assert app.state.model_inflight == 1
-                    assert (await client.post("/analyze", json={"text": "next"})).status_code == 429
-                    release.set()
-                    for _ in range(100):
-                        if app.state.model_inflight == 0:
-                            break
-                        await asyncio.sleep(0.01)
-                    assert app.state.model_inflight == 0
-                    assert (await client.post("/analyze", json={"text": "next"})).status_code == 200
+            async with (
+                app.router.lifespan_context(app),
+                httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://ner") as client,
+            ):
+                task = asyncio.create_task(client.post("/analyze", json={"text": "private@example.invalid"}))
+                assert await asyncio.to_thread(started.wait, 2)
+                assert (await client.get("/health")).status_code == 200
+                assert (await client.post("/analyze", json={"text": "next"})).status_code == 429
+                task.cancel()
+                with pytest.raises(asyncio.CancelledError):
+                    await task
+                assert app.state.model_inflight == 1
+                assert (await client.post("/analyze", json={"text": "next"})).status_code == 429
+                release.set()
+                for _ in range(100):
+                    if app.state.model_inflight == 0:
+                        break
+                    await asyncio.sleep(0.01)
+                assert app.state.model_inflight == 0
+                assert (await client.post("/analyze", json={"text": "next"})).status_code == 200
             assert not app.state.ready
             assert app.state.pool._shutdown
             assert not loop_errors
@@ -345,31 +355,33 @@ def test_model_queue_is_bounded_and_cancelled_queued_job_never_runs():
 
         app = make_app(StubAnalyzer(callback), max_model_jobs=4)
         try:
-            async with app.router.lifespan_context(app):
-                async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://ner") as client:
-                    first = asyncio.create_task(client.post("/analyze", json={"text": "first"}))
-                    assert await asyncio.to_thread(started.wait, 2)
-                    queued = [asyncio.create_task(client.post("/analyze", json={"text": f"queued-{index}"})) for index in range(3)]
-                    for _ in range(100):
-                        if app.state.model_inflight == 4:
-                            break
-                        await asyncio.sleep(0.01)
-                    assert app.state.model_inflight == 4
-                    assert (await client.post("/analyze", json={"text": "overflow"})).status_code == 429
-                    queued[1].cancel()
-                    with pytest.raises(asyncio.CancelledError):
-                        await queued[1]
-                    for _ in range(100):
-                        if app.state.model_inflight == 3:
-                            break
-                        await asyncio.sleep(0.01)
-                    assert app.state.model_inflight == 3
-                    assert observed == ["first"]
-                    release.set()
-                    responses = await asyncio.gather(first, queued[0], queued[2])
-                    assert all(response.status_code == 200 for response in responses)
-                    assert observed == ["first", "queued-0", "queued-2"]
-                    assert app.state.model_inflight == 0
+            async with (
+                app.router.lifespan_context(app),
+                httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://ner") as client,
+            ):
+                first = asyncio.create_task(client.post("/analyze", json={"text": "first"}))
+                assert await asyncio.to_thread(started.wait, 2)
+                queued = [asyncio.create_task(client.post("/analyze", json={"text": f"queued-{index}"})) for index in range(3)]
+                for _ in range(100):
+                    if app.state.model_inflight == 4:
+                        break
+                    await asyncio.sleep(0.01)
+                assert app.state.model_inflight == 4
+                assert (await client.post("/analyze", json={"text": "overflow"})).status_code == 429
+                queued[1].cancel()
+                with pytest.raises(asyncio.CancelledError):
+                    await queued[1]
+                for _ in range(100):
+                    if app.state.model_inflight == 3:
+                        break
+                    await asyncio.sleep(0.01)
+                assert app.state.model_inflight == 3
+                assert observed == ["first"]
+                release.set()
+                responses = await asyncio.gather(first, queued[0], queued[2])
+                assert all(response.status_code == 200 for response in responses)
+                assert observed == ["first", "queued-0", "queued-2"]
+                assert app.state.model_inflight == 0
         finally:
             release.set()
 

@@ -1,0 +1,22 @@
+{
+  "revision": "12191083eea106edf85c7bbc6e60a140faf1b4c2",
+  "files": {
+    "seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+    "seif/app.py": "e0d8051b406eadfb05484d3a5086b8d616b11a09b8c30984597bac94b607e004",
+    "seif/cardholder_fields.py": "586f3f4f30f1bce3a460562dbee2ba053cff44bea527264e617c7e5af087a7cb",
+    "seif/config.py": "de35e12ca073a432f87798950685d49340641bad4303f8094e86667e929b0f07",
+    "seif/context_filters.py": "0e3a8750c62ba3cb136fc13a67d0642aa924aa2106a9bd7346e6899aef24f4a1",
+    "seif/detector.py": "e47a19060307387f7071d0c00be9439c62e424621ead81902153b8e42501bb5c",
+    "seif/document_fields.py": "b56592ad71b66a31ce8abeba82047a3818183d6f9ead81f19e9dbc58ea417c55",
+    "seif/location_fields.py": "1cde438a393d321ad17c954fe88d274825529a6d6d638ab15f051b8303d048cb",
+    "seif/ner.py": "c6454ec976086be8a4d666694499c785d6a21d8a322dd2259e52893cc48095a5",
+    "seif/person_fields.py": "aa30140a816b0df94040d301e557e01f6226f3c3f075bdc889bc165f6a8d74e4",
+    "seif/request_capture.py": "a3372c5f022b328f454272a47deef47e9960ea3624b30e831db8415d8d4533ce",
+    "seif/structured_fields.py": "acfff4efc6d0765bbd46462bdd5467be1dd965b7b2d662ef4a4773d70e5b5d24",
+    "seif/transform.py": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+    "seif/vault.py": "3f8ef93f831cd100cbe9fdd6f020cc49269acfba90f83a445afdc9c3327e356b",
+    "scripts/evaluate_external.py": "4dc5d5c123a4f20f542123ad04596be3a582cdadb62aab5ecb3266137da4c46e",
+    "scripts/compare_presidio.py": "5ec362a7637c1aa2fd26d130180478eafab0d860bc51a19323daa3eff65648c0"
+  },
+  "restoration_roundtrips": 3620
+}

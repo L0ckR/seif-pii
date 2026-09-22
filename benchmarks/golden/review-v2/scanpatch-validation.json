@@ -1,0 +1,34 @@
+{
+  "candidate_matches_all_current_production_files": true,
+  "candidate_matches_authoritative_golden_final_production_files": true,
+  "authoritative_golden_report_sha256": "efa50ed610a6929363afe7c15c37a64f94af749025ed8ce446f38b37fd777f19",
+  "production_file_count": 14,
+  "typed_character_transitions_common_types_all_532": {
+    "rules": {
+      "gained_tp_chars": 131,
+      "gained_tp_cases": 7,
+      "lost_tp_chars": 0,
+      "lost_tp_cases": 0,
+      "new_fp_chars": 1,
+      "new_fp_cases": 1,
+      "removed_fp_chars": 0,
+      "removed_fp_cases": 0
+    },
+    "hybrid": {
+      "gained_tp_chars": 131,
+      "gained_tp_cases": 7,
+      "lost_tp_chars": 0,
+      "lost_tp_cases": 0,
+      "new_fp_chars": 1,
+      "new_fp_cases": 1,
+      "removed_fp_chars": 0,
+      "removed_fp_cases": 0
+    }
+  },
+  "predictions_byte_identical_to_preliminary": true,
+  "production_paths_changed_since_preliminary": [
+    "seif/cardholder_fields.py",
+    "seif/detector.py"
+  ],
+  "note": "Aggregates only. No external case text or case-level error descriptions inspected; no tuning from external results."
+}

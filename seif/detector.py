@@ -15,11 +15,12 @@ from datetime import date
 from functools import lru_cache
 from typing import Iterable
 
+from seif.cardholder_fields import cardholder_candidates
 from seif.context_filters import refine_candidates
+from seif.document_fields import document_kind_at_value
 from seif.location_fields import location_candidates
 from seif.person_fields import person_candidates
 from seif.structured_fields import structured_candidates
-
 
 PASSPORT_WORD = "паспорт"
 
@@ -71,38 +72,33 @@ _SEP = r"[ \t]*(?::|=|—|-)?[ \t]*"
 _WORD = r"[а-яё][а-яё'-]{0,39}"
 _NAMEWORD = r"[а-яё][а-яё'-]{1,39}"
 _PATR = r"[а-яё-]{2,30}(?:ович(?:а|у|ем|е)?|евич(?:а|у|ем|е)?|ич|овн[аыеу]|евн[аыеу]|овной|евной|иничн[аыеу])"
-_NAMES = set(
-    "иван петр пётр александр алексей андрей антон артём артем артур борис вадим валентин валерий василий виктор виталий владимир владислав вячеслав геннадий георгий глеб григорий даниил данил денис дмитрий евгений егор иван игорь илья кирилл константин лев леонид максим марк матвей михаил никита николай олег павел пётр роман руслан семён семен сергей станислав степан тимофей тимур фёдор федор юрий ярослав алёна алена александра алина алиса алла анастасия анна валентина валерия варвара вера вероника виктория галина дарья диана ева евгения екатерина елена елизавета жанна зоя инна ирина карина кристина ксения лариса лидия любовь людмила маргарита марина мария надежда наталья наталия нина оксана олеся ольга полина раиса светлана софия софья тамара татьяна ульяна юлия яна".split()
-)
+_NAMES = {
+    "иван", "петр", "пётр", "александр", "алексей", "андрей", "антон", "артём", "артем", "артур", "борис", "вадим",
+    "валентин", "валерий", "василий", "виктор", "виталий", "владимир", "владислав", "вячеслав", "геннадий",
+    "георгий", "глеб", "григорий", "даниил", "данил", "денис", "дмитрий", "евгений", "егор", "игорь", "илья",
+    "кирилл", "константин", "лев", "леонид", "максим", "марк", "матвей", "михаил", "никита", "николай", "олег",
+    "павел", "роман", "руслан", "семён", "семен", "сергей", "станислав", "степан", "тимофей", "тимур", "фёдор",
+    "федор", "юрий", "ярослав", "алёна", "алена", "александра", "алина", "алиса", "алла", "анастасия", "анна",
+    "валентина", "валерия", "варвара", "вера", "вероника", "виктория", "галина", "дарья", "диана", "ева",
+    "евгения", "екатерина", "елена", "елизавета", "жанна", "зоя", "инна", "ирина", "карина", "кристина", "ксения",
+    "лариса", "лидия", "любовь", "людмила", "маргарита", "марина", "мария", "надежда", "наталья", "наталия",
+    "нина", "оксана", "олеся", "ольга", "полина", "раиса", "светлана", "софия", "софья", "тамара", "татьяна",
+    "ульяна", "юлия", "яна",
+}
 _NAME_STEMS = tuple(sorted({x[:-1] if x[-1] in "аьяй" else x for x in _NAMES}, key=len, reverse=True))
 _NAME_FORMS = _NAMES | {
     stem + ending for stem in _NAME_STEMS for ending in ("а", "у", "ом", "е", "ой", "ы", "и", "ю", "я")
 }
 _NAME_STOP = {
-    "клиент",
-    "клиентка",
-    "фио",
-    "сотрудник",
-    "заёмщик",
-    "заемщик",
-    "пациент",
-    "получатель",
-    "поэт",
-    "писатель",
-    "зовут",
-    "это",
-    "и",
-    "господин",
-    "госпожа",
-    "уважаемый",
-    "уважаемая",
+    "клиент", "клиентка", "фио", "сотрудник", "заёмщик", "заемщик", "пациент", "получатель", "поэт", "писатель",
+    "зовут", "это", "и", "господин", "госпожа", "уважаемый", "уважаемая",
 }
 _SURNAME = _rx(
     r"(?:ов|ев|ёв|ин|ын|ский|ская|цкий|цкая|енко|ко|их|ых|ович|евич|ян|дзе|швили)(?:а|у|ым|ым|ом|е|ой|ую|ого|ому)?$"
 )
 _RARE_SURNAMES = {
     stem + ending
-    for stem in "ким цой мороз волк лебедь заяц журавль шмидт гоголь блок даль дюма толстых белых чёрных черных".split()
+    for stem in ["ким", "цой", "мороз", "волк", "лебедь", "заяц", "журавль", "шмидт", "гоголь", "блок", "даль", "дюма", "толстых", "белых", "чёрных", "черных"]
     for ending in ("", "а", "у", "ом", "е")
 }
 _NAME_TRIPLE = _rx(rf"(?<![\w-])(?P<value>{_NAMEWORD}[ \t]+{_NAMEWORD}[ \t]+{_PATR})(?![\w-])")
@@ -165,9 +161,9 @@ _AFTER_BIRTH = _rx(rf"(?<!\d)(?P<value>{_DATE})(?:\s*г(?:ода|\.)?)?\s+(?:р�
 _PASS_DATE = _rx(
     rf"\b(?:дата[ \t]+выдачи(?:[ \t]+паспорта)?|паспорт[ \t]+выдан|выдан(?:а|о)?){_SEP}(?P<value>{_DATE})(?!\d)"
 )
-_PASS_DATE_LATE = _rx(rf"\bвыдан(?:а|о)?\s+(?:[^\n;:]{{0,130}}?)[, \t]+(?P<value>{_DATE})(?!\d)")
+_PASS_DATE_LATE = _rx(rf"\bвыдан(?:ный|ная|ное|ные|ного|а|о)?\s+(?:[^\n;:]{{0,130}}?)[, \t]+(?P<value>{_DATE})(?!\d)")
 _FIELD_END = r"(?=\s*(?:[,;\n]|$|\b(?:паспорт|телефон|email|e-mail|инн|код подразделения|дата выдачи|дата рождения|гражданство|адрес|родился|родилась|снилс|карта|фио)\b))"
-_BIRTH_PLACE = _rx(rf"\b(?:место рождения|родил(?:ся|ась)\s+в){_SEP}(?P<value>[^;\n]{{2,140}}?){_FIELD_END}")
+_BIRTH_PLACE = _rx(rf"\b(?:место рождения|родил(?:ся|ась)\s+в\b){_SEP}(?P<value>[^;\n]{{2,140}}?){_FIELD_END}")
 _CITIZENSHIP = _rx(
     rf"\b(?:гражданство|гражданин|гражданка){_SEP}(?P<value>(?:российск(?:ая\s+федерация|ое)|росси[яию]|рф|ссср|сша|беларус[ьи]|республик[аи]\s+{_WORD}|казахстан[а]?|украин[аы]|узбекистан[а]?|таджикистан[а]?|кыргызстан[а]?|киргизи[яи]|армении|германии|израиля|турции|франции))(?!\w)"
 )
@@ -205,21 +201,21 @@ _PUBLIC_INN_OWNER = _rx(
 )
 _PRIVATE_INN_OWNER = _rx(r"\b(?:клиент[а-я]*|сотрудник[а-я]*|физлиц[а-я]*|физическ[а-я]*|за[её]мщик[а-я]*|ип)\b")
 _INN_LABEL = _rx(
-    rf"\bинн(?:[ \t]+(?:физлица|физического[ \t]+лица|клиента|сотрудника|за[её]мщика|ип|банка|компании|организации|юрлица|юридического[ \t]+лица))?(?:[ \t]+банка)?{_SEP}(?P<value>\d{{12}}|\d{{10}})(?!\d)"
+    rf"\bинн(?:[ \t]+(?:физлица|физического[ \t]+лица|клиента|сотрудника|за[её]мщика|поручителя|ип|банка|компании|организации|юрлица|юридического[ \t]+лица))?(?:[ \t]+банка)?{_SEP}(?P<value>\d{{4}}[ \t]+\d{{4}}[ \t]+\d{{4}}|\d{{12}}|\d{{10}})(?!\d)"
 )
 _INN_BARE = _rx(r"(?<![\w\d])(?P<value>\d{12}|\d{10})(?![\w\d])")
 _CARD_LABEL = _rx(
     rf"\b(?:номер(?:[ \t]+банковской)?[ \t]+карты|банковская карта|карта|card|pan){_SEP}(?P<value>\d(?:[ \t-]*\d){{12,18}})(?!\d)"
 )
 _CARD_BARE = _rx(r"(?<![\w\d])(?P<value>[2-6]\d{2,3}(?:[ \t-]?\d){9,15})(?![\w\d])")
+_CARD_SUFFIX = _rx(
+    rf"\bпоследние[ \t]+(?:4|четыре)[ \t]+цифры[ \t]+(?:номера[ \t]+)?"
+    rf"(?:банковской[ \t]+)?карты{_SEP}(?P<value>[0-9]{{4}})(?!\w)"
+)
 _CVV = _rx(
     rf"\b(?:cvv2?|cvc2?|cid|сvv|сvv2|сvc|си[ -]?ви[ -]?ви|cvv[ -]код|код безопасности)(?:[ -]*(?:код|карты))?{_SEP}(?P<value>\d{{3,4}})(?!\d)"
 )
 _PIN = _rx(rf"\b(?:пин|pin)(?:[ -]*код)?(?:[ \t]+карты)?{_SEP}(?P<value>\d{{4,6}})(?!\d)")
-_CARDHOLDER = _rx(
-    rf"\b(?:имя держателя(?:[ \t]+карты)?|держатель(?:[ \t]+карты)?|cardholder|card holder|name on card){_SEP}(?P<value>[а-яёa-z][а-яёa-z'-]{{1,39}}(?:[ \t]+[а-яёa-z][а-яёa-z'-]{{1,39}}){{1,2}})(?!\w)"
-)
-
 # Regional identifiers are recognized from explicit field labels, never merely
 # from length. These are privacy recognizers, not government validity checks.
 # Country-specific formats and official references are documented in docs/cis.md.
@@ -293,8 +289,11 @@ _ADDRESS = _rx(
 _COUNTRY = _rx(
     rf"\bстрана(?:[ \t]+проживания)?{_SEP}(?P<value>{_WORD}(?:[ \t]+{_WORD}){{0,2}}?)(?=\s*(?:[,;.\n!?]|$|\b(?:город|индекс|адрес)\b))"
 )
-_POSTAL = _rx(rf"\b(?:индекс|почтовый индекс){_SEP}(?P<value>\d{{6}})(?!\d)")
-_CITY = _rx(rf"(?<!\w)(?:город|г[.]){_SEP}(?P<value>{_WORD}(?:[-]{_WORD})?)(?!\w)")
+_POSTAL = _rx(rf"\bиндекс(?:а|у|ом|е)?{_SEP}(?P<value>\d{{6}})(?!\d)")
+_CITY = _rx(
+    rf"(?<!\w)(?:город(?:[ \t]+(?:проживания|рождения|регистрации))?|г[.](?![ \t]*о[.]))"
+    rf"{_SEP}(?P<value>{_WORD}(?:[-]{_WORD})?)(?!\w)"
+)
 _STREET = _rx(
     rf"(?<!\w)(?:улица|ул[.]|проспект|пр-т|переулок|пер[.]|бульвар|бул[.]|набережная|наб[.]|шоссе){_SEP}(?P<value>(?:\d{{1,3}}[- ]?)?{_WORD}(?:[ \t]+{_WORD}){{0,2}}?)(?=\s*(?:[,;.\n!?]|$|\b(?:дом|д[.]|кв[.]|квартира|корпус|корп[.])|\d))"
 )
@@ -316,8 +315,8 @@ _ADDR_NAME_WORD = (
 _ADDR_NAME = rf"(?:[0-9]{{1,4}}(?:-(?:я|й|ая|ый))?[ \t]+)?{_ADDR_NAME_WORD}(?:[ \t]+{_ADDR_NAME_WORD}){{0,3}}"
 _ADDR_HOUSE_NUMBER = r"[0-9]{1,4}(?:[/\-][0-9]{1,4})?[а-яёa-z]?(?:[кk][0-9]{1,3})?(?!\w)"
 _ADDR_STREET_HEAD = _rx(
-    r"(?<!\w)(?:улица|ул|проспект|просп|пр-т|переулок|пер|шоссе|набережная|наб|"
-    r"бульвар|бул|б-р|проезд|аллея|площадь|пл)(?!\w)[.]?[ \t]*"
+    r"(?<!\w)(?:улица|ул|проспект|просп|пр-т|пр-кт|переулок|пер|шоссе|набережная|наб|"
+    r"бульвар|бул|б-р|проезд|аллея|площадь|пл|микрорайон|мкр)(?!\w)[.]?[ \t]*"
 )
 _ADDR_STREET_HOUSE = _rx(
     rf"{_ADDR_NAME}{_ADDR_JOIN}(?P<label>(?:дом|д)(?!\w)[.]?[ \t]*)?"
@@ -328,10 +327,15 @@ _ADDR_EXTRA = _rx(
     rf"[.]?[ \t]*(?:№[ \t]*)?(?:{_ADDR_HOUSE_NUMBER}|[а-яёa-z](?!\w))"
 )
 _ADDR_LOCALITY = (
-    rf"(?:город|г|пос[её]лок|пос|село|деревня|дер)(?!\w)[.]?[ \t]*"
+    rf"(?:город|г|пос[её]лок|пос|пгт|село|с|деревня|дер|д)(?!\w)[.]?[ \t]*"
+    rf"(?:им[.][ \t]*)?"
     rf"{_ADDR_NAME_WORD}(?:[ \t]+{_ADDR_NAME_WORD}){{0,1}}"
 )
 _ADDR_LOCALITY_PREFIX = _rx(rf"(?<!\w)(?:[0-9]{{5,6}}{_ADDR_JOIN})?{_ADDR_LOCALITY}{_ADDR_JOIN}$")
+_ADDR_REGION_PREFIX = _rx(
+    rf"(?<!\w)(?:{_ADDR_NAME_WORD}[ \t]+(?:область|обл[.]|край|район|р-н|г[.]о[.]|с[.]п[.])"
+    rf"|республика[ \t]+{_ADDR_NAME}){_ADDR_JOIN}$"
+)
 _ADDR_POSTAL_PREFIX = _rx(
     rf"(?<!\w)[0-9]{{5,6}}{_ADDR_JOIN}(?:{_ADDR_NAME_WORD}(?:[ \t]+{_ADDR_NAME_WORD})?{_ADDR_JOIN})?$"
 )
@@ -345,6 +349,7 @@ _CONTEXT_BREAK = _rx(r"[!?]|\n[ \t]*\n|\.(?=[ \t\r\n]|$)")
 _CONTEXT_ABBREVIATION = _rx(r"\b(?:г|гор|ул|д|кв|корп|стр|обл|р-н|им|пос|тел|гг)\.$")
 _DOCUMENT_OWNER = _rx(
     r"(?P<passport>\bпаспорт(?:а|у|ом|е)?\b)|"
+    r"(?P<license>(?<!\w)(?:в[ /]?у|водительск[а-яё]*[ \t]+удостоверени[а-яё]*)(?!\w))|"
     r"(?P<other>\b(?:(?:талон|товар|чек|сертификат|заказ|билет|пропуск)(?:а|у|ом|е)?|"
     r"накладн(?:ая|ую|ой|ые|ых)|справк(?:а|у|и|е|ой))\b)"
 )
@@ -382,7 +387,12 @@ def _has_passport_context(text: str, start: int) -> bool:
         # An explicit other owner beats an unqualified "дата выдачи";
         # "дата выдачи паспорта" contains the later, more specific owner.
         return owners[-1].lastgroup == "passport"
-    return bool(_ISSUE_DATE_FIELD.search(prefix))
+    if not _ISSUE_DATE_FIELD.search(prefix):
+        return False
+    # A following date field can continue a driver's licence record across a
+    # sentence, but must not acquire the PASSPORT_DATE type by default.
+    earlier = list(_DOCUMENT_OWNER.finditer(text[max(0, start - 180):start]))
+    return not earlier or earlier[-1].lastgroup != "license"
 
 
 def _is_nonpersonal_number_field(text: str, start: int) -> bool:
@@ -568,7 +578,13 @@ def _resolve_address_start(text: str, start: int) -> int:
             not (possible_start and (text[possible_start - 1].isalnum() or text[possible_start - 1] == "_"))
             and not _is_nonpersonal_number_field(text, possible_start)
         ):
-            return possible_start
+            start = possible_start
+    for _ in range(3):
+        region_start = max(0, start - 140)
+        region = _ADDR_REGION_PREFIX.search(text[region_start:start])
+        if region is None:
+            break
+        start = region_start + region.start()
     return start
 
 
@@ -675,10 +691,9 @@ def _trim_ner_person_role(
     No given-name dictionary or capitalization requirement limits that name.
     """
     role = _NER_CLIENT_ROLE.match(text, span.start)
-    if role is None or role.end() > span.end:
-        return span
     covering = bisect_right(person_starts, span.start) - 1
-    if covering >= 0 and person_cover_ends[covering] > span.start:
+    if (role is None or role.end() > span.end
+            or (covering >= 0 and person_cover_ends[covering] > span.start)):
         return span
     # Preserve dotted/quoted fields and a value on the immediately next line.
     # Only name words can follow the opening quote; a completed value, later
@@ -833,25 +848,26 @@ def validate_extra_rule(rule: dict) -> None:
     _custom_pattern(rule["pattern"])
 
 
-def _add_candidate(
-    candidates: list[Span], text: str, pattern: re.Pattern, kind: str,
-    reason: str = "context", confidence: float = 0.98, check=None,
-) -> None:
-    for match in pattern.finditer(text):
-        start, end = match.span("value")
-        if kind == "PERSON" and reason == "personal-record-context":
-            words = list(re.finditer(_NAMEWORD, text[start:end], _FLAGS))
-            if len(words) == 3 and not any(re.fullmatch(_PATR, word.group(), _FLAGS) for word in words[1:]):
-                end = start + words[1].end()
-        while end > start and text[end - 1] in " \t,":
-            end -= 1
-        if kind in {"ADDRESS", "BIRTH_PLACE", "PASSPORT_ISSUER"}:
-            while end > start and text[end - 1] in ".!?":
-                end -= 1
-        value = text[start:end]
-        if value and (check is None or check(value, start, end)):
-            candidates.append(Span(start, end, kind, confidence, reason))
+@dataclass(slots=True)
+class _CandidateCollector:
+    text: str
+    candidates: list[Span]
 
+    def add(self, pattern: re.Pattern, kind: str, reason: str = "context", confidence: float = 0.98, check=None) -> None:
+        for match in pattern.finditer(self.text):
+            start, end = match.span("value")
+            if kind == "PERSON" and reason == "personal-record-context":
+                words = list(re.finditer(_NAMEWORD, self.text[start:end], _FLAGS))
+                if len(words) == 3 and not any(re.fullmatch(_PATR, word.group(), _FLAGS) for word in words[1:]):
+                    end = start + words[1].end()
+            while end > start and self.text[end - 1] in " \t,":
+                end -= 1
+            if kind in {"ADDRESS", "BIRTH_PLACE", "PASSPORT_ISSUER"}:
+                while end > start and self.text[end - 1] in ".!?":
+                    end -= 1
+            value = self.text[start:end]
+            if value and (check is None or check(value, start, end)):
+                self.candidates.append(Span(start, end, kind, confidence, reason))
 
 def _detect_contacts(text: str, lower: str, add) -> None:
     if "@" in text:
@@ -863,7 +879,7 @@ def _detect_contacts(text: str, lower: str, add) -> None:
 
 def _detect_documents(text: str, lower: str, add) -> None:
     if PASSPORT_WORD in lower or "серия" in lower:
-        add(_PASSPORT, "PASSPORT")
+        add(_PASSPORT, "PASSPORT", check=lambda _, s, e: document_kind_at_value(text, s) == "PASSPORT")
         add(_PASS_SERIES, "PASSPORT")
     if any(label in lower for label in ("удостоверен", "в/у", "в у", "права")):
         add(_LICENSE, "DRIVER_LICENSE")
@@ -885,6 +901,7 @@ def _detect_identifiers(text: str, lower: str, add) -> None:
         ),
     )
     add(_CARD_LABEL, "CARD", "explicit-card-context", 0.98)
+    add(_CARD_SUFFIX, "CARD", "explicit-card-suffix", 0.98)
     add(
         _CARD_BARE,
         "CARD",
@@ -971,7 +988,7 @@ def _detect_birth_place(text: str, lower: str, add) -> None:
 
 
 def _detect_names(text: str, lower: str, add, candidates: list[Span]) -> None:
-    add(_CARDHOLDER, "CARDHOLDER")
+    candidates.extend(Span(*candidate) for candidate in cardholder_candidates(text, given_names=_NAME_FORMS))
     add(_STRONG_NAME_FIELD, "PERSON", "explicit-unicode-name-field")
     add(
         _NAME_TRIPLE,
@@ -1009,9 +1026,9 @@ def _detect_names(text: str, lower: str, add, candidates: list[Span]) -> None:
         if not 0 < b.start() - a.end() <= 3 or not text[a.end() : b.start()].isspace():
             continue
         av, bv = a.group(), b.group()
-        if (_given_name(av) and _surname(bv)) or (_surname(av) and _given_name(bv)):
-            if not _is_public_name(text, a.start(), b.end()):
-                candidates.append(Span(a.start(), b.end(), "PERSON", 0.92, "given-name-and-surname"))
+        if (((_given_name(av) and _surname(bv)) or (_surname(av) and _given_name(bv)))
+                and not _is_public_name(text, a.start(), b.end())):
+            candidates.append(Span(a.start(), b.end(), "PERSON", 0.92, "given-name-and-surname"))
 
 
 def _detect_addresses(text: str, lower: str, add, candidates: list[Span]) -> None:
@@ -1066,8 +1083,7 @@ def detect(text: str, *, extra_rules: list[dict] | None = None) -> list[Span]:
         return []
     candidates: list[Span] = []
 
-    def add(pattern: re.Pattern, kind: str, reason: str = "context", confidence: float = 0.98, check=None) -> None:
-        _add_candidate(candidates, text, pattern, kind, reason, confidence, check)
+    add = _CandidateCollector(text, candidates).add
 
     lower = text.lower()
     _detect_contacts(text, lower, add)

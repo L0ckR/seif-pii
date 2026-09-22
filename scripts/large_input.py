@@ -26,7 +26,8 @@ while len(encoder.encode(text)) < 100_000:
     text += NEUTRAL_SUFFIX
 while len(encoder.encode(text)) > 100_000:
     text = text.rsplit(NEUTRAL_SUFFIX, 1)[0]
-assert len(encoder.encode(text)) == 100_000
+if len(encoder.encode(text)) != 100_000:
+    raise RuntimeError("Synthetic request does not contain exactly 100000 tokens")
 payload_id = "large-" + uuid.uuid4().hex
 with httpx.Client(base_url=args.url, timeout=30, trust_env=False) as client:
     start = time.perf_counter()
@@ -43,7 +44,8 @@ with httpx.Client(base_url=args.url, timeout=30, trust_env=False) as client:
               "sensitive_span_masked": "long@example.invalid" not in masked,
               "exact_roundtrip": second.json()["result"] == text,
               "scope": "One synthetic document, isolated HTTP request, not 1000 RPS of large documents"}
-    assert result["sensitive_span_masked"] and result["exact_roundtrip"]
+    if not result["sensitive_span_masked"] or not result["exact_roundtrip"]:
+        raise RuntimeError("Large-input masking or exact restoration failed")
     args.output.parent.mkdir(exist_ok=True, parents=True)
     args.output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
     print(json.dumps(result, ensure_ascii=False, indent=2))

@@ -221,6 +221,19 @@ def latency_summary(values):
             "over_1000ms": sum(value > 1000 for value in ordered)}
 
 
+def _dispatch_pair(active, counters, finished, pair, limits):
+    expired, concurrency = limits
+    if expired:
+        counters["pairs_dropped_client_deadline"] += 1
+    elif len(active) >= concurrency:
+        counters["pairs_dropped_client_capacity"] += 1
+    else:
+        task = asyncio.create_task(pair())
+        active.add(task)
+        task.add_done_callback(finished)
+        counters["pairs_dispatched"] += 1
+
+
 async def schedule(config, pair, counters, on_offer):
     active = set()
     task_failed = False
@@ -245,15 +258,8 @@ async def schedule(config, pair, counters, on_offer):
             max_lag = max(max_lag, now - scheduled)
             counters["pairs_offered"] += 1
             assignment = on_offer(index)
-            if now >= started + config.duration:
-                counters["pairs_dropped_client_deadline"] += 1
-            elif len(active) >= config.concurrency:
-                counters["pairs_dropped_client_capacity"] += 1
-            else:
-                task = asyncio.create_task(pair(index, assignment))
-                active.add(task)
-                task.add_done_callback(finished)
-                counters["pairs_dispatched"] += 1
+            _dispatch_pair(active, counters, finished, lambda index=index, assignment=assignment: pair(index, assignment),
+                           (now >= started + config.duration, config.concurrency))
             if index % 32 == 31:
                 await asyncio.sleep(0)
         remaining = started + config.duration - time.perf_counter()
@@ -270,93 +276,102 @@ async def schedule(config, pair, counters, on_offer):
     return time.perf_counter() - started, max_lag * 1000
 
 
-async def run_with_requester(config, corpus, requester):
-    """Pure transport boundary makes scheduling and failure tests network-free."""
-    config.validate()
-    counters = Counter(dict.fromkeys((
-        "pairs_offered", "pairs_dispatched", "pairs_dropped_client_capacity", "pairs_dropped_client_deadline",
-        "pairs_verified", "pairs_mask_failed", "pairs_unmask_failed", "pairs_roundtrip_mismatch",
-        "pairs_mask_changed", "pairs_mask_unchanged", "requests_attempted", "requests_successful"), 0))
-    errors, statuses, visited = Counter(), Counter(), Counter()
-    latency = {phase: array("d") for phase in ("mask", "unmask")}
-    source = WeightedCycle(corpus.cases, config.seed)
-    sequence_hash, run_id = hashlib.sha256(), uuid.uuid4().hex
+class _CorpusRun:
+    def __init__(self, config, corpus, requester):
+        self.config, self.corpus, self.requester = config, corpus, requester
+        self.counters = Counter(dict.fromkeys((
+            "pairs_offered", "pairs_dispatched", "pairs_dropped_client_capacity", "pairs_dropped_client_deadline",
+            "pairs_verified", "pairs_mask_failed", "pairs_unmask_failed", "pairs_roundtrip_mismatch",
+            "pairs_mask_changed", "pairs_mask_unchanged", "requests_attempted", "requests_successful"), 0))
+        self.errors, self.statuses, self.visited = Counter(), Counter(), Counter()
+        self.latency = {phase: array("d") for phase in ("mask", "unmask")}
+        self.source = WeightedCycle(self.corpus.cases, self.config.seed)
+        self.sequence_hash, self.run_id = hashlib.sha256(), uuid.uuid4().hex
 
-    def on_offer(_index):
+    def on_offer(self, _index):
         # Advance before deciding whether to dispatch: overload cannot shift
         # later sampling, and coroutine start order cannot change assignments.
-        case_index = next(source)
-        sequence_hash.update(case_index.to_bytes(8, "big"))
+        case_index = next(self.source)
+        self.sequence_hash.update(case_index.to_bytes(8, "big"))
         return case_index
 
-    async def request(payload, correlation, phase):
-        counters["requests_attempted"] += 1
+    async def request(self, payload, correlation, phase):
+        self.counters["requests_attempted"] += 1
         started = time.perf_counter()
         try:
             try:
-                outcome = await requester(payload, correlation)
+                outcome = await self.requester(payload, correlation)
             except Exception:
                 outcome = Outcome(error="request_failed")
             if outcome.status is not None:
-                statuses[str(outcome.status)] += 1
+                self.statuses[str(outcome.status)] += 1
             if outcome.error:
-                errors[outcome.error] += 1
+                self.errors[outcome.error] += 1
                 return None
             if outcome.status != 200 or not isinstance(outcome.result, str):
-                errors["invalid_contract"] += 1
+                self.errors["invalid_contract"] += 1
                 return None
-            counters["requests_successful"] += 1
+            self.counters["requests_successful"] += 1
             return outcome.result
         finally:
-            latency[phase].append((time.perf_counter() - started) * 1000)
+            self.latency[phase].append((time.perf_counter() - started) * 1000)
 
-    async def pair(index, case_index):
-        original = corpus.cases[case_index].payload
-        visited[case_index] += 1
-        correlation = f"corpus-{run_id}-{index}"
-        masked = await request(original, correlation, "mask")
+    async def pair(self, index, case_index):
+        original = self.corpus.cases[case_index].payload
+        self.visited[case_index] += 1
+        correlation = f"corpus-{self.run_id}-{index}"
+        masked = await self.request(original, correlation, "mask")
         if masked is None:
-            counters["pairs_mask_failed"] += 1
+            self.counters["pairs_mask_failed"] += 1
         else:
-            counters["pairs_mask_unchanged" if masked == original else "pairs_mask_changed"] += 1
-            restored = await request(masked, correlation, "unmask")
+            self.counters["pairs_mask_unchanged" if masked == original else "pairs_mask_changed"] += 1
+            restored = await self.request(masked, correlation, "unmask")
             if restored is None:
-                counters["pairs_unmask_failed"] += 1
+                self.counters["pairs_unmask_failed"] += 1
             elif restored != original:
-                counters["pairs_roundtrip_mismatch"] += 1
-                errors["roundtrip_mismatch"] += 1
+                self.counters["pairs_roundtrip_mismatch"] += 1
+                self.errors["roundtrip_mismatch"] += 1
             else:
-                counters["pairs_verified"] += 1
-    elapsed, lag = await schedule(config, pair, counters, on_offer)
-    counters["http_requests_offered"] = 2 * counters["pairs_offered"]
-    counters["http_requests_not_attempted"] = counters["http_requests_offered"] - counters["requests_attempted"]
-    all_latencies = latency["mask"] + latency["unmask"]
-    return {"schema_version": 1, "measurement": "completed",
-            "method": "open-loop correlation pairs; 2 offered HTTP requests/pair; no retries",
-            "transport": "aiohttp", "event_loop": type(asyncio.get_running_loop()).__module__,
-            "target_url": config.url, "corpus": corpus.summary(),
-            "sampling": {"algorithm": "weighted virtual cycles with seeded per-visit jitter v1",
-                         "seed": config.seed, "offered_sequence_sha256": sequence_hash.hexdigest(),
-                         "unique_cases_dispatched": len(visited),
-                         "min_visits_dispatched": min(visited.values()) if visited else 0,
-                         "max_visits_dispatched": max(visited.values()) if visited else 0},
-            "configured_duration_seconds": config.duration,
-            "observed_elapsed_seconds_including_drain": round(elapsed, 6),
-            "offered_http_rps": config.rps, "max_concurrent_pairs": config.concurrency,
-            "request_timeout_seconds": config.timeout, "max_response_bytes": config.max_response_bytes,
-            "achieved_attempted_http_rps": round(counters["requests_attempted"] / elapsed, 3),
-            "achieved_successful_http_rps": round(counters["requests_successful"] / elapsed, 3),
-            "counts": dict(counters), "http_statuses": dict(statuses), "errors": dict(errors),
-            "latency_ms_all_attempts": latency_summary(all_latencies),
-            "latency_ms_mask": latency_summary(latency["mask"]),
-            "latency_ms_unmask": latency_summary(latency["unmask"]),
-            "client_scheduler_max_lag_ms": round(lag, 3),
-            "all_offered_pairs_verified": counters["pairs_verified"] == config.offered_pairs,
-            "limitations": ["Throughput includes draining requests after the scheduling window.",
-                            "Pair arrival times are open-loop; the second request follows its first response.",
-                            "A failed mask skips its unmask; client drops and unsent second requests remain counted.",
-                            "Roundtrip equality is not a PII recall measurement; annotation is evaluated separately.",
-                            "No original text, case identifier, request identifier or token is retained in this report."]}
+                self.counters["pairs_verified"] += 1
+
+    def report(self, elapsed, lag):
+        self.counters["http_requests_offered"] = 2 * self.counters["pairs_offered"]
+        self.counters["http_requests_not_attempted"] = self.counters["http_requests_offered"] - self.counters["requests_attempted"]
+        all_latencies = self.latency["mask"] + self.latency["unmask"]
+        return {"schema_version": 1, "measurement": "completed",
+                "method": "open-loop correlation pairs; 2 offered HTTP requests/pair; no retries",
+                "transport": "aiohttp", "event_loop": type(asyncio.get_running_loop()).__module__,
+                "target_url": self.config.url, "corpus": self.corpus.summary(),
+                "sampling": {"algorithm": "weighted virtual cycles with seeded per-visit jitter v1",
+                             "seed": self.config.seed, "offered_sequence_sha256": self.sequence_hash.hexdigest(),
+                             "unique_cases_dispatched": len(self.visited),
+                             "min_visits_dispatched": min(self.visited.values()) if self.visited else 0,
+                             "max_visits_dispatched": max(self.visited.values()) if self.visited else 0},
+                "configured_duration_seconds": self.config.duration,
+                "observed_elapsed_seconds_including_drain": round(elapsed, 6),
+                "offered_http_rps": self.config.rps, "max_concurrent_pairs": self.config.concurrency,
+                "request_timeout_seconds": self.config.timeout, "max_response_bytes": self.config.max_response_bytes,
+                "achieved_attempted_http_rps": round(self.counters["requests_attempted"] / elapsed, 3),
+                "achieved_successful_http_rps": round(self.counters["requests_successful"] / elapsed, 3),
+                "counts": dict(self.counters), "http_statuses": dict(self.statuses), "errors": dict(self.errors),
+                "latency_ms_all_attempts": latency_summary(all_latencies),
+                "latency_ms_mask": latency_summary(self.latency["mask"]),
+                "latency_ms_unmask": latency_summary(self.latency["unmask"]),
+                "client_scheduler_max_lag_ms": round(lag, 3),
+                "all_offered_pairs_verified": self.counters["pairs_verified"] == self.config.offered_pairs,
+                "limitations": ["Throughput includes draining requests after the scheduling window.",
+                                "Pair arrival times are open-loop; the second request follows its first response.",
+                                "A failed mask skips its unmask; client drops and unsent second requests remain counted.",
+                                "Roundtrip equality is not a PII recall measurement; annotation is evaluated separately.",
+                                "No original text, case identifier, request identifier or token is retained in this report."]}
+
+
+async def run_with_requester(config, corpus, requester):
+    """Pure transport boundary makes scheduling and failure tests network-free."""
+    config.validate()
+    run = _CorpusRun(config, corpus, requester)
+    elapsed, lag = await schedule(config, run.pair, run.counters, run.on_offer)
+    return run.report(elapsed, lag)
 
 
 async def benchmark(config, corpus):

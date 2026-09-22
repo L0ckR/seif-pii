@@ -1,0 +1,42 @@
+{
+  "all_input_hashes_equal": true,
+  "all_scope_id_hashes_equal": true,
+  "mappings_equal_between_versions": true,
+  "exact_previous_protocol_exclusions_retained": true,
+  "source_snapshots_match_git_revisions": true,
+  "before_checks": {
+    "source_and_inputs_immutable": true,
+    "cached_gold_matches_csv": true,
+    "frozen_protocol_exclusions_unchanged": true,
+    "historical_common5_ids_unchanged": true,
+    "network_disabled": true,
+    "live_ner_inference": false,
+    "cached_ner_score": 0.85,
+    "cached_ner_scores_reconstructed": true
+  },
+  "after_checks": {
+    "source_and_inputs_immutable": true,
+    "cached_gold_matches_csv": true,
+    "frozen_protocol_exclusions_unchanged": true,
+    "historical_common5_ids_unchanged": true,
+    "network_disabled": true,
+    "live_ner_inference": false,
+    "cached_ner_score": 0.85,
+    "cached_ner_scores_reconstructed": true
+  },
+  "runtime_python_before": "3.13.7",
+  "runtime_python_after": "3.13.7",
+  "no_production_changes": true,
+  "no_source_tuning": true,
+  "no_error_text_inspection": true,
+  "artifact_sha256": {
+    "runner.py": "c32273625c79c06983fae5c614cd56ec4a4ed9f0851c4a088125be0f332f1e99",
+    "aggregate.py": "4b4034b3f3b4d2a36453448a316d5358f870fa528adca382c4cd74594e994ae3",
+    "baseline.json": "f33847d02abb6522939c2564609c18549338ed579912bac2c4cdcafd1baab9f5",
+    "current.json": "d6e67a59451dbba6ad0b701a6f63aa1183f23909550947a7b6de35cdb5a9c781",
+    "report.json": "00b8b51ecf964507bd8c5504d6a3205684b912f65a252ad83e88083dbaca34a5"
+  },
+  "compressed_count_reports_roundtrip_exact": true,
+  "no_raw_text_or_error_text_fields": true,
+  "isolated_aggregate_replay_reproduces_report_except_timestamp": true
+}

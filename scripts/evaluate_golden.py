@@ -90,9 +90,10 @@ def compare_quality(current: dict, baseline: dict) -> list[str]:
             raise ValueError("Missing baseline profile")
         actual = current["profiles"][profile]
         for group in ("unique_case_primary", "certain_cases_sensitivity"):
-            for metric in ("precision", "recall", "f1"):
-                if actual[group]["character_metrics"][metric] + 1e-6 < reference[group]["character_metrics"][metric]:
-                    failures.append(f"{profile}.{group}.{metric}")
+            failures.extend(
+                f"{profile}.{group}.{metric}" for metric in ("precision", "recall", "f1")
+                if actual[group]["character_metrics"][metric] + 1e-6 < reference[group]["character_metrics"][metric]
+            )
         if actual["unique_case_primary"]["false_positive_negative_cases"] > reference["unique_case_primary"]["false_positive_negative_cases"]:
             failures.append(f"{profile}.false_positive_negative_cases")
     return failures

@@ -11,9 +11,9 @@ import httpx
 
 from .detector import Span
 
-
 NER_UNAVAILABLE = "NER is unavailable"
 INVALID_NER_RESPONSE = "Invalid NER response"
+NER_INCOMPLETE = "NER did not complete protection"
 
 
 class NerUnavailable(RuntimeError):
@@ -53,6 +53,30 @@ def chunks(text: str, size: int = 16000, overlap: int = 256):
         start = end - overlap
 
 
+async def _response_json(response, limit: int, error_message: str):
+    content = bytearray()
+    async for part in response.aiter_bytes():
+        if len(content) + len(part) > limit:
+            raise NerUnavailable(error_message)
+        content.extend(part)
+    return json.loads(content)
+
+
+def _entity_values(item: dict, text_length: int) -> tuple[int, int, float, str]:
+    if not isinstance(item, dict) or set(item) != {"start", "end", "score", "entity_type"}:
+        raise NerUnavailable(INVALID_NER_RESPONSE)
+    start, end, score = item["start"], item["end"], item["score"]
+    kind = item["entity_type"]
+    if (
+        kind not in ("PERSON", "LOCATION")
+        or type(start) is not int or type(end) is not int
+        or not 0 <= start < end <= text_length or end - start > 200
+        or type(score) not in (int, float) or not math.isfinite(score) or not 0 <= score <= 1
+    ):
+        raise NerUnavailable(INVALID_NER_RESPONSE)
+    return start, end, score, kind
+
+
 class NerClient:
     def __init__(self, url: str, token: str, timeout: float = 20.0, *, transport=None):
         validate_ner_settings(url, token, timeout)
@@ -78,12 +102,8 @@ class NerClient:
                 async with self.client.stream("GET", "health", timeout=2.0) as response:
                     if response.status_code != 200:
                         raise NerUnavailable(NER_UNAVAILABLE)
-                    content = bytearray()
-                    async for part in response.aiter_bytes():
-                        if len(content) + len(part) > 4096:
-                            raise NerUnavailable(NER_UNAVAILABLE)
-                        content.extend(part)
-                    if json.loads(content).get("status") != "ok":
+                    body = await _response_json(response, 4096, NER_UNAVAILABLE)
+                    if body.get("status") != "ok":
                         raise NerUnavailable(NER_UNAVAILABLE)
         except (httpx.HTTPError, TimeoutError, ValueError, TypeError, AttributeError, RecursionError):
             raise NerUnavailable(NER_UNAVAILABLE) from None
@@ -94,19 +114,14 @@ class NerClient:
                 if response.status_code == 429 and attempt < 3:
                     retry = True
                 elif response.status_code != 200:
-                    raise NerUnavailable("NER did not complete protection")
+                    raise NerUnavailable(NER_INCOMPLETE)
                 else:
                     retry = False
-                    content = bytearray()
-                    async for part in response.aiter_bytes():
-                        if len(content) + len(part) > 262144:
-                            raise NerUnavailable(INVALID_NER_RESPONSE)
-                        content.extend(part)
-                    body = json.loads(content)
+                    body = await _response_json(response, 262144, INVALID_NER_RESPONSE)
             if not retry:
                 return body
             await asyncio.sleep(0.005 * (2**attempt))
-        raise NerUnavailable("NER did not complete protection")
+        raise NerUnavailable(NER_INCOMPLETE)
 
     def _parse_entities(self, body: dict, text: str, offset: int, total_length: int) -> list[Span]:
         if not isinstance(body, dict) or set(body) != {"entities"}:
@@ -116,17 +131,7 @@ class NerClient:
             raise NerUnavailable(INVALID_NER_RESPONSE)
         result = []
         for item in entities:
-            if not isinstance(item, dict) or set(item) != {"start", "end", "score", "entity_type"}:
-                raise NerUnavailable(INVALID_NER_RESPONSE)
-            start, end, score = item["start"], item["end"], item["score"]
-            kind = item["entity_type"]
-            if (
-                kind not in ("PERSON", "LOCATION")
-                or type(start) is not int or type(end) is not int
-                or not 0 <= start < end <= len(text) or end - start > 200
-                or type(score) not in (int, float) or not math.isfinite(score) or not 0 <= score <= 1
-            ):
-                raise NerUnavailable(INVALID_NER_RESPONSE)
+            start, end, score, kind = _entity_values(item, len(text))
             # Do not accept a name visibly clipped by an artificial chunk edge.
             # The overlapping neighbouring chunk contains the complete name.
             if (offset and start == 0) or (offset + len(text) < total_length and end == len(text)):
@@ -139,30 +144,30 @@ class NerClient:
             body = await self._analyze_chunk(text)
             return self._parse_entities(body, text, offset, total_length)
 
+    async def _detect_batch(self, pending: list[tuple[int, str]], total_length: int) -> list[Span]:
+        if len(pending) == 1:
+            offset, part = pending[0]
+            return await self._chunk(offset, part, total_length)
+        # TaskGroup cancels sibling chunks on failure; no model requests may
+        # outlive a failed protection operation.
+        async with asyncio.TaskGroup() as group:
+            jobs = [group.create_task(self._chunk(offset, part, total_length)) for offset, part in pending]
+        return [span for job in jobs for span in job.result()]
+
     async def detect(self, text: str) -> list[Span]:
         result = []
         pending = []
         try:
             # Includes waiting for capacity, all chunks and bounded 429 retries.
-            # asyncio.timeout entry/exit and each TaskGroup exit provide
-            # cancellation checkpoints, so no explicit sleep(0) is needed.
             async with asyncio.timeout(self.timeout):
                 for offset, part in chunks(text):
                     pending.append((offset, part))
                     if len(pending) == 4:
-                        # TaskGroup cancels remaining work on error instead of
-                        # letting background tasks outlive the failed request.
-                        async with asyncio.TaskGroup() as group:
-                            jobs = [group.create_task(self._chunk(o, p, len(text))) for o, p in pending]
-                        for job in jobs:
-                            result.extend(job.result())
+                        result.extend(await self._detect_batch(pending, len(text)))
                         pending.clear()
                 if pending:
-                    async with asyncio.TaskGroup() as group:
-                        jobs = [group.create_task(self._chunk(o, p, len(text))) for o, p in pending]
-                    for job in jobs:
-                        result.extend(job.result())
+                    result.extend(await self._detect_batch(pending, len(text)))
         except Exception:
             # Do not propagate HTTP URLs, response bodies or model exceptions.
-            raise NerUnavailable("NER did not complete protection") from None
+            raise NerUnavailable(NER_INCOMPLETE) from None
         return result

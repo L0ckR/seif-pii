@@ -36,15 +36,19 @@ def source_files(root: Path):
         directory = root / name
         if directory.is_symlink() or not directory.is_dir():
             continue
-        for current, directories, files in os.walk(directory, followlinks=False):
-            directories[:] = sorted(child for child in directories
-                                    if child not in EXCLUDED and not (Path(current) / child).is_symlink())
-            for filename in sorted(files):
-                path = Path(current) / filename
-                if (path.is_symlink() or not path.is_file() or path.suffix not in suffixes
-                        or filename.startswith(".env")):
-                    continue
-                yield path
+        yield from _directory_sources(directory, suffixes)
+
+
+def _directory_sources(directory, suffixes):
+    for current, directories, files in os.walk(directory, followlinks=False):
+        directories[:] = sorted(child for child in directories
+                                if child not in EXCLUDED and not (Path(current) / child).is_symlink())
+        for filename in sorted(files):
+            path = Path(current) / filename
+            if (path.is_symlink() or not path.is_file() or path.suffix not in suffixes
+                    or filename.startswith(".env")):
+                continue
+            yield path
 
 
 def build_archive(root: Path, target: Path) -> Path:

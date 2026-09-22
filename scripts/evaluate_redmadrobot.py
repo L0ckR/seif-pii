@@ -73,6 +73,10 @@ def parse_bio(row):
         return None, "invalid_token_json"
     if not isinstance(tokens, list) or not isinstance(labels, list) or len(tokens) != len(labels):
         return None, "token_label_length_mismatch"
+    return _align_bio(row["text"], tokens, labels)
+
+
+def _align_bio(text, tokens, labels):
     cursor, previous, spans = 0, "O", []
     for token, label in zip(tokens, labels, strict=True):
         # An empty O token marks no characters/entities; preserve its BIO
@@ -82,22 +86,19 @@ def parse_bio(row):
             continue
         if not isinstance(token, str) or not token or not isinstance(label, str):
             return None, "invalid_token_or_label"
-        start = row["text"].find(token, cursor)
-        if start < 0 or row["text"][cursor:start].strip():
+        start = text.find(token, cursor)
+        if start < 0 or text[cursor:start].strip():
             return None, "token_not_exactly_alignable"
         end = start + len(token)
-        if label == "O":
-            # Outside tokens produce no span.
-            pass
-        elif label.startswith("B-") and label[2:] in ALL_FINE:
+        if label.startswith("B-") and label[2:] in ALL_FINE:
             spans.append((label[2:], start, end))
         elif label.startswith("I-") and label[2:] in ALL_FINE and previous in {"B-" + label[2:], label}:
             kind, begin, _ = spans[-1]
             spans[-1] = (kind, begin, end)
-        else:
+        elif label != "O":
             return None, "invalid_bio_transition"
         previous, cursor = label, end
-    if row["text"][cursor:].strip():
+    if text[cursor:].strip():
         return None, "unaligned_text_suffix"
     return set(spans), None
 
@@ -126,17 +127,23 @@ def merge_adjacent(text, spans):
     """Same category + overlap or whitespace-only gap, identical for all sides."""
     merged = []
     for kind in sorted({span[0] for span in spans}):
-        current = None
-        for _, start, end in sorted(span for span in spans if span[0] == kind):
-            if current is not None and (start <= current[2] or not text[current[2]:start].strip()):
-                current = (kind, current[1], max(end, current[2]))
-            else:
-                if current is not None:
-                    merged.append(current)
-                current = (kind, start, end)
-        if current is not None:
-            merged.append(current)
+        merged.extend(_merge_kind(text, spans, kind))
     return set(merged)
+
+
+def _merge_kind(text, spans, kind):
+    merged = []
+    current = None
+    for _, start, end in sorted(span for span in spans if span[0] == kind):
+        if current is not None and (start <= current[2] or not text[current[2]:start].strip()):
+            current = (kind, current[1], max(end, current[2]))
+        else:
+            if current is not None:
+                merged.append(current)
+            current = (kind, start, end)
+    if current is not None:
+        merged.append(current)
+    return merged
 
 
 def score_scope(truth, predictions, allowed, whole_cases=True):
@@ -153,6 +160,35 @@ def score_scope(truth, predictions, allowed, whole_cases=True):
         results[system]["typed_character_primary"].pop("first_five_error_offsets", None)
     return {"case_ids": ids, "types": sorted(allowed), "systems": results,
             "selection": "whole cases: every gold type is allowed; all gold-empty rows retained" if whole_cases else "all aligned cases, filter only types (diagnostic)"}
+
+
+def _infer_rows(rows, analyzer, original_outputs):
+    from seif.detector import Span, detect, merge_person_candidates
+
+    truth, raw_truth = {}, {}
+    predictions = {key: {} for key in ("seif_fast", "presidio_ru", "seif_hybrid")}
+    raw_coarse = {key: {} for key in predictions}
+    with original_outputs.open("w", encoding="utf-8") as stream:
+        for row in rows:
+            key, text = row["id"], row["text"]
+            base = detect(text)
+            upstream = analyzer.analyze(text=text, language="ru", score_threshold=0.0)
+            candidates = [Span(item.start, item.end, "PERSON", item.score, "ner-person") for item in upstream if item.entity_type == "PERSON"]
+            hybrid = merge_person_candidates(text, base, candidates)
+            original = {
+                "seif_fast": {(item.type, item.start, item.end) for item in base},
+                "presidio_ru": {(item.entity_type, item.start, item.end) for item in upstream},
+                "seif_hybrid": {(item.type, item.start, item.end) for item in hybrid},
+            }
+            raw_truth[key] = coarsen(row["fine_gold"], GOLD_MAP, keep_unknown=True)
+            truth[key] = merge_adjacent(text, raw_truth[key])
+            for system, spans in original.items():
+                raw_coarse[system][key] = coarsen(spans, PRESIDIO_MAP if system == "presidio_ru" else SEIF_MAP)
+                predictions[system][key] = merge_adjacent(text, raw_coarse[system][key])
+            stream.write(json.dumps({"id": key, "fine_gold": sorted(row["fine_gold"]), "raw_coarse_gold": sorted(raw_truth[key]),
+                                     "merged_gold": sorted(truth[key]), "original_predictions": {name: sorted(spans) for name, spans in original.items()},
+                                     "merged_predictions": {name: sorted(values[key]) for name, values in predictions.items()}}, ensure_ascii=False) + "\n")
+    return truth, raw_truth, predictions, raw_coarse
 
 
 def main():
@@ -201,8 +237,6 @@ def main():
         return
     if (marker.exists() or args.output.exists()) and not args.repeat:
         parser.error("Prior inference/report exists; repeated runs require --repeat and are not a fresh holdout.")
-    from seif.detector import Span, detect, merge_person_candidates
-
     source_hash = sha((ROOT / "seif/detector.py").read_bytes())
     first = not marker.exists()
     if first:
@@ -210,30 +244,8 @@ def main():
             json.dump({"started_at_utc": datetime.now(timezone.utc).isoformat(), "detector_sha256": source_hash,
                        "protocol_sha256": sha(protocol_path.read_bytes())}, file)
     analyzer, configuration = build_presidio()
-    truth, raw_truth = {}, {}
-    predictions = {key: {} for key in ("seif_fast", "presidio_ru", "seif_hybrid")}
-    raw_coarse = {key: {} for key in predictions}
     original_outputs = args.data_dir / ("redmadrobot-predictions-first.jsonl" if first else "redmadrobot-predictions-repeat.jsonl")
-    with original_outputs.open("w", encoding="utf-8") as stream:
-        for row in rows:
-            key, text = row["id"], row["text"]
-            base = detect(text)
-            upstream = analyzer.analyze(text=text, language="ru", score_threshold=0.0)
-            candidates = [Span(item.start, item.end, "PERSON", item.score, "ner-person") for item in upstream if item.entity_type == "PERSON"]
-            hybrid = merge_person_candidates(text, base, candidates)
-            original = {
-                "seif_fast": {(item.type, item.start, item.end) for item in base},
-                "presidio_ru": {(item.entity_type, item.start, item.end) for item in upstream},
-                "seif_hybrid": {(item.type, item.start, item.end) for item in hybrid},
-            }
-            raw_truth[key] = coarsen(row["fine_gold"], GOLD_MAP, keep_unknown=True)
-            truth[key] = merge_adjacent(text, raw_truth[key])
-            for system, spans in original.items():
-                raw_coarse[system][key] = coarsen(spans, PRESIDIO_MAP if system == "presidio_ru" else SEIF_MAP)
-                predictions[system][key] = merge_adjacent(text, raw_coarse[system][key])
-            stream.write(json.dumps({"id": key, "fine_gold": sorted(row["fine_gold"]), "raw_coarse_gold": sorted(raw_truth[key]),
-                                     "merged_gold": sorted(truth[key]), "original_predictions": {name: sorted(spans) for name, spans in original.items()},
-                                     "merged_predictions": {name: sorted(values[key]) for name, values in predictions.items()}}, ensure_ascii=False) + "\n")
+    truth, raw_truth, predictions, raw_coarse = _infer_rows(rows, analyzer, original_outputs)
     if sha((ROOT / "seif/detector.py").read_bytes()) != source_hash:
         raise RuntimeError("Detector changed during inference; report not published.")
     primary = score_scope(truth, predictions, COMMON)

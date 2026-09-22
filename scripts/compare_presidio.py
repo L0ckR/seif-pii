@@ -141,7 +141,8 @@ def build_presidio():
                          "supported_entities": item.supported_entities, "context": item.context,
                          "phone_regions": list(getattr(item, "supported_regions", []))} for item in recognizers],
     }
-    assert all(item.supported_language == "ru" for item in recognizers)
+    if not all(item.supported_language == "ru" for item in recognizers):
+        raise RuntimeError("Recognizer language differs from the fixed Russian comparison protocol")
     return analyzer, metadata
 
 

@@ -11,6 +11,8 @@ import re
 from collections.abc import Iterator
 from datetime import date
 
+from seif.document_fields import document_candidates
+
 Candidate = tuple[int, int, str, float, str]
 _FLAGS = re.IGNORECASE
 _SPACE = r"[ \t]*"
@@ -157,29 +159,34 @@ def _match_date_value(text: str, label, prefix, end) -> tuple[re.Match | None, b
 
 def _date_candidates(text: str) -> Iterator[Candidate]:
     for label in _DATE_LABEL.finditer(text):
-        # A bounded prefix admits owner qualifiers and '(day and month)', but
-        # cannot consume another field, sentence or a date before the delimiter.
-        end = min(len(text), label.end() + 160)
-        prefix = _FIELD_PREFIX.match(text, label.end(), end)
-        if prefix is None:
-            prefix = _DIRECT_PREFIX.match(text, label.end(), end)
-        assert prefix is not None
-        owner = text[label.end():prefix.end()]
-        if _UNKNOWN_FIELD.search(owner) or _NEXT_DATE_FIELD.search(owner):
-            continue
-        before = text[max(0, label.start() - 80):prefix.end()]
-        before = re.split(r"[.!?;\n]", before)[-1]
-        if (_PUBLIC_OWNER.search(owner) or _HISTORICAL_OWNER.search(before)) and not _PRIVATE_OWNER.search(before):
-            continue
-        value, valid = _match_date_value(text, label, prefix, end)
-        if value is not None and valid:
-            kind = "BIRTH_DATE" if label.lastgroup == "birth" else "PASSPORT_DATE"
-            stop = value.end()
-            if stop == end and end < len(text):
-                continue
-            if text[stop - 1] == "." and not value.group().lower().endswith(" г."):
-                stop -= 1
-            yield value.start(), stop, kind, 0.99, "explicit-personal-date-field"
+        yield from _labelled_date(text, label)
+
+
+def _labelled_date(text: str, label: re.Match) -> Iterator[Candidate]:
+    # A bounded prefix admits owner qualifiers and '(day and month)', but
+    # cannot consume another field, sentence or a date before the delimiter.
+    end = min(len(text), label.end() + 160)
+    prefix = _FIELD_PREFIX.match(text, label.end(), end)
+    if prefix is None:
+        prefix = _DIRECT_PREFIX.match(text, label.end(), end)
+    if prefix is None:
+        return
+    owner = text[label.end():prefix.end()]
+    if _UNKNOWN_FIELD.search(owner) or _NEXT_DATE_FIELD.search(owner):
+        return
+    before = text[max(0, label.start() - 80):prefix.end()]
+    before = re.split(r"[.!?;\n]", before)[-1]
+    if (_PUBLIC_OWNER.search(owner) or _HISTORICAL_OWNER.search(before)) and not _PRIVATE_OWNER.search(before):
+        return
+    value, valid = _match_date_value(text, label, prefix, end)
+    if value is not None and valid:
+        kind = "BIRTH_DATE" if label.lastgroup == "birth" else "PASSPORT_DATE"
+        stop = value.end()
+        if stop == end and end < len(text):
+            return
+        if text[stop - 1] == "." and not value.group().lower().endswith(" г."):
+            stop -= 1
+        yield value.start(), stop, kind, 0.99, "explicit-personal-date-field"
 
 
 # Delimiters are outside captured values, including quotes and parentheses.
@@ -258,25 +265,30 @@ def _document_parts(text: str, label, end, kind) -> Iterator[Candidate]:
             yield start, stop, kind, 0.99, "explicit-personal-document-part"
 
 
+def _labelled_document(text: str, label: re.Match) -> Iterator[Candidate]:
+    kind = "DRIVER_LICENSE" if label.lastgroup == "license" else "PASSPORT"
+    end = min(len(text), label.end() + 180)
+    owner = _DOCUMENT_OWNER.match(text, label.end(), end)
+    if owner is None:
+        return
+    qualifier = _document_qualifier(text, label, end)
+    if _NONPERSONAL_DOCUMENT.search(qualifier) or _UNKNOWN_FIELD.search(qualifier):
+        return
+    value = _DOCUMENT_VALUE.match(text, owner.end(), end)
+    if value is not None:
+        start, stop = value.span("value")
+        if stop < len(text) and (text[stop].isalnum() or text[stop] == "_"):
+            return
+        yield start, stop, kind, 0.99, "explicit-personal-document-field"
+    stop = _DOCUMENT_STOP.search(text, label.end(), end)
+    if stop is not None:
+        end = stop.start()
+    yield from _document_parts(text, label, end, kind)
+
+
 def _document_candidates(text: str) -> Iterator[Candidate]:
     for label in _DOCUMENT_LABEL.finditer(text):
-        kind = "DRIVER_LICENSE" if label.lastgroup == "license" else "PASSPORT"
-        end = min(len(text), label.end() + 180)
-        owner = _DOCUMENT_OWNER.match(text, label.end(), end)
-        assert owner is not None
-        qualifier = _document_qualifier(text, label, end)
-        if _NONPERSONAL_DOCUMENT.search(qualifier) or _UNKNOWN_FIELD.search(qualifier):
-            continue
-        value = _DOCUMENT_VALUE.match(text, owner.end(), end)
-        if value is not None:
-            start, stop = value.span("value")
-            if stop < len(text) and (text[stop].isalnum() or text[stop] == "_"):
-                continue
-            yield start, stop, kind, 0.99, "explicit-personal-document-field"
-        stop = _DOCUMENT_STOP.search(text, label.end(), end)
-        if stop is not None:
-            end = stop.start()
-        yield from _document_parts(text, label, end, kind)
+        yield from _labelled_document(text, label)
     for value in _LICENSE_SUFFIX.finditer(text):
         start, end = value.span("value")
         yield start, end, "DRIVER_LICENSE", 0.99, "explicit-license-suffix"
@@ -291,8 +303,19 @@ def structured_candidates(text: str) -> Iterator[Candidate]:
         yield from _date_candidates(text)
     if not any(char.isdigit() for char in text):
         return
+    document_values = set()
     if any(hint in lower for hint in ("паспорт", "удостоверен", "ву", "в/у", "в у")):
-        yield from _document_candidates(text)
+        for candidate in _document_candidates(text):
+            document_values.add(candidate[:3])
+            yield candidate
+    for candidate in document_candidates(text):
+        if candidate[:3] not in document_values:
+            document_values.add(candidate[:3])
+            yield candidate
+    yield from _payment_candidates(text, lower)
+
+
+def _payment_candidates(text: str, lower: str) -> Iterator[Candidate]:
     for pattern, kind, hints in (
         (_PIN_VALUE, "PIN", ("pin", "пин")),
         (_CVV_VALUE, "CVV", ("cvv", "cvc", "цвв", "сvv", "сvc")),

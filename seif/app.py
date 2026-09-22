@@ -11,6 +11,7 @@ import sys
 import sysconfig
 import time
 import uuid
+from concurrent.futures import CancelledError as WorkerCancelledError
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import asynccontextmanager, contextmanager
 from dataclasses import asdict, dataclass
@@ -26,7 +27,7 @@ from prometheus_client import CollectorRegistry, Counter, Histogram, generate_la
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from .config import Settings
+from .config import Policy, Settings
 from .detector import TYPES, detect, merge_ner_candidates, validate_extra_rule
 from .ner import NerClient, validate_ner_settings
 from .request_capture import RequestCapture
@@ -229,22 +230,34 @@ def _validate_policies(settings: Settings) -> None:
             raise ValueError("Unknown entity type in system policy")
 
 
+@dataclass(slots=True)
+class _OperationContext:
+    """Validated request policy and correlation data for one operation."""
+
+    body: ProcessRequest
+    policy: Policy
+    operation: str
+    mode: str
+    key: str
+    fingerprint: str
+
+
 class _AppContext:
     """Shared request-processing state and handlers for the FastAPI app."""
 
-    def __init__(self, settings, vault, ner, cpu_pool, registry, capture):
+    def __init__(self, settings: Settings):
         self.settings = settings
-        self.vault = vault
-        self.ner = ner
-        self.cpu_pool = cpu_pool
-        self.registry = registry
-        self.capture = capture
+        self.ner = NerClient(settings.ner_url, settings.ner_token, settings.ner_timeout_seconds) if settings.ner_url else None
+        self.vault = Vault(settings)
+        self.registry = CollectorRegistry()
+        self.cpu_pool = ThreadPoolExecutor(max_workers=settings.cpu_workers, thread_name_prefix="seif-detect")
+        self.capture = RequestCapture.from_env()
         self.large_inflight = 0
         self.limits = {}
-        self.detected = Counter("seif_entities_total", "Detected entity types, never values", ["type"], registry=registry)
-        self.chars = Counter("seif_input_characters_total", "Processed input Unicode characters", registry=registry)
-        self.tokens = Counter("seif_input_tokens_estimated_total", "Estimated tokens = characters / 4, not a model tokenizer", registry=registry)
-        self.stages = Histogram("seif_stage_duration_seconds", "Processing stages", ["stage"], registry=registry)
+        self.detected = Counter("seif_entities_total", "Detected entity types, never values", ["type"], registry=self.registry)
+        self.chars = Counter("seif_input_characters_total", "Processed input Unicode characters", registry=self.registry)
+        self.tokens = Counter("seif_input_tokens_estimated_total", "Estimated tokens = characters / 4, not a model tokenizer", registry=self.registry)
+        self.stages = Histogram("seif_stage_duration_seconds", "Processing stages", ["stage"], registry=self.registry)
 
     @asynccontextmanager
     async def lifespan(self, app):
@@ -300,7 +313,9 @@ class _AppContext:
             self.limits[tenant] = (balance - 1, now)
         return tenant, policy
 
-    def _restore_record(self, policy, body, operation, fingerprint, record, stage):
+    def _restore_record(self, context, record, stage):
+        policy, body = context.policy, context.body
+        operation, fingerprint = context.operation, context.fingerprint
         if not policy.allow_unmask:
             fail(403, "unmask_disabled", "Демаскирование отключено для системы.")
         with stage("restore"):
@@ -328,14 +343,16 @@ class _AppContext:
 
         def complete_cpu_work(done):
             release_cpu_slot()
-            try:
-                result = done.result()
-            except BaseException as exc:
-                if not pending.done():
-                    pending.set_exception(exc)
+            if pending.done():
+                return
+            # Worker failures belong to the awaiting request, including custom
+            # BaseException subclasses. Reading exception() transfers them without
+            # raising on the event loop or leaking their possibly sensitive text.
+            exception = WorkerCancelledError() if done.cancelled() else done.exception()
+            if exception is not None:
+                pending.set_exception(exception)
             else:
-                if not pending.done():
-                    pending.set_result(result)
+                pending.set_result(done.result())
 
         try:
             work = self.cpu_pool.submit(partial(detect, body.payload, extra_rules=list(policy.extra_rules)))
@@ -360,7 +377,10 @@ class _AppContext:
             selected = []
         return selected, type_set
 
-    async def _detect_and_transform(self, policy, body, operation, key, fingerprint, mode, stage):
+    async def _detect_and_transform(self, context, stage):
+        policy, body = context.policy, context.body
+        operation, mode = context.operation, context.mode
+        key, fingerprint = context.key, context.fingerprint
         with stage("detect"):
             if len(body.payload) > 16000:
                 spans = await self._detect_large(policy, body)
@@ -385,14 +405,15 @@ class _AppContext:
             fail(409, "payload_conflict", "payload_id уже связан с другим текстом.")
         if operation == "mask" and record["mode"] != mode:
             fail(409, "mode_conflict", "Для нового режима используйте новый payload_id.")
-        return record["masked"]
+        return record
 
-    async def _resolve_record(self, tenant, policy, body, operation, key, fingerprint, record, mode, stage):
+    async def _resolve_record(self, context, record, stage):
+        operation, fingerprint, mode = context.operation, context.fingerprint, context.mode
         direction = "mask"
         if record is not None:
             if operation == "unmask" or (operation == "process" and fingerprint == record["masked_hash"] and fingerprint != record["original_hash"]):
                 direction = "unmask"
-                result = self._restore_record(policy, body, operation, fingerprint, record, stage)
+                result = self._restore_record(context, record, stage)
             elif fingerprint == record["original_hash"]:
                 if operation == "mask" and mode != record["mode"]:
                     fail(409, "mode_conflict", "Для нового режима используйте новый payload_id.")
@@ -402,7 +423,8 @@ class _AppContext:
         elif operation == "unmask":
             fail(410, "mapping_expired", "Соответствие отсутствует или срок хранения истёк.")
         else:
-            result = await self._detect_and_transform(policy, body, operation, key, fingerprint, mode, stage)
+            record = await self._detect_and_transform(context, stage)
+            result = record["masked"]
         return direction, result, record
 
     async def execute(self, body: ProcessRequest, request: Request, operation: str):
@@ -437,9 +459,8 @@ class _AppContext:
                 key, fingerprint = self.vault.key(tenant, body.payload_id), self.vault.digest(body.payload)
             with stage("vault_read"):
                 record = await self.vault.get(key)
-            direction, result, record = await self._resolve_record(
-                tenant, policy, body, operation, key, fingerprint, record, mode, stage,
-            )
+            context = _OperationContext(body, policy, operation, mode, key, fingerprint)
+            direction, result, record = await self._resolve_record(context, record, stage)
             elapsed = (time.perf_counter() - start) * 1000
             kinds = sorted({s["type"] for s in record["entities"]})
             for kind in kinds:
@@ -521,18 +542,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     _validate_policies(settings)
     # Validation can fail synchronously, before lifespan cleanup exists.
     # Allocate clients and the worker pool only after all policies are valid.
-    ner = NerClient(settings.ner_url, settings.ner_token, settings.ner_timeout_seconds) if settings.ner_url else None
-    vault, registry = Vault(settings), CollectorRegistry()
-    cpu_pool = ThreadPoolExecutor(max_workers=settings.cpu_workers, thread_name_prefix="seif-detect")
-    capture = RequestCapture.from_env()
-    ctx = _AppContext(settings, vault, ner, cpu_pool, registry, capture)
+    ctx = _AppContext(settings)
 
     app = FastAPI(title="СЕЙФ · Personal Data Gateway", version="1.0.0", lifespan=ctx.lifespan,
                   docs_url=None, redoc_url=None)
-    app.state.vault, app.state.settings = vault, settings
-    app.state.ner = ner
-    app.state.capture = capture
-    app.add_middleware(Boundary, settings=settings, registry=registry, capture=capture)
+    app.state.vault, app.state.settings = ctx.vault, settings
+    app.state.ner = ctx.ner
+    app.state.capture = ctx.capture
+    app.add_middleware(Boundary, settings=settings, registry=ctx.registry, capture=ctx.capture)
 
     @app.exception_handler(RequestValidationError)
     async def validation_error(request, exc):

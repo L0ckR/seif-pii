@@ -1,0 +1,25 @@
+{
+  "source_matches_golden_final": true,
+  "previous_metrics_exactly_reproduced": true,
+  "predictions_byte_identical": false,
+  "transitions": {
+    "rules": {
+      "changed_cases": 1,
+      "lost_tp_characters": 0,
+      "new_fp_characters": 0,
+      "gained_tp_characters": 0,
+      "removed_fp_characters": 0,
+      "cases_with_lost_tp": 0,
+      "cases_with_new_fp": 0
+    },
+    "hybrid": {
+      "changed_cases": 1,
+      "lost_tp_characters": 0,
+      "new_fp_characters": 0,
+      "gained_tp_characters": 0,
+      "removed_fp_characters": 0,
+      "cases_with_lost_tp": 0,
+      "cases_with_new_fp": 0
+    }
+  }
+}

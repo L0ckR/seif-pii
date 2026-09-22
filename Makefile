@@ -4,7 +4,7 @@ run:
 test:
 	.venv/bin/python -m pytest -q
 lint:
-	.venv/bin/ruff check seif tests scripts
+	.venv/bin/ruff check seif tests scripts deploy
 evaluate:
 	.venv/bin/python scripts/evaluate.py --output docs/evaluation.json
 zip:

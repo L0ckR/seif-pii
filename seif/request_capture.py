@@ -14,6 +14,7 @@ import queue
 import threading
 import time
 import uuid
+from contextlib import suppress
 from pathlib import Path
 
 _LOG = logging.getLogger(__name__)
@@ -37,10 +38,8 @@ def _private_directory(path: Path) -> int:
     descriptor = os.open(absolute.anchor, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
     try:
         for part in absolute.parts[1:]:
-            try:
+            with suppress(FileExistsError):
                 os.mkdir(part, 0o700, dir_fd=descriptor)
-            except FileExistsError:
-                pass
             child = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=descriptor)
             os.close(descriptor)
             descriptor = child
@@ -111,24 +110,28 @@ class RequestCapture:
         self._thread.start()
 
     @staticmethod
-    def _copy_metadata(metadata: dict, body: bytes) -> tuple[dict, int]:
+    def _metadata_item_size(key, value) -> int:
+        if type(key) is not str or len(key) > 128:
+            raise ValueError
+        if value is not None and type(value) not in (str, int, float, bool):
+            raise ValueError
+        if isinstance(value, str) and len(value) > 4096:
+            raise ValueError
+        if type(value) is int and value.bit_length() > 256:
+            raise ValueError
+        if type(value) is float and not math.isfinite(value):
+            raise ValueError
+        return 128 + len(key) * 4 + (len(value) * 4 if isinstance(value, str) else 32)
+
+    @classmethod
+    def _copy_metadata(cls, metadata: dict, body: bytes) -> tuple[dict, int]:
         if type(body) is not bytes or type(metadata) is not dict or len(metadata) > 64:
             raise ValueError
         copied = {}
         size = len(body) + 512
         for key, value in metadata.items():
-            if type(key) is not str or len(key) > 128:
-                raise ValueError
-            if value is not None and type(value) not in (str, int, float, bool):
-                raise ValueError
-            if isinstance(value, str) and len(value) > 4096:
-                raise ValueError
-            if type(value) is int and value.bit_length() > 256:
-                raise ValueError
-            if type(value) is float and not math.isfinite(value):
-                raise ValueError
+            size += cls._metadata_item_size(key, value)
             copied[key] = value
-            size += 128 + len(key) * 4 + (len(value) * 4 if isinstance(value, str) else 32)
         return copied, size
 
     def submit(self, metadata: dict, body: bytes) -> bool:
@@ -201,10 +204,8 @@ class RequestCapture:
                 stream.write(json.dumps(self.snapshot(), separators=(",", ":")).encode())
             os.replace(temporary, f"worker-{self._pid}.json", src_dir_fd=self._dir_fd, dst_dir_fd=self._dir_fd)
         finally:
-            try:
+            with suppress(FileNotFoundError):
                 os.unlink(temporary, dir_fd=self._dir_fd)
-            except FileNotFoundError:
-                pass
 
     def _drain_one(self) -> None:
         try:

@@ -1,0 +1,7 @@
+{
+  "source_revision": "12191083eea106edf85c7bbc6e60a140faf1b4c2",
+  "command": "python scripts/evaluate_golden.py --baseline benchmarks/golden/reference-v2.json",
+  "regressions": [],
+  "report_sha256": "35e7a124fdeb88e58b2fc71e79293568baf3c1e8b7fb17dbbe67269c3110ab2a",
+  "checked_report_field": "regressions_against_baseline"
+}

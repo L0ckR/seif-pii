@@ -45,125 +45,137 @@ def validate_options(args: argparse.Namespace) -> None:
         raise ValueError("Benchmark exceeds bounded rate, duration, concurrency or timeout settings")
 
 
-async def benchmark(args: argparse.Namespace) -> dict:
-    validate_options(args)
-    latencies: list[float] = []
-    errors: Counter[str] = Counter()
-    statuses: Counter[str] = Counter()
-    counters: Counter[str] = Counter()
-    active: set[asyncio.Task] = set()
-    headers = {}
-    if args.system:
-        headers["X-System-ID"] = args.system
-    if args.api_key:
-        headers["X-API-Key"] = args.api_key
-    run_id = uuid.uuid4().hex
-    connector = aiohttp.TCPConnector(limit=args.concurrency, keepalive_timeout=30)
-    async with aiohttp.ClientSession(
-        timeout=aiohttp.ClientTimeout(total=args.timeout), headers=headers,
-        connector=connector, trust_env=False,
-    ) as client:
-        async def request(payload: str, payload_id: str) -> str | None:
-            started = time.perf_counter()
-            counters["requests_attempted"] += 1
-            try:
-                async with client.post(args.url.rstrip("/") + "/process",
-                                       json={"payload": payload, "payload_id": payload_id},
-                                       allow_redirects=False) as response:
-                    statuses[str(response.status)] += 1
-                    if response.status != 200:
-                        errors[f"http_{response.status}"] += 1
-                        return None
-                    try:
-                        body = await response.json()
-                    except (ValueError, aiohttp.ContentTypeError):
-                        errors["invalid_json"] += 1
-                        return None
-                if not isinstance(body, dict) or set(body) != {"result"} or not isinstance(body["result"], str):
-                    errors["invalid_contract"] += 1
+class _BenchmarkRun:
+    def __init__(self, args, client):
+        self.args, self.client = args, client
+        self.latencies = []
+        self.errors, self.statuses, self.counters = Counter(), Counter(), Counter()
+        self.active = set()
+        self.run_id = uuid.uuid4().hex
+
+    async def request(self, payload: str, payload_id: str) -> str | None:
+        started = time.perf_counter()
+        self.counters["requests_attempted"] += 1
+        try:
+            async with self.client.post(self.args.url.rstrip("/") + "/process",
+                                   json={"payload": payload, "payload_id": payload_id},
+                                   allow_redirects=False) as response:
+                self.statuses[str(response.status)] += 1
+                if response.status != 200:
+                    self.errors[f"http_{response.status}"] += 1
                     return None
-                counters["requests_successful"] += 1
-                return body["result"]
-            except asyncio.TimeoutError:
-                errors["timeout"] += 1
+                try:
+                    body = await response.json()
+                except (ValueError, aiohttp.ContentTypeError):
+                    self.errors["invalid_json"] += 1
+                    return None
+            if not isinstance(body, dict) or set(body) != {"result"} or not isinstance(body["result"], str):
+                self.errors["invalid_contract"] += 1
                 return None
-            except aiohttp.ClientError:
-                errors["transport"] += 1
-                return None
-            finally:
-                latencies.append((time.perf_counter() - started) * 1000)
+            self.counters["requests_successful"] += 1
+            return body["result"]
+        except asyncio.TimeoutError:
+            self.errors["timeout"] += 1
+            return None
+        except aiohttp.ClientError:
+            self.errors["transport"] += 1
+            return None
+        finally:
+            self.latencies.append((time.perf_counter() - started) * 1000)
 
-        async def pair(index: int) -> None:
-            source = SYNTHETIC_PAYLOADS[index % len(SYNTHETIC_PAYLOADS)]
-            correlation = f"bench-{run_id}-{index}"
-            masked = await request(source, correlation)
-            if masked is None:
-                counters["pairs_mask_failed"] += 1
-                return
-            restored = await request(masked, correlation)
-            if restored is None:
-                counters["pairs_unmask_failed"] += 1
-            elif restored != source:
-                errors["roundtrip_mismatch"] += 1
-            else:
-                counters["pairs_verified"] += 1
+    async def pair(self, index: int) -> None:
+        source = SYNTHETIC_PAYLOADS[index % len(SYNTHETIC_PAYLOADS)]
+        correlation = f"bench-{self.run_id}-{index}"
+        masked = await self.request(source, correlation)
+        if masked is None:
+            self.counters["pairs_mask_failed"] += 1
+            return
+        restored = await self.request(masked, correlation)
+        if restored is None:
+            self.counters["pairs_unmask_failed"] += 1
+        elif restored != source:
+            self.errors["roundtrip_mismatch"] += 1
+        else:
+            self.counters["pairs_verified"] += 1
 
+    async def schedule(self):
         started = time.perf_counter()
         index = 0
         scheduling_lag_max = 0.0
-        interval = 2 / args.rps
+        interval = 2 / self.args.rps
         # A bounded set prevents the load generator itself becoming an unbounded queue.
-        while index * interval < args.duration:
+        while index * interval < self.args.duration:
             scheduled = started + index * interval
             delay = scheduled - time.perf_counter()
             if delay > 0:
                 await asyncio.sleep(delay)
             scheduling_lag_max = max(scheduling_lag_max, time.perf_counter() - scheduled)
-            counters["pairs_offered"] += 1
-            if len(active) >= args.concurrency:
-                counters["pairs_dropped_client_capacity"] += 1
+            self.counters["pairs_offered"] += 1
+            if len(self.active) >= self.args.concurrency:
+                self.counters["pairs_dropped_client_capacity"] += 1
             else:
-                task = asyncio.create_task(pair(index))
-                active.add(task)
-                task.add_done_callback(active.discard)
-                counters["pairs_dispatched"] += 1
+                task = asyncio.create_task(self.pair(index))
+                self.active.add(task)
+                task.add_done_callback(self.active.discard)
+                self.counters["pairs_dispatched"] += 1
             index += 1
             # Give HTTP tasks time to progress even when scheduler catch-up is needed.
             if index % 32 == 0:
                 await asyncio.sleep(0)
-        remaining = started + args.duration - time.perf_counter()
+        remaining = started + self.args.duration - time.perf_counter()
         if remaining > 0:
             await asyncio.sleep(remaining)
-        await asyncio.gather(*active)
+        await asyncio.gather(*self.active)
         elapsed = time.perf_counter() - started
-    return {
-        "schema_version": 1,
-        "method": "open-loop correlation pairs; 2 offered HTTP requests/pair; no retries",
-        "transport": "aiohttp",
-        "event_loop": type(asyncio.get_running_loop()).__module__,
-        "target_url": args.url,
-        "synthetic_data_only": True,
-        "configured_duration_seconds": args.duration,
-        "observed_elapsed_seconds_including_drain": round(elapsed, 3),
-        "offered_http_rps": args.rps,
-        "max_concurrent_pairs": args.concurrency,
-        "achieved_attempted_http_rps": round(counters["requests_attempted"] / elapsed, 2),
-        "achieved_successful_http_rps": round(counters["requests_successful"] / elapsed, 2),
-        "counts": dict(counters),
-        "http_statuses": dict(statuses),
-        "errors": dict(errors),
-        "latency_ms_all_attempts": {
-            "p50": percentile(latencies, 50), "p95": percentile(latencies, 95),
-            "p99": percentile(latencies, 99), "max": round(max(latencies), 3) if latencies else None,
-        },
-        "client_scheduler_max_lag_ms": round(scheduling_lag_max * 1000, 3),
-        "limitations": [
-            "This is a local synthetic sample, not the organizer's closed evaluation dataset.",
-            "Reported throughput includes request completion after the scheduling window.",
-            "Client drops or significant scheduler lag mean the client could not offer the target load.",
-            "Fast responses do not establish PII detection quality or production availability.",
-        ],
-    }
+        return elapsed, scheduling_lag_max
+
+    def report(self, elapsed, scheduling_lag_max):
+        return {
+            "schema_version": 1,
+            "method": "open-loop correlation pairs; 2 offered HTTP requests/pair; no retries",
+            "transport": "aiohttp",
+            "event_loop": type(asyncio.get_running_loop()).__module__,
+            "target_url": self.args.url,
+            "synthetic_data_only": True,
+            "configured_duration_seconds": self.args.duration,
+            "observed_elapsed_seconds_including_drain": round(elapsed, 3),
+            "offered_http_rps": self.args.rps,
+            "max_concurrent_pairs": self.args.concurrency,
+            "achieved_attempted_http_rps": round(self.counters["requests_attempted"] / elapsed, 2),
+            "achieved_successful_http_rps": round(self.counters["requests_successful"] / elapsed, 2),
+            "counts": dict(self.counters),
+            "http_statuses": dict(self.statuses),
+            "errors": dict(self.errors),
+            "latency_ms_all_attempts": {
+                "p50": percentile(self.latencies, 50), "p95": percentile(self.latencies, 95),
+                "p99": percentile(self.latencies, 99), "max": round(max(self.latencies), 3) if self.latencies else None,
+            },
+            "client_scheduler_max_lag_ms": round(scheduling_lag_max * 1000, 3),
+            "limitations": [
+                "This is a local synthetic sample, not the organizer's closed evaluation dataset.",
+                "Reported throughput includes request completion after the scheduling window.",
+                "Client drops or significant scheduler lag mean the client could not offer the target load.",
+                "Fast responses do not establish PII detection quality or production availability.",
+            ],
+        }
+
+
+
+async def benchmark(args: argparse.Namespace) -> dict:
+    validate_options(args)
+    headers = {}
+    if args.system:
+        headers["X-System-ID"] = args.system
+    if args.api_key:
+        headers["X-API-Key"] = args.api_key
+    connector = aiohttp.TCPConnector(limit=args.concurrency, keepalive_timeout=30)
+    async with aiohttp.ClientSession(
+        timeout=aiohttp.ClientTimeout(total=args.timeout), headers=headers,
+        connector=connector, trust_env=False,
+    ) as client:
+        run = _BenchmarkRun(args, client)
+        elapsed, scheduling_lag_max = await run.schedule()
+    return run.report(elapsed, scheduling_lag_max)
 
 
 def main() -> None:

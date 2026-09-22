@@ -1,0 +1,16 @@
+{
+  "rules": {
+    "cases": 532,
+    "actual_changed_masks": [],
+    "entity_boundary_changes": [
+      "test_0219"
+    ]
+  },
+  "hybrid": {
+    "cases": 532,
+    "actual_changed_masks": [],
+    "entity_boundary_changes": [
+      "test_0219"
+    ]
+  }
+}

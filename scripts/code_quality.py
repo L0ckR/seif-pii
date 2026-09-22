@@ -70,19 +70,23 @@ def validate_report(report: list, source_paths: set[str]) -> None:
         if issue["fingerprint"] in fingerprints:
             raise ValueError("Duplicate fingerprint would hide a finding in GitLab")
         fingerprints.add(issue["fingerprint"])
-        location = issue.get("location", {})
-        try:
-            line = location.get("lines", {}).get("begin")
-            if line is None:
-                line = location.get("positions", {}).get("begin", {}).get("line")
-        except AttributeError:
-            raise ValueError("Invalid GitLab location object") from None
-        severity = issue.get("severity")
-        if not isinstance(severity, str) or severity not in SEVERITIES or type(line) is not int or line < 1:
-            raise ValueError("Invalid GitLab severity or line number")
-        path = location.get("path")
-        if not isinstance(path, str) or path not in source_paths:
-            raise ValueError("GitLab finding does not reference an analyzed source file")
+        _validate_location(issue, source_paths)
+
+
+def _validate_location(issue, source_paths):
+    location = issue.get("location", {})
+    try:
+        line = location.get("lines", {}).get("begin")
+        if line is None:
+            line = location.get("positions", {}).get("begin", {}).get("line")
+    except AttributeError:
+        raise ValueError("Invalid GitLab location object") from None
+    severity = issue.get("severity")
+    if not isinstance(severity, str) or severity not in SEVERITIES or type(line) is not int or line < 1:
+        raise ValueError("Invalid GitLab severity or line number")
+    path = location.get("path")
+    if not isinstance(path, str) or path not in source_paths:
+        raise ValueError("GitLab finding does not reference an analyzed source file")
 
 
 def summarize(report: list) -> dict:

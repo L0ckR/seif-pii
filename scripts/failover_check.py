@@ -19,6 +19,7 @@ import sys
 import time
 import uuid
 from collections import Counter
+from contextlib import suppress
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -54,10 +55,8 @@ def request(client: httpx.Client, payload: str, payload_id: str, deadline: float
             if response.status_code not in {429, 502, 503, 504}:
                 raise CheckFailed(f"http_{response.status_code}")
             errors[f"http_{response.status_code}"] += 1
-            try:
+            with suppress(ValueError):
                 delay = max(delay, min(float(response.headers.get("Retry-After", "0")), 2.0))
-            except ValueError:
-                pass
         except httpx.TimeoutException:
             errors["timeout"] += 1
         except httpx.HTTPError:

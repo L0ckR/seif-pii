@@ -10,10 +10,12 @@ from __future__ import annotations
 import re
 from collections.abc import Sequence
 
+from seif.location_fields import issuer_value_end
+
 _FLAGS = re.IGNORECASE | re.UNICODE
 # Start at the literal field name. Searching from overlapping whitespace
 # quantifiers becomes cubic on a long, otherwise valid spaced document value.
-_NUMBER_FIELD = re.compile(r"\bномер\b\s*+[:№=—-]?\s*+", _FLAGS)
+_NUMBER_FIELD = re.compile(r"(?:\bномер\b|\bном[.]?(?!\w)|№)\s*+[:№=—-]?\s*+", _FLAGS)
 _DOCUMENT_PART = re.compile(r"(?a:\d)(?:[0-9 \t]*(?a:\d))?")
 _NAME_PROSE = re.compile(
     r"(?<![\w-])(?:обратил(?:ся|ась|ись)|подтвердил(?:а|и)?|запросил(?:а|и)?|"
@@ -51,6 +53,10 @@ _PRIVATE_OWNER = re.compile(
     _FLAGS,
 )
 _INN_FIELD_END = re.compile(r"\bинн(?:\s*+/\s*+кпп)?\s*+[:=—-]?\s*+$", _FLAGS)
+_COUNTRY_QUALIFIER = re.compile(r"\b(?:паспорт|гражданин|гражданка)[ \t]+$", _FLAGS)
+_CORPORATE_ADDRESS = re.compile(r"\bадрес[а-яё]*[ \t]*[:=—-]?[ \t]*(?:г[.][ \t]*)?$", _FLAGS)
+_NUMERIC_TAIL = re.compile(r"[.,]([0-9]{1,13})(?![0-9])")
+_NUMERIC_HEAD = re.compile(r"(?<![0-9])([0-9]{1,13})[.,]$")
 _RECORD_BOUNDARY = re.compile(r"[;!?]|\n[ \t]*\n|[.](?=\s|$)")
 _ABBREVIATION = re.compile(r"(?:\b|\\[nr])(?:г|гор|ул|д|кв|корп|стр|обл|р-н|им|пос|тел|ао)[.]$", _FLAGS)
 _OFFICE = re.compile(r"\b(?:[оуг]вд|[оу]{0,2}фмс|мвд|умвд|отдел\s+внутренних\s+дел)\b", _FLAGS)
@@ -118,6 +124,28 @@ def _office_geography(text: str, span, personal_context: bool) -> bool:
     return bool(_OFFICE.search(prefix) and not personal_context)
 
 
+def _geographic_scaffolding(text: str, span) -> bool:
+    prefix = _record_prefix(text, span.start)
+    value = text[span.start:span.end].lower()
+    if value in {"рф", "россии"} and _COUNTRY_QUALIFIER.search(prefix):
+        return True
+    if not _CORPORATE_ADDRESS.search(prefix):
+        return False
+    corporate = list(_CORPORATE_OWNER.finditer(prefix))
+    private = list(_PRIVATE_OWNER.finditer(prefix))
+    return bool(corporate and (not private or corporate[-1].start() > private[-1].start()))
+
+
+def _decimal_inn_fragment(text: str, span) -> bool:
+    if span.reason != "checksum":
+        return False
+    after = _NUMERIC_TAIL.match(text, span.end, min(len(text), span.end + 15))
+    before = _NUMERIC_HEAD.search(text[max(0, span.start - 15):span.start])
+    # Two full identifiers separated by punctuation are a list, not a fractional
+    # number; retain both, including lists without whitespace after a comma.
+    return any(part is not None and len(part[1]) not in {10, 12} for part in (after, before))
+
+
 def _name_span(text: str, span):
     value = text[span.start:span.end]
     if span.type == "CARDHOLDER" and _MISSING_NAME.match(value):
@@ -161,6 +189,30 @@ def _place_parts(text: str, span) -> list:
     return parts
 
 
+def _excluded_context(text: str, span, personal_context: bool) -> bool:
+    if span.type == "INN":
+        return _corporate_inn(text, span) or _decimal_inn_fragment(text, span)
+    return span.type in {"CITY", "LOCATION"} and (
+        _office_geography(text, span, personal_context) or _geographic_scaffolding(text, span)
+    )
+
+
+def _refined_parts(text: str, span) -> list:
+    if span.reason == "custom-rule":
+        return [span]
+    if span.type in {"PASSPORT", "DRIVER_LICENSE"}:
+        return _document_parts(text, span)
+    if span.type in {"ADDRESS", "BIRTH_PLACE"}:
+        return _place_parts(text, span)
+    if span.type in {"PERSON", "CARDHOLDER"}:
+        refined = _name_span(text, span)
+    elif span.type == "PASSPORT_ISSUER":
+        refined = _segment(text, span, span.start, issuer_value_end(text, span.start, span.end))
+    else:
+        return [span]
+    return [refined] if refined is not None else []
+
+
 def refine_candidates(text: str, candidates: Sequence) -> list:
     """Refine already validated candidates before ordinary overlap resolution."""
     result = []
@@ -170,20 +222,7 @@ def refine_candidates(text: str, candidates: Sequence) -> list:
         span.type in {"CITY", "LOCATION"} for span in candidates
     ) else False
     for span in candidates:
-        if span.reason == "custom-rule":
-            result.append(span)
-        elif span.type in {"PASSPORT", "DRIVER_LICENSE"}:
-            result.extend(_document_parts(text, span))
-        elif span.type in {"PERSON", "CARDHOLDER"}:
-            refined = _name_span(text, span)
-            if refined is not None:
-                result.append(refined)
-        elif span.type in {"ADDRESS", "BIRTH_PLACE"}:
-            result.extend(_place_parts(text, span))
-        elif span.type == "INN" and _corporate_inn(text, span):
+        if span.reason != "custom-rule" and _excluded_context(text, span, personal_context):
             continue
-        elif span.type in {"CITY", "LOCATION"} and _office_geography(text, span, personal_context):
-            continue
-        else:
-            result.append(span)
+        result.extend(_refined_parts(text, span))
     return result

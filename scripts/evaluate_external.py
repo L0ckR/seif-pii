@@ -68,13 +68,17 @@ def download_and_read(folder):
         rows = pq.read_table(folder / f"{split}-00000-of-00001.parquet").to_pylist()
         if len(rows) != {"domain": 900, "entity": 910}[split] or len({row["id"] for row in rows}) != len(rows):
             raise RuntimeError("Unexpected dataset size or duplicate IDs.")
-        for row in rows:
-            for entity in row["entities"]:
-                if (entity["type"] not in ALL_TYPES or not 0 <= entity["start"] < entity["end"] <= len(row["text"])
-                        or row["text"][entity["start"]:entity["end"]] != entity["text"]):
-                    raise RuntimeError("Invalid original annotation; evaluation aborted without editing labels.")
+        _validate_rows(rows)
         corpora[split] = rows
     return corpora
+
+
+def _validate_rows(rows):
+    for row in rows:
+        for entity in row["entities"]:
+            if (entity["type"] not in ALL_TYPES or not 0 <= entity["start"] < entity["end"] <= len(row["text"])
+                    or row["text"][entity["start"]:entity["end"]] != entity["text"]):
+                raise RuntimeError("Invalid original annotation; evaluation aborted without editing labels.")
 
 
 def scores(tp, fp, fn):
@@ -181,6 +185,62 @@ def dataset_metadata(corpora):
     }
 
 
+def _infer_corpus(name, rows, analyzer, raw_file):
+    from seif.detector import Span, detect, merge_person_candidates
+
+    truth, by_domain = {}, {}
+    predictions = {key: {} for key in ("seif_fast", "presidio_ru", "seif_hybrid")}
+    samples = {key: [] for key in predictions}
+    for row in rows:
+        case_id, text = row["id"], row["text"]
+        truth[case_id] = {(item["type"], item["start"], item["end"]) for item in row["entities"]}
+        by_domain.setdefault(row["domain"], []).append(case_id)
+        start = time.perf_counter_ns()
+        base = detect(text)
+        samples["seif_fast"].append((time.perf_counter_ns() - start) / 1e6)
+        start = time.perf_counter_ns()
+        upstream = analyzer.analyze(text=text, language="ru", score_threshold=0.0)
+        samples["presidio_ru"].append((time.perf_counter_ns() - start) / 1e6)
+        candidates = [Span(item.start, item.end, "PERSON", item.score, "ner-person")
+                      for item in upstream if item.entity_type == "PERSON"]
+        start = time.perf_counter_ns()
+        merged = merge_person_candidates(text, base, candidates)
+        samples["seif_hybrid"].append((time.perf_counter_ns() - start) / 1e6)
+        predictions["seif_fast"][case_id] = {(item.type, item.start, item.end) for item in base}
+        predictions["seif_hybrid"][case_id] = {(item.type, item.start, item.end) for item in merged}
+        predictions["presidio_ru"][case_id] = {(item.entity_type, item.start, item.end) for item in upstream}
+        raw_file.write(json.dumps({"split": name, "id": case_id, "expected": sorted(truth[case_id]),
+                                   "predictions": {system: sorted(data[case_id]) for system, data in predictions.items()}}, ensure_ascii=False) + "\n")
+    mapped = {system: map_predictions(values, PRESIDIO_MAP if system == "presidio_ru" else SEIF_MAP)
+              for system, values in predictions.items()}
+    common = subset_metric(truth, mapped, COMMON)
+    supported = subset_metric(truth, mapped, SUPPORTED)
+    address_gold = {key: {span for span in spans if span[0] == "ADDRESS"} for key, spans in truth.items()}
+    address_proxy = {}
+    for system, values in predictions.items():
+        allowed = {"LOCATION"} if system == "presidio_ru" else ADDRESS_COMPONENTS
+        proxy = {key: {("ADDRESS", start, end) for kind, start, end in spans if kind in allowed} for key, spans in values.items()}
+        address_proxy[system] = {"raw_exact_span": measure(address_gold, proxy),
+                                 "typed_character": measure(typed_characters(address_gold), typed_characters(proxy), include_details=False)}
+    report = {
+        "common4_primary": common, "supported8_requirement_coverage": supported,
+        "common4_uncertainty": paired_bootstrap(truth, mapped, by_domain, COMMON),
+        "all13_coverage_diagnostic": {system: measure(truth, values) for system, values in mapped.items()},
+        "name_all_cases": {system: measure({key: {span for span in spans if span[0] == "NAME"} for key, spans in truth.items()},
+                                           {key: {span for span in spans if span[0] == "NAME"} for key, spans in values.items()})
+                           for system, values in mapped.items()},
+        "unsupported_by_assignment": sorted(ALL_TYPES - SUPPORTED),
+        "address_location_component_proxy": address_proxy,
+        "per_domain_common4": {domain: subset_metric({key: truth[key] for key in ids},
+                                  {system: {key: values[key] for key in ids} for system, values in mapped.items()}, COMMON)
+                               for domain, ids in sorted(by_domain.items())},
+    }
+    latency = {system: {"samples": len(values), "mean_ms": round(sum(values) / len(values), 6),
+                              "p50_ms": percentile(values, 50), "p95_ms": percentile(values, 95), "p99_ms": percentile(values, 99)}
+                     for system, values in samples.items()}
+    return report, latency
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data-dir", type=Path, default=ROOT / "output/external-bench")
@@ -214,8 +274,6 @@ def main():
     marker = args.data_dir / "first-inference.json"
     if (marker.exists() or args.output.exists()) and not args.repeat:
         parser.error("A prior evaluation exists; use --repeat and report it as reproduction/development, never a new blind result.")
-    from seif.detector import Span, detect, merge_person_candidates
-
     detector_hash = digest((ROOT / "seif/detector.py").read_bytes())
     first_run = not marker.exists()
     if first_run:
@@ -227,56 +285,7 @@ def main():
     predictions_path = args.data_dir / ("predictions-first.jsonl" if first_run else "predictions-repeat.jsonl")
     with predictions_path.open("w", encoding="utf-8") as raw_file:
         for name, rows in corpora.items():
-            truth, by_domain = {}, {}
-            predictions = {key: {} for key in ("seif_fast", "presidio_ru", "seif_hybrid")}
-            samples = {key: [] for key in predictions}
-            for row in rows:
-                case_id, text = row["id"], row["text"]
-                truth[case_id] = {(item["type"], item["start"], item["end"]) for item in row["entities"]}
-                by_domain.setdefault(row["domain"], []).append(case_id)
-                start = time.perf_counter_ns()
-                base = detect(text)
-                samples["seif_fast"].append((time.perf_counter_ns() - start) / 1e6)
-                start = time.perf_counter_ns()
-                upstream = analyzer.analyze(text=text, language="ru", score_threshold=0.0)
-                samples["presidio_ru"].append((time.perf_counter_ns() - start) / 1e6)
-                candidates = [Span(item.start, item.end, "PERSON", item.score, "ner-person")
-                              for item in upstream if item.entity_type == "PERSON"]
-                start = time.perf_counter_ns()
-                merged = merge_person_candidates(text, base, candidates)
-                samples["seif_hybrid"].append((time.perf_counter_ns() - start) / 1e6)
-                predictions["seif_fast"][case_id] = {(item.type, item.start, item.end) for item in base}
-                predictions["seif_hybrid"][case_id] = {(item.type, item.start, item.end) for item in merged}
-                predictions["presidio_ru"][case_id] = {(item.entity_type, item.start, item.end) for item in upstream}
-                raw_file.write(json.dumps({"split": name, "id": case_id, "expected": sorted(truth[case_id]),
-                                           "predictions": {system: sorted(data[case_id]) for system, data in predictions.items()}}, ensure_ascii=False) + "\n")
-            mapped = {system: map_predictions(values, PRESIDIO_MAP if system == "presidio_ru" else SEIF_MAP)
-                      for system, values in predictions.items()}
-            common = subset_metric(truth, mapped, COMMON)
-            supported = subset_metric(truth, mapped, SUPPORTED)
-            address_gold = {key: {span for span in spans if span[0] == "ADDRESS"} for key, spans in truth.items()}
-            address_proxy = {}
-            for system, values in predictions.items():
-                allowed = {"LOCATION"} if system == "presidio_ru" else ADDRESS_COMPONENTS
-                proxy = {key: {("ADDRESS", start, end) for kind, start, end in spans if kind in allowed} for key, spans in values.items()}
-                address_proxy[system] = {"raw_exact_span": measure(address_gold, proxy),
-                                         "typed_character": measure(typed_characters(address_gold), typed_characters(proxy), include_details=False)}
-            reports[name] = {
-                "common4_primary": common, "supported8_requirement_coverage": supported,
-                "common4_uncertainty": paired_bootstrap(truth, mapped, by_domain, COMMON),
-                "all13_coverage_diagnostic": {system: measure(truth, values) for system, values in mapped.items()},
-                "name_all_cases": {system: measure({key: {span for span in spans if span[0] == "NAME"} for key, spans in truth.items()},
-                                                   {key: {span for span in spans if span[0] == "NAME"} for key, spans in values.items()})
-                                   for system, values in mapped.items()},
-                "unsupported_by_assignment": sorted(ALL_TYPES - SUPPORTED),
-                "address_location_component_proxy": address_proxy,
-                "per_domain_common4": {domain: subset_metric({key: truth[key] for key in ids},
-                                          {system: {key: values[key] for key in ids} for system, values in mapped.items()}, COMMON)
-                                       for domain, ids in sorted(by_domain.items())},
-            }
-            latency[name] = {system: {"samples": len(values), "mean_ms": round(sum(values) / len(values), 6),
-                                      "p50_ms": percentile(values, 50), "p95_ms": percentile(values, 95), "p99_ms": percentile(values, 99)}
-                             for system, values in samples.items()}
+            reports[name], latency[name] = _infer_corpus(name, rows, analyzer, raw_file)
     if detector_hash != digest((ROOT / "seif/detector.py").read_bytes()):
         raise RuntimeError("Detector changed during inference; report not published.")
     report = {

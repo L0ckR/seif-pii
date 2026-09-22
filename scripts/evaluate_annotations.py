@@ -58,6 +58,29 @@ def shape_mask(text, protected):
     return "".join("*" if index in protected else char for index, char in enumerate(text))
 
 
+def summarize(counts):
+    result = {key: value for key, value in counts.items() if key not in {"tp", "fp", "fn"}}
+    result["character_metrics"] = scores(counts["tp"], counts["fp"], counts["fn"])
+    result["exact_case_rate"] = round(counts["exact_cases"] / counts["cases"], 6) if counts["cases"] else None
+    result["fully_protected_positive_rate"] = (round(counts["fully_protected_positive_cases"] /
+                                                      counts["positive_cases"], 6)
+                                                if counts["positive_cases"] else None)
+    result["false_positive_negative_rate"] = (round(counts["false_positive_negative_cases"] /
+                                                    counts["negative_cases"], 6)
+                                              if counts["negative_cases"] else None)
+    return result
+
+def _update_type_coverage(text, gold, actual, type_counts):
+    missing = []
+    for kind in {s["type"] for s in gold}:
+        relevant = positions(text, [s for s in gold if s["type"] == kind])
+        type_counts[kind].update(gold_characters=len(relevant), protected_characters=len(relevant & actual),
+                                 cases=1, fully_protected_cases=int(relevant <= actual))
+        if relevant - actual:
+            missing.append(kind)
+    return missing
+
+
 def evaluate(inputs, annotations, predictions, weights=None):
     if set(inputs) != set(annotations) or set(inputs) != set(predictions):
         raise ValueError("Inputs, annotations and predictions must cover the same complete case set")
@@ -101,27 +124,10 @@ def evaluate(inputs, annotations, predictions, weights=None):
         pred_spans = {(s["type"], s["start"], s["end"]) for s in guessed}
         exact_span.update(tp=len(gold_spans & pred_spans), fp=len(pred_spans - gold_spans),
                           fn=len(gold_spans - pred_spans))
-        missing = []
-        for kind in {s["type"] for s in gold}:
-            relevant = positions(text, [s for s in gold if s["type"] == kind])
-            type_counts[kind].update(gold_characters=len(relevant), protected_characters=len(relevant & actual),
-                                     cases=1, fully_protected_cases=int(relevant <= actual))
-            if not relevant <= actual:
-                missing.append(kind)
+        missing = _update_type_coverage(text, gold, actual, type_counts)
         diagnostics.append({"case_id": case_id, **counts, "traffic_weight": weights[case_id],
                             "gold_types": sorted({s["type"] for s in gold}), "missed_types": sorted(missing)})
 
-    def summarize(counts):
-        result = {key: value for key, value in counts.items() if key not in {"tp", "fp", "fn"}}
-        result["character_metrics"] = scores(counts["tp"], counts["fp"], counts["fn"])
-        result["exact_case_rate"] = round(counts["exact_cases"] / counts["cases"], 6) if counts["cases"] else None
-        result["fully_protected_positive_rate"] = (round(counts["fully_protected_positive_cases"] /
-                                                          counts["positive_cases"], 6)
-                                                    if counts["positive_cases"] else None)
-        result["false_positive_negative_rate"] = (round(counts["false_positive_negative_cases"] /
-                                                        counts["negative_cases"], 6)
-                                                  if counts["negative_cases"] else None)
-        return result
 
     return {
         "unique_case_primary": summarize(totals), "traffic_weighted_secondary": summarize(weighted),

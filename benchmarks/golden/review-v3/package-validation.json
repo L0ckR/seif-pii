@@ -1,0 +1,10 @@
+{
+  "source_revision": "12191083eea106edf85c7bbc6e60a140faf1b4c2",
+  "archive": "seif-pii-generalized-1219108.zip",
+  "sha256": "424d28b2e4beca96cb91181e7d83ad4ee1f3e4f3ea2bd10d4ac51b2d7e6c9320",
+  "bytes": 608941,
+  "files": 177,
+  "source_bytes_match": true,
+  "archive_crc_ok": true,
+  "private_corpora_excluded": true
+}

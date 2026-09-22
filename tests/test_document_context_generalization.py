@@ -1,0 +1,217 @@
+"""Independent ownership, record-boundary and field-continuation controls."""
+
+import pytest
+
+from seif.document_fields import document_candidates, document_kind_at_value
+
+NUMBER_PARTS = [("DRIVER_LICENSE", "34 56"), ("DRIVER_LICENSE", "876543")]
+
+
+def values(text):
+    return [(kind, text[start:end]) for start, end, kind, _, _ in document_candidates(text)]
+
+
+@pytest.mark.parametrize("label", [
+    "Карточка водителя", "Данные карточки водителя", "Предъявите карточку водителя",
+    "С карточкой водителя", "В карточке водителя", "Водительская карточка",
+    "Данные водительской карточки", "Предъявите водительскую карточку",
+])
+@pytest.mark.parametrize("transform", [str.lower, str.upper, lambda value: value])
+def test_personal_driver_card_inflections_are_recognized(label, transform):
+    text = transform(label + ", категория C, серия 34 56, номер 876543.")
+    assert values(text) == NUMBER_PARTS
+
+
+@pytest.mark.parametrize("bridge", [
+    ". ", ".\n", "\n", "\r\n", "; ",
+    ". В графе 3 указано: ", ". В пункте 2. 3 записано, что ",
+    ". На обороте приведены: ", ". В ней указаны ",
+    " проверено. ", " клиента предъявлено. В строке № 2 указаны: ",
+])
+@pytest.mark.parametrize("transform", [str.lower, str.upper, lambda value: value])
+def test_explicit_owner_continues_only_into_a_field_clause(bridge, transform):
+    text = transform("Водительское удостоверение" + bridge + "Серия 34 56, номер 876543.")
+    assert values(text) == NUMBER_PARTS
+
+
+@pytest.mark.parametrize("separator", ["\n", "\r\n"])
+def test_separate_lines_in_one_document_preserve_both_parts(separator):
+    text = "Водительское удостоверение" + separator + "серия 34 56" + separator + "номер 876543"
+    assert values(text) == NUMBER_PARTS
+
+
+@pytest.mark.parametrize("bridge", [
+    ". Обсудили встречу. ", ". На следующий день ", ". Другие сведения: ",
+    ". Новая запись: ", ". Следующая анкета: ", "\n\n", "\r\n\r\n", "! ", "? ",
+])
+def test_unrelated_record_does_not_inherit_driver_license(bridge):
+    # The pre-existing unowned paired-series policy is PASSPORT. This control
+    # asserts that an unrelated earlier licence does not alter that policy.
+    text = "Водительское удостоверение" + bridge + "серия 34 56, номер 876543."
+    assert values(text) == [("PASSPORT", "34 56"), ("PASSPORT", "876543")]
+
+
+@pytest.mark.parametrize("business", ["Заказ", "Паспорт оборудования", "Накладная", "Номер договора", "Артикул товара"])
+def test_new_business_owner_stops_personal_document_context(business):
+    text = "Водительское удостоверение проверено. " + business + ": серия 34 56, номер 876543."
+    assert values(text) == []
+
+
+@pytest.mark.parametrize("business", ["Заказ", "Накладная", "Паспорт оборудования"])
+def test_business_record_continuation_does_not_become_a_personal_document(business):
+    text = business + " проверен. В графе 2 указано: серия 34 56, номер 876543."
+    assert values(text) == []
+
+
+def test_new_explicit_personal_owner_overrides_prior_business_record():
+    text = "Накладная проверена. Водительское удостоверение: серия 34 56, номер 876543."
+    assert values(text) == NUMBER_PARTS
+
+
+def test_multiple_documents_preserve_their_individual_owners():
+    text = ("Водительское удостоверение. Серия 34 56, номер 876543; "
+            "паспорт: серия 78 12, номер 345678.")
+    assert values(text) == NUMBER_PARTS + [("PASSPORT", "78 12"), ("PASSPORT", "345678")]
+
+
+@pytest.mark.parametrize("label", [
+    "Тахографическая карточка водителя", "Топливная карточка водителя",
+    "Корпоративная карточка водителя", "Коммерческая карточка водителя",
+    "Карточка водителя для тахографа", "Для цифрового тахографа карточка водителя",
+    "Карта водителя", "Водительская карта", "Карта водителя для оплаты топлива",
+])
+def test_non_license_or_ambiguous_driver_cards_are_not_assumed_to_be_licenses(label):
+    assert values(label + ": серия 34 56, номер 876543.") == []
+
+
+def test_plain_grouped_number_needs_ownership_in_its_own_clause():
+    assert values("Водительское удостоверение проверено. 3456 876543") == []
+
+
+def test_blank_line_does_not_pair_document_parts_from_separate_records():
+    assert values("Водительское удостоверение: серия 34 56\n\nномер 876543") == []
+
+
+def test_owner_context_does_not_expand_without_limit():
+    text = "Водительское удостоверение. " + " " * 170 + "серия 34 56, номер 876543."
+    assert values(text) == [("PASSPORT", "34 56"), ("PASSPORT", "876543")]
+
+
+@pytest.mark.parametrize("device", ["принтере", "сканере", "компьютере", "ноутбуке", "устройстве", "двигателе"])
+def test_new_product_record_rejects_personal_document_inference(device):
+    text = f"Паспорт заявителя проверен.\n\nОтчёт о {device}: серия 34 56, номер 876543."
+    assert values(text) == []
+
+
+@pytest.mark.parametrize("template,kind", [
+    ("Карточка водителя: серия {value}, номер 876543.", "DRIVER_LICENSE"),
+    ("Водительское удостоверение. Серия {value}, номер 876543.", "DRIVER_LICENSE"),
+    ("Водительское удостоверение. В графе 3 указано: серия {value}, номер 876543.", "DRIVER_LICENSE"),
+    ("Паспорт заявителя проверен.\n\nОтчёт о принтере: серия {value}, номер 876543.", None),
+    ("Паспорт: серия {value}, номер 876543.", "PASSPORT"),
+])
+def test_legacy_numeric_match_uses_the_same_field_owner(template, kind):
+    text = template.format(value="34 56")
+    assert document_kind_at_value(text, text.index("34 56")) == kind
+
+
+@pytest.mark.parametrize("label", [
+    "паспортные данные", "паспортных данных", "паспортными реквизитами",
+    "удостоверение личности", "удостоверения личности",
+])
+@pytest.mark.parametrize("transform", [str.lower, str.upper])
+def test_explicit_identity_fields_override_earlier_business_context(label, transform):
+    text = transform(f"Счёт согласован; {label} клиента: серия 34 56, номер 876543.")
+    assert values(text) == [("PASSPORT", "34 56"), ("PASSPORT", "876543")]
+
+
+@pytest.mark.parametrize("cue", ["Реквизиты:", "Данные:", "Вот:", "Следующие данные:", "Его реквизиты —"])
+@pytest.mark.parametrize("transform", [str.lower, str.upper])
+@pytest.mark.parametrize("bridge", [" клиента предъявлен. ", " для регистрации в системе.\n"])
+def test_explicit_number_presentation_can_continue_a_personal_owner(cue, transform, bridge):
+    text = transform(f"Паспорт{bridge}{cue} 3456 876543.")
+    assert values(text) == [("PASSPORT", "3456 876543")]
+
+
+@pytest.mark.parametrize("bridge", [
+    " клиента предъявлен. Обсуждение завершено. ", " клиента предъявлен.\n\n",
+    " клиента предъявлен! ", " клиента предъявлен. Новая запись: ",
+    " клиента предъявлен. Оборудование: ", " клиента предъявлен. Номер заказа: ",
+])
+def test_number_presentation_does_not_cross_records_or_new_owners(bridge):
+    assert values(f"Паспорт{bridge}Данные: 3456 876543.") == []
+
+
+@pytest.mark.parametrize("purpose", ["Для проверки товара", "При получении оборудования", "В целях регистрации договора"])
+@pytest.mark.parametrize("field_request", ["необходимы следующие данные", "требуются реквизиты"])
+@pytest.mark.parametrize("transform", [str.lower, str.upper])
+def test_purpose_object_does_not_own_subsequently_requested_paired_fields(purpose, field_request, transform):
+    # The two labelled parts retain the established context-free policy. This
+    # grammar does not assert that the requested document is a passport.
+    text = transform(f"{purpose} {field_request}: серия 34 56, номер 876543.")
+    assert values(text) == [("PASSPORT", "34 56"), ("PASSPORT", "876543")]
+
+
+@pytest.mark.parametrize("prefix", [
+    "Данные товара", "Реквизиты договора", "Паспорт оборудования",
+    "Для проверки товара", "Для проверки товара нужны его данные",
+    "Для проверки товара необходимы данные оборудования",
+])
+def test_direct_business_fields_keep_veto_even_with_purpose_words(prefix):
+    assert values(f"{prefix}: серия 34 56, номер 876543.") == []
+
+
+def test_purpose_context_does_not_grant_ownership_to_bare_numbers():
+    assert values("Для проверки товара необходимы следующие данные: 3456 876543.") == []
+
+
+@pytest.mark.parametrize("transform", [str.lower, str.upper])
+@pytest.mark.parametrize("prefix", [
+    "", "Проверка договора завершена. ", "Регистрация автомобиля завершена. ",
+    "Паспорт оборудования проверен. ",
+])
+def test_generic_identity_document_does_not_assign_bare_number_category(transform, prefix):
+    assert values(transform(prefix + "Удостоверение личности: 34 56 876543.")) == []
+
+
+@pytest.mark.parametrize("prefix", ["Регистрация автомобиля завершена. ", "Паспорт оборудования проверен. "])
+def test_generic_identity_document_preserves_explicit_paired_field_policy(prefix):
+    text = prefix + "Удостоверение личности: серия 34 56, номер 876543."
+    assert values(text) == [("PASSPORT", "34 56"), ("PASSPORT", "876543")]
+
+
+def test_specific_owner_can_follow_generic_identity_document():
+    text = "Удостоверение личности: водительское удостоверение 34 56 876543."
+    assert values(text) == [("DRIVER_LICENSE", "34 56 876543")]
+
+
+@pytest.mark.parametrize("prefix", [
+    "Моё удостоверение выдано в 2017 году, ",
+    "Предъявлена копия удостоверения клиента, ",
+    "Водительское удостоверение проверено. Старое удостоверение имеется, ",
+])
+@pytest.mark.parametrize("transform", [str.lower, str.upper])
+def test_unqualified_identity_preserves_paired_number_privacy(prefix, transform):
+    from seif.detector import detect
+
+    text = transform(prefix + "серия 34 56, номер 876543.")
+    spans = detect(text)
+    for value in ("34 56", "876543"):
+        start = text.index(value)
+        assert all(any(s.start <= offset < s.end for s in spans)
+                   for offset in range(start, start + len(value)) if text[offset].isalnum())
+
+
+@pytest.mark.parametrize("prefix", [
+    "Служебное удостоверение выдано, ", "Студенческое удостоверение предъявлено, ",
+    "Пенсионное удостоверение имеется, ", "Удостоверение оборудования проверено, ",
+    "Удостоверение имеется. Новый заказ: ", "Удостоверение работника предъявлено, ",
+    "Удостоверение качества получено, ",
+    "Техническое удостоверение: ", "Транспортное удостоверение выдано, ",
+])
+def test_qualified_or_new_business_owner_does_not_acquire_paired_identity_fields(prefix):
+    assert values(prefix + "серия 34 56, номер 876543.") == []
+
+
+def test_immediate_generic_certificate_label_retains_existing_license_policy():
+    assert values("Удостоверение: серия 34 56, номер 876543.") == NUMBER_PARTS

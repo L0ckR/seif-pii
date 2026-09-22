@@ -81,36 +81,44 @@ def client(port: int, password: str) -> Redis:
     )
 
 
+def _node_snapshot(node, executable, credentials):
+    vote = None
+    owned = process_owned(node, executable)
+    item = {"port": node["port"], "owned_process_running": owned}
+    password = credentials["redis_password" if node["kind"] == "redis" else "sentinel_password"]
+    try:
+        if not owned:
+            raise ConnectionError("Owned process unavailable")
+        with client(node["port"], password) as connection:
+            if node["kind"] == "redis":
+                replication = connection.info("replication")
+                item.update(role=replication["role"], connected_replicas=replication.get("connected_slaves", 0))
+                if replication["role"] == "slave":
+                    item["primary_port"] = replication["master_port"]
+                    item["replication_link"] = replication["master_link_status"]
+            else:
+                info = connection.sentinel_master(MASTER)
+                item.update(
+                    primary_host=info["ip"],
+                    primary_port=info["port"],
+                    known_sentinels=info["num-other-sentinels"] + 1,
+                )
+                vote = (info["ip"], int(info["port"]))
+    except (RedisError, OSError):
+        item["available"] = False
+    else:
+        item["available"] = True
+    return item, vote
+
+
 def snapshot(directory: Path) -> dict:
     state, credentials = load_state(directory)
     result = {"ready": False, "same_host_only": True, "redis": [], "sentinels": []}
     primary_votes = []
     for node in state["nodes"]:
-        owned = process_owned(node, state["executable"])
-        item = {"port": node["port"], "owned_process_running": owned}
-        password = credentials["redis_password" if node["kind"] == "redis" else "sentinel_password"]
-        try:
-            if not owned:
-                raise ConnectionError("Owned process unavailable")
-            with client(node["port"], password) as connection:
-                if node["kind"] == "redis":
-                    replication = connection.info("replication")
-                    item.update(role=replication["role"], connected_replicas=replication.get("connected_slaves", 0))
-                    if replication["role"] == "slave":
-                        item["primary_port"] = replication["master_port"]
-                        item["replication_link"] = replication["master_link_status"]
-                else:
-                    info = connection.sentinel_master(MASTER)
-                    item.update(
-                        primary_host=info["ip"],
-                        primary_port=info["port"],
-                        known_sentinels=info["num-other-sentinels"] + 1,
-                    )
-                    primary_votes.append((info["ip"], int(info["port"])))
-        except (RedisError, OSError):
-            item["available"] = False
-        else:
-            item["available"] = True
+        item, vote = _node_snapshot(node, state["executable"], credentials)
+        if vote is not None:
+            primary_votes.append(vote)
         result["redis" if node["kind"] == "redis" else "sentinels"].append(item)
     agreed = len(primary_votes) == 3 and len(set(primary_votes)) == 1
     if agreed:
@@ -160,13 +168,7 @@ def stop(directory: Path) -> dict:
     }
 
 
-def start(directory: Path, executable: Path, library_dir: Path | None) -> dict:
-    if directory.exists():
-        raise ValueError(
-            "Directory already exists. Use status/stop; existing AOF and Sentinel state must not be re-bootstrapped."
-        )
-    if not executable.is_file() or not os.access(executable, os.X_OK):
-        raise ValueError("Provide an executable Redis server with --redis-server")
+def _check_available_ports():
     # Refuse occupied ports before creating credentials or touching any service.
     reserved = []
     try:
@@ -179,6 +181,63 @@ def start(directory: Path, executable: Path, library_dir: Path | None) -> dict:
     finally:
         for sock in reserved:
             sock.close()
+
+
+def _start_node(directory, executable, environment, credentials, identity):
+    kind, index, port = identity
+    node_directory = directory / f"{kind}-{port}"
+    node_directory.mkdir(mode=0o700)
+    config = node_directory / f"{kind}.conf"
+    common = f"bind 127.0.0.1\nprotected-mode yes\nport {port}\ndir {node_directory}\ndaemonize no\n"
+    if kind == "redis":
+        body = (
+            f"requirepass {credentials['redis_password']}\nmasterauth {credentials['redis_password']}\n"
+            'appendonly yes\nappendfsync everysec\nsave ""\nmaxmemory 1gb\nmaxmemory-policy noeviction\n'
+            "min-replicas-to-write 1\nmin-replicas-max-lag 5\n"
+            + (f"replicaof 127.0.0.1 {REDIS_PORTS[0]}\n" if index else "")
+        )
+    else:
+        body = (
+            f"requirepass {credentials['sentinel_password']}\n"
+            f"sentinel sentinel-pass {credentials['sentinel_password']}\n"
+            f"sentinel monitor {MASTER} 127.0.0.1 {REDIS_PORTS[0]} 2\n"
+            f"sentinel auth-pass {MASTER} {credentials['redis_password']}\n"
+            f"sentinel down-after-milliseconds {MASTER} 5000\n"
+            f"sentinel failover-timeout {MASTER} 15000\nsentinel parallel-syncs {MASTER} 1\n"
+        )
+    write_private(config, common + body)
+    log_path = node_directory / "server.log"
+    descriptor = os.open(log_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    command = [str(executable), str(config)] + (["--sentinel"] if kind == "sentinel" else [])
+    with os.fdopen(descriptor, "wb") as log:
+        process = subprocess.Popen(
+            command,
+            cwd=node_directory,
+            env=environment,
+            stdin=subprocess.DEVNULL,
+            stdout=log,
+            stderr=log,
+            start_new_session=True,
+            umask=0o077,
+        )
+    node = {
+        "kind": kind,
+        "port": port,
+        "pid": process.pid,
+        "directory": str(node_directory),
+        "start_ticks": process_start(process.pid),
+    }
+    return node
+
+
+def start(directory: Path, executable: Path, library_dir: Path | None) -> dict:
+    if directory.exists():
+        raise ValueError(
+            "Directory already exists. Use status/stop; existing AOF and Sentinel state must not be re-bootstrapped."
+        )
+    if not executable.is_file() or not os.access(executable, os.X_OK):
+        raise ValueError("Provide an executable Redis server with --redis-server")
+    _check_available_ports()
     directory.mkdir(mode=0o700, parents=True)
     credentials = {"redis_password": secrets.token_urlsafe(32), "sentinel_password": secrets.token_urlsafe(32)}
     write_private(directory / "credentials.json", json.dumps(credentials, indent=2) + "\n")
@@ -191,48 +250,7 @@ def start(directory: Path, executable: Path, library_dir: Path | None) -> dict:
     try:
         for kind, ports in (("redis", REDIS_PORTS), ("sentinel", SENTINEL_PORTS)):
             for index, port in enumerate(ports):
-                node_directory = directory / f"{kind}-{port}"
-                node_directory.mkdir(mode=0o700)
-                config = node_directory / f"{kind}.conf"
-                common = f"bind 127.0.0.1\nprotected-mode yes\nport {port}\ndir {node_directory}\ndaemonize no\n"
-                if kind == "redis":
-                    body = (
-                        f"requirepass {credentials['redis_password']}\nmasterauth {credentials['redis_password']}\n"
-                        'appendonly yes\nappendfsync everysec\nsave ""\nmaxmemory 1gb\nmaxmemory-policy noeviction\n'
-                        "min-replicas-to-write 1\nmin-replicas-max-lag 5\n"
-                        + (f"replicaof 127.0.0.1 {REDIS_PORTS[0]}\n" if index else "")
-                    )
-                else:
-                    body = (
-                        f"requirepass {credentials['sentinel_password']}\n"
-                        f"sentinel sentinel-pass {credentials['sentinel_password']}\n"
-                        f"sentinel monitor {MASTER} 127.0.0.1 {REDIS_PORTS[0]} 2\n"
-                        f"sentinel auth-pass {MASTER} {credentials['redis_password']}\n"
-                        f"sentinel down-after-milliseconds {MASTER} 5000\n"
-                        f"sentinel failover-timeout {MASTER} 15000\nsentinel parallel-syncs {MASTER} 1\n"
-                    )
-                write_private(config, common + body)
-                log_path = node_directory / "server.log"
-                descriptor = os.open(log_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
-                command = [str(executable), str(config)] + (["--sentinel"] if kind == "sentinel" else [])
-                with os.fdopen(descriptor, "wb") as log:
-                    process = subprocess.Popen(
-                        command,
-                        cwd=node_directory,
-                        env=environment,
-                        stdin=subprocess.DEVNULL,
-                        stdout=log,
-                        stderr=log,
-                        start_new_session=True,
-                        umask=0o077,
-                    )
-                node = {
-                    "kind": kind,
-                    "port": port,
-                    "pid": process.pid,
-                    "directory": str(node_directory),
-                    "start_ticks": process_start(process.pid),
-                }
+                node = _start_node(directory, executable, environment, credentials, (kind, index, port))
                 state["nodes"].append(node)
                 write_state(directory, state)
         deadline = time.monotonic() + 30

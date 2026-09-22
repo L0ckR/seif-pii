@@ -88,14 +88,14 @@ jobs:
           cache: pip
       - run: pip install -r requirements.lock && pip install -e '.[dev]'
       - run: sudo apt-get update && sudo apt-get install -y redis-server
-      - run: ruff check seif tests scripts
+      - run: ruff check seif tests scripts deploy
       - run: pytest -q
         env:
           SEIF_TEST_REDIS_URL: redis://127.0.0.1:6379/15
           SEIF_TEST_REDIS_SERVER: /usr/bin/redis-server
       - run: python scripts/evaluate.py --output output/evaluation.json
       - name: Check immutable organizer golden against the accepted reference
-        run: python scripts/evaluate_golden.py --baseline benchmarks/golden/reference-v1.json --output output/golden-quality/ci.json
+        run: python scripts/evaluate_golden.py --baseline benchmarks/golden/reference-v2.json --output output/golden-quality/ci.json
       - run: python scripts/package.py
       - uses: actions/upload-artifact@v4
         with:
@@ -110,14 +110,16 @@ jobs:
           python-version: '3.14'
           cache: pip
       - run: pip install -r requirements.lock && pip install -e '.[dev]'
-      - run: ruff check seif tests scripts
       - run: git diff --check
       - run: python scripts/package.py
       - name: Generate GitLab Code Quality reports
         run: |
           python scripts/code_quality.py output/seif-pii-source.zip \
-            --ruff .venv/bin/ruff --output local-data/code-analysis/ci
+            --ruff ruff --output local-data/code-analysis/ci
+      - name: Enforce reviewed project lint policy
+        run: ruff check seif tests scripts deploy
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: code-quality-reports
           path: local-data/code-analysis/ci/*.json

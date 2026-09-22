@@ -1,0 +1,23 @@
+{
+  "revision": "12191083eea106edf85c7bbc6e60a140faf1b4c2",
+  "profiles": {
+    "rules": {
+      "cases": 446,
+      "changed_masks": [],
+      "changed_entity_boundaries": [
+        "org_0208"
+      ]
+    },
+    "hybrid": {
+      "cases": 446,
+      "changed_masks": [],
+      "changed_entity_boundaries": [
+        "org_0208"
+      ]
+    }
+  },
+  "source_matches": true,
+  "dataset_sha256": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46",
+  "ner_cache_sha256": "c0152894401d87c1848aab145aa5b734b30754c678d66e733545308d596f054f",
+  "note": "All 892 masks and primary scores unchanged; one case splits a field marker outside its numeric value."
+}

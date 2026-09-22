@@ -1,0 +1,345 @@
+{
+  "scope": "Every one of 1810 aligned original cases; original13 gold labels; historical strict mapping for typed metrics and ALL actual service spans for untyped privacy.",
+  "profiles": {
+    "rules": {
+      "domain": {
+        "cases": 900,
+        "metrics": {
+          "exact_span": {
+            "baseline": {
+              "tp": 536,
+              "fp": 37,
+              "fn": 221
+            },
+            "final": {
+              "tp": 538,
+              "fp": 37,
+              "fn": 219
+            },
+            "delta": {
+              "tp": 2,
+              "fp": 0,
+              "fn": -2
+            }
+          },
+          "typed_character": {
+            "baseline": {
+              "tp": 9312,
+              "fp": 172,
+              "fn": 3267
+            },
+            "final": {
+              "tp": 9334,
+              "fp": 172,
+              "fn": 3245
+            },
+            "delta": {
+              "tp": 22,
+              "fp": 0,
+              "fn": -22
+            }
+          },
+          "untyped_service_character": {
+            "baseline": {
+              "tp": 9501,
+              "fp": 141,
+              "fn": 3078
+            },
+            "final": {
+              "tp": 9511,
+              "fp": 141,
+              "fn": 3068
+            },
+            "delta": {
+              "tp": 10,
+              "fp": 0,
+              "fn": -10
+            }
+          }
+        }
+      },
+      "entity": {
+        "cases": 910,
+        "metrics": {
+          "exact_span": {
+            "baseline": {
+              "tp": 392,
+              "fp": 68,
+              "fn": 518
+            },
+            "final": {
+              "tp": 400,
+              "fp": 68,
+              "fn": 510
+            },
+            "delta": {
+              "tp": 8,
+              "fp": 0,
+              "fn": -8
+            }
+          },
+          "typed_character": {
+            "baseline": {
+              "tp": 7113,
+              "fp": 377,
+              "fn": 11099
+            },
+            "final": {
+              "tp": 7201,
+              "fp": 377,
+              "fn": 11011
+            },
+            "delta": {
+              "tp": 88,
+              "fp": 0,
+              "fn": -88
+            }
+          },
+          "untyped_service_character": {
+            "baseline": {
+              "tp": 7394,
+              "fp": 104,
+              "fn": 10818
+            },
+            "final": {
+              "tp": 7482,
+              "fp": 104,
+              "fn": 10730
+            },
+            "delta": {
+              "tp": 88,
+              "fp": 0,
+              "fn": -88
+            }
+          }
+        }
+      },
+      "all_aligned": {
+        "cases": 1810,
+        "metrics": {
+          "exact_span": {
+            "baseline": {
+              "tp": 928,
+              "fp": 105,
+              "fn": 739
+            },
+            "final": {
+              "tp": 938,
+              "fp": 105,
+              "fn": 729
+            },
+            "delta": {
+              "tp": 10,
+              "fp": 0,
+              "fn": -10
+            }
+          },
+          "typed_character": {
+            "baseline": {
+              "tp": 16425,
+              "fp": 549,
+              "fn": 14366
+            },
+            "final": {
+              "tp": 16535,
+              "fp": 549,
+              "fn": 14256
+            },
+            "delta": {
+              "tp": 110,
+              "fp": 0,
+              "fn": -110
+            }
+          },
+          "untyped_service_character": {
+            "baseline": {
+              "tp": 16895,
+              "fp": 245,
+              "fn": 13896
+            },
+            "final": {
+              "tp": 16993,
+              "fp": 245,
+              "fn": 13798
+            },
+            "delta": {
+              "tp": 98,
+              "fp": 0,
+              "fn": -98
+            }
+          }
+        }
+      }
+    },
+    "hybrid_person_only": {
+      "domain": {
+        "cases": 900,
+        "metrics": {
+          "exact_span": {
+            "baseline": {
+              "tp": 541,
+              "fp": 70,
+              "fn": 216
+            },
+            "final": {
+              "tp": 543,
+              "fp": 70,
+              "fn": 214
+            },
+            "delta": {
+              "tp": 2,
+              "fp": 0,
+              "fn": -2
+            }
+          },
+          "typed_character": {
+            "baseline": {
+              "tp": 9379,
+              "fp": 402,
+              "fn": 3200
+            },
+            "final": {
+              "tp": 9401,
+              "fp": 402,
+              "fn": 3178
+            },
+            "delta": {
+              "tp": 22,
+              "fp": 0,
+              "fn": -22
+            }
+          },
+          "untyped_service_character": {
+            "baseline": {
+              "tp": 9638,
+              "fp": 301,
+              "fn": 2941
+            },
+            "final": {
+              "tp": 9648,
+              "fp": 301,
+              "fn": 2931
+            },
+            "delta": {
+              "tp": 10,
+              "fp": 0,
+              "fn": -10
+            }
+          }
+        }
+      },
+      "entity": {
+        "cases": 910,
+        "metrics": {
+          "exact_span": {
+            "baseline": {
+              "tp": 401,
+              "fp": 98,
+              "fn": 509
+            },
+            "final": {
+              "tp": 409,
+              "fp": 98,
+              "fn": 501
+            },
+            "delta": {
+              "tp": 8,
+              "fp": 0,
+              "fn": -8
+            }
+          },
+          "typed_character": {
+            "baseline": {
+              "tp": 7262,
+              "fp": 631,
+              "fn": 10950
+            },
+            "final": {
+              "tp": 7350,
+              "fp": 631,
+              "fn": 10862
+            },
+            "delta": {
+              "tp": 88,
+              "fp": 0,
+              "fn": -88
+            }
+          },
+          "untyped_service_character": {
+            "baseline": {
+              "tp": 7609,
+              "fp": 292,
+              "fn": 10603
+            },
+            "final": {
+              "tp": 7697,
+              "fp": 292,
+              "fn": 10515
+            },
+            "delta": {
+              "tp": 88,
+              "fp": 0,
+              "fn": -88
+            }
+          }
+        }
+      },
+      "all_aligned": {
+        "cases": 1810,
+        "metrics": {
+          "exact_span": {
+            "baseline": {
+              "tp": 942,
+              "fp": 168,
+              "fn": 725
+            },
+            "final": {
+              "tp": 952,
+              "fp": 168,
+              "fn": 715
+            },
+            "delta": {
+              "tp": 10,
+              "fp": 0,
+              "fn": -10
+            }
+          },
+          "typed_character": {
+            "baseline": {
+              "tp": 16641,
+              "fp": 1033,
+              "fn": 14150
+            },
+            "final": {
+              "tp": 16751,
+              "fp": 1033,
+              "fn": 14040
+            },
+            "delta": {
+              "tp": 110,
+              "fp": 0,
+              "fn": -110
+            }
+          },
+          "untyped_service_character": {
+            "baseline": {
+              "tp": 17247,
+              "fp": 593,
+              "fn": 13544
+            },
+            "final": {
+              "tp": 17345,
+              "fp": 593,
+              "fn": 13446
+            },
+            "delta": {
+              "tp": 98,
+              "fp": 0,
+              "fn": -98
+            }
+          }
+        }
+      }
+    }
+  }
+}

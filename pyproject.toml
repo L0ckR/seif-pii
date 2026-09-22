@@ -25,3 +25,20 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "I", "B", "C901", "C4", "SIM", "PERF", "PLR0911", "PLR0912", "PLR0913", "PLR0915", "S"]
+
+# Pytest assertions and fixed, local-only fixture credentials are intentional.
+# The isolated archive analyzer still reports every finding from these rules.
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S105", "S106"]
+# These regression tests execute fixed local programs without a shell.
+"tests/test_field_adversarial.py" = ["S603"]
+"tests/test_transform_review.py" = ["S603"]
+"tests/test_sentinel.py" = ["S603"]
+# Local operator tools intentionally execute validated argv, with shell=False.
+"scripts/code_quality.py" = ["S603"]
+"scripts/local_redis.py" = ["S603"]
+"scripts/failover_check.py" = ["S603"]
+"deploy/k8s/create-secrets.py" = ["S603"]
+# Seeded shuffling determines benchmark order, never credentials or identifiers.
+"scripts/compare_presidio.py" = ["S311"]
+"scripts/benchmark_corpus.py" = ["S311"]

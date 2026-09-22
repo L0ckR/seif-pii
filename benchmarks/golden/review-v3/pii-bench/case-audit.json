@@ -1,0 +1,3659 @@
+{
+  "schema_version": 1,
+  "scope": "Aggregate paired-case audit, without corpus text output or modifications.",
+  "baseline_revision": "4e46c86a6f6c7bf91e9525968981ae47d7984aba",
+  "final_revision": "12191083eea106edf85c7bbc6e60a140faf1b4c2",
+  "prior_4e_reproduction": {
+    "predictions_byte_identical": true,
+    "primary_secondary_metrics_exact": [
+      "domain/common4_primary/rules",
+      "domain/common4_primary/hybrid_person_only",
+      "domain/supported8_requirement_coverage/rules",
+      "domain/supported8_requirement_coverage/hybrid_person_only",
+      "entity/common4_primary/rules",
+      "entity/common4_primary/hybrid_person_only",
+      "entity/supported8_requirement_coverage/rules",
+      "entity/supported8_requirement_coverage/hybrid_person_only"
+    ]
+  },
+  "service_character_diagnostic": "Unmodified actual service spans ignoring types, on whole-case and domain slices with full original gold. Not calculated per entity type: masking a different true PII type is not a service false positive. This is additional to the historical typed metric.",
+  "slices": [
+    {
+      "split": "domain",
+      "stratum": "common4",
+      "selection": "Original whole-case subset including empty gold",
+      "profile": "rules",
+      "cases": 612,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "supported8",
+      "selection": "Original whole-case subset including empty gold",
+      "profile": "rules",
+      "cases": 787,
+      "changed_mapped_cases": 2,
+      "changed_service_mask_cases": 2,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 2,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 22,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 10,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "all_cases",
+      "selection": "Every original case and gold type; predictions use original strict mapping",
+      "profile": "rules",
+      "cases": 900,
+      "changed_mapped_cases": 2,
+      "changed_service_mask_cases": 2,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 2,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 22,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 10,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "domain/L-CHAT",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 100,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "domain/L-DIALOG",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 100,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "domain/S-AUTO",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 100,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "domain/S-BANK",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 100,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "domain/S-DELIVERY",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 100,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "domain/S-HR",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 100,
+      "changed_mapped_cases": 1,
+      "changed_service_mask_cases": 1,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 1,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 11,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 5,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "domain/S-RE",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 100,
+      "changed_mapped_cases": 1,
+      "changed_service_mask_cases": 1,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 1,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 11,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 5,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "domain/S-SUPPORT",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 100,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "domain/S-TELECOM",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 100,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/ADDRESS",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/BANK_CARD_NUMBER",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/CVC",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/EMAIL",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/INN",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/KPP",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/NAME",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/OGRN",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/OGRNIP",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/PASSPORT_NUMBER",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 900,
+      "changed_mapped_cases": 2,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 2,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 22,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/PHONE_NUMBER",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/SNILS",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/TOKEN",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "common4",
+      "selection": "Original whole-case subset including empty gold",
+      "profile": "hybrid_person_only",
+      "cases": 612,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "supported8",
+      "selection": "Original whole-case subset including empty gold",
+      "profile": "hybrid_person_only",
+      "cases": 787,
+      "changed_mapped_cases": 2,
+      "changed_service_mask_cases": 2,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 2,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 22,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 10,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "all_cases",
+      "selection": "Every original case and gold type; predictions use original strict mapping",
+      "profile": "hybrid_person_only",
+      "cases": 900,
+      "changed_mapped_cases": 2,
+      "changed_service_mask_cases": 2,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 2,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 22,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 10,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "domain/L-CHAT",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 100,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "domain/L-DIALOG",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 100,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "domain/S-AUTO",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 100,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "domain/S-BANK",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 100,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "domain/S-DELIVERY",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 100,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "domain/S-HR",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 100,
+      "changed_mapped_cases": 1,
+      "changed_service_mask_cases": 1,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 1,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 11,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 5,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "domain/S-RE",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 100,
+      "changed_mapped_cases": 1,
+      "changed_service_mask_cases": 1,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 1,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 11,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 5,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "domain/S-SUPPORT",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 100,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "domain/S-TELECOM",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 100,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/ADDRESS",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/BANK_CARD_NUMBER",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/CVC",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/EMAIL",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/INN",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/KPP",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/NAME",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/OGRN",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/OGRNIP",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/PASSPORT_NUMBER",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 900,
+      "changed_mapped_cases": 2,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 2,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 22,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/PHONE_NUMBER",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/SNILS",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "stratum": "type/TOKEN",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 900,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "common4",
+      "selection": "Original whole-case subset including empty gold",
+      "profile": "rules",
+      "cases": 280,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "supported8",
+      "selection": "Original whole-case subset including empty gold",
+      "profile": "rules",
+      "cases": 560,
+      "changed_mapped_cases": 8,
+      "changed_service_mask_cases": 8,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 8,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 88,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 88,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "all_cases",
+      "selection": "Every original case and gold type; predictions use original strict mapping",
+      "profile": "rules",
+      "cases": 910,
+      "changed_mapped_cases": 8,
+      "changed_service_mask_cases": 8,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 8,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 88,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 88,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/ADDRESS",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/BANK_CARD_NUMBER",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/CVC",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/EMAIL",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/INN",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/KPP",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/NAME",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/OGRN",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/OGRNIP",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/PASSPORT_NUMBER",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 70,
+      "changed_mapped_cases": 8,
+      "changed_service_mask_cases": 8,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 8,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 88,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 88,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/PHONE_NUMBER",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/SNILS",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/TOKEN",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "rules",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/ADDRESS",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/BANK_CARD_NUMBER",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/CVC",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/EMAIL",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/INN",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/KPP",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/NAME",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/OGRN",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/OGRNIP",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/PASSPORT_NUMBER",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 910,
+      "changed_mapped_cases": 8,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 8,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 88,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/PHONE_NUMBER",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/SNILS",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/TOKEN",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "rules",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "common4",
+      "selection": "Original whole-case subset including empty gold",
+      "profile": "hybrid_person_only",
+      "cases": 280,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "supported8",
+      "selection": "Original whole-case subset including empty gold",
+      "profile": "hybrid_person_only",
+      "cases": 560,
+      "changed_mapped_cases": 8,
+      "changed_service_mask_cases": 8,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 8,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 88,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 88,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "all_cases",
+      "selection": "Every original case and gold type; predictions use original strict mapping",
+      "profile": "hybrid_person_only",
+      "cases": 910,
+      "changed_mapped_cases": 8,
+      "changed_service_mask_cases": 8,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 8,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 88,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 88,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/ADDRESS",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/BANK_CARD_NUMBER",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/CVC",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/EMAIL",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/INN",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/KPP",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/NAME",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/OGRN",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/OGRNIP",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/PASSPORT_NUMBER",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 70,
+      "changed_mapped_cases": 8,
+      "changed_service_mask_cases": 8,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 8,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 88,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 88,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/PHONE_NUMBER",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/SNILS",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "domain/TOKEN",
+      "selection": "Every original case in this domain, all original gold types",
+      "profile": "hybrid_person_only",
+      "cases": 70,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": 0,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "untyped_service_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/ADDRESS",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/BANK_CARD_NUMBER",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/CVC",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/EMAIL",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/INN",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/KPP",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/NAME",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/OGRN",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/OGRNIP",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/PASSPORT_NUMBER",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 910,
+      "changed_mapped_cases": 8,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 8,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 88,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/PHONE_NUMBER",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/SNILS",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "stratum": "type/TOKEN",
+      "selection": "This gold type across all cases; predictions filtered to this type",
+      "profile": "hybrid_person_only",
+      "cases": 910,
+      "changed_mapped_cases": 0,
+      "changed_service_mask_cases": null,
+      "changes": {
+        "exact_span": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        },
+        "typed_character": {
+          "lost_tp": 0,
+          "gained_tp": 0,
+          "new_fp": 0,
+          "removed_fp": 0,
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "cases_with_any_regression": 0
+        }
+      }
+    }
+  ],
+  "regression_strata": []
+}

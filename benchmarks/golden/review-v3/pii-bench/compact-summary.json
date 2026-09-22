@@ -1,0 +1,212 @@
+{
+  "baseline_revision": "4e46c86a6f6c7bf91e9525968981ae47d7984aba",
+  "final_revision": "12191083eea106edf85c7bbc6e60a140faf1b4c2",
+  "dataset_revision": "cd6a18ace16daf23e79247ccf1e2b245d4054654",
+  "ner_profile": {
+    "entities": [
+      "PERSON"
+    ],
+    "score": 0.85,
+    "mode": "same frozen Presidio outputs for both revisions; no NER rerun",
+    "location": "excluded to preserve historical protocol; this is not a PERSON+LOCATION deployment evaluation"
+  },
+  "metrics": [
+    {
+      "split": "domain",
+      "subset": "common4_primary",
+      "profile": "rules",
+      "cases": 612,
+      "exact_f1_before": 0.992,
+      "exact_f1_after": 0.992,
+      "typed_character_f1_before": 0.99519,
+      "typed_character_f1_after": 0.99519
+    },
+    {
+      "split": "domain",
+      "subset": "common4_primary",
+      "profile": "hybrid_person_only",
+      "cases": 612,
+      "exact_f1_before": 0.973643,
+      "exact_f1_after": 0.973643,
+      "typed_character_f1_before": 0.989037,
+      "typed_character_f1_after": 0.989037
+    },
+    {
+      "split": "domain",
+      "subset": "supported8_requirement_coverage",
+      "profile": "rules",
+      "cases": 787,
+      "exact_f1_before": 0.882613,
+      "exact_f1_after": 0.884581,
+      "typed_character_f1_before": 0.92643,
+      "typed_character_f1_after": 0.92766
+    },
+    {
+      "split": "domain",
+      "subset": "supported8_requirement_coverage",
+      "profile": "hybrid_person_only",
+      "cases": 787,
+      "exact_f1_before": 0.865236,
+      "exact_f1_after": 0.867181,
+      "typed_character_f1_before": 0.919773,
+      "typed_character_f1_after": 0.920996
+    },
+    {
+      "split": "entity",
+      "subset": "common4_primary",
+      "profile": "rules",
+      "cases": 280,
+      "exact_f1_before": 0.983666,
+      "exact_f1_after": 0.983666,
+      "typed_character_f1_before": 0.983384,
+      "typed_character_f1_after": 0.983384
+    },
+    {
+      "split": "entity",
+      "subset": "common4_primary",
+      "profile": "hybrid_person_only",
+      "cases": 280,
+      "exact_f1_before": 0.980736,
+      "exact_f1_after": 0.980736,
+      "typed_character_f1_before": 0.989686,
+      "typed_character_f1_after": 0.989686
+    },
+    {
+      "split": "entity",
+      "subset": "supported8_requirement_coverage",
+      "profile": "rules",
+      "cases": 560,
+      "exact_f1_before": 0.784785,
+      "exact_f1_after": 0.794439,
+      "typed_character_f1_before": 0.868286,
+      "typed_character_f1_after": 0.874332
+    },
+    {
+      "split": "entity",
+      "subset": "supported8_requirement_coverage",
+      "profile": "hybrid_person_only",
+      "cases": 560,
+      "exact_f1_before": 0.777132,
+      "exact_f1_after": 0.786538,
+      "typed_character_f1_before": 0.867674,
+      "typed_character_f1_after": 0.873596
+    }
+  ],
+  "aligned_corpus_cases": 1810,
+  "audit_strata": 108,
+  "regression_strata": 0,
+  "all_trial_passport_losses_recovered": true,
+  "predictions_identical_to_822": true,
+  "aligned_metrics": {
+    "rules": {
+      "exact_span": {
+        "baseline": {
+          "tp": 928,
+          "fp": 105,
+          "fn": 739
+        },
+        "final": {
+          "tp": 938,
+          "fp": 105,
+          "fn": 729
+        },
+        "delta": {
+          "tp": 10,
+          "fp": 0,
+          "fn": -10
+        }
+      },
+      "typed_character": {
+        "baseline": {
+          "tp": 16425,
+          "fp": 549,
+          "fn": 14366
+        },
+        "final": {
+          "tp": 16535,
+          "fp": 549,
+          "fn": 14256
+        },
+        "delta": {
+          "tp": 110,
+          "fp": 0,
+          "fn": -110
+        }
+      },
+      "untyped_service_character": {
+        "baseline": {
+          "tp": 16895,
+          "fp": 245,
+          "fn": 13896
+        },
+        "final": {
+          "tp": 16993,
+          "fp": 245,
+          "fn": 13798
+        },
+        "delta": {
+          "tp": 98,
+          "fp": 0,
+          "fn": -98
+        }
+      }
+    },
+    "hybrid_person_only": {
+      "exact_span": {
+        "baseline": {
+          "tp": 942,
+          "fp": 168,
+          "fn": 725
+        },
+        "final": {
+          "tp": 952,
+          "fp": 168,
+          "fn": 715
+        },
+        "delta": {
+          "tp": 10,
+          "fp": 0,
+          "fn": -10
+        }
+      },
+      "typed_character": {
+        "baseline": {
+          "tp": 16641,
+          "fp": 1033,
+          "fn": 14150
+        },
+        "final": {
+          "tp": 16751,
+          "fp": 1033,
+          "fn": 14040
+        },
+        "delta": {
+          "tp": 110,
+          "fp": 0,
+          "fn": -110
+        }
+      },
+      "untyped_service_character": {
+        "baseline": {
+          "tp": 17247,
+          "fp": 593,
+          "fn": 13544
+        },
+        "final": {
+          "tp": 17345,
+          "fp": 593,
+          "fn": 13446
+        },
+        "delta": {
+          "tp": 98,
+          "fp": 0,
+          "fn": -98
+        }
+      }
+    }
+  },
+  "limitations": [
+    "Development regression after targeted prior-trial diagnosis; not a new blind holdout.",
+    "Frozen PERSON-only NER, not deployed PERSON+LOCATION or HTTP/RPS."
+  ]
+}
