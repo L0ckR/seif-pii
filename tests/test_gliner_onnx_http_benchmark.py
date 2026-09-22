@@ -2,6 +2,7 @@
 import importlib
 import json
 import sys
+from http.client import RemoteDisconnected
 from types import SimpleNamespace
 
 import pytest
@@ -180,3 +181,98 @@ def test_cli_preserves_virtualenv_interpreter_symlinks(monkeypatch, tmp_path):
     args = bench.parse_args()
     assert args.ner_python == interpreter and args.api_python == interpreter
     assert args.ner_python != binary
+
+
+def test_http_client_renews_idle_connections_before_send_without_retry(monkeypatch):
+    clock, connections = [0.0], []
+
+    class FakeConnection:
+        def __init__(self, *_args, **_kwargs):
+            self.requests, self.closed = [], False
+            connections.append(self)
+
+        def request(self, method, path, **_kwargs):
+            assert not self.closed
+            self.requests.append((method, path))
+
+        def getresponse(self):
+            return SimpleNamespace(status=200, read=lambda _: b"{}")
+
+        def close(self):
+            self.closed = True
+
+    monkeypatch.setattr(bench, "HTTPConnection", FakeConnection)
+    monkeypatch.setattr(bench.time, "monotonic", lambda: clock[0])
+    client = bench.LocalClient("http://127.0.0.1:12345", {}, 30)
+    client.call("/v1/mask", {"payload": "synthetic"})
+    clock[0] = .5
+    client.call("/v1/mask", {"payload": "synthetic"})
+    assert len(connections) == 1 and len(connections[0].requests) == 2
+    clock[0] = 10
+    client.call("/v1/unmask", {"payload": "synthetic"})
+    assert len(connections) == 2 and connections[0].closed
+    # Administrative reads also refresh recently used sockets, outside timing.
+    client.call("/metrics", raw=True)
+    assert len(connections) == 3 and connections[1].closed
+    assert sum(len(item.requests) for item in connections) == 4
+    client.close()
+
+
+def test_timed_post_disconnect_remains_an_error_and_is_not_retried(monkeypatch):
+    requests = []
+
+    class DisconnectedConnection:
+        def __init__(self, *_args, **_kwargs):
+            pass
+
+        def request(self, method, path, **_kwargs):
+            requests.append((method, path))
+
+        def getresponse(self):
+            raise RemoteDisconnected("Synthetic disconnect")
+
+        def close(self):
+            pass
+
+    monkeypatch.setattr(bench, "HTTPConnection", DisconnectedConnection)
+    client = bench.LocalClient("http://127.0.0.1:12345", {}, 30)
+    outcome = bench.mask_request(client, example_case(), "synthetic-id")
+    assert outcome["error"] == "invalid_response_or_transport"
+    assert outcome["status"] is None
+    assert requests == [("POST", "/v1/mask")]
+
+
+def test_admin_failure_preserves_timed_summary_with_unknown_ner_counts(monkeypatch):
+    class FakeNer:
+        calls = 0
+
+        def call(self, _path):
+            self.calls += 1
+            if self.calls > 1:
+                raise RemoteDisconnected("Synthetic admin disconnect")
+            return 200, {"counts": bench.Counts().snapshot(), "model": {}}
+
+    class FakeApi:
+        timeout = 1
+
+        def call(self, _path, *, raw=False):
+            assert raw
+            return 200, 'seif_stage_duration_seconds_count{stage="ner"} 0\n'
+
+    def result(_api, case, payload_id):
+        return {"case_id": case["case_id"], "payload_id": payload_id, "masked": "****", "status": 200,
+                "latency_ms": 1, "mask_match": True, "entities_match": True, "types_match": True,
+                "unexpected_unmasked": False}
+
+    monkeypatch.setattr(bench, "mask_request", result)
+    reports = []
+    with pytest.raises(RemoteDisconnected):
+        bench.run_phase(FakeApi(), FakeNer(), [example_case()], 1, phase_reports=reports)
+    assert len(reports) == 1
+    report = reports[0]
+    assert report["mask_requests"] == 1 and report["success_ratio"] == 1
+    assert report["per_case"][0]["latency_ms"] == 1
+    assert report["ner_counts"] is None and report["ner_stage_attempts"] is None
+    assert report["requests_without_ner_stage"] is None
+    assert report["postflight_status"] == "failed" and report["postflight_error_type"] == "RemoteDisconnected"
+    assert not report["valid_successful_measurement"]

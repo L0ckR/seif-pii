@@ -150,6 +150,13 @@ class LocalClient:
         self.local, self.connections, self.lock = threading.local(), [], threading.Lock()
 
     def call(self, path, body=None, *, raw=False):
+        connection = getattr(self.local, "connection", None)
+        # Uvicorn closes idle keepalive sockets after five seconds by default.
+        # Admin reads are outside timing and always fresh. Renew idle POST
+        # connections before sending; never retry an attempted timed request.
+        if connection is not None and (body is None or time.monotonic() - self.local.last_response_at >= 2):
+            connection.close()
+            self.local.connection = None
         if getattr(self.local, "connection", None) is None:
             self.local.connection = HTTPConnection(self.host, self.port, timeout=self.timeout)
             with self.lock:
@@ -162,6 +169,7 @@ class LocalClient:
             response = connection.getresponse()
             content = response.read(256 * 1024 + 1)
             require(len(content) <= 256 * 1024, "bounded_http_response")
+            self.local.last_response_at = time.monotonic()
             return response.status, content.decode("utf-8") if raw else json.loads(content)
         except Exception:
             connection.close()
@@ -268,7 +276,7 @@ def phase_summary(outcomes, elapsed, concurrency, counts, stage_count):
     errors = Counter(row["error"] for row in outcomes if "error" in row)
     successful = [row for row in outcomes if "error" not in row]
     matches = sum(all(row[key] for key in ("mask_match", "entities_match", "types_match")) for row in successful)
-    all_inferred = (stage_count == len(outcomes) == counts.get("model_started")
+    all_inferred = (counts is not None and stage_count == len(outcomes) == counts.get("model_started")
                     == counts.get("model_completed") == counts.get("http_200")
                     and counts.get("model_failed", 0) == 0)
     return {
@@ -281,7 +289,8 @@ def phase_summary(outcomes, elapsed, concurrency, counts, stage_count):
         "typed_entity_mismatches": sum(not row["entities_match"] for row in successful),
         "type_list_mismatches": sum(not row["types_match"] for row in successful),
         "unexpected_unmasked_responses": sum(row["unexpected_unmasked"] for row in successful),
-        "ner_stage_attempts": stage_count, "requests_without_ner_stage": len(outcomes) - stage_count,
+        "ner_stage_attempts": stage_count,
+        "requests_without_ner_stage": None if stage_count is None else len(outcomes) - stage_count,
         "ner_counts": counts, "every_mask_completed_real_ner": all_inferred,
         "valid_successful_measurement": len(successful) == matches == len(outcomes) and all_inferred,
         "latency_ms_all_attempts": {"p50": statistics.median(values),
@@ -305,7 +314,7 @@ def restore_samples(client, cases, outcomes):
     return {"checked": passed, "exact": passed, "excluded_from_mask_timing": True}
 
 
-def run_phase(api, ner, cases, concurrency):
+def run_phase(api, ner, cases, concurrency, *, phase_reports=None):
     before, stage_before = ner_snapshot(ner)["counts"], ner_stage_count(api)
     run_id = secrets.token_hex(16)
     with ThreadPoolExecutor(max_workers=concurrency) as pool:
@@ -314,20 +323,38 @@ def run_phase(api, ner, cases, concurrency):
                    for index, case in enumerate(cases)]
         outcomes = [future.result() for future in futures]
         elapsed = time.perf_counter() - started
+    # Preserve timed evidence even if subsequent admin reads fail. Unknown
+    # postflight counters never grant successful-inference credit.
+    report = phase_summary(outcomes, elapsed, concurrency, None, None)
+    report.update(ner_drained=False, postflight_status="pending")
+    if phase_reports is not None:
+        phase_reports.append(report)
+    try:
+        finish_phase(report, api, ner, (cases, outcomes, before, stage_before))
+    except Exception as exc:
+        report["postflight_status"] = "failed"
+        report["postflight_error_type"] = type(exc).__name__
+        report["valid_successful_measurement"] = False
+        raise
+    return report
+
+
+def finish_phase(report, api, ner, context):
+    cases, outcomes, before, stage_before = context
     deadline = time.monotonic() + api.timeout
     after = ner_snapshot(ner)["counts"]
     while (after["http_active"] or after["model_active"]) and time.monotonic() < deadline:
         time.sleep(.1)
         after = ner_snapshot(ner)["counts"]
-    report = phase_summary(outcomes, elapsed, concurrency, delta_counts(before, after),
-                           ner_stage_count(api) - stage_before)
+    report.update(phase_summary(outcomes, report["elapsed_seconds"], report["concurrency"],
+                                delta_counts(before, after), ner_stage_count(api) - stage_before))
     report["ner_drained"] = after["http_active"] == after["model_active"] == 0
     report["valid_successful_measurement"] &= report["ner_drained"]
+    report["postflight_status"] = "verified" if report["ner_drained"] else "not_drained"
     if not report["ner_drained"]:
-        return report
+        return
     report["restore"] = restore_samples(api, cases, outcomes)
     require(ner_snapshot(ner)["counts"] == after, "restore_did_not_invoke_ner")
-    return report
 
 
 def launch(args, backend, temporary, children, logs):
@@ -382,8 +409,7 @@ def run_backend(args, backend, cases):
                 for concurrency in (1, 4):
                     print(json.dumps({"backend": backend, "concurrency": concurrency,
                                       "phase": "started", "mask_requests": len(cases)}), flush=True)
-                    report["phases"].append(run_phase(api, ner, cases, concurrency))
-                    phase = report["phases"][-1]
+                    phase = run_phase(api, ner, cases, concurrency, phase_reports=report["phases"])
                     print(json.dumps({"backend": backend, "concurrency": concurrency, "phase": "completed",
                                       "successful_mask_rps": phase["successful_mask_rps"],
                                       "reference_match_ratio": phase["reference_match_ratio"],
