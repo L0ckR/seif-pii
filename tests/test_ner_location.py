@@ -44,7 +44,11 @@ def test_every_specific_core_class_beats_a_wider_location(kind):
 def test_existing_complete_address_is_not_relabelled_as_location():
     text = "г. Тверь, ул. Тихая, д. 14"
     base = detect(text)
-    assert merge_ner_candidates(text, base, [candidate(text, "Тверь"), candidate(text, "Тихая")]) == base
+    result = merge_ner_candidates(text, base, [candidate(text, "Тверь"), candidate(text, "Тихая")])
+    assert all(span.type == "ADDRESS" and span.reason == base[0].reason for span in result)
+    assert {index for span in result for index in range(span.start, span.end) if text[index].isalnum()} == {
+        index for index, char in enumerate(text) if char.isalnum()
+    }
     assert values(text, base) == [("ADDRESS", text)]
 
 

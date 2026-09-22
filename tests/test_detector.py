@@ -62,7 +62,7 @@ def extracted(text):
         ("ПИН-код карты: 9876", "PIN", "9876"),
         ("Держатель карты: IVAN PETROV", "CARDHOLDER", "IVAN PETROV"),
         ("Загранпаспорт: 75 1234567", "FOREIGN_DOCUMENT", "75 1234567"),
-        ("Свидетельство о рождении: IV-АБ 123456", "FOREIGN_DOCUMENT", "IV-АБ 123456"),
+        ("Свидетельство о рождении: IV-АБ 123456", "BIRTH_CERTIFICATE", "IV-АБ 123456"),
     ],
 )
 def test_exact_entities(text, kind, value):

@@ -58,6 +58,7 @@ _CORPORATE_ADDRESS = re.compile(r"\bадрес[а-яё]*[ \t]*+[:=—-]?[ \t]*+(
 _NUMERIC_TAIL = re.compile(r"[.,]((?a:\d){1,13})(?!(?a:\d))")
 _NUMERIC_HEAD = re.compile(r"(?<!(?a:\d))((?a:\d){1,13})[.,]$")
 _DECIMAL_PHONE_VALUE = re.compile(r"\+?[0-9]{8,15}[.,][0-9]{1,8}")
+_FLOAT_PHONE_VALUE = re.compile(r"(?P<integer>\+?[0-9]{7,15})[.,]0+")
 _RECORD_BOUNDARY = re.compile(r"[;!?]|\n[ \t]*\n|[.](?=\s|$)")
 _ABBREVIATION = re.compile(r"(?:\b|\\[nr])(?:г|гор|ул|д|кв|корп|стр|обл|р-н|им|пос|тел|ао)[.]$", _FLAGS)
 _OFFICE = re.compile(r"\b(?:[оуг]вд|[оу]{0,2}фмс|мвд|умвд|отдел\s+внутренних\s+дел)\b", _FLAGS)
@@ -149,13 +150,24 @@ def _decimal_inn_fragment(text: str, span) -> bool:
 
 
 def _decimal_phone_fragment(text: str, span) -> bool:
-    if _DECIMAL_PHONE_VALUE.fullmatch(text[span.start:span.end]):
+    value = text[span.start:span.end]
+    if _DECIMAL_PHONE_VALUE.fullmatch(value) and not _FLOAT_PHONE_VALUE.fullmatch(value):
         return True
     after = _NUMERIC_TAIL.match(text, span.end, min(len(text), span.end + 15))
     before = _NUMERIC_HEAD.search(text[max(0, span.start - 15):span.start])
     # Sentence-ending punctuation is harmless. Adjacent complete phone numbers
     # remain a list; a short fractional component is not a second telephone.
-    return any(part is not None and not 7 <= len(part[1]) <= 13 for part in (after, before))
+    return bool(
+        after is not None and set(after[1]) != {"0"} and not 7 <= len(after[1]) <= 13
+        or before is not None and not 7 <= len(before[1]) <= 13
+    )
+
+
+def _phone_span(text: str, span):
+    serialized = _FLOAT_PHONE_VALUE.fullmatch(text[span.start:span.end])
+    # Spreadsheet/JSON exports can serialize an integer telephone as a float.
+    # Preserve its integer digits and leave a zero fractional suffix visible.
+    return _copy_span(span, span.start, span.start + serialized.end("integer")) if serialized else span
 
 
 def _name_span(text: str, span):
@@ -220,6 +232,8 @@ def _refined_parts(text: str, span) -> list:
         return _place_parts(text, span)
     if span.type in {"PERSON", "CARDHOLDER"}:
         refined = _name_span(text, span)
+    elif span.type == "PHONE":
+        refined = _phone_span(text, span)
     elif span.type == "PASSPORT_ISSUER":
         refined = _segment(text, span, span.start, issuer_value_end(text, span.start, span.end))
     else:

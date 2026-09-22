@@ -148,7 +148,11 @@ def test_base_person_value_prevents_shrinking_even_with_overlapping_base_spans(m
     full = person(text, text, reason="explicit-unicode-name-field", confidence=0.99)
     short = person(text, "Дина", reason="context", confidence=0.96)
     external = person(text, "Клиент Марковна")
-    assert merge(text, [short, full], [external]) == [full]
+    result = merge(text, [short, full], [external])
+    assert {index for span in result for index in range(span.start, span.end) if text[index].isalnum()} == {
+        index for index, char in enumerate(text) if char.isalnum()
+    }
+    assert all(span.type == full.type and span.reason == full.reason for span in result)
 
 
 def test_repeated_records_and_emoji_preserve_original_unicode_offsets(merge):

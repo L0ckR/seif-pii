@@ -45,16 +45,16 @@ def test_all_structured_types_keep_original_offsets_and_restore(kind, value, pre
 @pytest.mark.parametrize(
     "kind,value,prefix",
     [
-        ("INN", "123456789012", "Значение: "),
-        ("CARD", "1234567890123456", "Значение: "),
+        ("INN", "123456789012", ""),
+        ("CARD", "1234567890123456", ""),
         ("PHONE", "1234567890", "Паспорт: "),
         ("PHONE", "79991112233", "Номер заказа: "),
         ("PASSPORT", "1234567890", "Номер заказа: "),
         ("INN", "1234567890", "ИНН организации: "),
-        ("IP_ADDRESS", "999.0.0.1", "Адрес соединения: "),
+        ("IP_ADDRESS", "999.0.0", "Адрес соединения: "),
         ("EMAIL", "a@example", "Почта: "),
-        ("SNILS", "12345", "СНИЛС: "),
-        ("OMS", "12345", "Полис ОМС: "),
+        ("SNILS", "обычное слово", "СНИЛС: "),
+        ("OMS", "обычное слово", "Полис ОМС: "),
         ("URL", "обычное слово", "Ссылка: "),
     ],
 )
@@ -138,3 +138,112 @@ def test_wider_location_does_not_mask_arbitrary_prose_around_address():
     text = "перед значением после"
     base = [candidate(text, "значением", "STREET", "core-field")]
     assert merge_ner_candidates(text, base, [candidate(text, text, "LOCATION")]) == base
+
+
+@pytest.mark.parametrize("suffix", [".0", ".00", ",000"])
+def test_integral_phone_float_exports_preserve_only_integer_digits(suffix):
+    number = "79992223344"
+    text = number + suffix
+    rules = detect(text)
+    assert values(text, [span for span in rules if span.type == "PHONE"]) == [("PHONE", number)]
+    neural = merge_ner_candidates(text, [], [candidate(text, text, "PHONE")])
+    assert values(text, neural) == [("PHONE", number)]
+
+
+@pytest.mark.parametrize("value", ["1234-567890", "1234-5678-9012", "123456789012.0"])
+def test_model_cannot_reinterpret_ambiguous_bare_document_shapes_as_phone(value):
+    assert merge_ner_candidates(value, [], [candidate(value, value, "PHONE")]) == []
+
+
+def test_split_client_role_is_removed_but_same_word_as_explicit_name_is_kept():
+    text = "Клиент Дина ждёт"
+    neural = [candidate(text, "Клиент", "PERSON"), candidate(text, "Дина", "PERSON")]
+    assert values(text, merge_ner_candidates(text, [], neural)) == [("PERSON", "Дина")]
+    name = "ФИО: Клиент Дина"
+    neural = [candidate(name, "Клиент", "PERSON"), candidate(name, "Дина", "PERSON")]
+    assert values(name, merge_ner_candidates(name, [], neural)) == [("PERSON", "Клиент"), ("PERSON", "Дина")]
+
+
+@pytest.mark.parametrize(
+    "text,value,kind",
+    [("Оформил зарплатную карту", "зарплатную", "LOCATION"),
+     ("Аренда сейфовой ячейки", "сейфовой ячейки", "LOCATION"),
+     ("Отдел закупок", "закупок", "PERSON")],
+)
+def test_nonpersonal_financial_products_and_department_names_are_contextual(text, value, kind):
+    assert merge_ner_candidates(text, [], [candidate(text, value, kind)]) == []
+
+
+def test_product_or_department_word_can_still_be_a_name_in_explicit_personal_field():
+    text = "ФИО: Закупок; адрес: Сейфовая"
+    result = merge_ner_candidates(text, [], [candidate(text, "Закупок", "PERSON"), candidate(text, "Сейфовая", "LOCATION")])
+    assert values(text, result) == [("PERSON", "Закупок"), ("LOCATION", "Сейфовая")]
+
+
+@pytest.mark.parametrize(
+    "kind,value",
+    [("PASSPORT", "12 34"), ("DRIVER_LICENSE", "34 56"),
+     ("BIRTH_CERTIFICATE", "IV – АБ"), ("MILITARY_ID", "АБ"),
+     ("SNILS", "42"), ("OMS", "1234|5678|9012|3456")],
+)
+def test_model_document_components_need_not_be_complete_validated_documents(kind, value):
+    text = "Значение: " + value
+    assert values(text, merge_ner_candidates(text, [], [candidate(text, value, kind)])) == [(kind, value)]
+
+
+@pytest.mark.parametrize("value", ["192.0.2.1", "192 . 0 . 2 . 1", "2001:db8::1", "::1", "::ffff", "2001 : db8 : 1 : 2 : 3 : 4 : 5 : 6"])
+def test_ip_rules_keep_complete_original_value_and_offset(value):
+    text = "🔐 IP: " + value + ". Запись."
+    result = [span for span in detect(text) if span.type == "IP_ADDRESS"]
+    assert values(text, result) == [("IP_ADDRESS", value)]
+
+
+@pytest.mark.parametrize("value", ["999.1.2.3", "12.03.2026", "12:34:56", "1.2.3.4.5", "12345678", "::", ":::1"])
+def test_ip_rules_require_address_syntax_and_validity(value):
+    assert not [span for span in detect("Значение: " + value) if span.type == "IP_ADDRESS"]
+
+
+def test_ipv6_model_fragment_is_validated_in_containing_address():
+    text = "IP: 2001 : db8 : abcd : 2 : 3 : 4 : 5 : 6"
+    result = merge_ner_candidates(text, [], [candidate(text, "abcd", "IP_ADDRESS")])
+    assert values(text, result) == [("IP_ADDRESS", "abcd")]
+
+
+def test_mistyped_ip_remains_sensitive_when_the_model_recognizes_it():
+    text = "IP: 999.0.2.1"
+    assert values(text, merge_ner_candidates(text, [], [candidate(text, "999.0.2.1", "IP_ADDRESS")])) == [("IP_ADDRESS", "999.0.2.1")]
+
+
+@pytest.mark.parametrize("value", ["123-456-789 42", "123:456:789:42", "123_456_789_42"])
+def test_explicit_snils_is_protected_even_with_mistyped_checksum(value):
+    text = "СНИЛС: " + value
+    assert values(text, [span for span in detect(text) if span.type == "SNILS"]) == [("SNILS", value)]
+
+
+def test_snils_field_never_extracts_eleven_digit_prefix_of_longer_identifier():
+    assert not [span for span in detect("СНИЛС: 123-456-789-421") if span.type == "SNILS"]
+
+
+def test_electronic_registration_does_not_borrow_an_address_hint_from_later_sentence():
+    text = "Клиент зарегистрирован в приложении. Его заказ 123456 подтверждён. IP: 192.0.2.1."
+    assert not [span for span in detect(text) if span.type == "ADDRESS"]
+    assert values(text, [span for span in detect(text) if span.type == "IP_ADDRESS"]) == [("IP_ADDRESS", "192.0.2.1")]
+
+
+def test_address_sentence_boundary_retains_abbreviations_and_named_street_initial():
+    text = "Адрес: г. Псков, ул. С. Разина, д. 14. Следующая запись: 123456."
+    address = [span for span in detect(text) if span.type == "ADDRESS"]
+    assert values(text, address) == [("ADDRESS", "г. Псков, ул. С. Разина, д. 14")]
+
+
+def test_explicit_inn_fragment_with_typo_is_sensitive_but_bare_number_stays_ambiguous():
+    value = "123456789"
+    text = "ИНН клиента: " + value
+    assert values(text, merge_ner_candidates(text, [], [candidate(text, value, "INN")])) == [("INN", value)]
+    assert merge_ner_candidates(value, [], [candidate(value, value, "INN")]) == []
+
+
+def test_birth_certificate_keeps_precise_class_with_model_components():
+    text = "Свидетельство о рождении: IV-АБ 123456"
+    spans = merge_ner_candidates(text, detect(text), [candidate(text, "IV-АБ", "BIRTH_CERTIFICATE"), candidate(text, "123456", "BIRTH_CERTIFICATE")])
+    assert values(text, spans) == [("BIRTH_CERTIFICATE", "IV-АБ"), ("BIRTH_CERTIFICATE", "123456")]

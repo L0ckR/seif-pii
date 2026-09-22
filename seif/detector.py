@@ -20,6 +20,7 @@ from seif.cardholder_fields import cardholder_candidates
 from seif.context_filters import refine_candidates
 from seif.document_fields import document_kind_at_value
 from seif.location_fields import location_candidates
+from seif.ner_boundaries import preserve_model_boundaries
 from seif.ner_contract import NER_TYPES, max_entity_chars
 from seif.person_fields import person_candidates
 from seif.structured_fields import structured_candidates
@@ -158,6 +159,11 @@ _PUBLIC_ADDRESS = _rx(
 _PRIVATE_ADDRESS = _rx(
     r"\b(?:прожива[а-я]*|проживани[яе]|регистраци[ияю]|прописк[аи]|домашн[а-я]*|личн[а-я]*|клиент[а-я]*)\b"
 )
+_NER_CARD_ATTRIBUTE = _rx(r"(?:дебетов|кредитн|плат[её]жн|зарплатн|виртуальн|банковск)[а-яё]*")
+_NER_CARD_PRODUCT = _rx(r"[ \t]+карт[а-яё]*\b")
+_NER_BANK_PRODUCT = _rx(r"(?:сейфов[а-яё]*[ \t]+яче[а-яё]*|(?:расч[её]тн|текущ)[а-яё]*[ \t]+сч[её]т[а-яё]*)")
+_NER_DEPARTMENT_HEAD = _rx(r"\b(?:отдел|управление|департамент)[ \t]+$")
+_NER_DEPARTMENT_UNIT = _rx(r"(?:полиции|милиции|кадров|продаж|закупок|безопасности)")
 
 _MONTH = r"(?:январ[ья]|феврал[ья]|март[а]?|апрел[ья]|ма[йя]|июн[ья]|июл[ья]|август[а]?|сентябр[ья]|октябр[ья]|ноябр[ья]|декабр[ья])"
 _DATE = rf"(?:(?:\d{{1,2}}[./-]\d{{1,2}}[./-]\d{{4}})|(?:\d{{4}}[./-]\d{{1,2}}[./-]\d{{1,2}})|(?:\d{{1,2}}\s+{_MONTH}\s+\d{{4}})|(?:\d{{4}}(?:\s+г(?:ода|\.)?)?[, ]+\d{{1,2}}\s+{_MONTH})|(?:{_MONTH}\s+\d{{1,2}}[, ]+\d{{4}}))"
@@ -180,6 +186,15 @@ _CITIZENSHIP = _rx(
 _EMAIL = _rx(
     r"(?<![\w.+-])(?P<value>[a-zа-яё0-9.!#$%&'*+/=?^_`{|}~-]{1,64}@[a-zа-яё0-9](?:[a-zа-яё0-9-]{0,61}[a-zа-яё0-9])?(?:\.[a-zа-яё0-9](?:[a-zа-яё0-9-]{0,61}[a-zа-яё0-9])?){1,8})(?![\w@-])"
 )
+_IPV4 = _rx(
+    r"(?<![\w.])(?P<value>[0-9]{1,3}(?:[ \t]{0,8}[.][ \t]{0,8}[0-9]{1,3}){3})"
+    r"(?!\w|[.][0-9]|[ \t]{0,8}[.][ \t]{0,8}[0-9])"
+)
+_IPV6 = _rx(
+    r"(?<![\w:])(?P<value>(?:[0-9a-f]{1,4}(?:[ \t]{0,8}:[ \t]{0,8}[0-9a-f]{0,4}){2,8}"
+    r"|:[ \t]{0,8}:[ \t]{0,8}[0-9a-f]{0,4}(?:[ \t]{0,8}:[ \t]{0,8}[0-9a-f]{0,4}){0,7}))"
+    r"(?!\w|[ \t]{0,8}:)"
+)
 _PHONE = _rx(
     r"(?<![\w\d])(?P<value>(?:\+7|8|7)[ \t.-]*(?:\([ \t]*\d{3}[ \t]*\)|\d{3})[ \t.-]*\d{3}[ \t.-]*\d{2}[ \t.-]*\d{2})(?!\d)"
 )
@@ -195,8 +210,17 @@ _PASS_SERIES = _rx(rf"\bпаспорт(?:а)?(?:\s+рф)?{_SEP}(?P<value>\d{{10}
 _LICENSE = _rx(
     rf"(?<!\w)(?:водительск[а-я]*[ \t]+удостоверени[а-я]*|в[ /]?у|права){_SEP}(?:серия\s*)?(?P<value>(?:\d{{2}}[ \t]*[а-яёa-z]{{2}}|\d{{2}}[ \t]*\d{{2}})[ \t,-]*(?:(?:номер|№)\s*)?\d{{6}})(?!\d)"
 )
+_FOREIGN_DOC_VALUE = (
+    r"(?:[IVXLCІVХ]{1,8}[- ]?[А-ЯЁA-Z]{2}[ \t№-]*\d{6}|\d{2}[ \t№-]*\d{7}|"
+    r"[A-ZА-ЯЁ]{1,3}[ \t-]*\d{6,9}|\d{7,12})"
+)
 _FOREIGN_DOC = _rx(
-    rf"\b(?:загранпаспорт(?:а)?|иностранный паспорт|вид на жительство|внж|свидетельство о рождении){_SEP}(?:(?:серия|номер|№)\s*)?(?P<value>(?:[IVXLCІVХ]{{1,8}}[- ]?[А-ЯЁA-Z]{{2}}[ \t№-]*\d{{6}}|\d{{2}}[ \t№-]*\d{{7}}|[A-ZА-ЯЁ]{{1,3}}[ \t-]*\d{{6,9}}|\d{{7,12}}))(?!\w)"
+    rf"\b(?:загранпаспорт(?:а)?|иностранный паспорт|вид на жительство|внж){_SEP}"
+    rf"(?:(?:серия|номер|№)\s*)?(?P<value>{_FOREIGN_DOC_VALUE})(?!\w)"
+)
+_BIRTH_CERTIFICATE = _rx(
+    rf"\bсвидетельство о рождении{_SEP}(?:(?:серия|номер|№)\s*)?"
+    rf"(?P<value>{_FOREIGN_DOC_VALUE})(?!\w)"
 )
 _DEPT = _rx(rf"\b(?:код(?:[ \t]+подразделения)?|к[ /]п){_SEP}(?P<value>\d{{3}}[ -]\d{{3}})(?!\d)")
 _ISSUER = _rx(
@@ -229,6 +253,10 @@ _PIN = _rx(rf"\b(?:пин|pin)(?:[ -]*код)?(?:[ \t]+карты)?{_SEP}(?P<val
 # from length. These are privacy recognizers, not government validity checks.
 # Country-specific formats and official references are documented in docs/cis.md.
 _IDENTIFIER_SEP = rf"{_SEP}(?:(?:номер|№|no[.]?)[ \t]*)?{_SEP}"
+_SNILS_LABEL = _rx(
+    rf"\bснилс{_IDENTIFIER_SEP}(?P<value>[0-9](?:[ \t:._/|–—-]{{0,8}}[0-9]){{10}})"
+    r"(?![0-9]|[ \t:._/|–—-]+[0-9])"
+)
 _KZ = r"(?:(?:республик[аи][ \t]+)?казахстан(?:а)?|рк|kz)"
 _UA = r"(?:украин[аы]|україн[аи]|ukraine|ua)"
 _UZ = r"(?:(?:республик[аи][ \t]+)?узбекистан(?:а)?|uzbekistan|uz)"
@@ -356,6 +384,8 @@ _ADDR_BARE_HOUSE_END = _rx(r"(?=[ \t]*(?:[,;.!?\n]|$))")
 # Inspired by Presidio's recognizer/context interfaces, implemented independently.
 _CONTEXT_BREAK = _rx(r"[!?]|\n[ \t]*\n|\.(?=[ \t\r\n]|$)")
 _CONTEXT_ABBREVIATION = _rx(r"\b(?:г|гор|ул|д|кв|корп|стр|обл|р-н|им|пос|тел|гг)\.$")
+_ADDRESS_ABBREVIATION = _rx(r"\b(?:г|гор|ул|д|кв|корп|стр|обл|р-н|им|пос|пр|просп|пер|наб|бул)\.$")
+_ADDRESS_INITIAL = re.compile(r"(?<!\w)[А-ЯЁA-Z][.]$")
 _DOCUMENT_OWNER = _rx(
     r"(?P<passport>\bпаспорт(?:а|у|ом|е)?\b)|"
     r"(?P<license>(?<!\w)(?:в[ /]?у|водительск[а-яё]*[ \t]+удостоверени[а-яё]*)(?!\w))|"
@@ -416,6 +446,7 @@ def _is_nonpersonal_number_field(text: str, start: int) -> bool:
 
 _PRIORITY = {
     "FOREIGN_DOCUMENT": 110,
+    "BIRTH_CERTIFICATE": 110,
     "PASSPORT": 105,
     "DRIVER_LICENSE": 104,
     "BIRTH_DATE": 103,
@@ -693,7 +724,8 @@ def _trim_repeated_roles(text: str, span: Span, start: int) -> int | None:
 
 
 def _trim_ner_person_role(
-    text: str, span: Span, person_starts: Sequence[int], person_cover_ends: Sequence[int]
+    text: str, span: Span, person_starts: Sequence[int], person_cover_ends: Sequence[int],
+    candidate_person_starts: frozenset[int],
 ) -> Span | None:
     """Remove a leading client role while preserving explicit/core name values.
 
@@ -716,7 +748,7 @@ def _trim_ner_person_role(
     if separator is None:
         return span
     if separator.end() >= span.end:
-        return None if separator.group("label") else span
+        return None if separator.group("label") or separator.end() in candidate_person_starts else span
     start = _trim_repeated_roles(text, span, separator.end())
     if start is None:
         return None
@@ -753,8 +785,13 @@ _NER_NUMBER_OWNER = _rx(
     r"(?P<MILITARY_ID>\bвоенн[а-яё]*[ \t]+билет[а-яё]*\b)|"
     r"(?P<BIRTH_CERTIFICATE>\bсвидетельств[а-яё]*[ \t]+о[ \t]+рождении\b)"
 )
-_NER_NUMERIC_VALUE = _rx(r"\+?[0-9][0-9 \t()./-]*[0-9]|[0-9]")
-_NER_DOCUMENT_VALUE = _rx(r"[а-яёa-zivxlc0-9№ \t./–—-]+")
+_NER_NUMERIC_VALUE = _rx(r"[0-9\W_]+")
+_NER_DOCUMENT_VALUE = _rx(r"[а-яёa-zivxlc0-9\W_]+")
+_NER_DOCUMENT_SERIES = _rx(r"(?:[ivxlc]+[\W_]*[а-яё]{2}|[а-яё]{2})")
+_NER_IPV4_VALUE = _rx(r"(?:[0-9]{1,3}[.]){3}[0-9]{1,3}")
+_NER_IP_CHARACTER = re.compile(r"[0-9a-fA-F:. \t]")
+_NER_LOCAL_PHONE = _rx(r"[0-9]{3}[ \t.-]+[0-9]{3}[ \t.-]+[0-9]{2}[ \t.-]+[0-9]{2}")
+_NER_FLOAT_SUFFIX = re.compile(r"[.,]0+$")
 _NER_URL_VALUE = _rx(
     r"(?:https?://|ftp://|www[.])[^\s]+|"
     r"(?:[a-zа-яё0-9-]+[.])+[a-zа-яё]{2,63}(?:[:/?#][^\s]*)?"
@@ -771,19 +808,71 @@ def _ner_number_owner(text: str, start: int) -> str | None:
     return owners[-1].lastgroup
 
 
-def _valid_ner_network_value(value: str, kind: str) -> bool:
-    # Tokenized corpora may put spaces around punctuation. Use a temporary
-    # validation view; the accepted span still points into the exact input.
+def _valid_ner_ip_value(value: str) -> bool:
+    try:
+        ip_address(value)
+    except ValueError:
+        # A syntactically identifiable address with a mistyped octet remains
+        # sensitive; validity of a network endpoint is not a privacy condition.
+        return bool(_NER_IPV4_VALUE.fullmatch(value))
+    return True
+
+
+def _valid_ip_match(value: str, _start: int, _end: int) -> bool:
     compact = re.sub(r"[ \t]+", "", value)
-    if kind == "EMAIL":
-        return bool(_EMAIL.fullmatch(compact))
-    if kind == "URL":
-        return bool(_NER_URL_VALUE.fullmatch(compact))
+    if not any(char in "0123456789abcdefABCDEF" for char in compact):
+        return False
     try:
         ip_address(compact)
     except ValueError:
         return False
     return True
+
+
+def _valid_ner_ip(text: str, span: Span) -> bool:
+    if _valid_ner_ip_value(re.sub(r"[ \t]+", "", text[span.start:span.end])):
+        return True
+    begin, end = span.start, span.end
+    # The decoder preserves atomic IPv6 components. Validate their containing
+    # address view instead of demanding that each hex group is a complete IP.
+    while begin > max(0, span.start - 100) and _NER_IP_CHARACTER.fullmatch(text[begin - 1]):
+        begin -= 1
+    while end < min(len(text), span.end + 100) and _NER_IP_CHARACTER.fullmatch(text[end]):
+        end += 1
+    compact = re.sub(r"[ \t]+", "", text[begin:end]).strip(".")
+    # An adjacent field's colon is punctuation, not an extra IPv6 group.
+    without_label = compact[1:] if compact.startswith(":") and not compact.startswith("::") else compact
+    return _valid_ner_ip_value(compact) or _valid_ner_ip_value(without_label)
+
+
+def _valid_ner_network_value(text: str, span: Span) -> bool:
+    # Tokenized corpora may put spaces around punctuation. Use a temporary
+    # validation view; the accepted span still points into the exact input.
+    compact = re.sub(r"[ \t]+", "", text[span.start:span.end])
+    if span.type == "EMAIL":
+        return bool(_EMAIL.fullmatch(compact))
+    if span.type == "URL":
+        return bool(_NER_URL_VALUE.fullmatch(compact))
+    return _valid_ner_ip(text, span)
+
+
+def _numeric_only_record(text: str, span: Span) -> bool:
+    # Keep this check bounded per candidate even for a very large document.
+    window = text[max(0, span.start - 120):min(len(text), span.end + 120)]
+    return not any(char.isalpha() for char in window)
+
+
+def _valid_ner_phone(value: str, owner: str | None, text: str, span: Span) -> bool:
+    value = _NER_FLOAT_SUFFIX.sub("", value)
+    count = len(_digits(value))
+    if not (7 if owner else 8) <= count <= 15:
+        return False
+    if owner == "PHONE" or value.startswith("+"):
+        return True
+    # A bare 4+6 passport or 4+4+4 identifier is ambiguous even when a neural
+    # model calls it a phone. Keep ordinary Russian/international/local forms.
+    return bool(_PHONE.fullmatch(value) or _NER_LOCAL_PHONE.fullmatch(value)
+                or (value.isdecimal() and count == 10 and not _numeric_only_record(text, span)))
 
 
 def _valid_ner_number(text: str, span: Span, owner: str | None) -> bool:
@@ -792,27 +881,31 @@ def _valid_ner_number(text: str, span: Span, owner: str | None) -> bool:
     if not _NER_NUMERIC_VALUE.fullmatch(value):
         return False
     if span.type == "INN":
-        return len(digits) in {10, 12} and (
-            owner == "INN" or _valid_inn(digits)
+        return (1 <= len(digits) <= 14 if owner == "INN" else len(digits) in {10, 12}) and (
+            owner == "INN" or _valid_inn(digits) or not _numeric_only_record(text, span)
         ) and not _is_public_inn(text, span.start, digits)
     if span.type == "CARD":
-        return 13 <= len(digits) <= 19 and (owner == "CARD" or _luhn(value))
+        return 13 <= len(digits) <= 19 and (owner == "CARD" or _luhn(value) or not _numeric_only_record(text, span))
     if span.type == "PHONE":
-        return (7 if owner else 8) <= len(digits) <= 15
-    return len(digits) == {"SNILS": 11, "OMS": 16}.get(span.type)
+        return _valid_ner_phone(value, owner, text, span)
+    # Model spans can be a series/check-digit component of a larger document.
+    # Punctuation and partial lengths are not a universal validity veto.
+    return 1 <= len(digits) <= {"SNILS": 13, "OMS": 16}.get(span.type, 0)
 
 
 def _accept_ner_structured(text: str, span: Span) -> bool:
     value = text[span.start:span.end]
     if span.type in {"EMAIL", "URL", "IP_ADDRESS"}:
-        return _valid_ner_network_value(value, span.type)
+        return _valid_ner_network_value(text, span)
     if _is_nonpersonal_number_field(text, span.start):
         return False
     owner = _ner_number_owner(text, span.start)
     if owner is not None and owner != span.type:
         return False
     if span.type in {"PASSPORT", "DRIVER_LICENSE", "MILITARY_ID", "BIRTH_CERTIFICATE"}:
-        return bool(_NER_DOCUMENT_VALUE.fullmatch(value)) and (2 if owner else 6) <= len(_digits(value)) <= 14
+        return bool(_NER_DOCUMENT_VALUE.fullmatch(value)) and (
+            1 <= len(_digits(value)) <= 14 or bool(_NER_DOCUMENT_SERIES.fullmatch(value))
+        )
     return _valid_ner_number(text, span, owner)
 
 
@@ -821,15 +914,22 @@ def _normalize_ner_candidate(
     span: Span,
     person_starts: Sequence[int],
     person_cover_ends: Sequence[int],
+    candidate_person_starts: frozenset[int],
 ) -> Span | None:
     if span.type == "PERSON":
         if _is_public_name(text, span.start, span.end):
             return None
-        return _trim_ner_person_role(text, span, person_starts, person_cover_ends)
+        if _NER_DEPARTMENT_UNIT.fullmatch(text[span.start:span.end]) and _NER_DEPARTMENT_HEAD.search(
+            text[max(0, span.start - 40):span.start]
+        ):
+            return None
+        return _trim_ner_person_role(text, span, person_starts, person_cover_ends, candidate_person_starts)
     if span.type == "LOCATION":
         # A bank in an earlier sentence cannot exempt an unrelated place.
         prefix = _local_record_prefix(text, span.start, limit=150)
-        if _is_public_address(prefix, len(prefix)):
+        if (_is_public_address(prefix, len(prefix))
+                or _NER_CARD_ATTRIBUTE.fullmatch(text[span.start:span.end]) and _NER_CARD_PRODUCT.match(text, span.end)
+                or _NER_BANK_PRODUCT.fullmatch(text[span.start:span.end])):
             return None
     elif not _accept_ner_structured(text, span):
         return None
@@ -844,11 +944,12 @@ def _accept_ner_candidates(
     person_cover_ends: Sequence[int],
 ) -> dict[tuple[str, int, int], Span]:
     accepted: dict[tuple[str, int, int], Span] = {}
+    candidate_person_starts = frozenset(span.start for span in candidates if span.type == "PERSON")
     for span in candidates:
         identity = (span.type, span.start, span.end)
         if identity in existing:
             continue
-        span = _normalize_ner_candidate(text, span, person_starts, person_cover_ends)
+        span = _normalize_ner_candidate(text, span, person_starts, person_cover_ends, candidate_person_starts)
         if span is None:
             continue
         identity = (span.type, span.start, span.end)
@@ -949,9 +1050,12 @@ def _merge_ner_candidates(
     # Keep rule classes on overlaps and retain independently supported address
     # tails. A short street rule must not erase a model's street designator.
     refined = refine_candidates(text, [*base_spans, *accepted.values()])
-    return _preserve_address_tails(text, _resolve(refined), (
+    resolved = _preserve_address_tails(text, _resolve(refined), (
         span for span in refined if span.reason == "ner-location"
     ))
+    return preserve_model_boundaries(text, resolved, [
+        span for span in refined if span.reason in {"ner-person", "ner-location", "ner-structured"}
+    ])
 
 
 def merge_person_candidates(text: str, base_spans: Sequence[Span], candidates: Sequence[Span]) -> list[Span]:
@@ -1039,6 +1143,7 @@ def _detect_documents(text: str, lower: str, add) -> None:
         add(_LICENSE, "DRIVER_LICENSE")
     if any(label in lower for label in (PASSPORT_WORD, "внж", "жительств", "свидетельство")):
         add(_FOREIGN_DOC, "FOREIGN_DOCUMENT")
+        add(_BIRTH_CERTIFICATE, "BIRTH_CERTIFICATE")
     if "код" in lower or "к/п" in lower:
         add(_DEPT, "DEPARTMENT_CODE")
 
@@ -1086,8 +1191,14 @@ def _detect_dates(text: str, lower: str, add) -> None:
 
 
 def _detect_numeric(text: str, lower: str, add) -> None:
+    if ":" in text:
+        add(_IPV6, "IP_ADDRESS", "ip-address-format", 0.99, _valid_ip_match)
     if not any(c.isdigit() for c in text):
         return
+    if "." in text:
+        add(_IPV4, "IP_ADDRESS", "ip-address-format", 0.99, _valid_ip_match)
+    if "снилс" in lower:
+        add(_SNILS_LABEL, "SNILS", "explicit-snils-field", 0.99)
     add(
         _PHONE,
         "PHONE",
@@ -1185,10 +1296,20 @@ def _detect_names(text: str, add, candidates: list[Span]) -> None:
             candidates.append(Span(a.start(), b.end(), "PERSON", 0.92, "given-name-and-surname"))
 
 
+def _address_sentence_end(text: str, start: int, end: int) -> int:
+    for boundary in _CONTEXT_BREAK.finditer(text, start, end):
+        prefix = text[max(start, boundary.start() - 8):boundary.end()]
+        if boundary.group() == "." and (_ADDRESS_ABBREVIATION.search(prefix) or _ADDRESS_INITIAL.search(prefix)):
+            continue
+        return boundary.start()
+    return end
+
+
 def _detect_addresses(text: str, lower: str, add, candidates: list[Span]) -> None:
     if any(label in lower for label in ("адрес", "прописан", "зарегистрирован", "прожива", "живёт", "живет")):
         for match in _ADDRESS.finditer(text):
             start, end = match.span("value")
+            end = _address_sentence_end(text, start, end)
             value = text[start:end]
             if not _ADDRESS_HINT.search(value) or _PUBLIC_ADDRESS.search(value[:70]) or _is_public_address(text, start):
                 continue
