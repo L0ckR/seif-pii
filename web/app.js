@@ -60,6 +60,21 @@ function makeId() {
   crypto.getRandomValues(bytes);
   return `web-${Date.now()}-${Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("")}`;
 }
+function parseDetail(detail) {
+  if (typeof detail === "string") return detail;
+  if (Array.isArray(detail)) return detail.map((item) => item.msg).filter(Boolean).join("; ");
+  if (detail && typeof detail.message === "string") return detail.message;
+  return "Проверьте параметры запроса и настройки подключения.";
+}
+function apiErrorMessage(response, data) {
+  const detail = data.detail ?? data.error;
+  return `Ошибка ${response.status}: ${parseDetail(detail)}`;
+}
+function translateApiError(error) {
+  if (error.name === "AbortError") return new Error("Сервер не ответил за 30 секунд. Попробуйте ещё раз или уменьшите текст.");
+  if (error instanceof TypeError) return new Error("Не удалось связаться с API. Проверьте подключение и доступность сервера.");
+  return error;
+}
 async function api(path, body) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 30000);
@@ -67,17 +82,11 @@ async function api(path, body) {
     const response = await fetch(path, { method: "POST", headers: headers(), body: JSON.stringify(body), signal: controller.signal });
     let data;
     try { data = await response.json(); } catch (_) { throw new Error("Сервер вернул ответ в неожиданном формате. Проверьте доступность API."); }
-    if (!response.ok) {
-      const detail = data.detail ?? data.error;
-      const hint = typeof detail === "string" ? detail : Array.isArray(detail) ? detail.map((item) => item.msg).filter(Boolean).join("; ") : detail && typeof detail.message === "string" ? detail.message : "Проверьте параметры запроса и настройки подключения.";
-      throw new Error(`Ошибка ${response.status}: ${hint}`);
-    }
+    if (!response.ok) throw new Error(apiErrorMessage(response, data));
     if (typeof data.result !== "string") throw new Error("В ответе API отсутствует текст результата.");
     return data;
   } catch (error) {
-    if (error.name === "AbortError") throw new Error("Сервер не ответил за 30 секунд. Попробуйте ещё раз или уменьшите текст.");
-    if (error instanceof TypeError) throw new Error("Не удалось связаться с API. Проверьте подключение и доступность сервера.");
-    throw error;
+    throw translateApiError(error);
   } finally { clearTimeout(timer); }
 }
 function setBusy(value, restoring = false) {
@@ -168,9 +177,11 @@ async function protect() {
     lastResult = { ...data, original, mode: data.mode || mode, restored: false };
     showOutput(data.result);
     const count = renderEntities(original, data.entities, data.payload_id);
-    $("result-status").textContent = data.masking_enabled === false
-      ? "Маскирование отключено политикой системы"
-      : count ? `Защищено фрагментов: ${count} · ${Array.from(data.result).length.toLocaleString("ru-RU")} символов` : "Защищаемые сущности не найдены";
+    let statusText;
+    if (data.masking_enabled === false) statusText = "Маскирование отключено политикой системы";
+    else if (count) statusText = `Защищено фрагментов: ${count} · ${Array.from(data.result).length.toLocaleString("ru-RU")} символов`;
+    else statusText = "Защищаемые сущности не найдены";
+    $("result-status").textContent = statusText;
     showTiming(data);
   } catch (error) {
     if (sequence !== operationNumber) return;
@@ -237,7 +248,7 @@ source.addEventListener("keydown", (event) => { if ((event.ctrlKey || event.meta
 document.querySelectorAll('input[name="mode"]').forEach((input) => input.addEventListener("change", () => { $("mode-help").textContent = modeDescriptions[selectedMode()]; }));
 $("protect-button").addEventListener("click", protect);
 $("restore-button").addEventListener("click", restore);
-$("clear-button").addEventListener("click", () => { if (busy) return; source.value = ""; resetResult(); updateCount(); source.focus(); });
+$("clear-button").addEventListener("click", () => { if (busy) { return; } source.value = ""; resetResult(); updateCount(); source.focus(); });
 $("connection-toggle").addEventListener("click", () => {
   const expanded = $("connection-toggle").getAttribute("aria-expanded") === "true";
   $("connection-toggle").setAttribute("aria-expanded", String(!expanded));
@@ -246,13 +257,13 @@ $("connection-toggle").addEventListener("click", () => {
 $("copy-button").addEventListener("click", async () => {
   if (!lastResult) return;
   try { await navigator.clipboard.writeText(lastResult.result); notice("Текст скопирован.", true); noticeTimer = setTimeout(() => notice(""), 2200); }
-  catch (_) { notice("Браузер не разрешил доступ к буферу обмена. Выделите результат и скопируйте его вручную."); }
+  catch (_) { /* The notice already informs the user; the exception itself needs no further handling. */ notice("Браузер не разрешил доступ к буферу обмена. Выделите результат и скопируйте его вручную."); }
 });
 async function initialize() {
   source.value = examples.client; updateCount();
   const outcomes = await Promise.allSettled([
-    fetch("/health", { signal: AbortSignal.timeout(8000) }).then(async (response) => { if (!response.ok) throw new Error("Health failed"); return response.json(); }),
-    fetch("/v1/types", { headers: headers(), signal: AbortSignal.timeout(8000) }).then(async (response) => { if (!response.ok) throw new Error("Types unavailable"); return response.json(); })
+    fetch("/health", { signal: AbortSignal.timeout(8000) }).then(async (response) => { if (!response.ok) { throw new Error("Health failed"); } return response.json(); }),
+    fetch("/v1/types", { headers: headers(), signal: AbortSignal.timeout(8000) }).then(async (response) => { if (!response.ok) { throw new Error("Types unavailable"); } return response.json(); })
   ]);
   const health = outcomes[0];
   if (health.status === "fulfilled" && health.value.status === "ok") {
