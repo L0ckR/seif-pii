@@ -88,25 +88,27 @@ class NerClient:
         except (httpx.HTTPError, TimeoutError, ValueError, TypeError, AttributeError, RecursionError):
             raise NerUnavailable(NER_UNAVAILABLE) from None
 
-    async def _chunk(self, offset: int, text: str, total_length: int) -> list[Span]:
-        async with self.capacity:
-            for attempt in range(4):
-                async with self.client.stream("POST", "analyze", json={"text": text}) as response:
-                    if response.status_code == 429 and attempt < 3:
-                        retry = True
-                    elif response.status_code != 200:
-                        raise NerUnavailable("NER did not complete protection")
-                    else:
-                        retry = False
-                        content = bytearray()
-                        async for part in response.aiter_bytes():
-                            if len(content) + len(part) > 262144:
-                                raise NerUnavailable(INVALID_NER_RESPONSE)
-                            content.extend(part)
-                        body = json.loads(content)
-                if not retry:
-                    break
-                await asyncio.sleep(0.005 * (2**attempt))
+    async def _analyze_chunk(self, text: str) -> dict:
+        for attempt in range(4):
+            async with self.client.stream("POST", "analyze", json={"text": text}) as response:
+                if response.status_code == 429 and attempt < 3:
+                    retry = True
+                elif response.status_code != 200:
+                    raise NerUnavailable("NER did not complete protection")
+                else:
+                    retry = False
+                    content = bytearray()
+                    async for part in response.aiter_bytes():
+                        if len(content) + len(part) > 262144:
+                            raise NerUnavailable(INVALID_NER_RESPONSE)
+                        content.extend(part)
+                    body = json.loads(content)
+            if not retry:
+                return body
+            await asyncio.sleep(0.005 * (2**attempt))
+        raise NerUnavailable("NER did not complete protection")
+
+    def _parse_entities(self, body: dict, text: str, offset: int, total_length: int) -> list[Span]:
         if not isinstance(body, dict) or set(body) != {"entities"}:
             raise NerUnavailable(INVALID_NER_RESPONSE)
         entities = body["entities"]
@@ -131,6 +133,11 @@ class NerClient:
                 continue
             result.append(Span(offset + start, offset + end, kind, score, "presidio-ru-ner"))
         return result
+
+    async def _chunk(self, offset: int, text: str, total_length: int) -> list[Span]:
+        async with self.capacity:
+            body = await self._analyze_chunk(text)
+            return self._parse_entities(body, text, offset, total_length)
 
     async def detect(self, text: str) -> list[Span]:
         result = []
