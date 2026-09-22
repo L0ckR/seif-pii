@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "prepared_at_utc": "2026-09-22T18:29:09.346081+00:00",
+  "purpose": "External transfer check after organizer-only model selection; no external-result tuning.",
+  "source_sha256": {
+    "seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+    "seif/app.py": "e958559569fae134ace1e54ef02af655dc65a4fc481a93545c315721bc1f8951",
+    "seif/async_callbacks.py": "b5ce7aae9979e6251c827d3e2099a4377266bcb8076606d67dbe86c38fa21ebe",
+    "seif/cardholder_fields.py": "3d80d59636e4b2e1a668325fbb945027b48a37e60aad5297c39b727a51806462",
+    "seif/config.py": "ca9c4e4bc80fcb6847f53f08593b25e5a3b41d6ae5a44ce7c416075ffd7b4b45",
+    "seif/context_filters.py": "c3fbd2c356784e87c481d3ac7d58a8cbf5863d04db96e47d4ef062e348bfd7fb",
+    "seif/detector.py": "e0b09cda385168f401ed1d1aa81ae4b1457d701be977f8f9aee789e444534025",
+    "seif/document_fields.py": "2200ed9f9751ee4894f164a4b43654de6f204c9661da83cdbf7a2a455d46ba51",
+    "seif/gliner_ner.py": "8012d0c3fc83b6c0a0defd4a07735d6e9cd4aa0c5debb1f7c395ddafb7431311",
+    "seif/location_fields.py": "2d806e7a35bb7669001e796deba5cbac020dddb2887284390d27becebc43009e",
+    "seif/ner.py": "66c64453390bd851f2283c01bd995145e3a21e4cd23ad9af1f8330a665816068",
+    "seif/person_fields.py": "ca843e9b6f8ef9d4739703e83b1438a96d114dc95782626fa2e89366bf29f08d",
+    "seif/request_capture.py": "ce9d53ed7827992cd5c0c4b10914e3f9becc978cc192263116112c642e506855",
+    "seif/structured_fields.py": "26462106b1a29140a3bbf2b2370feab631145932ee44fbb78ca007b6d1d1218c",
+    "seif/transform.py": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+    "seif/vault.py": "b6b4f59bc911bb0a0c745b6801bcd9a034200e016f321e38c2984206c2946554",
+    "scripts/compare_ner_public.py": "a781a7fc73b3ac947f27c14459f1e40aafd7bb8fcc6bdf064bcba14c7ded6286",
+    "scripts/evaluate_external.py": "7281551dc7c62ce22b10676f7029de5580b9558f3c1d427a79e2a89497a22e85",
+    "scripts/evaluate_redmadrobot.py": "2e94c14034db198cb8718ed8161abe76354c27980f63346e3d34fad439aaa5c4",
+    "scripts/evaluate_annotations.py": "b429e3605b90a9090a8eae0185ee9286708836494235617901fbd6ae4e0d5463",
+    "scripts/evaluate_golden.py": "02e1160fbfbb2933e4e90d65573e559962e6b474ab69ddaa1c2c0f66e68226ff",
+    "scripts/cache_gliner.py": "80d04e6a1e10f7e2d606d096722a7ebf36c10309d29155a895b4d739ea0dba88",
+    "scripts/ner_service.py": "9d2291f08dc6013ba23552f34abe206f93a46fd6afc3da6abfc48e34b0958069",
+    "scripts/compare_presidio.py": "e6839cccbeccb27303d69037a7f4d73256a5e89a15b5bb04bafcb5fe86c7e99a"
+  },
+  "input_sha256": {
+    "pii/README.md": "e8f203645e78f712be38a58b795a23f41c18655b76ec67796478135f6bb60e34",
+    "pii/domain-00000-of-00001.parquet": "7ef3574273c0fe3a987981e38e32cd2764031a82766ca5b235bfccd1f27058eb",
+    "pii/entity-00000-of-00001.parquet": "6e0c77d566c2f04e7213917b26f1038336e28fc006551fac7a7f44f7627d5f96",
+    "pii/prepared-protocol.json": "50d26b14af910da207eb8e1b69c9f61a22305b46193149ee0e29ef690ff7ba39",
+    "redmadrobot/redmadrobot-test.csv": "6bf544a380a3ee5bec94b946124bea3afaecce49e734679ad0f0c0e7c12977bb",
+    "redmadrobot/redmadrobot-README.md": "a346c4c012bff1cce330d15ef6271db32a8cf83696a9bd7237f180e45c23ac50",
+    "redmadrobot/redmadrobot-protocol.json": "30c44a48cd151dc72b61d804a979ddd0e3203fd78ac79dbac2d5d8e7f50e86b1"
+  },
+  "prepared_inputs_sha256": "b8b80873a507ae3841c1c74143162f8f169c0a68d6509da8509907cf11a20405",
+  "datasets": {
+    "pii": {
+      "repository": "hivetrace/pii-bench",
+      "revision": "cd6a18ace16daf23e79247ccf1e2b245d4054654"
+    },
+    "redmadrobot": {
+      "repository": "redmadrobot-rnd/pii_benchmark",
+      "revision": "f77ea831274daf980cc45c61a93c226be9d978d6",
+      "excluded_before_inference": [
+        {
+          "id": "row_0000",
+          "source_row_zero_based": 0,
+          "reason": "token_not_exactly_alignable"
+        },
+        {
+          "id": "row_1628",
+          "source_row_zero_based": 1628,
+          "reason": "token_not_exactly_alignable"
+        }
+      ]
+    }
+  },
+  "cases": 4649,
+  "split_counts": {
+    "pii/domain": 900,
+    "pii/entity": 910,
+    "redmadrobot/test": 2839
+  },
+  "ordered_membership_sha256": "f3a0f55680c78b619e003570b1eeb8ae0f19d92e9252ff8bd14469c451ca97fc",
+  "text_sha256": "661ddd7e4e90e880b6992fcf46358c8aabe25dc8cf0204272be6720e0c299aa0",
+  "gold_sha256": "2196c2e2e17412a89db8b7e499c0dfa166e7c186d5d791c6f9189bfa87768f7e",
+  "input_lengths": {
+    "maximum_characters": 2574,
+    "maximum_whitespace_words": 921
+  },
+  "selected_organizer_metadata_sha256": "533cbac4d6b24eb30c94bce6bd3359baa284fcf378ff640c6fb5958410ba279e",
+  "gliner": {
+    "model": "fastino/gliner2.5-multi-v1",
+    "revision": "a221b77a8baf4a613b8f8652661d41fa10a5641e",
+    "file_sha256": {
+      "config.json": "8b59a0f426a65859c89cd1ea850c3529c09aa3be3a6fafd8eddfdd17b1bf0146",
+      "encoder_config/config.json": "fa4f9ef2903b5369ab172333aae4574e6a476511d7465845cf59f8360ee18716",
+      "model.safetensors": "c1ff4ec0bc00031c15530b8f3c33d3677f27949e6a0cb52e1247a6224b6c5395",
+      "tokenizer.json": "c62446df87ae18ec98b133f8f84fc449a07cc89bbf8ef192a4cb5f9c53777a7a",
+      "tokenizer_config.json": "0bf3ea0873234bd9bfdd3853c440395009ac6365a925b91654daed5396d655e1"
+    },
+    "versions": {
+      "gliner2": "2.0.0",
+      "torch": "2.14.0",
+      "transformers": "4.57.6",
+      "tokenizers": "0.22.2",
+      "protobuf": "7.36.2",
+      "sentencepiece": "0.2.2"
+    },
+    "settings": {
+      "schema": "described-names",
+      "threshold": 0.8,
+      "device": "cuda",
+      "dtype": "torch.float32",
+      "cpu_threads": 4,
+      "seed": 20260922,
+      "compile": false,
+      "batch_size": 1,
+      "overlap_policy": "flat",
+      "service_word_window": 384,
+      "service_word_overlap": 64,
+      "gateway_character_window": 16000,
+      "gateway_character_overlap": 256
+    },
+    "labels": {
+      "person": "Proper names of individual people: given names, surnames, patronymics or initials. Exclude generic roles, job titles, kinship terms, pronouns and numeric identifiers.",
+      "location": "Geographic proper names of cities, settlements, regions and countries. Exclude organizations, institution names, generic facility types and field labels.",
+      "organization": "Names or references to companies, banks, government agencies and other institutions."
+    }
+  },
+  "spacy": {
+    "model": "ru_core_news_sm",
+    "versions": {
+      "spacy": "3.8.16",
+      "ru-core-news-sm": "3.8.0",
+      "presidio-analyzer": "2.2.364"
+    },
+    "score_threshold": 0.0
+  },
+  "mapping": {
+    "pii": {
+      "PERSON": "NAME",
+      "CARDHOLDER": "NAME",
+      "PHONE": "PHONE_NUMBER",
+      "EMAIL": "EMAIL",
+      "CARD": "BANK_CARD_NUMBER",
+      "ADDRESS": "ADDRESS",
+      "CVV": "CVC",
+      "INN": "INN",
+      "PASSPORT": "PASSPORT_NUMBER"
+    },
+    "redmadrobot": {
+      "PERSON": "PERSON",
+      "CARDHOLDER": "PERSON",
+      "EMAIL": "EMAIL",
+      "PHONE": "PHONE",
+      "CARD": "CARD",
+      "PASSPORT": "PASSPORT",
+      "INN": "INN",
+      "DRIVER_LICENSE": "DRIVER_LICENSE",
+      "ADDRESS": "LOCATION",
+      "COUNTRY": "LOCATION",
+      "CITY": "LOCATION",
+      "STREET": "LOCATION",
+      "HOUSE": "LOCATION",
+      "APARTMENT": "LOCATION",
+      "POSTAL_CODE": "LOCATION",
+      "BIRTH_PLACE": "LOCATION",
+      "LOCATION": "LOCATION"
+    }
+  },
+  "policy": {
+    "labels": "Original labels and fixed BIO exclusions unchanged.",
+    "pii": "Historical common4 and supported8 whole-case subsets; exact spans and typed characters.",
+    "redmadrobot": "Historical common5 and mapped8 subsets; identical adjacent/overlap merge on every side.",
+    "unfiltered_protection": "All rows and all original gold types, including unsupported types; actual maskable alphanumeric characters.",
+    "typed_unfiltered": "All original gold types and every prediction retained, unmapped predictions penalized explicitly.",
+    "prepared_inputs": "Text copy remains under ignored local-data; reports and model caches contain no raw text.",
+    "historical_person_only": "Same current detector and merge, retaining only each model's PERSON candidates.",
+    "timing": "Sequential local NER calls only; not HTTP throughput or service RPS."
+  }
+}
