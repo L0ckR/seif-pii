@@ -21,6 +21,9 @@ from seif.person_fields import person_candidates
 from seif.structured_fields import structured_candidates
 
 
+PASSPORT_WORD = "паспорт"
+
+
 @dataclass(frozen=True, slots=True)
 class Span:
     start: int
@@ -270,7 +273,7 @@ _CIS_IDENTIFIERS = (
         "FOREIGN_DOCUMENT",
     ),
     (
-        ("паспорт", "id"),
+        (PASSPORT_WORD, "id"),
         _regional_field(r"(?:номер[ \t]+)?(?:паспорт(?:а)?|id[ -]?(?:карт[аы]|картк[аи]|card))", _UA, r"[0-9]{9}"),
         "FOREIGN_DOCUMENT",
     ),
@@ -853,12 +856,12 @@ def detect(text: str, *, extra_rules: list[dict] | None = None) -> list[Span]:
             )
         if any(label in lower for label in ("тел", "моб", "phone")):
             add(_LABEL_PHONE, "PHONE", check=lambda value, *_: 7 <= len(_digits(value)) <= 15)
-        if "паспорт" in lower or "серия" in lower:
+        if PASSPORT_WORD in lower or "серия" in lower:
             add(_PASSPORT, "PASSPORT")
             add(_PASS_SERIES, "PASSPORT")
         if any(label in lower for label in ("удостоверен", "в/у", "в у", "права")):
             add(_LICENSE, "DRIVER_LICENSE")
-        if any(label in lower for label in ("паспорт", "внж", "жительств", "свидетельство")):
+        if any(label in lower for label in (PASSPORT_WORD, "внж", "жительств", "свидетельство")):
             add(_FOREIGN_DOC, "FOREIGN_DOCUMENT")
         if "код" in lower or "к/п" in lower:
             add(_DEPT, "DEPARTMENT_CODE")
@@ -891,7 +894,7 @@ def detect(text: str, *, extra_rules: list[dict] | None = None) -> list[Span]:
                 "PASSPORT_DATE",
                 check=lambda v, s, e: _valid_date(v) and _has_passport_context(text, s),
             )
-            if "паспорт" in lower:
+            if PASSPORT_WORD in lower:
                 add(
                     _PASS_DATE_LATE,
                     "PASSPORT_DATE",
@@ -907,7 +910,7 @@ def detect(text: str, *, extra_rules: list[dict] | None = None) -> list[Span]:
 
     if any(label in lower for label in ("выдан", "орган", "мвд", "увд", "фмс")):
         add(_ISSUER, "PASSPORT_ISSUER")
-        if "паспорт" in lower:
+        if PASSPORT_WORD in lower:
             add(
                 _ISSUER_DIRECT, "PASSPORT_ISSUER", confidence=0.95, check=lambda v, s, e: _has_passport_context(text, s)
             )

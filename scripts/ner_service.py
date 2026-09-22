@@ -27,6 +27,8 @@ LOG = logging.getLogger("seif.ner")
 MAX_TEXT_CHARS = 20_000
 MAX_BODY_BYTES = 128 * 1024
 BODY_READ_TIMEOUT_SECONDS = 5.0
+NER_UNAVAILABLE = "NER temporarily unavailable."
+INVALID_REQUEST = "Invalid request."
 
 
 @dataclass(frozen=True)
@@ -91,7 +93,7 @@ class Boundary:
             # Catch here so a third-party exception cannot leak input to Uvicorn.
             LOG.warning("ner_request_failed")
             if not response_started:
-                return await error(503, "unavailable", "NER temporarily unavailable.")(scope, receive, send)
+                return await error(503, "unavailable", NER_UNAVAILABLE)(scope, receive, send)
         finally:
             self.inflight -= 1
 
@@ -100,9 +102,9 @@ class Boundary:
         try:
             content_length = int(headers.get(b"content-length", b"0"))
         except ValueError:
-            return error(400, "invalid_request", "Invalid request.")
+            return error(400, "invalid_request", INVALID_REQUEST)
         if content_length < 0:
-            return error(400, "invalid_request", "Invalid request.")
+            return error(400, "invalid_request", INVALID_REQUEST)
         if content_length > MAX_BODY_BYTES:
             return error(413, "too_large", "Request body is too large.")
         return None
@@ -231,12 +233,12 @@ def create_app(settings=None, analyzer_factory=None):
 
     @app.exception_handler(HTTPException)
     async def http_error(_request, exc):
-        return error(exc.status_code, "invalid_request", "Invalid request.")
+        return error(exc.status_code, "invalid_request", INVALID_REQUEST)
 
     @app.exception_handler(Exception)
     async def unexpected_error(_request, _exc):
         LOG.warning("ner_request_failed")
-        return error(503, "unavailable", "NER temporarily unavailable.")
+        return error(503, "unavailable", NER_UNAVAILABLE)
 
     @app.get("/health")
     async def health():
@@ -279,7 +281,7 @@ def create_app(settings=None, analyzer_factory=None):
             job = app.state.pool.submit(infer, app.state.analyzer, body.text)
         except Exception:
             app.state.model_inflight -= 1
-            return error(503, "unavailable", "NER temporarily unavailable.")
+            return error(503, "unavailable", NER_UNAVAILABLE)
         job.add_done_callback(lambda future: loop.call_soon_threadsafe(complete, future))
         try:
             result = await waiter
@@ -290,7 +292,7 @@ def create_app(settings=None, analyzer_factory=None):
             raise
         except Exception:
             LOG.warning("ner_inference_failed")
-            return error(503, "unavailable", "NER temporarily unavailable.")
+            return error(503, "unavailable", NER_UNAVAILABLE)
         return JSONResponse(result, headers={"Cache-Control": "no-store", "X-Content-Type-Options": "nosniff"})
 
     return app

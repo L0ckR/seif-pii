@@ -12,18 +12,20 @@ from pathlib import Path
 import httpx
 import tiktoken
 
+NEUTRAL_SUFFIX = " neutral"
+
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--url", default="http://127.0.0.1:8765")
 parser.add_argument("--output", type=Path, default=Path("docs/large-input.json"))
 args = parser.parse_args()
 encoder = tiktoken.get_encoding("cl100k_base")
 prefix = "Email: long@example.invalid. "
-text = prefix + " neutral" * (100_000 - len(encoder.encode(prefix)))
+text = prefix + NEUTRAL_SUFFIX * (100_000 - len(encoder.encode(prefix)))
 # Boundary merges can change a token; correct construction without truncating PII.
 while len(encoder.encode(text)) < 100_000:
-    text += " neutral"
+    text += NEUTRAL_SUFFIX
 while len(encoder.encode(text)) > 100_000:
-    text = text.rsplit(" neutral", 1)[0]
+    text = text.rsplit(NEUTRAL_SUFFIX, 1)[0]
 assert len(encoder.encode(text)) == 100_000
 payload_id = "large-" + uuid.uuid4().hex
 with httpx.Client(base_url=args.url, timeout=30, trust_env=False) as client:

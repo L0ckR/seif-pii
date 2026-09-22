@@ -12,6 +12,10 @@ import httpx
 from .detector import Span
 
 
+NER_UNAVAILABLE = "NER is unavailable"
+INVALID_NER_RESPONSE = "Invalid NER response"
+
+
 class NerUnavailable(RuntimeError):
     """Safe, input-free error for the HTTP boundary."""
 
@@ -73,16 +77,16 @@ class NerClient:
             async with asyncio.timeout(2.0):
                 async with self.client.stream("GET", "health", timeout=2.0) as response:
                     if response.status_code != 200:
-                        raise NerUnavailable("NER is unavailable")
+                        raise NerUnavailable(NER_UNAVAILABLE)
                     content = bytearray()
                     async for part in response.aiter_bytes():
                         if len(content) + len(part) > 4096:
-                            raise NerUnavailable("NER is unavailable")
+                            raise NerUnavailable(NER_UNAVAILABLE)
                         content.extend(part)
                     if json.loads(content).get("status") != "ok":
-                        raise NerUnavailable("NER is unavailable")
+                        raise NerUnavailable(NER_UNAVAILABLE)
         except (httpx.HTTPError, TimeoutError, ValueError, TypeError, AttributeError, RecursionError):
-            raise NerUnavailable("NER is unavailable") from None
+            raise NerUnavailable(NER_UNAVAILABLE) from None
 
     async def _chunk(self, offset: int, text: str, total_length: int) -> list[Span]:
         async with self.capacity:
@@ -97,21 +101,21 @@ class NerClient:
                         content = bytearray()
                         async for part in response.aiter_bytes():
                             if len(content) + len(part) > 262144:
-                                raise NerUnavailable("Invalid NER response")
+                                raise NerUnavailable(INVALID_NER_RESPONSE)
                             content.extend(part)
                         body = json.loads(content)
                 if not retry:
                     break
                 await asyncio.sleep(0.005 * (2**attempt))
         if not isinstance(body, dict) or set(body) != {"entities"}:
-            raise NerUnavailable("Invalid NER response")
+            raise NerUnavailable(INVALID_NER_RESPONSE)
         entities = body["entities"]
         if not isinstance(entities, list) or len(entities) > 2048:
-            raise NerUnavailable("Invalid NER response")
+            raise NerUnavailable(INVALID_NER_RESPONSE)
         result = []
         for item in entities:
             if not isinstance(item, dict) or set(item) != {"start", "end", "score", "entity_type"}:
-                raise NerUnavailable("Invalid NER response")
+                raise NerUnavailable(INVALID_NER_RESPONSE)
             start, end, score = item["start"], item["end"], item["score"]
             kind = item["entity_type"]
             if (
@@ -120,7 +124,7 @@ class NerClient:
                 or not 0 <= start < end <= len(text) or end - start > 200
                 or type(score) not in (int, float) or not math.isfinite(score) or not 0 <= score <= 1
             ):
-                raise NerUnavailable("Invalid NER response")
+                raise NerUnavailable(INVALID_NER_RESPONSE)
             # Do not accept a name visibly clipped by an artificial chunk edge.
             # The overlapping neighbouring chunk contains the complete name.
             if (offset and start == 0) or (offset + len(text) < total_length and end == len(text)):

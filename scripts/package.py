@@ -7,11 +7,12 @@ from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 ROOT = Path(__file__).resolve().parents[1]
+YAML_SUFFIX = ".yaml"
 SOURCE_SUFFIXES = {
     "seif": {".py"}, "tests": {".py"}, "scripts": {".py", ".sh"},
-    "config": {".yaml", ".yml"},
-    "deploy": {".yaml", ".yml", ".sh", ".py", ".txt"},
-    "web": {".html", ".css", ".js", ".svg"}, ".github": {".yaml", ".yml"},
+    "config": {YAML_SUFFIX, ".yml"},
+    "deploy": {YAML_SUFFIX, ".yml", ".sh", ".py", ".txt"},
+    "web": {".html", ".css", ".js", ".svg"}, ".github": {YAML_SUFFIX, ".yml"},
     "docs": {".md", ".json"},
 }
 ROOT_FILES = {
