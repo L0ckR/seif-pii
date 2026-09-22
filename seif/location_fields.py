@@ -44,7 +44,7 @@ _ISSUER_PROSE = re.compile(
     r"[ \t]+[0-9]{1,2}[./-][0-9]{1,2}[./-][0-9]{2,4}(?!\d)", _FLAGS,
 )
 _ISSUER_CONTEXT = re.compile(
-    r"\b(?:выда(?:н(?:ный|ная|ное|ные|ного|а|о)?|л[ао]?)|орган[ \t]+выдачи)\b", _FLAGS,
+    r"\b(?:выданн(?:ы[йе]|ая|ое|ого)|выда[нл][ао]?|орган[ \t]+выдачи)\b", _FLAGS,
 )
 _AUTHORITY_START = re.compile(rf"\b{_AUTHORITY_HEAD}\b", _FLAGS)
 _AFTER_BIRTH_DATE_PLACE = re.compile(
