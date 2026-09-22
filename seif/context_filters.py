@@ -14,7 +14,7 @@ _FLAGS = re.IGNORECASE | re.UNICODE
 # Start at the literal field name. Searching from overlapping whitespace
 # quantifiers becomes cubic on a long, otherwise valid spaced document value.
 _NUMBER_FIELD = re.compile(r"\bномер\b\s*+[:№=—-]?\s*+", _FLAGS)
-_DOCUMENT_PART = re.compile(r"\d(?:[\d \t]*\d)?")
+_DOCUMENT_PART = re.compile(r"(?a:\d)(?:[0-9 \t]*(?a:\d))?")
 _NAME_PROSE = re.compile(
     r"(?<![\w-])(?:обратил(?:ся|ась|ись)|подтвердил(?:а|и)?|запросил(?:а|и)?|"
     r"предъявил(?:а|и)?|сообщил(?:а|и)?|подписал(?:а|и)?|получил(?:а|и)?|"
@@ -28,7 +28,7 @@ _FIELD_SCAFFOLD = re.compile(
 )
 _LOCALITY_START = re.compile(r"(?:\b(?:г|ул|д|кв|пос)[.]|\b(?:город|улица|дом)\b)", _FLAGS)
 _ADDRESS_PREFIX = re.compile(r"^\s*по\s+адресу\s*[:=—-]?\s*", _FLAGS)
-_ENUMERATION = re.compile(r"^\s*\d+[.)]\s*")
+_ENUMERATION = re.compile(r"^\s*(?a:\d)+[.)]\s*")
 _ADDRESS_BREAK = re.compile(
     r"(?:[.]\s*|,\s*)(?:адрес\s+(?:(?:фактического\s+)?проживания|регистрации)|"
     r"(?:продавец|покупатель|за[её]мщик)\s*[—-]?\s*по\s+адресу)\s*[:=—-]?\s*",

@@ -14,7 +14,7 @@ from datetime import date
 Candidate = tuple[int, int, str, float, str]
 _FLAGS = re.IGNORECASE
 _SPACE = r"[ \t]*"
-_DIGIT2 = r"\d{2}"
+_DIGIT2 = r"(?a:\d){2}"
 _MONTH_NAMES = (
     r"янв(?:арь|аря)?", r"фев(?:раль|раля)?", r"мар(?:т|та)?",
     r"апр(?:ель|еля)?", r"ма[йя]", r"июн[ья]?", r"июл[ья]?",
@@ -209,7 +209,7 @@ _DOCUMENT_OWNER = re.compile(
     r"[ \t]*(?:[:,=—–-][ \t]*)?(?:№[ \t]*)?", _FLAGS,
 )
 _DOCUMENT_VALUE = re.compile(
-    rf"(?P<value>(?:{_DIGIT2}[ \t]*{_DIGIT2}|{_DIGIT2}[ \t]+[а-яёa-z]{{2}})[ \t-]+\d{{6}})(?!\w)", _FLAGS,
+    rf"(?P<value>(?:{_DIGIT2}[ \t]*{_DIGIT2}|{_DIGIT2}[ \t]+[а-яёa-z]{{2}})[ \t-]+(?a:\d){{6}})(?!\w)", _FLAGS,
 )
 _LICENSE_SUFFIX = re.compile(
     rf"(?<!\w)(?P<value>[0-9]{{2}}[ \t]*[0-9]{{2}}[ \t-]+[0-9]{{6}})(?!\w)"
