@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import hashlib
+import json
+import sys
 from types import SimpleNamespace
 
 import pytest
@@ -112,3 +114,57 @@ def test_frozen_protocol_rejects_changes_before_evaluation(monkeypatch, tmp_path
 
     with pytest.raises(ValueError):
         comparison.verify(args, protocol)
+
+
+@pytest.mark.parametrize("metadata_matches", [True, False])
+def test_failed_inference_cannot_be_scored_as_an_empty_prediction(monkeypatch, tmp_path, metadata_matches):
+    rows = [{"key": "organizer/a", "dataset": "organizer", "text": "Alice", "gold": set()},
+            {"key": "organizer/b", "dataset": "organizer", "text": "!", "gold": set()}]
+    records = [{"case_id": "organizer/a", "entities": []},
+               {"case_id": "organizer/b", "entities": [], "inference_error": "RuntimeException"}]
+    (tmp_path / "onnx-cpu-all.jsonl").write_text("\n".join(json.dumps(row) for row in records), encoding="utf-8")
+    (tmp_path / "protocol.json").write_text("{}", encoding="utf-8")
+    failed = [{"case_id": "organizer/b", "error_type": "RuntimeException"}] if metadata_matches else []
+    metadata = {"failures_by_corpus": {"organizer": failed}}
+    empty_cache = {row["key"]: [] for row in rows}
+    monkeypatch.setattr(comparison.public, "load_cache", lambda *_args: (empty_cache, metadata))
+    monkeypatch.setattr(comparison, "reference_caches", lambda *_args: {"native": empty_cache})
+    monkeypatch.setattr(comparison.public, "predictions_for", lambda *_args: {})
+    monkeypatch.setattr(comparison.golden, "load_cases", lambda *_args: {})
+    monkeypatch.setattr(comparison, "verify", lambda *_args: rows)
+
+    def forbidden_score(*_args):
+        pytest.fail("A failed corpus must never be scored or assigned inference parity")
+
+    monkeypatch.setattr(comparison, "score_organizer", forbidden_score)
+    monkeypatch.setattr(comparison, "parity", forbidden_score)
+    args = SimpleNamespace(run_dir=tmp_path, backend="onnx", device="cpu", scope="all",
+                           output=tmp_path / "report.json")
+
+    if not metadata_matches:
+        with pytest.raises(ValueError, match="Failure provenance"):
+            comparison.evaluate(args, rows, {})
+        assert not args.output.exists()
+        return
+
+    summary = comparison.evaluate(args, rows, {})
+    report = json.loads(args.output.read_text())
+    corpus = report["corpora"]["organizer"]
+    assert summary["cases"] == corpus["cases"] == 2
+    assert corpus["quality_available"] is False
+    assert corpus["failed_case_ids"] == ["organizer/b"]
+    assert "service_hybrid" not in corpus
+    assert report["parity_vs_native"]["organizer"] is None
+
+
+def test_measured_failure_records_exception_class_without_private_text(monkeypatch):
+    monkeypatch.setitem(sys.modules, "torch", SimpleNamespace())
+
+    def failing_inference(_analyzer, text):
+        raise RuntimeError("Model failed on private text: " + text)
+
+    monkeypatch.setattr(comparison.public, "infer_document", failing_inference)
+    entities, error, elapsed_ms = comparison.measured_call(object(), "private fixture value", "cpu")
+    assert entities == []
+    assert error == "RuntimeError"
+    assert elapsed_ms >= 0
