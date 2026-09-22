@@ -1,0 +1,3489 @@
+{
+  "corpora": {
+    "organizer": {
+      "pipeline_removal_reason_attribution": {
+        "excluded_native_types / CREDIT_CARD": {
+          "cases": 2,
+          "characters": 11,
+          "example_case_ids": [
+            "organizer/org_0070",
+            "organizer/org_0245"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 11
+        },
+        "excluded_native_types / INN": {
+          "cases": 8,
+          "characters": 39,
+          "example_case_ids": [
+            "organizer/org_0157",
+            "organizer/org_0165",
+            "organizer/org_0239",
+            "organizer/org_0241",
+            "organizer/org_0267",
+            "organizer/org_0323",
+            "organizer/org_0367",
+            "organizer/org_0374"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 39
+        },
+        "excluded_native_types / PASSPORT": {
+          "cases": 1,
+          "characters": 13,
+          "example_case_ids": [
+            "organizer/org_0381"
+          ],
+          "gold_characters": 13,
+          "non_gold_characters": 0
+        },
+        "excluded_native_types / PHONE": {
+          "cases": 15,
+          "characters": 63,
+          "example_case_ids": [
+            "organizer/org_0064",
+            "organizer/org_0154",
+            "organizer/org_0167",
+            "organizer/org_0179",
+            "organizer/org_0232",
+            "organizer/org_0233",
+            "organizer/org_0239",
+            "organizer/org_0241"
+          ],
+          "gold_characters": 11,
+          "non_gold_characters": 52
+        },
+        "ner_context_or_role_normalization / leading_client_role_trim": {
+          "cases": 2,
+          "characters": 12,
+          "example_case_ids": [
+            "organizer/org_0183",
+            "organizer/org_0426"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 12
+        },
+        "ner_context_or_role_normalization / public_address_context": {
+          "cases": 1,
+          "characters": 21,
+          "example_case_ids": [
+            "organizer/org_0030"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 21
+        },
+        "shared_context_refinement / geographic_or_corporate_scaffolding": {
+          "cases": 1,
+          "characters": 6,
+          "example_case_ids": [
+            "organizer/org_0267"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 6
+        },
+        "shared_context_refinement / institution_geography_without_personal_context": {
+          "cases": 9,
+          "characters": 103,
+          "example_case_ids": [
+            "organizer/org_0079",
+            "organizer/org_0125",
+            "organizer/org_0126",
+            "organizer/org_0148",
+            "organizer/org_0234",
+            "organizer/org_0254",
+            "organizer/org_0276",
+            "organizer/org_0314"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 103
+        }
+      },
+      "pipeline_removed_characters_by_stage": {
+        "excluded_native_types": {
+          "cases": 22,
+          "characters": 126,
+          "example_case_ids": [
+            "organizer/org_0064",
+            "organizer/org_0070",
+            "organizer/org_0154",
+            "organizer/org_0157",
+            "organizer/org_0165",
+            "organizer/org_0167",
+            "organizer/org_0179",
+            "organizer/org_0232"
+          ],
+          "gold_characters": 24,
+          "non_gold_characters": 102
+        },
+        "ner_context_or_role_normalization": {
+          "cases": 3,
+          "characters": 33,
+          "example_case_ids": [
+            "organizer/org_0030",
+            "organizer/org_0183",
+            "organizer/org_0426"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 33
+        },
+        "overlap_priority_resolution": {
+          "cases": 0,
+          "characters": 0,
+          "example_case_ids": [],
+          "gold_characters": 0,
+          "non_gold_characters": 0
+        },
+        "shared_context_refinement": {
+          "cases": 10,
+          "characters": 109,
+          "example_case_ids": [
+            "organizer/org_0079",
+            "organizer/org_0125",
+            "organizer/org_0126",
+            "organizer/org_0148",
+            "organizer/org_0234",
+            "organizer/org_0254",
+            "organizer/org_0267",
+            "organizer/org_0276"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 109
+        }
+      },
+      "pipeline_removed_gold_characters_by_stage_and_gold_type": {
+        "excluded_native_types / PASSPORT": {
+          "cases": 3,
+          "characters": 24,
+          "example_case_ids": [
+            "organizer/org_0154",
+            "organizer/org_0258",
+            "organizer/org_0381"
+          ],
+          "gold_characters": 24,
+          "non_gold_characters": 0
+        }
+      },
+      "rule_correct_characters_not_covered_by_native21_by_gold_type": {
+        "ADDRESS": {
+          "cases": 27,
+          "characters": 94,
+          "example_case_ids": [
+            "organizer/org_0004",
+            "organizer/org_0032",
+            "organizer/org_0055",
+            "organizer/org_0069",
+            "organizer/org_0080",
+            "organizer/org_0084",
+            "organizer/org_0114",
+            "organizer/org_0116"
+          ],
+          "gold_characters": 94,
+          "non_gold_characters": 0
+        },
+        "BIRTH_DATE": {
+          "cases": 37,
+          "characters": 300,
+          "example_case_ids": [
+            "organizer/org_0007",
+            "organizer/org_0017",
+            "organizer/org_0020",
+            "organizer/org_0029",
+            "organizer/org_0035",
+            "organizer/org_0040",
+            "organizer/org_0076",
+            "organizer/org_0077"
+          ],
+          "gold_characters": 300,
+          "non_gold_characters": 0
+        },
+        "BIRTH_PLACE": {
+          "cases": 9,
+          "characters": 12,
+          "example_case_ids": [
+            "organizer/org_0038",
+            "organizer/org_0114",
+            "organizer/org_0166",
+            "organizer/org_0169",
+            "organizer/org_0184",
+            "organizer/org_0203",
+            "organizer/org_0324",
+            "organizer/org_0334"
+          ],
+          "gold_characters": 12,
+          "non_gold_characters": 0
+        },
+        "CARD": {
+          "cases": 1,
+          "characters": 4,
+          "example_case_ids": [
+            "organizer/org_0142"
+          ],
+          "gold_characters": 4,
+          "non_gold_characters": 0
+        },
+        "CARDHOLDER": {
+          "cases": 4,
+          "characters": 44,
+          "example_case_ids": [
+            "organizer/org_0065",
+            "organizer/org_0153",
+            "organizer/org_0300",
+            "organizer/org_0325"
+          ],
+          "gold_characters": 44,
+          "non_gold_characters": 0
+        },
+        "CITIZENSHIP": {
+          "cases": 6,
+          "characters": 72,
+          "example_case_ids": [
+            "organizer/org_0039",
+            "organizer/org_0053",
+            "organizer/org_0087",
+            "organizer/org_0220",
+            "organizer/org_0324",
+            "organizer/org_0370"
+          ],
+          "gold_characters": 72,
+          "non_gold_characters": 0
+        },
+        "CVV": {
+          "cases": 13,
+          "characters": 37,
+          "example_case_ids": [
+            "organizer/org_0065",
+            "organizer/org_0067",
+            "organizer/org_0119",
+            "organizer/org_0134",
+            "organizer/org_0163",
+            "organizer/org_0262",
+            "organizer/org_0280",
+            "organizer/org_0288"
+          ],
+          "gold_characters": 37,
+          "non_gold_characters": 0
+        },
+        "DEPARTMENT_CODE": {
+          "cases": 11,
+          "characters": 66,
+          "example_case_ids": [
+            "organizer/org_0025",
+            "organizer/org_0053",
+            "organizer/org_0056",
+            "organizer/org_0141",
+            "organizer/org_0284",
+            "organizer/org_0324",
+            "organizer/org_0358",
+            "organizer/org_0384"
+          ],
+          "gold_characters": 66,
+          "non_gold_characters": 0
+        },
+        "DRIVER_LICENSE": {
+          "cases": 7,
+          "characters": 35,
+          "example_case_ids": [
+            "organizer/org_0044",
+            "organizer/org_0047",
+            "organizer/org_0150",
+            "organizer/org_0173",
+            "organizer/org_0197",
+            "organizer/org_0324",
+            "organizer/org_0398"
+          ],
+          "gold_characters": 35,
+          "non_gold_characters": 0
+        },
+        "INN": {
+          "cases": 5,
+          "characters": 45,
+          "example_case_ids": [
+            "organizer/org_0157",
+            "organizer/org_0324",
+            "organizer/org_0368",
+            "organizer/org_0383",
+            "organizer/org_0402"
+          ],
+          "gold_characters": 45,
+          "non_gold_characters": 0
+        },
+        "PASSPORT": {
+          "cases": 12,
+          "characters": 75,
+          "example_case_ids": [
+            "organizer/org_0048",
+            "organizer/org_0053",
+            "organizer/org_0054",
+            "organizer/org_0136",
+            "organizer/org_0187",
+            "organizer/org_0263",
+            "organizer/org_0272",
+            "organizer/org_0324"
+          ],
+          "gold_characters": 75,
+          "non_gold_characters": 0
+        },
+        "PASSPORT_DATE": {
+          "cases": 25,
+          "characters": 183,
+          "example_case_ids": [
+            "organizer/org_0002",
+            "organizer/org_0008",
+            "organizer/org_0016",
+            "organizer/org_0053",
+            "organizer/org_0054",
+            "organizer/org_0059",
+            "organizer/org_0075",
+            "organizer/org_0083"
+          ],
+          "gold_characters": 183,
+          "non_gold_characters": 0
+        },
+        "PASSPORT_ISSUER": {
+          "cases": 14,
+          "characters": 190,
+          "example_case_ids": [
+            "organizer/org_0018",
+            "organizer/org_0053",
+            "organizer/org_0054",
+            "organizer/org_0068",
+            "organizer/org_0123",
+            "organizer/org_0141",
+            "organizer/org_0191",
+            "organizer/org_0217"
+          ],
+          "gold_characters": 190,
+          "non_gold_characters": 0
+        },
+        "PERSON": {
+          "cases": 39,
+          "characters": 53,
+          "example_case_ids": [
+            "organizer/org_0022",
+            "organizer/org_0028",
+            "organizer/org_0034",
+            "organizer/org_0036",
+            "organizer/org_0052",
+            "organizer/org_0054",
+            "organizer/org_0060",
+            "organizer/org_0063"
+          ],
+          "gold_characters": 53,
+          "non_gold_characters": 0
+        },
+        "PHONE": {
+          "cases": 9,
+          "characters": 37,
+          "example_case_ids": [
+            "organizer/org_0118",
+            "organizer/org_0144",
+            "organizer/org_0145",
+            "organizer/org_0230",
+            "organizer/org_0296",
+            "organizer/org_0315",
+            "organizer/org_0322",
+            "organizer/org_0324"
+          ],
+          "gold_characters": 37,
+          "non_gold_characters": 0
+        },
+        "PIN": {
+          "cases": 24,
+          "characters": 94,
+          "example_case_ids": [
+            "organizer/org_0015",
+            "organizer/org_0027",
+            "organizer/org_0049",
+            "organizer/org_0055",
+            "organizer/org_0071",
+            "organizer/org_0107",
+            "organizer/org_0117",
+            "organizer/org_0130"
+          ],
+          "gold_characters": 94,
+          "non_gold_characters": 0
+        },
+        "POSTAL_CODE": {
+          "cases": 1,
+          "characters": 6,
+          "example_case_ids": [
+            "organizer/org_0324"
+          ],
+          "gold_characters": 6,
+          "non_gold_characters": 0
+        }
+      },
+      "rule_correct_characters_not_covered_by_native21_by_type_and_reason": {
+        "ADDRESS / explicit-private-registration-field": {
+          "cases": 1,
+          "characters": 3,
+          "example_case_ids": [
+            "organizer/org_0318"
+          ],
+          "gold_characters": 3,
+          "non_gold_characters": 0
+        },
+        "ADDRESS / linked-address-components": {
+          "cases": 20,
+          "characters": 42,
+          "example_case_ids": [
+            "organizer/org_0004",
+            "organizer/org_0055",
+            "organizer/org_0069",
+            "organizer/org_0080",
+            "organizer/org_0084",
+            "organizer/org_0116",
+            "organizer/org_0155",
+            "organizer/org_0158"
+          ],
+          "gold_characters": 42,
+          "non_gold_characters": 0
+        },
+        "ADDRESS / residential-address-components": {
+          "cases": 4,
+          "characters": 29,
+          "example_case_ids": [
+            "organizer/org_0032",
+            "organizer/org_0192",
+            "organizer/org_0283",
+            "organizer/org_0394"
+          ],
+          "gold_characters": 29,
+          "non_gold_characters": 0
+        },
+        "ADDRESS / structured-address-context": {
+          "cases": 2,
+          "characters": 14,
+          "example_case_ids": [
+            "organizer/org_0114",
+            "organizer/org_0324"
+          ],
+          "gold_characters": 14,
+          "non_gold_characters": 0
+        },
+        "BIRTH_DATE / context": {
+          "cases": 1,
+          "characters": 8,
+          "example_case_ids": [
+            "organizer/org_0114"
+          ],
+          "gold_characters": 8,
+          "non_gold_characters": 0
+        },
+        "BIRTH_DATE / explicit-personal-date-field": {
+          "cases": 36,
+          "characters": 292,
+          "example_case_ids": [
+            "organizer/org_0007",
+            "organizer/org_0017",
+            "organizer/org_0020",
+            "organizer/org_0029",
+            "organizer/org_0035",
+            "organizer/org_0040",
+            "organizer/org_0076",
+            "organizer/org_0077"
+          ],
+          "gold_characters": 292,
+          "non_gold_characters": 0
+        },
+        "BIRTH_PLACE / birth-date-locality-field": {
+          "cases": 1,
+          "characters": 1,
+          "example_case_ids": [
+            "organizer/org_0114"
+          ],
+          "gold_characters": 1,
+          "non_gold_characters": 0
+        },
+        "BIRTH_PLACE / context": {
+          "cases": 8,
+          "characters": 11,
+          "example_case_ids": [
+            "organizer/org_0038",
+            "organizer/org_0166",
+            "organizer/org_0169",
+            "organizer/org_0184",
+            "organizer/org_0203",
+            "organizer/org_0324",
+            "organizer/org_0334",
+            "organizer/org_0392"
+          ],
+          "gold_characters": 11,
+          "non_gold_characters": 0
+        },
+        "CARD / explicit-card-suffix": {
+          "cases": 1,
+          "characters": 4,
+          "example_case_ids": [
+            "organizer/org_0142"
+          ],
+          "gold_characters": 4,
+          "non_gold_characters": 0
+        },
+        "CARDHOLDER / delimited-cardholder-field": {
+          "cases": 2,
+          "characters": 22,
+          "example_case_ids": [
+            "organizer/org_0065",
+            "organizer/org_0325"
+          ],
+          "gold_characters": 22,
+          "non_gold_characters": 0
+        },
+        "CARDHOLDER / explicit-cardholder-field": {
+          "cases": 2,
+          "characters": 20,
+          "example_case_ids": [
+            "organizer/org_0300",
+            "organizer/org_0325"
+          ],
+          "gold_characters": 20,
+          "non_gold_characters": 0
+        },
+        "CITIZENSHIP / context": {
+          "cases": 6,
+          "characters": 72,
+          "example_case_ids": [
+            "organizer/org_0039",
+            "organizer/org_0053",
+            "organizer/org_0087",
+            "organizer/org_0220",
+            "organizer/org_0324",
+            "organizer/org_0370"
+          ],
+          "gold_characters": 72,
+          "non_gold_characters": 0
+        },
+        "CVV / context": {
+          "cases": 1,
+          "characters": 3,
+          "example_case_ids": [
+            "organizer/org_0134"
+          ],
+          "gold_characters": 3,
+          "non_gold_characters": 0
+        },
+        "CVV / explicit-payment-security-field": {
+          "cases": 12,
+          "characters": 34,
+          "example_case_ids": [
+            "organizer/org_0065",
+            "organizer/org_0067",
+            "organizer/org_0119",
+            "organizer/org_0163",
+            "organizer/org_0262",
+            "organizer/org_0280",
+            "organizer/org_0288",
+            "organizer/org_0324"
+          ],
+          "gold_characters": 34,
+          "non_gold_characters": 0
+        },
+        "DEPARTMENT_CODE / explicit-department-field": {
+          "cases": 11,
+          "characters": 66,
+          "example_case_ids": [
+            "organizer/org_0025",
+            "organizer/org_0053",
+            "organizer/org_0056",
+            "organizer/org_0141",
+            "organizer/org_0284",
+            "organizer/org_0324",
+            "organizer/org_0358",
+            "organizer/org_0384"
+          ],
+          "gold_characters": 66,
+          "non_gold_characters": 0
+        },
+        "DRIVER_LICENSE / explicit-license-suffix": {
+          "cases": 1,
+          "characters": 7,
+          "example_case_ids": [
+            "organizer/org_0197"
+          ],
+          "gold_characters": 7,
+          "non_gold_characters": 0
+        },
+        "DRIVER_LICENSE / explicit-personal-document-field": {
+          "cases": 4,
+          "characters": 16,
+          "example_case_ids": [
+            "organizer/org_0150",
+            "organizer/org_0173",
+            "organizer/org_0324",
+            "organizer/org_0398"
+          ],
+          "gold_characters": 16,
+          "non_gold_characters": 0
+        },
+        "DRIVER_LICENSE / explicit-personal-document-part": {
+          "cases": 2,
+          "characters": 12,
+          "example_case_ids": [
+            "organizer/org_0044",
+            "organizer/org_0047"
+          ],
+          "gold_characters": 12,
+          "non_gold_characters": 0
+        },
+        "INN / checksum": {
+          "cases": 1,
+          "characters": 5,
+          "example_case_ids": [
+            "organizer/org_0383"
+          ],
+          "gold_characters": 5,
+          "non_gold_characters": 0
+        },
+        "INN / context": {
+          "cases": 4,
+          "characters": 40,
+          "example_case_ids": [
+            "organizer/org_0157",
+            "organizer/org_0324",
+            "organizer/org_0368",
+            "organizer/org_0402"
+          ],
+          "gold_characters": 40,
+          "non_gold_characters": 0
+        },
+        "PASSPORT / context": {
+          "cases": 3,
+          "characters": 18,
+          "example_case_ids": [
+            "organizer/org_0136",
+            "organizer/org_0332",
+            "organizer/org_0431"
+          ],
+          "gold_characters": 18,
+          "non_gold_characters": 0
+        },
+        "PASSPORT / explicit-personal-document-field": {
+          "cases": 3,
+          "characters": 22,
+          "example_case_ids": [
+            "organizer/org_0053",
+            "organizer/org_0263",
+            "organizer/org_0324"
+          ],
+          "gold_characters": 22,
+          "non_gold_characters": 0
+        },
+        "PASSPORT / explicit-personal-document-part": {
+          "cases": 1,
+          "characters": 7,
+          "example_case_ids": [
+            "organizer/org_0054"
+          ],
+          "gold_characters": 7,
+          "non_gold_characters": 0
+        },
+        "PASSPORT / paired-personal-document-parts": {
+          "cases": 5,
+          "characters": 28,
+          "example_case_ids": [
+            "organizer/org_0048",
+            "organizer/org_0187",
+            "organizer/org_0272",
+            "organizer/org_0427",
+            "organizer/org_0442"
+          ],
+          "gold_characters": 28,
+          "non_gold_characters": 0
+        },
+        "PASSPORT_DATE / context": {
+          "cases": 4,
+          "characters": 32,
+          "example_case_ids": [
+            "organizer/org_0053",
+            "organizer/org_0054",
+            "organizer/org_0270",
+            "organizer/org_0324"
+          ],
+          "gold_characters": 32,
+          "non_gold_characters": 0
+        },
+        "PASSPORT_DATE / explicit-personal-date-field": {
+          "cases": 20,
+          "characters": 140,
+          "example_case_ids": [
+            "organizer/org_0002",
+            "organizer/org_0008",
+            "organizer/org_0016",
+            "organizer/org_0059",
+            "organizer/org_0075",
+            "organizer/org_0083",
+            "organizer/org_0098",
+            "organizer/org_0102"
+          ],
+          "gold_characters": 140,
+          "non_gold_characters": 0
+        },
+        "PASSPORT_DATE / relative-personal-document-date": {
+          "cases": 1,
+          "characters": 11,
+          "example_case_ids": [
+            "organizer/org_0301"
+          ],
+          "gold_characters": 11,
+          "non_gold_characters": 0
+        },
+        "PASSPORT_ISSUER / context": {
+          "cases": 1,
+          "characters": 25,
+          "example_case_ids": [
+            "organizer/org_0141"
+          ],
+          "gold_characters": 25,
+          "non_gold_characters": 0
+        },
+        "PASSPORT_ISSUER / explicit-passport-authority-field": {
+          "cases": 12,
+          "characters": 159,
+          "example_case_ids": [
+            "organizer/org_0018",
+            "organizer/org_0053",
+            "organizer/org_0054",
+            "organizer/org_0068",
+            "organizer/org_0123",
+            "organizer/org_0191",
+            "organizer/org_0217",
+            "organizer/org_0242"
+          ],
+          "gold_characters": 159,
+          "non_gold_characters": 0
+        },
+        "PASSPORT_ISSUER / personal-passport-issuing-authority": {
+          "cases": 1,
+          "characters": 6,
+          "example_case_ids": [
+            "organizer/org_0244"
+          ],
+          "gold_characters": 6,
+          "non_gold_characters": 0
+        },
+        "PERSON / explicit-personal-name-field": {
+          "cases": 14,
+          "characters": 17,
+          "example_case_ids": [
+            "organizer/org_0028",
+            "organizer/org_0034",
+            "organizer/org_0052",
+            "organizer/org_0060",
+            "organizer/org_0063",
+            "organizer/org_0124",
+            "organizer/org_0164",
+            "organizer/org_0174"
+          ],
+          "gold_characters": 17,
+          "non_gold_characters": 0
+        },
+        "PERSON / patronymic-name": {
+          "cases": 1,
+          "characters": 1,
+          "example_case_ids": [
+            "organizer/org_0324"
+          ],
+          "gold_characters": 1,
+          "non_gold_characters": 0
+        },
+        "PERSON / personal-name-with-initials": {
+          "cases": 24,
+          "characters": 33,
+          "example_case_ids": [
+            "organizer/org_0022",
+            "organizer/org_0036",
+            "organizer/org_0054",
+            "organizer/org_0082",
+            "organizer/org_0085",
+            "organizer/org_0090",
+            "organizer/org_0103",
+            "organizer/org_0110"
+          ],
+          "gold_characters": 33,
+          "non_gold_characters": 0
+        },
+        "PERSON / transliterated-person-name": {
+          "cases": 1,
+          "characters": 4,
+          "example_case_ids": [
+            "organizer/org_0251"
+          ],
+          "gold_characters": 4,
+          "non_gold_characters": 0
+        },
+        "PHONE / russian-phone-format": {
+          "cases": 9,
+          "characters": 37,
+          "example_case_ids": [
+            "organizer/org_0118",
+            "organizer/org_0144",
+            "organizer/org_0145",
+            "organizer/org_0230",
+            "organizer/org_0296",
+            "organizer/org_0315",
+            "organizer/org_0322",
+            "organizer/org_0324"
+          ],
+          "gold_characters": 37,
+          "non_gold_characters": 0
+        },
+        "PIN / explicit-payment-security-field": {
+          "cases": 24,
+          "characters": 94,
+          "example_case_ids": [
+            "organizer/org_0015",
+            "organizer/org_0027",
+            "organizer/org_0049",
+            "organizer/org_0055",
+            "organizer/org_0071",
+            "organizer/org_0107",
+            "organizer/org_0117",
+            "organizer/org_0130"
+          ],
+          "gold_characters": 94,
+          "non_gold_characters": 0
+        },
+        "POSTAL_CODE / address-format": {
+          "cases": 1,
+          "characters": 6,
+          "example_case_ids": [
+            "organizer/org_0069"
+          ],
+          "gold_characters": 6,
+          "non_gold_characters": 0
+        },
+        "POSTAL_CODE / context": {
+          "cases": 1,
+          "characters": 6,
+          "example_case_ids": [
+            "organizer/org_0324"
+          ],
+          "gold_characters": 6,
+          "non_gold_characters": 0
+        }
+      },
+      "rule_false_negative_characters_by_gold_type": {
+        "ADDRESS": {
+          "cases": 1,
+          "characters": 15,
+          "example_case_ids": [
+            "organizer/org_0178"
+          ],
+          "gold_characters": 15,
+          "non_gold_characters": 0
+        },
+        "BIRTH_DATE": {
+          "cases": 2,
+          "characters": 14,
+          "example_case_ids": [
+            "organizer/org_0201",
+            "organizer/org_0231"
+          ],
+          "gold_characters": 14,
+          "non_gold_characters": 0
+        },
+        "BIRTH_PLACE": {
+          "cases": 4,
+          "characters": 59,
+          "example_case_ids": [
+            "organizer/org_0038",
+            "organizer/org_0169",
+            "organizer/org_0178",
+            "organizer/org_0203"
+          ],
+          "gold_characters": 59,
+          "non_gold_characters": 0
+        },
+        "CARD": {
+          "cases": 2,
+          "characters": 32,
+          "example_case_ids": [
+            "organizer/org_0259",
+            "organizer/org_0299"
+          ],
+          "gold_characters": 32,
+          "non_gold_characters": 0
+        },
+        "CARDHOLDER": {
+          "cases": 1,
+          "characters": 9,
+          "example_case_ids": [
+            "organizer/org_0115"
+          ],
+          "gold_characters": 9,
+          "non_gold_characters": 0
+        },
+        "CITIZENSHIP": {
+          "cases": 3,
+          "characters": 68,
+          "example_case_ids": [
+            "organizer/org_0033",
+            "organizer/org_0074",
+            "organizer/org_0391"
+          ],
+          "gold_characters": 68,
+          "non_gold_characters": 0
+        },
+        "CITY": {
+          "cases": 1,
+          "characters": 6,
+          "example_case_ids": [
+            "organizer/org_0443"
+          ],
+          "gold_characters": 6,
+          "non_gold_characters": 0
+        },
+        "PASSPORT": {
+          "cases": 11,
+          "characters": 120,
+          "example_case_ids": [
+            "organizer/org_0043",
+            "organizer/org_0127",
+            "organizer/org_0143",
+            "organizer/org_0154",
+            "organizer/org_0171",
+            "organizer/org_0258",
+            "organizer/org_0286",
+            "organizer/org_0339"
+          ],
+          "gold_characters": 120,
+          "non_gold_characters": 0
+        },
+        "PASSPORT_DATE": {
+          "cases": 1,
+          "characters": 7,
+          "example_case_ids": [
+            "organizer/org_0072"
+          ],
+          "gold_characters": 7,
+          "non_gold_characters": 0
+        },
+        "PERSON": {
+          "cases": 29,
+          "characters": 284,
+          "example_case_ids": [
+            "organizer/org_0019",
+            "organizer/org_0030",
+            "organizer/org_0046",
+            "organizer/org_0058",
+            "organizer/org_0073",
+            "organizer/org_0101",
+            "organizer/org_0122",
+            "organizer/org_0146"
+          ],
+          "gold_characters": 284,
+          "non_gold_characters": 0
+        }
+      },
+      "rule_false_positive_characters_by_type_and_reason": {
+        "BIRTH_PLACE / context": {
+          "cases": 1,
+          "characters": 18,
+          "example_case_ids": [
+            "organizer/org_0078"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 18
+        },
+        "INN / checksum": {
+          "cases": 2,
+          "characters": 22,
+          "example_case_ids": [
+            "organizer/org_0292",
+            "organizer/org_0418"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 22
+        },
+        "INN / context": {
+          "cases": 1,
+          "characters": 10,
+          "example_case_ids": [
+            "organizer/org_0380"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 10
+        },
+        "PERSON / given-name-and-surname": {
+          "cases": 1,
+          "characters": 20,
+          "example_case_ids": [
+            "organizer/org_0416"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 20
+        },
+        "PERSON / patronymic-name": {
+          "cases": 1,
+          "characters": 24,
+          "example_case_ids": [
+            "organizer/org_0078"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 24
+        },
+        "PHONE / russian-phone-format": {
+          "cases": 1,
+          "characters": 11,
+          "example_case_ids": [
+            "organizer/org_0037"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 11
+        }
+      },
+      "rule_missed_gold_with_policy_or_checksum_traits": {
+        "CARD / card_luhn_invalid": {
+          "cases": 2,
+          "characters": 32,
+          "example_case_ids": [
+            "organizer/org_0259",
+            "organizer/org_0299"
+          ],
+          "gold_characters": 32,
+          "non_gold_characters": 0
+        }
+      },
+      "rules_increment_over_native21": {
+        "correct_gold_characters": 1347,
+        "new_false_positive_characters": 33
+      },
+      "selected_case_diagnostics": [
+        {
+          "case_id": "organizer/org_0037",
+          "losses": {
+            "excluded_native_types": {
+              "gold": 0,
+              "non_gold": 0
+            },
+            "ner_context_or_role_normalization": {
+              "gold": 0,
+              "non_gold": 0
+            },
+            "overlap_priority_resolution": {
+              "gold": 0,
+              "non_gold": 0
+            },
+            "shared_context_refinement": {
+              "gold": 0,
+              "non_gold": 0
+            }
+          },
+          "native21": {
+            "exact": 1,
+            "fn": 0,
+            "fp": 0,
+            "tp": 0
+          },
+          "rules": {
+            "exact": 0,
+            "fn": 0,
+            "fp": 11,
+            "tp": 0
+          },
+          "service_hybrid": {
+            "exact": 0,
+            "fn": 0,
+            "fp": 11,
+            "tp": 0
+          },
+          "uncertain": true
+        },
+        {
+          "case_id": "organizer/org_0078",
+          "losses": {
+            "excluded_native_types": {
+              "gold": 0,
+              "non_gold": 0
+            },
+            "ner_context_or_role_normalization": {
+              "gold": 0,
+              "non_gold": 0
+            },
+            "overlap_priority_resolution": {
+              "gold": 0,
+              "non_gold": 0
+            },
+            "shared_context_refinement": {
+              "gold": 0,
+              "non_gold": 0
+            }
+          },
+          "native21": {
+            "exact": 0,
+            "fn": 0,
+            "fp": 34,
+            "tp": 0
+          },
+          "rules": {
+            "exact": 0,
+            "fn": 0,
+            "fp": 42,
+            "tp": 0
+          },
+          "service_hybrid": {
+            "exact": 0,
+            "fn": 0,
+            "fp": 42,
+            "tp": 0
+          },
+          "uncertain": false
+        }
+      ],
+      "systems": {
+        "gateway_and_rules_union": {
+          "cases": 446,
+          "exact": 401,
+          "f1": 0.9561789512284562,
+          "fn": 176,
+          "fp": 302,
+          "precision": 0.9452601051295995,
+          "recall": 0.9673529957336301,
+          "tp": 5215
+        },
+        "gateway_model_only": {
+          "cases": 446,
+          "exact": 145,
+          "f1": 0.6666666666666666,
+          "fn": 2570,
+          "fp": 251,
+          "precision": 0.9182942708333334,
+          "recall": 0.5232795399740308,
+          "tp": 2821
+        },
+        "native21": {
+          "cases": 446,
+          "exact": 177,
+          "f1": 0.8062979076030661,
+          "fn": 1499,
+          "fp": 371,
+          "precision": 0.9129720853858785,
+          "recall": 0.7219439807085883,
+          "tp": 3892
+        },
+        "native_and_rules_union": {
+          "cases": 446,
+          "exact": 383,
+          "f1": 0.949610295450426,
+          "fn": 152,
+          "fp": 404,
+          "precision": 0.9284068757752968,
+          "recall": 0.9718048599517715,
+          "tp": 5239
+        },
+        "normalized_gateway_and_rules": {
+          "cases": 446,
+          "exact": 402,
+          "f1": 0.9590804597701149,
+          "fn": 176,
+          "fp": 269,
+          "precision": 0.950948212983224,
+          "recall": 0.9673529957336301,
+          "tp": 5215
+        },
+        "refined_gateway_and_rules": {
+          "cases": 446,
+          "exact": 412,
+          "f1": 0.9687906371911573,
+          "fn": 176,
+          "fp": 160,
+          "precision": 0.9702325581395349,
+          "recall": 0.9673529957336301,
+          "tp": 5215
+        },
+        "rules": {
+          "cases": 446,
+          "exact": 386,
+          "f1": 0.9300107076803271,
+          "fn": 614,
+          "fp": 105,
+          "precision": 0.9784924211388775,
+          "recall": 0.8861064737525506,
+          "tp": 4777
+        },
+        "service_hybrid": {
+          "cases": 446,
+          "exact": 412,
+          "f1": 0.9687906371911573,
+          "fn": 176,
+          "fp": 160,
+          "precision": 0.9702325581395349,
+          "recall": 0.9673529957336301,
+          "tp": 5215
+        }
+      }
+    },
+    "redmadrobot": {
+      "pipeline_removal_reason_attribution": {
+        "excluded_native_types / BIRTH_CERTIFICATE": {
+          "cases": 190,
+          "characters": 1676,
+          "example_case_ids": [
+            "redmadrobot/test/row_0002",
+            "redmadrobot/test/row_0011",
+            "redmadrobot/test/row_0012",
+            "redmadrobot/test/row_0015",
+            "redmadrobot/test/row_0021",
+            "redmadrobot/test/row_0036",
+            "redmadrobot/test/row_0088",
+            "redmadrobot/test/row_0098"
+          ],
+          "gold_characters": 1676,
+          "non_gold_characters": 0
+        },
+        "excluded_native_types / CREDIT_CARD": {
+          "cases": 126,
+          "characters": 1979,
+          "example_case_ids": [
+            "redmadrobot/test/row_0004",
+            "redmadrobot/test/row_0035",
+            "redmadrobot/test/row_0051",
+            "redmadrobot/test/row_0067",
+            "redmadrobot/test/row_0076",
+            "redmadrobot/test/row_0099",
+            "redmadrobot/test/row_0102",
+            "redmadrobot/test/row_0120"
+          ],
+          "gold_characters": 1914,
+          "non_gold_characters": 65
+        },
+        "excluded_native_types / DRIVER_LICENSE": {
+          "cases": 105,
+          "characters": 748,
+          "example_case_ids": [
+            "redmadrobot/test/row_0039",
+            "redmadrobot/test/row_0053",
+            "redmadrobot/test/row_0065",
+            "redmadrobot/test/row_0089",
+            "redmadrobot/test/row_0116",
+            "redmadrobot/test/row_0121",
+            "redmadrobot/test/row_0139",
+            "redmadrobot/test/row_0146"
+          ],
+          "gold_characters": 746,
+          "non_gold_characters": 2
+        },
+        "excluded_native_types / EMAIL": {
+          "cases": 33,
+          "characters": 1953,
+          "example_case_ids": [
+            "redmadrobot/test/row_0124",
+            "redmadrobot/test/row_0172",
+            "redmadrobot/test/row_0259",
+            "redmadrobot/test/row_0274",
+            "redmadrobot/test/row_0311",
+            "redmadrobot/test/row_0507",
+            "redmadrobot/test/row_0522",
+            "redmadrobot/test/row_0612"
+          ],
+          "gold_characters": 1897,
+          "non_gold_characters": 56
+        },
+        "excluded_native_types / INN": {
+          "cases": 80,
+          "characters": 800,
+          "example_case_ids": [
+            "redmadrobot/test/row_0019",
+            "redmadrobot/test/row_0033",
+            "redmadrobot/test/row_0118",
+            "redmadrobot/test/row_0160",
+            "redmadrobot/test/row_0211",
+            "redmadrobot/test/row_0232",
+            "redmadrobot/test/row_0286",
+            "redmadrobot/test/row_0398"
+          ],
+          "gold_characters": 795,
+          "non_gold_characters": 5
+        },
+        "excluded_native_types / IP_ADDRESS": {
+          "cases": 130,
+          "characters": 1209,
+          "example_case_ids": [
+            "redmadrobot/test/row_0003",
+            "redmadrobot/test/row_0005",
+            "redmadrobot/test/row_0014",
+            "redmadrobot/test/row_0045",
+            "redmadrobot/test/row_0050",
+            "redmadrobot/test/row_0058",
+            "redmadrobot/test/row_0106",
+            "redmadrobot/test/row_0117"
+          ],
+          "gold_characters": 1209,
+          "non_gold_characters": 0
+        },
+        "excluded_native_types / MILITARY_ID": {
+          "cases": 170,
+          "characters": 1438,
+          "example_case_ids": [
+            "redmadrobot/test/row_0039",
+            "redmadrobot/test/row_0061",
+            "redmadrobot/test/row_0070",
+            "redmadrobot/test/row_0087",
+            "redmadrobot/test/row_0090",
+            "redmadrobot/test/row_0111",
+            "redmadrobot/test/row_0167",
+            "redmadrobot/test/row_0178"
+          ],
+          "gold_characters": 1438,
+          "non_gold_characters": 0
+        },
+        "excluded_native_types / OMS": {
+          "cases": 161,
+          "characters": 2543,
+          "example_case_ids": [
+            "redmadrobot/test/row_0024",
+            "redmadrobot/test/row_0031",
+            "redmadrobot/test/row_0034",
+            "redmadrobot/test/row_0038",
+            "redmadrobot/test/row_0046",
+            "redmadrobot/test/row_0056",
+            "redmadrobot/test/row_0062",
+            "redmadrobot/test/row_0081"
+          ],
+          "gold_characters": 2529,
+          "non_gold_characters": 14
+        },
+        "excluded_native_types / PASSPORT": {
+          "cases": 118,
+          "characters": 839,
+          "example_case_ids": [
+            "redmadrobot/test/row_0057",
+            "redmadrobot/test/row_0069",
+            "redmadrobot/test/row_0083",
+            "redmadrobot/test/row_0093",
+            "redmadrobot/test/row_0113",
+            "redmadrobot/test/row_0126",
+            "redmadrobot/test/row_0178",
+            "redmadrobot/test/row_0219"
+          ],
+          "gold_characters": 792,
+          "non_gold_characters": 47
+        },
+        "excluded_native_types / PHONE": {
+          "cases": 28,
+          "characters": 213,
+          "example_case_ids": [
+            "redmadrobot/test/row_0018",
+            "redmadrobot/test/row_0250",
+            "redmadrobot/test/row_0396",
+            "redmadrobot/test/row_0424",
+            "redmadrobot/test/row_0429",
+            "redmadrobot/test/row_0434",
+            "redmadrobot/test/row_0438",
+            "redmadrobot/test/row_0446"
+          ],
+          "gold_characters": 177,
+          "non_gold_characters": 36
+        },
+        "excluded_native_types / SNILS": {
+          "cases": 190,
+          "characters": 2017,
+          "example_case_ids": [
+            "redmadrobot/test/row_0081",
+            "redmadrobot/test/row_0084",
+            "redmadrobot/test/row_0122",
+            "redmadrobot/test/row_0125",
+            "redmadrobot/test/row_0127",
+            "redmadrobot/test/row_0145",
+            "redmadrobot/test/row_0148",
+            "redmadrobot/test/row_0158"
+          ],
+          "gold_characters": 2005,
+          "non_gold_characters": 12
+        },
+        "excluded_native_types / URL": {
+          "cases": 185,
+          "characters": 4762,
+          "example_case_ids": [
+            "redmadrobot/test/row_0054",
+            "redmadrobot/test/row_0075",
+            "redmadrobot/test/row_0091",
+            "redmadrobot/test/row_0095",
+            "redmadrobot/test/row_0100",
+            "redmadrobot/test/row_0105",
+            "redmadrobot/test/row_0107",
+            "redmadrobot/test/row_0117"
+          ],
+          "gold_characters": 4571,
+          "non_gold_characters": 191
+        },
+        "ner_context_or_role_normalization / public_name_context": {
+          "cases": 1,
+          "characters": 16,
+          "example_case_ids": [
+            "redmadrobot/test/row_0578"
+          ],
+          "gold_characters": 16,
+          "non_gold_characters": 0
+        },
+        "overlap_priority_resolution / priority:LOCATION:ner-location -> ADDRESS:linked-address-components": {
+          "cases": 2,
+          "characters": 16,
+          "example_case_ids": [
+            "redmadrobot/test/row_0556",
+            "redmadrobot/test/row_2108"
+          ],
+          "gold_characters": 16,
+          "non_gold_characters": 0
+        },
+        "overlap_priority_resolution / priority:LOCATION:ner-location -> ADDRESS:structured-address-context": {
+          "cases": 3,
+          "characters": 23,
+          "example_case_ids": [
+            "redmadrobot/test/row_1101",
+            "redmadrobot/test/row_2151",
+            "redmadrobot/test/row_2329"
+          ],
+          "gold_characters": 23,
+          "non_gold_characters": 0
+        },
+        "overlap_priority_resolution / priority:LOCATION:ner-location -> APARTMENT:context,HOUSE:context": {
+          "cases": 5,
+          "characters": 19,
+          "example_case_ids": [
+            "redmadrobot/test/row_0914",
+            "redmadrobot/test/row_1014",
+            "redmadrobot/test/row_1364",
+            "redmadrobot/test/row_1982",
+            "redmadrobot/test/row_2104"
+          ],
+          "gold_characters": 19,
+          "non_gold_characters": 0
+        },
+        "overlap_priority_resolution / priority:LOCATION:ner-location -> HOUSE:context": {
+          "cases": 11,
+          "characters": 57,
+          "example_case_ids": [
+            "redmadrobot/test/row_0680",
+            "redmadrobot/test/row_0766",
+            "redmadrobot/test/row_0872",
+            "redmadrobot/test/row_1456",
+            "redmadrobot/test/row_1489",
+            "redmadrobot/test/row_1636",
+            "redmadrobot/test/row_2113",
+            "redmadrobot/test/row_2229"
+          ],
+          "gold_characters": 57,
+          "non_gold_characters": 0
+        },
+        "overlap_priority_resolution / priority:LOCATION:ner-location -> HOUSE:context,STREET:context": {
+          "cases": 1,
+          "characters": 14,
+          "example_case_ids": [
+            "redmadrobot/test/row_2332"
+          ],
+          "gold_characters": 14,
+          "non_gold_characters": 0
+        },
+        "overlap_priority_resolution / priority:LOCATION:ner-location -> PERSON:personal-name-with-initials": {
+          "cases": 2,
+          "characters": 26,
+          "example_case_ids": [
+            "redmadrobot/test/row_2380",
+            "redmadrobot/test/row_2531"
+          ],
+          "gold_characters": 26,
+          "non_gold_characters": 0
+        },
+        "overlap_priority_resolution / priority:LOCATION:ner-location -> STREET:context": {
+          "cases": 8,
+          "characters": 32,
+          "example_case_ids": [
+            "redmadrobot/test/row_0230",
+            "redmadrobot/test/row_0426",
+            "redmadrobot/test/row_0500",
+            "redmadrobot/test/row_1332",
+            "redmadrobot/test/row_1851",
+            "redmadrobot/test/row_2240",
+            "redmadrobot/test/row_2425",
+            "redmadrobot/test/row_2827"
+          ],
+          "gold_characters": 32,
+          "non_gold_characters": 0
+        },
+        "overlap_priority_resolution / priority:PERSON:personal-name-with-initials -> PERSON:ner-person": {
+          "cases": 4,
+          "characters": 5,
+          "example_case_ids": [
+            "redmadrobot/test/row_0544",
+            "redmadrobot/test/row_1545",
+            "redmadrobot/test/row_1861",
+            "redmadrobot/test/row_2153"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 5
+        },
+        "shared_context_refinement / institution_geography_without_personal_context": {
+          "cases": 2,
+          "characters": 44,
+          "example_case_ids": [
+            "redmadrobot/test/row_1646",
+            "redmadrobot/test/row_2080"
+          ],
+          "gold_characters": 44,
+          "non_gold_characters": 0
+        }
+      },
+      "pipeline_removed_characters_by_stage": {
+        "excluded_native_types": {
+          "cases": 1365,
+          "characters": 20177,
+          "example_case_ids": [
+            "redmadrobot/test/row_0002",
+            "redmadrobot/test/row_0003",
+            "redmadrobot/test/row_0004",
+            "redmadrobot/test/row_0005",
+            "redmadrobot/test/row_0011",
+            "redmadrobot/test/row_0012",
+            "redmadrobot/test/row_0014",
+            "redmadrobot/test/row_0015"
+          ],
+          "gold_characters": 19749,
+          "non_gold_characters": 428
+        },
+        "ner_context_or_role_normalization": {
+          "cases": 1,
+          "characters": 16,
+          "example_case_ids": [
+            "redmadrobot/test/row_0578"
+          ],
+          "gold_characters": 16,
+          "non_gold_characters": 0
+        },
+        "overlap_priority_resolution": {
+          "cases": 36,
+          "characters": 192,
+          "example_case_ids": [
+            "redmadrobot/test/row_0230",
+            "redmadrobot/test/row_0426",
+            "redmadrobot/test/row_0500",
+            "redmadrobot/test/row_0544",
+            "redmadrobot/test/row_0556",
+            "redmadrobot/test/row_0680",
+            "redmadrobot/test/row_0766",
+            "redmadrobot/test/row_0872"
+          ],
+          "gold_characters": 187,
+          "non_gold_characters": 5
+        },
+        "shared_context_refinement": {
+          "cases": 2,
+          "characters": 44,
+          "example_case_ids": [
+            "redmadrobot/test/row_1646",
+            "redmadrobot/test/row_2080"
+          ],
+          "gold_characters": 44,
+          "non_gold_characters": 0
+        }
+      },
+      "pipeline_removed_gold_characters_by_stage_and_gold_type": {
+        "excluded_native_types / BIRTH_CERTIFICATE": {
+          "cases": 188,
+          "characters": 1692,
+          "example_case_ids": [
+            "redmadrobot/test/row_0002",
+            "redmadrobot/test/row_0011",
+            "redmadrobot/test/row_0012",
+            "redmadrobot/test/row_0015",
+            "redmadrobot/test/row_0021",
+            "redmadrobot/test/row_0036",
+            "redmadrobot/test/row_0088",
+            "redmadrobot/test/row_0098"
+          ],
+          "gold_characters": 1692,
+          "non_gold_characters": 0
+        },
+        "excluded_native_types / CREDIT_CARD": {
+          "cases": 119,
+          "characters": 1887,
+          "example_case_ids": [
+            "redmadrobot/test/row_0004",
+            "redmadrobot/test/row_0035",
+            "redmadrobot/test/row_0051",
+            "redmadrobot/test/row_0067",
+            "redmadrobot/test/row_0076",
+            "redmadrobot/test/row_0102",
+            "redmadrobot/test/row_0120",
+            "redmadrobot/test/row_0149"
+          ],
+          "gold_characters": 1887,
+          "non_gold_characters": 0
+        },
+        "excluded_native_types / DRIVER_LICENSE": {
+          "cases": 95,
+          "characters": 764,
+          "example_case_ids": [
+            "redmadrobot/test/row_0053",
+            "redmadrobot/test/row_0065",
+            "redmadrobot/test/row_0089",
+            "redmadrobot/test/row_0113",
+            "redmadrobot/test/row_0116",
+            "redmadrobot/test/row_0121",
+            "redmadrobot/test/row_0139",
+            "redmadrobot/test/row_0146"
+          ],
+          "gold_characters": 764,
+          "non_gold_characters": 0
+        },
+        "excluded_native_types / EMAIL": {
+          "cases": 26,
+          "characters": 1859,
+          "example_case_ids": [
+            "redmadrobot/test/row_0124",
+            "redmadrobot/test/row_0172",
+            "redmadrobot/test/row_0259",
+            "redmadrobot/test/row_0274",
+            "redmadrobot/test/row_0311",
+            "redmadrobot/test/row_0507",
+            "redmadrobot/test/row_0522",
+            "redmadrobot/test/row_0612"
+          ],
+          "gold_characters": 1859,
+          "non_gold_characters": 0
+        },
+        "excluded_native_types / INN": {
+          "cases": 77,
+          "characters": 820,
+          "example_case_ids": [
+            "redmadrobot/test/row_0019",
+            "redmadrobot/test/row_0033",
+            "redmadrobot/test/row_0118",
+            "redmadrobot/test/row_0160",
+            "redmadrobot/test/row_0211",
+            "redmadrobot/test/row_0232",
+            "redmadrobot/test/row_0286",
+            "redmadrobot/test/row_0398"
+          ],
+          "gold_characters": 820,
+          "non_gold_characters": 0
+        },
+        "excluded_native_types / IP_ADDRESS": {
+          "cases": 130,
+          "characters": 1209,
+          "example_case_ids": [
+            "redmadrobot/test/row_0003",
+            "redmadrobot/test/row_0005",
+            "redmadrobot/test/row_0014",
+            "redmadrobot/test/row_0045",
+            "redmadrobot/test/row_0050",
+            "redmadrobot/test/row_0058",
+            "redmadrobot/test/row_0106",
+            "redmadrobot/test/row_0117"
+          ],
+          "gold_characters": 1209,
+          "non_gold_characters": 0
+        },
+        "excluded_native_types / MILITARY_ID": {
+          "cases": 166,
+          "characters": 1456,
+          "example_case_ids": [
+            "redmadrobot/test/row_0039",
+            "redmadrobot/test/row_0061",
+            "redmadrobot/test/row_0070",
+            "redmadrobot/test/row_0087",
+            "redmadrobot/test/row_0090",
+            "redmadrobot/test/row_0111",
+            "redmadrobot/test/row_0167",
+            "redmadrobot/test/row_0178"
+          ],
+          "gold_characters": 1456,
+          "non_gold_characters": 0
+        },
+        "excluded_native_types / OMS": {
+          "cases": 157,
+          "characters": 2536,
+          "example_case_ids": [
+            "redmadrobot/test/row_0024",
+            "redmadrobot/test/row_0031",
+            "redmadrobot/test/row_0034",
+            "redmadrobot/test/row_0038",
+            "redmadrobot/test/row_0046",
+            "redmadrobot/test/row_0056",
+            "redmadrobot/test/row_0062",
+            "redmadrobot/test/row_0092"
+          ],
+          "gold_characters": 2536,
+          "non_gold_characters": 0
+        },
+        "excluded_native_types / PASSPORT": {
+          "cases": 91,
+          "characters": 727,
+          "example_case_ids": [
+            "redmadrobot/test/row_0057",
+            "redmadrobot/test/row_0069",
+            "redmadrobot/test/row_0083",
+            "redmadrobot/test/row_0093",
+            "redmadrobot/test/row_0126",
+            "redmadrobot/test/row_0178",
+            "redmadrobot/test/row_0219",
+            "redmadrobot/test/row_0229"
+          ],
+          "gold_characters": 727,
+          "non_gold_characters": 0
+        },
+        "excluded_native_types / PHONE": {
+          "cases": 14,
+          "characters": 133,
+          "example_case_ids": [
+            "redmadrobot/test/row_0018",
+            "redmadrobot/test/row_0396",
+            "redmadrobot/test/row_0424",
+            "redmadrobot/test/row_0429",
+            "redmadrobot/test/row_0434",
+            "redmadrobot/test/row_0508",
+            "redmadrobot/test/row_0742",
+            "redmadrobot/test/row_0823"
+          ],
+          "gold_characters": 133,
+          "non_gold_characters": 0
+        },
+        "excluded_native_types / SNILS": {
+          "cases": 191,
+          "characters": 2095,
+          "example_case_ids": [
+            "redmadrobot/test/row_0081",
+            "redmadrobot/test/row_0084",
+            "redmadrobot/test/row_0122",
+            "redmadrobot/test/row_0125",
+            "redmadrobot/test/row_0127",
+            "redmadrobot/test/row_0145",
+            "redmadrobot/test/row_0148",
+            "redmadrobot/test/row_0158"
+          ],
+          "gold_characters": 2095,
+          "non_gold_characters": 0
+        },
+        "excluded_native_types / URL": {
+          "cases": 182,
+          "characters": 4571,
+          "example_case_ids": [
+            "redmadrobot/test/row_0054",
+            "redmadrobot/test/row_0075",
+            "redmadrobot/test/row_0091",
+            "redmadrobot/test/row_0095",
+            "redmadrobot/test/row_0100",
+            "redmadrobot/test/row_0105",
+            "redmadrobot/test/row_0107",
+            "redmadrobot/test/row_0117"
+          ],
+          "gold_characters": 4571,
+          "non_gold_characters": 0
+        },
+        "ner_context_or_role_normalization / FIRST_NAME": {
+          "cases": 1,
+          "characters": 8,
+          "example_case_ids": [
+            "redmadrobot/test/row_0578"
+          ],
+          "gold_characters": 8,
+          "non_gold_characters": 0
+        },
+        "ner_context_or_role_normalization / MIDDLE_NAME": {
+          "cases": 1,
+          "characters": 8,
+          "example_case_ids": [
+            "redmadrobot/test/row_0578"
+          ],
+          "gold_characters": 8,
+          "non_gold_characters": 0
+        },
+        "overlap_priority_resolution / CITY": {
+          "cases": 1,
+          "characters": 12,
+          "example_case_ids": [
+            "redmadrobot/test/row_2108"
+          ],
+          "gold_characters": 12,
+          "non_gold_characters": 0
+        },
+        "overlap_priority_resolution / HOUSE": {
+          "cases": 22,
+          "characters": 116,
+          "example_case_ids": [
+            "redmadrobot/test/row_0556",
+            "redmadrobot/test/row_0680",
+            "redmadrobot/test/row_0766",
+            "redmadrobot/test/row_0872",
+            "redmadrobot/test/row_0914",
+            "redmadrobot/test/row_1014",
+            "redmadrobot/test/row_1101",
+            "redmadrobot/test/row_1364"
+          ],
+          "gold_characters": 116,
+          "non_gold_characters": 0
+        },
+        "overlap_priority_resolution / STREET": {
+          "cases": 10,
+          "characters": 59,
+          "example_case_ids": [
+            "redmadrobot/test/row_0230",
+            "redmadrobot/test/row_0426",
+            "redmadrobot/test/row_0500",
+            "redmadrobot/test/row_1332",
+            "redmadrobot/test/row_1851",
+            "redmadrobot/test/row_2240",
+            "redmadrobot/test/row_2332",
+            "redmadrobot/test/row_2425"
+          ],
+          "gold_characters": 59,
+          "non_gold_characters": 0
+        },
+        "shared_context_refinement / COUNTRY": {
+          "cases": 2,
+          "characters": 14,
+          "example_case_ids": [
+            "redmadrobot/test/row_1646",
+            "redmadrobot/test/row_2080"
+          ],
+          "gold_characters": 14,
+          "non_gold_characters": 0
+        },
+        "shared_context_refinement / DISTRICT": {
+          "cases": 1,
+          "characters": 30,
+          "example_case_ids": [
+            "redmadrobot/test/row_1646"
+          ],
+          "gold_characters": 30,
+          "non_gold_characters": 0
+        }
+      },
+      "rule_correct_characters_not_covered_by_native21_by_gold_type": {
+        "BIRTH_CERTIFICATE": {
+          "cases": 4,
+          "characters": 8,
+          "example_case_ids": [
+            "redmadrobot/test/row_0826",
+            "redmadrobot/test/row_1238",
+            "redmadrobot/test/row_1727",
+            "redmadrobot/test/row_2825"
+          ],
+          "gold_characters": 8,
+          "non_gold_characters": 0
+        },
+        "DRIVER_LICENSE": {
+          "cases": 4,
+          "characters": 14,
+          "example_case_ids": [
+            "redmadrobot/test/row_0065",
+            "redmadrobot/test/row_0954",
+            "redmadrobot/test/row_1090",
+            "redmadrobot/test/row_1168"
+          ],
+          "gold_characters": 14,
+          "non_gold_characters": 0
+        },
+        "EMAIL": {
+          "cases": 1,
+          "characters": 4,
+          "example_case_ids": [
+            "redmadrobot/test/row_0179"
+          ],
+          "gold_characters": 4,
+          "non_gold_characters": 0
+        },
+        "FIRST_NAME": {
+          "cases": 8,
+          "characters": 37,
+          "example_case_ids": [
+            "redmadrobot/test/row_0072",
+            "redmadrobot/test/row_0423",
+            "redmadrobot/test/row_0523",
+            "redmadrobot/test/row_1478",
+            "redmadrobot/test/row_1549",
+            "redmadrobot/test/row_1587",
+            "redmadrobot/test/row_1601",
+            "redmadrobot/test/row_1731"
+          ],
+          "gold_characters": 37,
+          "non_gold_characters": 0
+        },
+        "HOUSE": {
+          "cases": 2,
+          "characters": 2,
+          "example_case_ids": [
+            "redmadrobot/test/row_0218",
+            "redmadrobot/test/row_2411"
+          ],
+          "gold_characters": 2,
+          "non_gold_characters": 0
+        },
+        "INN": {
+          "cases": 32,
+          "characters": 151,
+          "example_case_ids": [
+            "redmadrobot/test/row_0274",
+            "redmadrobot/test/row_0374",
+            "redmadrobot/test/row_0586",
+            "redmadrobot/test/row_0589",
+            "redmadrobot/test/row_0607",
+            "redmadrobot/test/row_1024",
+            "redmadrobot/test/row_1084",
+            "redmadrobot/test/row_1117"
+          ],
+          "gold_characters": 151,
+          "non_gold_characters": 0
+        },
+        "IP_ADDRESS": {
+          "cases": 2,
+          "characters": 14,
+          "example_case_ids": [
+            "redmadrobot/test/row_1586",
+            "redmadrobot/test/row_1969"
+          ],
+          "gold_characters": 14,
+          "non_gold_characters": 0
+        },
+        "LAST_NAME": {
+          "cases": 10,
+          "characters": 49,
+          "example_case_ids": [
+            "redmadrobot/test/row_0072",
+            "redmadrobot/test/row_0379",
+            "redmadrobot/test/row_0469",
+            "redmadrobot/test/row_0523",
+            "redmadrobot/test/row_1076",
+            "redmadrobot/test/row_1478",
+            "redmadrobot/test/row_1549",
+            "redmadrobot/test/row_1587"
+          ],
+          "gold_characters": 49,
+          "non_gold_characters": 0
+        },
+        "MIDDLE_NAME": {
+          "cases": 2,
+          "characters": 4,
+          "example_case_ids": [
+            "redmadrobot/test/row_0469",
+            "redmadrobot/test/row_1072"
+          ],
+          "gold_characters": 4,
+          "non_gold_characters": 0
+        },
+        "PASSPORT": {
+          "cases": 27,
+          "characters": 159,
+          "example_case_ids": [
+            "redmadrobot/test/row_0187",
+            "redmadrobot/test/row_0250",
+            "redmadrobot/test/row_0254",
+            "redmadrobot/test/row_0344",
+            "redmadrobot/test/row_0375",
+            "redmadrobot/test/row_0384",
+            "redmadrobot/test/row_0466",
+            "redmadrobot/test/row_0483"
+          ],
+          "gold_characters": 159,
+          "non_gold_characters": 0
+        },
+        "PHONE": {
+          "cases": 6,
+          "characters": 8,
+          "example_case_ids": [
+            "redmadrobot/test/row_0288",
+            "redmadrobot/test/row_0683",
+            "redmadrobot/test/row_0974",
+            "redmadrobot/test/row_1386",
+            "redmadrobot/test/row_1549",
+            "redmadrobot/test/row_2662"
+          ],
+          "gold_characters": 8,
+          "non_gold_characters": 0
+        }
+      },
+      "rule_correct_characters_not_covered_by_native21_by_type_and_reason": {
+        "ADDRESS / structured-address-context": {
+          "cases": 4,
+          "characters": 16,
+          "example_case_ids": [
+            "redmadrobot/test/row_0218",
+            "redmadrobot/test/row_1586",
+            "redmadrobot/test/row_1969",
+            "redmadrobot/test/row_2411"
+          ],
+          "gold_characters": 16,
+          "non_gold_characters": 0
+        },
+        "CARDHOLDER / delimited-cardholder-field": {
+          "cases": 4,
+          "characters": 40,
+          "example_case_ids": [
+            "redmadrobot/test/row_0523",
+            "redmadrobot/test/row_1478",
+            "redmadrobot/test/row_1587",
+            "redmadrobot/test/row_1731"
+          ],
+          "gold_characters": 40,
+          "non_gold_characters": 0
+        },
+        "CARDHOLDER / explicit-cardholder-field": {
+          "cases": 1,
+          "characters": 10,
+          "example_case_ids": [
+            "redmadrobot/test/row_1601"
+          ],
+          "gold_characters": 10,
+          "non_gold_characters": 0
+        },
+        "DRIVER_LICENSE / explicit-personal-document-field": {
+          "cases": 1,
+          "characters": 10,
+          "example_case_ids": [
+            "redmadrobot/test/row_1168"
+          ],
+          "gold_characters": 10,
+          "non_gold_characters": 0
+        },
+        "DRIVER_LICENSE / explicit-personal-document-part": {
+          "cases": 1,
+          "characters": 1,
+          "example_case_ids": [
+            "redmadrobot/test/row_0954"
+          ],
+          "gold_characters": 1,
+          "non_gold_characters": 0
+        },
+        "EMAIL / format": {
+          "cases": 1,
+          "characters": 4,
+          "example_case_ids": [
+            "redmadrobot/test/row_0179"
+          ],
+          "gold_characters": 4,
+          "non_gold_characters": 0
+        },
+        "FOREIGN_DOCUMENT / context": {
+          "cases": 1,
+          "characters": 2,
+          "example_case_ids": [
+            "redmadrobot/test/row_2825"
+          ],
+          "gold_characters": 2,
+          "non_gold_characters": 0
+        },
+        "INN / checksum": {
+          "cases": 9,
+          "characters": 31,
+          "example_case_ids": [
+            "redmadrobot/test/row_0374",
+            "redmadrobot/test/row_0589",
+            "redmadrobot/test/row_1203",
+            "redmadrobot/test/row_1562",
+            "redmadrobot/test/row_1578",
+            "redmadrobot/test/row_1883",
+            "redmadrobot/test/row_2009",
+            "redmadrobot/test/row_2257"
+          ],
+          "gold_characters": 31,
+          "non_gold_characters": 0
+        },
+        "INN / cis-personal-id": {
+          "cases": 1,
+          "characters": 7,
+          "example_case_ids": [
+            "redmadrobot/test/row_1249"
+          ],
+          "gold_characters": 7,
+          "non_gold_characters": 0
+        },
+        "INN / context": {
+          "cases": 22,
+          "characters": 113,
+          "example_case_ids": [
+            "redmadrobot/test/row_0274",
+            "redmadrobot/test/row_0586",
+            "redmadrobot/test/row_0607",
+            "redmadrobot/test/row_1024",
+            "redmadrobot/test/row_1084",
+            "redmadrobot/test/row_1117",
+            "redmadrobot/test/row_1371",
+            "redmadrobot/test/row_1424"
+          ],
+          "gold_characters": 113,
+          "non_gold_characters": 0
+        },
+        "PASSPORT / context": {
+          "cases": 3,
+          "characters": 14,
+          "example_case_ids": [
+            "redmadrobot/test/row_0384",
+            "redmadrobot/test/row_0466",
+            "redmadrobot/test/row_2527"
+          ],
+          "gold_characters": 14,
+          "non_gold_characters": 0
+        },
+        "PASSPORT / explicit-personal-document-field": {
+          "cases": 10,
+          "characters": 83,
+          "example_case_ids": [
+            "redmadrobot/test/row_0187",
+            "redmadrobot/test/row_0483",
+            "redmadrobot/test/row_0735",
+            "redmadrobot/test/row_1026",
+            "redmadrobot/test/row_1320",
+            "redmadrobot/test/row_1393",
+            "redmadrobot/test/row_1571",
+            "redmadrobot/test/row_1803"
+          ],
+          "gold_characters": 83,
+          "non_gold_characters": 0
+        },
+        "PASSPORT / explicit-personal-document-part": {
+          "cases": 6,
+          "characters": 26,
+          "example_case_ids": [
+            "redmadrobot/test/row_0344",
+            "redmadrobot/test/row_0661",
+            "redmadrobot/test/row_1164",
+            "redmadrobot/test/row_1471",
+            "redmadrobot/test/row_1835",
+            "redmadrobot/test/row_1959"
+          ],
+          "gold_characters": 26,
+          "non_gold_characters": 0
+        },
+        "PASSPORT / grouped-personal-document-format": {
+          "cases": 3,
+          "characters": 10,
+          "example_case_ids": [
+            "redmadrobot/test/row_0375",
+            "redmadrobot/test/row_2241",
+            "redmadrobot/test/row_2611"
+          ],
+          "gold_characters": 10,
+          "non_gold_characters": 0
+        },
+        "PASSPORT / paired-personal-document-parts": {
+          "cases": 1,
+          "characters": 6,
+          "example_case_ids": [
+            "redmadrobot/test/row_1164"
+          ],
+          "gold_characters": 6,
+          "non_gold_characters": 0
+        },
+        "PERSON / given-name-and-surname": {
+          "cases": 1,
+          "characters": 14,
+          "example_case_ids": [
+            "redmadrobot/test/row_0072"
+          ],
+          "gold_characters": 14,
+          "non_gold_characters": 0
+        },
+        "PERSON / patronymic-name": {
+          "cases": 2,
+          "characters": 5,
+          "example_case_ids": [
+            "redmadrobot/test/row_0469",
+            "redmadrobot/test/row_1072"
+          ],
+          "gold_characters": 5,
+          "non_gold_characters": 0
+        },
+        "PERSON / personal-name-with-initials": {
+          "cases": 2,
+          "characters": 2,
+          "example_case_ids": [
+            "redmadrobot/test/row_0379",
+            "redmadrobot/test/row_1076"
+          ],
+          "gold_characters": 2,
+          "non_gold_characters": 0
+        },
+        "PERSON / transliterated-person-name": {
+          "cases": 2,
+          "characters": 19,
+          "example_case_ids": [
+            "redmadrobot/test/row_0423",
+            "redmadrobot/test/row_1549"
+          ],
+          "gold_characters": 19,
+          "non_gold_characters": 0
+        },
+        "PHONE / russian-phone-format": {
+          "cases": 6,
+          "characters": 8,
+          "example_case_ids": [
+            "redmadrobot/test/row_0288",
+            "redmadrobot/test/row_0683",
+            "redmadrobot/test/row_0974",
+            "redmadrobot/test/row_1386",
+            "redmadrobot/test/row_1549",
+            "redmadrobot/test/row_2662"
+          ],
+          "gold_characters": 8,
+          "non_gold_characters": 0
+        },
+        "POSTAL_CODE / address-format": {
+          "cases": 10,
+          "characters": 29,
+          "example_case_ids": [
+            "redmadrobot/test/row_0065",
+            "redmadrobot/test/row_0250",
+            "redmadrobot/test/row_0254",
+            "redmadrobot/test/row_0826",
+            "redmadrobot/test/row_1090",
+            "redmadrobot/test/row_1238",
+            "redmadrobot/test/row_1246",
+            "redmadrobot/test/row_1457"
+          ],
+          "gold_characters": 29,
+          "non_gold_characters": 0
+        }
+      },
+      "rule_false_negative_characters_by_gold_type": {
+        "BIRTH_CERTIFICATE": {
+          "cases": 188,
+          "characters": 1694,
+          "example_case_ids": [
+            "redmadrobot/test/row_0002",
+            "redmadrobot/test/row_0011",
+            "redmadrobot/test/row_0012",
+            "redmadrobot/test/row_0015",
+            "redmadrobot/test/row_0021",
+            "redmadrobot/test/row_0036",
+            "redmadrobot/test/row_0088",
+            "redmadrobot/test/row_0098"
+          ],
+          "gold_characters": 1694,
+          "non_gold_characters": 0
+        },
+        "CITY": {
+          "cases": 188,
+          "characters": 2160,
+          "example_case_ids": [
+            "redmadrobot/test/row_0023",
+            "redmadrobot/test/row_0026",
+            "redmadrobot/test/row_0030",
+            "redmadrobot/test/row_0037",
+            "redmadrobot/test/row_0054",
+            "redmadrobot/test/row_0064",
+            "redmadrobot/test/row_0082",
+            "redmadrobot/test/row_0101"
+          ],
+          "gold_characters": 2160,
+          "non_gold_characters": 0
+        },
+        "COUNTRY": {
+          "cases": 165,
+          "characters": 1548,
+          "example_case_ids": [
+            "redmadrobot/test/row_0020",
+            "redmadrobot/test/row_0049",
+            "redmadrobot/test/row_0094",
+            "redmadrobot/test/row_0136",
+            "redmadrobot/test/row_0141",
+            "redmadrobot/test/row_0161",
+            "redmadrobot/test/row_0209",
+            "redmadrobot/test/row_0226"
+          ],
+          "gold_characters": 1548,
+          "non_gold_characters": 0
+        },
+        "CREDIT_CARD": {
+          "cases": 119,
+          "characters": 1910,
+          "example_case_ids": [
+            "redmadrobot/test/row_0004",
+            "redmadrobot/test/row_0035",
+            "redmadrobot/test/row_0051",
+            "redmadrobot/test/row_0067",
+            "redmadrobot/test/row_0076",
+            "redmadrobot/test/row_0102",
+            "redmadrobot/test/row_0120",
+            "redmadrobot/test/row_0149"
+          ],
+          "gold_characters": 1910,
+          "non_gold_characters": 0
+        },
+        "DISTRICT": {
+          "cases": 131,
+          "characters": 2474,
+          "example_case_ids": [
+            "redmadrobot/test/row_0023",
+            "redmadrobot/test/row_0028",
+            "redmadrobot/test/row_0048",
+            "redmadrobot/test/row_0096",
+            "redmadrobot/test/row_0141",
+            "redmadrobot/test/row_0161",
+            "redmadrobot/test/row_0163",
+            "redmadrobot/test/row_0186"
+          ],
+          "gold_characters": 2474,
+          "non_gold_characters": 0
+        },
+        "DRIVER_LICENSE": {
+          "cases": 113,
+          "characters": 1498,
+          "example_case_ids": [
+            "redmadrobot/test/row_0010",
+            "redmadrobot/test/row_0053",
+            "redmadrobot/test/row_0065",
+            "redmadrobot/test/row_0089",
+            "redmadrobot/test/row_0113",
+            "redmadrobot/test/row_0116",
+            "redmadrobot/test/row_0121",
+            "redmadrobot/test/row_0139"
+          ],
+          "gold_characters": 1498,
+          "non_gold_characters": 0
+        },
+        "EMAIL": {
+          "cases": 26,
+          "characters": 1859,
+          "example_case_ids": [
+            "redmadrobot/test/row_0124",
+            "redmadrobot/test/row_0172",
+            "redmadrobot/test/row_0259",
+            "redmadrobot/test/row_0274",
+            "redmadrobot/test/row_0311",
+            "redmadrobot/test/row_0507",
+            "redmadrobot/test/row_0522",
+            "redmadrobot/test/row_0612"
+          ],
+          "gold_characters": 1859,
+          "non_gold_characters": 0
+        },
+        "FIRST_NAME": {
+          "cases": 258,
+          "characters": 2016,
+          "example_case_ids": [
+            "redmadrobot/test/row_0006",
+            "redmadrobot/test/row_0015",
+            "redmadrobot/test/row_0026",
+            "redmadrobot/test/row_0027",
+            "redmadrobot/test/row_0044",
+            "redmadrobot/test/row_0059",
+            "redmadrobot/test/row_0060",
+            "redmadrobot/test/row_0068"
+          ],
+          "gold_characters": 2016,
+          "non_gold_characters": 0
+        },
+        "HOUSE": {
+          "cases": 68,
+          "characters": 317,
+          "example_case_ids": [
+            "redmadrobot/test/row_0074",
+            "redmadrobot/test/row_0230",
+            "redmadrobot/test/row_0246",
+            "redmadrobot/test/row_0262",
+            "redmadrobot/test/row_0424",
+            "redmadrobot/test/row_0467",
+            "redmadrobot/test/row_0500",
+            "redmadrobot/test/row_0556"
+          ],
+          "gold_characters": 317,
+          "non_gold_characters": 0
+        },
+        "INN": {
+          "cases": 85,
+          "characters": 1324,
+          "example_case_ids": [
+            "redmadrobot/test/row_0019",
+            "redmadrobot/test/row_0033",
+            "redmadrobot/test/row_0118",
+            "redmadrobot/test/row_0160",
+            "redmadrobot/test/row_0211",
+            "redmadrobot/test/row_0232",
+            "redmadrobot/test/row_0286",
+            "redmadrobot/test/row_0398"
+          ],
+          "gold_characters": 1324,
+          "non_gold_characters": 0
+        },
+        "IP_ADDRESS": {
+          "cases": 152,
+          "characters": 2665,
+          "example_case_ids": [
+            "redmadrobot/test/row_0003",
+            "redmadrobot/test/row_0005",
+            "redmadrobot/test/row_0014",
+            "redmadrobot/test/row_0045",
+            "redmadrobot/test/row_0050",
+            "redmadrobot/test/row_0058",
+            "redmadrobot/test/row_0106",
+            "redmadrobot/test/row_0117"
+          ],
+          "gold_characters": 2665,
+          "non_gold_characters": 0
+        },
+        "LAST_NAME": {
+          "cases": 199,
+          "characters": 2154,
+          "example_case_ids": [
+            "redmadrobot/test/row_0015",
+            "redmadrobot/test/row_0026",
+            "redmadrobot/test/row_0027",
+            "redmadrobot/test/row_0053",
+            "redmadrobot/test/row_0059",
+            "redmadrobot/test/row_0068",
+            "redmadrobot/test/row_0074",
+            "redmadrobot/test/row_0080"
+          ],
+          "gold_characters": 2154,
+          "non_gold_characters": 0
+        },
+        "MIDDLE_NAME": {
+          "cases": 157,
+          "characters": 1611,
+          "example_case_ids": [
+            "redmadrobot/test/row_0006",
+            "redmadrobot/test/row_0017",
+            "redmadrobot/test/row_0026",
+            "redmadrobot/test/row_0027",
+            "redmadrobot/test/row_0044",
+            "redmadrobot/test/row_0059",
+            "redmadrobot/test/row_0074",
+            "redmadrobot/test/row_0080"
+          ],
+          "gold_characters": 1611,
+          "non_gold_characters": 0
+        },
+        "MILITARY_ID": {
+          "cases": 166,
+          "characters": 1491,
+          "example_case_ids": [
+            "redmadrobot/test/row_0039",
+            "redmadrobot/test/row_0061",
+            "redmadrobot/test/row_0070",
+            "redmadrobot/test/row_0087",
+            "redmadrobot/test/row_0090",
+            "redmadrobot/test/row_0111",
+            "redmadrobot/test/row_0167",
+            "redmadrobot/test/row_0178"
+          ],
+          "gold_characters": 1491,
+          "non_gold_characters": 0
+        },
+        "OMS": {
+          "cases": 166,
+          "characters": 3074,
+          "example_case_ids": [
+            "redmadrobot/test/row_0024",
+            "redmadrobot/test/row_0031",
+            "redmadrobot/test/row_0034",
+            "redmadrobot/test/row_0038",
+            "redmadrobot/test/row_0046",
+            "redmadrobot/test/row_0056",
+            "redmadrobot/test/row_0062",
+            "redmadrobot/test/row_0092"
+          ],
+          "gold_characters": 3074,
+          "non_gold_characters": 0
+        },
+        "PASSPORT": {
+          "cases": 104,
+          "characters": 1153,
+          "example_case_ids": [
+            "redmadrobot/test/row_0057",
+            "redmadrobot/test/row_0069",
+            "redmadrobot/test/row_0083",
+            "redmadrobot/test/row_0093",
+            "redmadrobot/test/row_0126",
+            "redmadrobot/test/row_0178",
+            "redmadrobot/test/row_0219",
+            "redmadrobot/test/row_0229"
+          ],
+          "gold_characters": 1153,
+          "non_gold_characters": 0
+        },
+        "PHONE": {
+          "cases": 15,
+          "characters": 163,
+          "example_case_ids": [
+            "redmadrobot/test/row_0018",
+            "redmadrobot/test/row_0396",
+            "redmadrobot/test/row_0424",
+            "redmadrobot/test/row_0429",
+            "redmadrobot/test/row_0434",
+            "redmadrobot/test/row_0508",
+            "redmadrobot/test/row_0742",
+            "redmadrobot/test/row_0823"
+          ],
+          "gold_characters": 163,
+          "non_gold_characters": 0
+        },
+        "REGION": {
+          "cases": 151,
+          "characters": 2439,
+          "example_case_ids": [
+            "redmadrobot/test/row_0001",
+            "redmadrobot/test/row_0007",
+            "redmadrobot/test/row_0008",
+            "redmadrobot/test/row_0013",
+            "redmadrobot/test/row_0037",
+            "redmadrobot/test/row_0048",
+            "redmadrobot/test/row_0091",
+            "redmadrobot/test/row_0108"
+          ],
+          "gold_characters": 2439,
+          "non_gold_characters": 0
+        },
+        "SNILS": {
+          "cases": 203,
+          "characters": 2780,
+          "example_case_ids": [
+            "redmadrobot/test/row_0029",
+            "redmadrobot/test/row_0081",
+            "redmadrobot/test/row_0084",
+            "redmadrobot/test/row_0122",
+            "redmadrobot/test/row_0125",
+            "redmadrobot/test/row_0127",
+            "redmadrobot/test/row_0145",
+            "redmadrobot/test/row_0148"
+          ],
+          "gold_characters": 2780,
+          "non_gold_characters": 0
+        },
+        "STREET": {
+          "cases": 70,
+          "characters": 865,
+          "example_case_ids": [
+            "redmadrobot/test/row_0032",
+            "redmadrobot/test/row_0037",
+            "redmadrobot/test/row_0074",
+            "redmadrobot/test/row_0220",
+            "redmadrobot/test/row_0230",
+            "redmadrobot/test/row_0246",
+            "redmadrobot/test/row_0249",
+            "redmadrobot/test/row_0262"
+          ],
+          "gold_characters": 865,
+          "non_gold_characters": 0
+        },
+        "URL": {
+          "cases": 182,
+          "characters": 4674,
+          "example_case_ids": [
+            "redmadrobot/test/row_0054",
+            "redmadrobot/test/row_0075",
+            "redmadrobot/test/row_0091",
+            "redmadrobot/test/row_0095",
+            "redmadrobot/test/row_0100",
+            "redmadrobot/test/row_0105",
+            "redmadrobot/test/row_0107",
+            "redmadrobot/test/row_0117"
+          ],
+          "gold_characters": 4674,
+          "non_gold_characters": 0
+        }
+      },
+      "rule_false_positive_characters_by_type_and_reason": {
+        "ADDRESS / linked-address-components": {
+          "cases": 22,
+          "characters": 73,
+          "example_case_ids": [
+            "redmadrobot/test/row_0232",
+            "redmadrobot/test/row_0293",
+            "redmadrobot/test/row_0533",
+            "redmadrobot/test/row_0556",
+            "redmadrobot/test/row_0607",
+            "redmadrobot/test/row_1040",
+            "redmadrobot/test/row_1070",
+            "redmadrobot/test/row_1074"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 73
+        },
+        "ADDRESS / structured-address-context": {
+          "cases": 21,
+          "characters": 380,
+          "example_case_ids": [
+            "redmadrobot/test/row_0218",
+            "redmadrobot/test/row_0223",
+            "redmadrobot/test/row_0274",
+            "redmadrobot/test/row_0693",
+            "redmadrobot/test/row_0843",
+            "redmadrobot/test/row_0887",
+            "redmadrobot/test/row_1074",
+            "redmadrobot/test/row_1101"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 380
+        },
+        "BIRTH_DATE / context": {
+          "cases": 2,
+          "characters": 21,
+          "example_case_ids": [
+            "redmadrobot/test/row_0142",
+            "redmadrobot/test/row_2698"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 21
+        },
+        "BIRTH_DATE / explicit-personal-date-field": {
+          "cases": 7,
+          "characters": 56,
+          "example_case_ids": [
+            "redmadrobot/test/row_0053",
+            "redmadrobot/test/row_0162",
+            "redmadrobot/test/row_0716",
+            "redmadrobot/test/row_0905",
+            "redmadrobot/test/row_1545",
+            "redmadrobot/test/row_2407",
+            "redmadrobot/test/row_2573"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 56
+        },
+        "BIRTH_PLACE / context": {
+          "cases": 4,
+          "characters": 4,
+          "example_case_ids": [
+            "redmadrobot/test/row_0025",
+            "redmadrobot/test/row_0710",
+            "redmadrobot/test/row_0916",
+            "redmadrobot/test/row_1927"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 4
+        },
+        "CARD / luhn-checksum": {
+          "cases": 1,
+          "characters": 16,
+          "example_case_ids": [
+            "redmadrobot/test/row_1257"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 16
+        },
+        "CARDHOLDER / delimited-cardholder-field": {
+          "cases": 1,
+          "characters": 10,
+          "example_case_ids": [
+            "redmadrobot/test/row_2199"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 10
+        },
+        "CITY / context": {
+          "cases": 21,
+          "characters": 54,
+          "example_case_ids": [
+            "redmadrobot/test/row_0029",
+            "redmadrobot/test/row_0199",
+            "redmadrobot/test/row_0366",
+            "redmadrobot/test/row_0371",
+            "redmadrobot/test/row_0654",
+            "redmadrobot/test/row_0966",
+            "redmadrobot/test/row_1066",
+            "redmadrobot/test/row_1156"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 54
+        },
+        "INN / checksum": {
+          "cases": 2,
+          "characters": 22,
+          "example_case_ids": [
+            "redmadrobot/test/row_1946",
+            "redmadrobot/test/row_2150"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 22
+        },
+        "INN / context": {
+          "cases": 2,
+          "characters": 22,
+          "example_case_ids": [
+            "redmadrobot/test/row_1206",
+            "redmadrobot/test/row_1427"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 22
+        },
+        "PASSPORT / explicit-personal-document-part": {
+          "cases": 1,
+          "characters": 10,
+          "example_case_ids": [
+            "redmadrobot/test/row_2430"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 10
+        },
+        "PASSPORT_DATE / context": {
+          "cases": 7,
+          "characters": 56,
+          "example_case_ids": [
+            "redmadrobot/test/row_0187",
+            "redmadrobot/test/row_0490",
+            "redmadrobot/test/row_0661",
+            "redmadrobot/test/row_1164",
+            "redmadrobot/test/row_1453",
+            "redmadrobot/test/row_1601",
+            "redmadrobot/test/row_2339"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 56
+        },
+        "PASSPORT_ISSUER / explicit-passport-authority-field": {
+          "cases": 3,
+          "characters": 35,
+          "example_case_ids": [
+            "redmadrobot/test/row_0661",
+            "redmadrobot/test/row_1164",
+            "redmadrobot/test/row_2743"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 35
+        },
+        "PERSON / explicit-personal-name-field": {
+          "cases": 1,
+          "characters": 2,
+          "example_case_ids": [
+            "redmadrobot/test/row_0953"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 2
+        },
+        "PERSON / given-name-and-surname": {
+          "cases": 1,
+          "characters": 7,
+          "example_case_ids": [
+            "redmadrobot/test/row_0469"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 7
+        },
+        "PERSON / personal-name-with-initials": {
+          "cases": 36,
+          "characters": 72,
+          "example_case_ids": [
+            "redmadrobot/test/row_0011",
+            "redmadrobot/test/row_0111",
+            "redmadrobot/test/row_0292",
+            "redmadrobot/test/row_0379",
+            "redmadrobot/test/row_0544",
+            "redmadrobot/test/row_0629",
+            "redmadrobot/test/row_0732",
+            "redmadrobot/test/row_0897"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 72
+        },
+        "PHONE / russian-phone-format": {
+          "cases": 2,
+          "characters": 13,
+          "example_case_ids": [
+            "redmadrobot/test/row_0564",
+            "redmadrobot/test/row_0772"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 13
+        },
+        "POSTAL_CODE / address-format": {
+          "cases": 25,
+          "characters": 150,
+          "example_case_ids": [
+            "redmadrobot/test/row_0009",
+            "redmadrobot/test/row_0054",
+            "redmadrobot/test/row_0118",
+            "redmadrobot/test/row_0122",
+            "redmadrobot/test/row_0411",
+            "redmadrobot/test/row_0418",
+            "redmadrobot/test/row_0586",
+            "redmadrobot/test/row_0872"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 150
+        },
+        "STREET / context": {
+          "cases": 2,
+          "characters": 11,
+          "example_case_ids": [
+            "redmadrobot/test/row_1332",
+            "redmadrobot/test/row_2411"
+          ],
+          "gold_characters": 0,
+          "non_gold_characters": 11
+        }
+      },
+      "rule_missed_gold_with_policy_or_checksum_traits": {
+        "BIRTH_CERTIFICATE / outside_current_rule_type_inventory": {
+          "cases": 188,
+          "characters": 1694,
+          "example_case_ids": [
+            "redmadrobot/test/row_0002",
+            "redmadrobot/test/row_0011",
+            "redmadrobot/test/row_0012",
+            "redmadrobot/test/row_0015",
+            "redmadrobot/test/row_0021",
+            "redmadrobot/test/row_0036",
+            "redmadrobot/test/row_0088",
+            "redmadrobot/test/row_0098"
+          ],
+          "gold_characters": 1694,
+          "non_gold_characters": 0
+        },
+        "CREDIT_CARD / card_luhn_invalid": {
+          "cases": 94,
+          "characters": 1500,
+          "example_case_ids": [
+            "redmadrobot/test/row_0004",
+            "redmadrobot/test/row_0035",
+            "redmadrobot/test/row_0051",
+            "redmadrobot/test/row_0067",
+            "redmadrobot/test/row_0076",
+            "redmadrobot/test/row_0102",
+            "redmadrobot/test/row_0120",
+            "redmadrobot/test/row_0149"
+          ],
+          "gold_characters": 1500,
+          "non_gold_characters": 0
+        },
+        "CREDIT_CARD / card_luhn_valid": {
+          "cases": 20,
+          "characters": 338,
+          "example_case_ids": [
+            "redmadrobot/test/row_0213",
+            "redmadrobot/test/row_0289",
+            "redmadrobot/test/row_0481",
+            "redmadrobot/test/row_0482",
+            "redmadrobot/test/row_0551",
+            "redmadrobot/test/row_0554",
+            "redmadrobot/test/row_0712",
+            "redmadrobot/test/row_1075"
+          ],
+          "gold_characters": 338,
+          "non_gold_characters": 0
+        },
+        "FIRST_NAME / public_name_context_predicate": {
+          "cases": 1,
+          "characters": 8,
+          "example_case_ids": [
+            "redmadrobot/test/row_0578"
+          ],
+          "gold_characters": 8,
+          "non_gold_characters": 0
+        },
+        "INN / inn_checksum_invalid": {
+          "cases": 37,
+          "characters": 454,
+          "example_case_ids": [
+            "redmadrobot/test/row_0033",
+            "redmadrobot/test/row_0118",
+            "redmadrobot/test/row_0211",
+            "redmadrobot/test/row_0398",
+            "redmadrobot/test/row_0402",
+            "redmadrobot/test/row_0446",
+            "redmadrobot/test/row_0610",
+            "redmadrobot/test/row_0643"
+          ],
+          "gold_characters": 454,
+          "non_gold_characters": 0
+        },
+        "INN / inn_checksum_valid": {
+          "cases": 37,
+          "characters": 376,
+          "example_case_ids": [
+            "redmadrobot/test/row_0232",
+            "redmadrobot/test/row_0286",
+            "redmadrobot/test/row_0504",
+            "redmadrobot/test/row_0521",
+            "redmadrobot/test/row_0610",
+            "redmadrobot/test/row_0693",
+            "redmadrobot/test/row_0752",
+            "redmadrobot/test/row_0791"
+          ],
+          "gold_characters": 376,
+          "non_gold_characters": 0
+        },
+        "INN / public_or_corporate_inn_predicate": {
+          "cases": 4,
+          "characters": 40,
+          "example_case_ids": [
+            "redmadrobot/test/row_0752",
+            "redmadrobot/test/row_0801",
+            "redmadrobot/test/row_0977",
+            "redmadrobot/test/row_2034"
+          ],
+          "gold_characters": 40,
+          "non_gold_characters": 0
+        },
+        "IP_ADDRESS / outside_current_rule_type_inventory": {
+          "cases": 152,
+          "characters": 2665,
+          "example_case_ids": [
+            "redmadrobot/test/row_0003",
+            "redmadrobot/test/row_0005",
+            "redmadrobot/test/row_0014",
+            "redmadrobot/test/row_0045",
+            "redmadrobot/test/row_0050",
+            "redmadrobot/test/row_0058",
+            "redmadrobot/test/row_0106",
+            "redmadrobot/test/row_0117"
+          ],
+          "gold_characters": 2665,
+          "non_gold_characters": 0
+        },
+        "LAST_NAME / public_name_context_predicate": {
+          "cases": 1,
+          "characters": 6,
+          "example_case_ids": [
+            "redmadrobot/test/row_2315"
+          ],
+          "gold_characters": 6,
+          "non_gold_characters": 0
+        },
+        "MILITARY_ID / outside_current_rule_type_inventory": {
+          "cases": 166,
+          "characters": 1491,
+          "example_case_ids": [
+            "redmadrobot/test/row_0039",
+            "redmadrobot/test/row_0061",
+            "redmadrobot/test/row_0070",
+            "redmadrobot/test/row_0087",
+            "redmadrobot/test/row_0090",
+            "redmadrobot/test/row_0111",
+            "redmadrobot/test/row_0167",
+            "redmadrobot/test/row_0178"
+          ],
+          "gold_characters": 1491,
+          "non_gold_characters": 0
+        },
+        "OMS / outside_current_rule_type_inventory": {
+          "cases": 166,
+          "characters": 3074,
+          "example_case_ids": [
+            "redmadrobot/test/row_0024",
+            "redmadrobot/test/row_0031",
+            "redmadrobot/test/row_0034",
+            "redmadrobot/test/row_0038",
+            "redmadrobot/test/row_0046",
+            "redmadrobot/test/row_0056",
+            "redmadrobot/test/row_0062",
+            "redmadrobot/test/row_0092"
+          ],
+          "gold_characters": 3074,
+          "non_gold_characters": 0
+        },
+        "SNILS / outside_current_rule_type_inventory": {
+          "cases": 203,
+          "characters": 2780,
+          "example_case_ids": [
+            "redmadrobot/test/row_0029",
+            "redmadrobot/test/row_0081",
+            "redmadrobot/test/row_0084",
+            "redmadrobot/test/row_0122",
+            "redmadrobot/test/row_0125",
+            "redmadrobot/test/row_0127",
+            "redmadrobot/test/row_0145",
+            "redmadrobot/test/row_0148"
+          ],
+          "gold_characters": 2780,
+          "non_gold_characters": 0
+        },
+        "URL / outside_current_rule_type_inventory": {
+          "cases": 182,
+          "characters": 4674,
+          "example_case_ids": [
+            "redmadrobot/test/row_0054",
+            "redmadrobot/test/row_0075",
+            "redmadrobot/test/row_0091",
+            "redmadrobot/test/row_0095",
+            "redmadrobot/test/row_0100",
+            "redmadrobot/test/row_0105",
+            "redmadrobot/test/row_0107",
+            "redmadrobot/test/row_0117"
+          ],
+          "gold_characters": 4674,
+          "non_gold_characters": 0
+        }
+      },
+      "rules_increment_over_native21": {
+        "correct_gold_characters": 450,
+        "new_false_positive_characters": 977
+      },
+      "selected_case_diagnostics": [
+        {
+          "case_id": "redmadrobot/test/row_0004",
+          "losses": {
+            "excluded_native_types": {
+              "gold": 16,
+              "non_gold": 0
+            },
+            "ner_context_or_role_normalization": {
+              "gold": 0,
+              "non_gold": 0
+            },
+            "overlap_priority_resolution": {
+              "gold": 0,
+              "non_gold": 0
+            },
+            "shared_context_refinement": {
+              "gold": 0,
+              "non_gold": 0
+            }
+          },
+          "native21": {
+            "exact": 1,
+            "fn": 0,
+            "fp": 0,
+            "tp": 16
+          },
+          "rules": {
+            "exact": 0,
+            "fn": 16,
+            "fp": 0,
+            "tp": 0
+          },
+          "service_hybrid": {
+            "exact": 0,
+            "fn": 16,
+            "fp": 0,
+            "tp": 0
+          },
+          "uncertain": null
+        },
+        {
+          "case_id": "redmadrobot/test/row_0124",
+          "losses": {
+            "excluded_native_types": {
+              "gold": 14,
+              "non_gold": 0
+            },
+            "ner_context_or_role_normalization": {
+              "gold": 0,
+              "non_gold": 0
+            },
+            "overlap_priority_resolution": {
+              "gold": 0,
+              "non_gold": 0
+            },
+            "shared_context_refinement": {
+              "gold": 0,
+              "non_gold": 0
+            }
+          },
+          "native21": {
+            "exact": 1,
+            "fn": 0,
+            "fp": 0,
+            "tp": 14
+          },
+          "rules": {
+            "exact": 0,
+            "fn": 14,
+            "fp": 0,
+            "tp": 0
+          },
+          "service_hybrid": {
+            "exact": 0,
+            "fn": 14,
+            "fp": 0,
+            "tp": 0
+          },
+          "uncertain": null
+        },
+        {
+          "case_id": "redmadrobot/test/row_0218",
+          "losses": {
+            "excluded_native_types": {
+              "gold": 0,
+              "non_gold": 0
+            },
+            "ner_context_or_role_normalization": {
+              "gold": 0,
+              "non_gold": 0
+            },
+            "overlap_priority_resolution": {
+              "gold": 0,
+              "non_gold": 0
+            },
+            "shared_context_refinement": {
+              "gold": 0,
+              "non_gold": 0
+            }
+          },
+          "native21": {
+            "exact": 0,
+            "fn": 1,
+            "fp": 15,
+            "tp": 34
+          },
+          "rules": {
+            "exact": 0,
+            "fn": 0,
+            "fp": 31,
+            "tp": 35
+          },
+          "service_hybrid": {
+            "exact": 0,
+            "fn": 0,
+            "fp": 31,
+            "tp": 35
+          },
+          "uncertain": null
+        },
+        {
+          "case_id": "redmadrobot/test/row_0230",
+          "losses": {
+            "excluded_native_types": {
+              "gold": 28,
+              "non_gold": 0
+            },
+            "ner_context_or_role_normalization": {
+              "gold": 0,
+              "non_gold": 0
+            },
+            "overlap_priority_resolution": {
+              "gold": 3,
+              "non_gold": 0
+            },
+            "shared_context_refinement": {
+              "gold": 0,
+              "non_gold": 0
+            }
+          },
+          "native21": {
+            "exact": 1,
+            "fn": 0,
+            "fp": 0,
+            "tp": 42
+          },
+          "rules": {
+            "exact": 0,
+            "fn": 36,
+            "fp": 0,
+            "tp": 6
+          },
+          "service_hybrid": {
+            "exact": 0,
+            "fn": 31,
+            "fp": 0,
+            "tp": 11
+          },
+          "uncertain": null
+        },
+        {
+          "case_id": "redmadrobot/test/row_0578",
+          "losses": {
+            "excluded_native_types": {
+              "gold": 0,
+              "non_gold": 0
+            },
+            "ner_context_or_role_normalization": {
+              "gold": 16,
+              "non_gold": 0
+            },
+            "overlap_priority_resolution": {
+              "gold": 0,
+              "non_gold": 0
+            },
+            "shared_context_refinement": {
+              "gold": 0,
+              "non_gold": 0
+            }
+          },
+          "native21": {
+            "exact": 1,
+            "fn": 0,
+            "fp": 0,
+            "tp": 29
+          },
+          "rules": {
+            "exact": 0,
+            "fn": 29,
+            "fp": 0,
+            "tp": 0
+          },
+          "service_hybrid": {
+            "exact": 0,
+            "fn": 16,
+            "fp": 0,
+            "tp": 13
+          },
+          "uncertain": null
+        },
+        {
+          "case_id": "redmadrobot/test/row_1646",
+          "losses": {
+            "excluded_native_types": {
+              "gold": 12,
+              "non_gold": 0
+            },
+            "ner_context_or_role_normalization": {
+              "gold": 0,
+              "non_gold": 0
+            },
+            "overlap_priority_resolution": {
+              "gold": 0,
+              "non_gold": 0
+            },
+            "shared_context_refinement": {
+              "gold": 40,
+              "non_gold": 0
+            }
+          },
+          "native21": {
+            "exact": 1,
+            "fn": 0,
+            "fp": 0,
+            "tp": 64
+          },
+          "rules": {
+            "exact": 0,
+            "fn": 64,
+            "fp": 0,
+            "tp": 0
+          },
+          "service_hybrid": {
+            "exact": 0,
+            "fn": 52,
+            "fp": 0,
+            "tp": 12
+          },
+          "uncertain": null
+        }
+      ],
+      "systems": {
+        "gateway_and_rules_union": {
+          "cases": 2839,
+          "exact": 1240,
+          "f1": 0.7006956364621917,
+          "fn": 25079,
+          "fp": 1425,
+          "precision": 0.9560849332799162,
+          "recall": 0.5529829064399409,
+          "tp": 31024
+        },
+        "gateway_model_only": {
+          "cases": 2839,
+          "exact": 789,
+          "f1": 0.5370334433016366,
+          "fn": 35348,
+          "fp": 437,
+          "precision": 0.9793790109475273,
+          "recall": 0.3699445662442294,
+          "tp": 20755
+        },
+        "native21": {
+          "cases": 2839,
+          "exact": 2368,
+          "f1": 0.9379694693481948,
+          "fn": 5780,
+          "fp": 876,
+          "precision": 0.9828902908259927,
+          "recall": 0.8969752063169527,
+          "tp": 50323
+        },
+        "native_and_rules_union": {
+          "cases": 2839,
+          "exact": 2317,
+          "f1": 0.933936668230187,
+          "fn": 5330,
+          "fp": 1853,
+          "precision": 0.9647892676623722,
+          "recall": 0.9049961677628647,
+          "tp": 50773
+        },
+        "normalized_gateway_and_rules": {
+          "cases": 2839,
+          "exact": 1239,
+          "f1": 0.7004608294930875,
+          "fn": 25095,
+          "fp": 1425,
+          "precision": 0.9560632688927944,
+          "recall": 0.5526977166996417,
+          "tp": 31008
+        },
+        "refined_gateway_and_rules": {
+          "cases": 2839,
+          "exact": 1238,
+          "f1": 0.6998146725127695,
+          "fn": 25139,
+          "fp": 1425,
+          "precision": 0.9560035814628424,
+          "recall": 0.5519134449138192,
+          "tp": 30964
+        },
+        "rules": {
+          "cases": 2839,
+          "exact": 759,
+          "f1": 0.4426388188300091,
+          "fn": 39869,
+          "fp": 1014,
+          "precision": 0.9412105751391465,
+          "recall": 0.28936064025096697,
+          "tp": 16234
+        },
+        "service_hybrid": {
+          "cases": 2839,
+          "exact": 1219,
+          "f1": 0.6971007927519819,
+          "fn": 25326,
+          "fp": 1420,
+          "precision": 0.9558965120974003,
+          "recall": 0.5485802898240736,
+          "tp": 30777
+        }
+      }
+    }
+  },
+  "frozen_aggregate_replay": {
+    "matches": true,
+    "reference_sha256": "1024f810093ea0f63bc93dff9554be9fcbe9d736506067e5f9f954d5b38aeea8"
+  },
+  "hashes": {
+    "/home/lockr/projects/seif-pii-gliner/local-data/gliner25-public/prepared-inputs.jsonl": "b8b80873a507ae3841c1c74143162f8f169c0a68d6509da8509907cf11a20405",
+    "benchmarks/ner-models/pii-guard-review/rule_analysis.py": "aaf28f4522fad24615a48c6f1bea89133024fb86e3f3769325afa0c686d920bf",
+    "datasets/golden/organizer-v1/cases.jsonl": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46",
+    "local-data/rubert-tensorrt/run-v1/rubert.jsonl": "45ea40a6d6a8df56b54b5e4bbfa1f0b7fa7b814b624edd50b2c19a7d0f37f465",
+    "local-data/rubert-tensorrt/run-v1/rubert.meta.json": "dbad73187ebe472698c668890ec564621fdeee6e3ce744c4cb47ec8b79cfe79f",
+    "seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+    "seif/app.py": "e958559569fae134ace1e54ef02af655dc65a4fc481a93545c315721bc1f8951",
+    "seif/async_callbacks.py": "b5ce7aae9979e6251c827d3e2099a4377266bcb8076606d67dbe86c38fa21ebe",
+    "seif/cardholder_fields.py": "3d80d59636e4b2e1a668325fbb945027b48a37e60aad5297c39b727a51806462",
+    "seif/config.py": "ca9c4e4bc80fcb6847f53f08593b25e5a3b41d6ae5a44ce7c416075ffd7b4b45",
+    "seif/context_filters.py": "c3fbd2c356784e87c481d3ac7d58a8cbf5863d04db96e47d4ef062e348bfd7fb",
+    "seif/detector.py": "e0b09cda385168f401ed1d1aa81ae4b1457d701be977f8f9aee789e444534025",
+    "seif/document_fields.py": "2200ed9f9751ee4894f164a4b43654de6f204c9661da83cdbf7a2a455d46ba51",
+    "seif/gliner_ner.py": "8012d0c3fc83b6c0a0defd4a07735d6e9cd4aa0c5debb1f7c395ddafb7431311",
+    "seif/gliner_onnx.py": "08118aaf0326e89d7a0ef890a24f7a29728578a713690e930cf7cf48cd12056d",
+    "seif/location_fields.py": "2d806e7a35bb7669001e796deba5cbac020dddb2887284390d27becebc43009e",
+    "seif/ner.py": "66c64453390bd851f2283c01bd995145e3a21e4cd23ad9af1f8330a665816068",
+    "seif/person_fields.py": "ca843e9b6f8ef9d4739703e83b1438a96d114dc95782626fa2e89366bf29f08d",
+    "seif/request_capture.py": "ce9d53ed7827992cd5c0c4b10914e3f9becc978cc192263116112c642e506855",
+    "seif/rubert_ner.py": "44a7c3522acb4a95924ea85689058740d2e33f2ec1c94512a9c7f406e6c79e12",
+    "seif/structured_fields.py": "26462106b1a29140a3bbf2b2370feab631145932ee44fbb78ca007b6d1d1218c",
+    "seif/transform.py": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+    "seif/vault.py": "b6b4f59bc911bb0a0c745b6801bcd9a034200e016f321e38c2984206c2946554"
+  },
+  "illustration_notice": "Sentences are synthetic or use redacted placeholders; they illustrate observed cached cases, not new model predictions. No original corpus texts are included.",
+  "interpretation": {
+    "format_coverage_limitations": [
+      {
+        "case_ids": [
+          "redmadrobot/test/row_0124",
+          "redmadrobot/test/row_0033"
+        ],
+        "evidence": "Spaced email tokens and slash-separated INN values evade the current strict formats. Their native model categories are then excluded by the gateway; these are two distinct stages, not one rule suppression."
+      }
+    ],
+    "general_implementation_defects": [
+      {
+        "case_ids": [
+          "redmadrobot/test/row_0578"
+        ],
+        "evidence": "The exact normalization stage drops a correctly detected personal name after 'по имени'. The predicate treats the word 'имени' as a public-reference cue.",
+        "kind": "public-name language collision"
+      },
+      {
+        "case_ids": [
+          "redmadrobot/test/row_0230",
+          "redmadrobot/test/row_0556"
+        ],
+        "evidence": "Shorter higher-priority rule spans discard an overlapping longer model span wholesale. Some losses are street prefixes; others are remaining house/apartment values. This stage loses 187 gold characters in RMR.",
+        "kind": "whole-span overlap rejection loses uncovered tails"
+      },
+      {
+        "case_ids": [
+          "organizer/org_0037"
+        ],
+        "evidence": "An eleven-digit prefix inside a decimal-looking string is accepted as a phone. The annotation is uncertain, so the intended privacy policy remains debatable.",
+        "kind": "number-boundary ambiguity"
+      }
+    ],
+    "metric_notice": "Every F1 in this report is alphanumeric untyped masking F1. It must not be compared directly with published exact-span or BIO token F1.",
+    "policy_or_annotation_scope_differences": [
+      {
+        "evidence": "Native structured/contact categories are intentionally omitted before merge. On RMR the rule fallback leaves 19749 otherwise correctly detected gold characters uncovered; on organizer this count is 24.",
+        "kind": "PERSON/LOCATION-only model integration"
+      },
+      {
+        "case_ids": [
+          "redmadrobot/test/row_1646",
+          "redmadrobot/test/row_2080"
+        ],
+        "evidence": "The service exempts public institution geography while RMR annotates these mentions. This is 44 gold characters removed by shared context refinement, not a model failure.",
+        "kind": "institution geography versus all location annotations"
+      },
+      {
+        "case_ids": [
+          "redmadrobot/test/row_0218"
+        ],
+        "evidence": "A whole ADDRESS field may contain scaffolding, commercial words or an unannotated postcode beyond the benchmark's component spans; apparent FP counts alone do not establish that every extra masked value is public.",
+        "kind": "address component versus whole field"
+      },
+      {
+        "case_ids": [
+          "redmadrobot/test/row_0004",
+          "redmadrobot/test/row_0033"
+        ],
+        "evidence": "Gold includes invalid-checksum identifiers and tokenized separators. Bare rules require checksums, while explicit context may bypass them; format matching also matters. Predicate counts are not a single-cause attribution.",
+        "kind": "checksum policy and artificial formatting"
+      },
+      {
+        "case_ids": [
+          "organizer/org_0078"
+        ],
+        "evidence": "The silver label excludes a historic biography, but rule context does not establish that the mention is public. Name and broad birthplace rules still mask it; authoritative organizer policy is unavailable.",
+        "kind": "organizer silver public-biography decision"
+      }
+    ]
+  },
+  "limitations": [
+    "Organizer annotations are AI silver; 117 of 446 cases are uncertain.",
+    "RedMadRobot 2839 is the previously aligned subset, not the full 2841-row publication protocol.",
+    "Gold-type counts preserve overlapping gold categories; attribution categories may overlap.",
+    "Checksum/public-context traits on missed gold are predicates, not proof that this single gate caused each miss.",
+    "No new inference, tuning, gold edits or production changes; native21 outputs stay distinct from gateway types."
+  ],
+  "method": "Sequential cached ablations; all gold types; alphanumeric untyped mask union. Stages are monotonically removing coverage from the hypothetical native21+rules union. Only final service uses actual merge/mask; union profiles are diagnostics, not proposed deployments.",
+  "schema_version": 1,
+  "synthetic_illustrations": [
+    {
+      "case_id": "organizer/org_0078",
+      "explanation": "Gold excludes the biography. Core name rules still select the name, and the birthplace rule also includes the trailing date.",
+      "finding": "historical biography still masked by core rules",
+      "synthetic_text": "[ФИО исторического деятеля], родился в [городе] [дате]"
+    },
+    {
+      "case_id": "organizer/org_0037",
+      "explanation": "The phone recognizer can select an eleven-digit prefix without excluding the decimal tail; organizer gold marks this case uncertain.",
+      "finding": "phone-like prefix inside a decimal number",
+      "synthetic_text": "79991110000.5"
+    },
+    {
+      "case_id": "redmadrobot/test/row_0230",
+      "explanation": "The rule STREET covers only the name; its higher overlap priority discards a model LOCATION covering the whole street. The prefix loses protection.",
+      "finding": "short structured rule overrides complete model street",
+      "synthetic_text": "Адрес склада: пр-т Примерный, стр. 8Б."
+    },
+    {
+      "case_id": "redmadrobot/test/row_0578",
+      "explanation": "The public-name predicate matches 'имени', although this construction identifies a person. The native name is removed before overlap resolution.",
+      "finding": "personal 'by the name of' phrase misclassified as a public reference",
+      "synthetic_text": "Здесь жил человек по имени Алёна Никитична."
+    },
+    {
+      "case_id": "redmadrobot/test/row_1646",
+      "explanation": "The benchmark labels institutional COUNTRY/DISTRICT mentions. Shared context filtering exempts institution geography without personal context.",
+      "finding": "institution geography policy differs from benchmark annotation scope",
+      "synthetic_text": "Руководитель МВД [страны] по [федеральному округу] назначен на должность."
+    },
+    {
+      "case_id": "redmadrobot/test/row_0124",
+      "explanation": "Native EMAIL recognizes spaced benchmark tokenization. Core email syntax misses it, while the gateway projects away EMAIL and other non-name/address types.",
+      "finding": "tokenized email missed by rules and excluded from model gateway",
+      "synthetic_text": "Почта: a . petrov@example . net"
+    },
+    {
+      "case_id": "redmadrobot/test/row_0004",
+      "explanation": "Gold labels a card with spaced separators and an invalid Luhn checksum. Rules miss it; native CREDIT_CARD finds it but the gateway excludes that type. These combined traits do not prove a single regex/checksum gate is the sole cause.",
+      "finding": "noncanonical card format and checksum versus annotated native type",
+      "synthetic_text": "Номер карты платёжной системы: 1234 - 5678 - 9012 - 3456."
+    },
+    {
+      "case_id": "redmadrobot/test/row_0218",
+      "explanation": "One broad ADDRESS span covers commercial/scaffolding words and a postcode omitted by the benchmark's component annotations, producing gold-relative false positives.",
+      "finding": "address rule covers more than annotated components",
+      "synthetic_text": "Адрес: второй этаж, торговый центр, дом 8, [улица], [город], 123456"
+    }
+  ]
+}
