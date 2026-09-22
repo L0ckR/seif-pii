@@ -1,0 +1,4115 @@
+{
+  "schema_version": 1,
+  "analysis_date": "2026-09-22",
+  "purpose": "Diagnostic analysis of immutable submitted source ZIPs; not the hackathon score formula",
+  "sonar": {
+    "version": "26.9.0.129388",
+    "scanner_version": "8.1.0.6389",
+    "scanner_zip_sha256": "ab76ab3c360025e9108be5b55be066f304a164f8b2850d2f2f333915db51bc1b",
+    "server_zip_sha256": "b7306f5ecfa6806753bc0eb0dc4ea11fe0ddd2c5a346592718814d6ec35b88cb",
+    "plugins": [
+      {
+        "key": "csharp",
+        "version": "10.33 (build 1635)",
+        "build": "ea106bc601532a89b0ef80a86ec5b7b1ff3b7239"
+      },
+      {
+        "key": "cayc",
+        "version": "2.6 (build 3665)",
+        "build": "55c5ecf4a75806328950c2526ed2660a69e5376b"
+      },
+      {
+        "key": "flex",
+        "version": "2.18 (build 6281)",
+        "build": "84cf021e37206d01e7f04ffe7172c40d0ee8ad85"
+      },
+      {
+        "key": "go",
+        "version": "1.43.0.7704",
+        "build": "3ceaf273e5cc26e33e28ef563f016b44a8f4f76a"
+      },
+      {
+        "key": "web",
+        "version": "3.31 (build 8334)",
+        "build": "420801ca5fcfd5d9875890ed46a6f152e58b0588"
+      },
+      {
+        "key": "iac",
+        "version": "2.16.0.22905",
+        "build": null
+      },
+      {
+        "key": "jacoco",
+        "version": "1.6.0 (build 5741)",
+        "build": "d7ac50ea711e3321dabc2e4fbb7edf757507f892"
+      },
+      {
+        "key": "javasymbolicexecution",
+        "version": "8.16.4 (build 1912)",
+        "build": "8d1b73d26c83a998d7af4e4a8f10587654f2e12c"
+      },
+      {
+        "key": "java",
+        "version": "8.41 (build 47177)",
+        "build": "68605929e2ce0013fdbe7852937ab4e5681c411e"
+      },
+      {
+        "key": "javascript",
+        "version": "13.8 (build 44569)",
+        "build": "1eea9253f87b448684d1089dc7160eca388b21b6"
+      },
+      {
+        "key": "kotlin",
+        "version": "3.9.0 (build 9809)",
+        "build": "de1144c967cef5fc537294d603aacdbba6bd91de"
+      },
+      {
+        "key": "php",
+        "version": "3.60.0.16641",
+        "build": null
+      },
+      {
+        "key": "python",
+        "version": "5.31 (build 36502)",
+        "build": "67630d25ba3983fc0846795621935c475e761e80"
+      },
+      {
+        "key": "ruby",
+        "version": "1.25.0 (build 2597)",
+        "build": "310fea768e3c269667a008954d18844366fe2451"
+      },
+      {
+        "key": "rust",
+        "version": "1.8.1.3395",
+        "build": null
+      },
+      {
+        "key": "sonarscala",
+        "version": "1.24.0 (build 2554)",
+        "build": "f8e0a83baf34dbe3fb8313eca792f0abd6e47ff5"
+      },
+      {
+        "key": "text",
+        "version": "2.49.0.12346",
+        "build": null
+      },
+      {
+        "key": "vbnet",
+        "version": "10.33 (build 1635)",
+        "build": "ea106bc601532a89b0ef80a86ec5b7b1ff3b7239"
+      },
+      {
+        "key": "xml",
+        "version": "2.19 (build 8138)",
+        "build": "86bebf89b5b8a93074cfdeff8437fabe40974701"
+      }
+    ],
+    "profiles": [
+      {
+        "language": "azureresourcemanager",
+        "name": "Sonar way",
+        "active_rules": 37
+      },
+      {
+        "language": "cloudformation",
+        "name": "Sonar way",
+        "active_rules": 26
+      },
+      {
+        "language": "cs",
+        "name": "Sonar way",
+        "active_rules": 326
+      },
+      {
+        "language": "css",
+        "name": "Sonar way",
+        "active_rules": 40
+      },
+      {
+        "language": "docker",
+        "name": "Sonar way",
+        "active_rules": 25
+      },
+      {
+        "language": "flex",
+        "name": "Sonar way",
+        "active_rules": 47
+      },
+      {
+        "language": "go",
+        "name": "Sonar way",
+        "active_rules": 22
+      },
+      {
+        "language": "ipynb",
+        "name": "Sonar way",
+        "active_rules": 394
+      },
+      {
+        "language": "java",
+        "name": "Sonar way",
+        "active_rules": 599
+      },
+      {
+        "language": "js",
+        "name": "Sonar way",
+        "active_rules": 420
+      },
+      {
+        "language": "json",
+        "name": "Sonar way",
+        "active_rules": 0
+      },
+      {
+        "language": "jsp",
+        "name": "Sonar way",
+        "active_rules": 0
+      },
+      {
+        "language": "kotlin",
+        "name": "Sonar way",
+        "active_rules": 129
+      },
+      {
+        "language": "kubernetes",
+        "name": "Sonar way",
+        "active_rules": 23
+      },
+      {
+        "language": "php",
+        "name": "Sonar way",
+        "active_rules": 176
+      },
+      {
+        "language": "py",
+        "name": "Sonar way",
+        "active_rules": 398
+      },
+      {
+        "language": "ruby",
+        "name": "Sonar way",
+        "active_rules": 29
+      },
+      {
+        "language": "rust",
+        "name": "Sonar way",
+        "active_rules": 78
+      },
+      {
+        "language": "scala",
+        "name": "Sonar way",
+        "active_rules": 30
+      },
+      {
+        "language": "secrets",
+        "name": "Sonar way",
+        "active_rules": 30
+      },
+      {
+        "language": "terraform",
+        "name": "Sonar way",
+        "active_rules": 51
+      },
+      {
+        "language": "text",
+        "name": "Sonar way",
+        "active_rules": 3
+      },
+      {
+        "language": "ts",
+        "name": "Sonar way",
+        "active_rules": 435
+      },
+      {
+        "language": "vbnet",
+        "name": "Sonar way",
+        "active_rules": 141
+      },
+      {
+        "language": "web",
+        "name": "Sonar way",
+        "active_rules": 61
+      },
+      {
+        "language": "xml",
+        "name": "Sonar way",
+        "active_rules": 24
+      },
+      {
+        "language": "yaml",
+        "name": "Sonar way",
+        "active_rules": 0
+      }
+    ],
+    "runs": {
+      "f1922bc-all-source": {
+        "project": "seif-f1922bc-all-source",
+        "issues_total": 66,
+        "severities": {
+          "CRITICAL": 30,
+          "MAJOR": 32,
+          "MINOR": 4
+        },
+        "types": {
+          "CODE_SMELL": 61,
+          "VULNERABILITY": 3,
+          "BUG": 2
+        },
+        "top_rules": [
+          [
+            "python:S3776",
+            21
+          ],
+          [
+            "python:S5778",
+            13
+          ],
+          [
+            "python:S1192",
+            6
+          ],
+          [
+            "javascript:S3358",
+            3
+          ],
+          [
+            "javascript:S2681",
+            3
+          ],
+          [
+            "python:S2245",
+            2
+          ],
+          [
+            "python:S3358",
+            2
+          ],
+          [
+            "python:S5754",
+            2
+          ],
+          [
+            "python:S5843",
+            2
+          ],
+          [
+            "python:S108",
+            1
+          ],
+          [
+            "python:S5713",
+            1
+          ],
+          [
+            "python:S1045",
+            1
+          ],
+          [
+            "python:S7490",
+            1
+          ],
+          [
+            "python:S7513",
+            1
+          ],
+          [
+            "python:S1481",
+            1
+          ]
+        ],
+        "top_files": [
+          [
+            "web/app.js",
+            10
+          ],
+          [
+            "seif/detector.py",
+            7
+          ],
+          [
+            "scripts/ner_service.py",
+            5
+          ],
+          [
+            "seif/ner.py",
+            5
+          ],
+          [
+            "scripts/local_redis.py",
+            4
+          ],
+          [
+            "seif/app.py",
+            4
+          ],
+          [
+            "tests/test_ner.py",
+            4
+          ],
+          [
+            "tests/test_ner_location.py",
+            4
+          ],
+          [
+            "scripts/evaluate_redmadrobot.py",
+            3
+          ],
+          [
+            "scripts/compare_presidio.py",
+            2
+          ],
+          [
+            "scripts/evaluate_external.py",
+            2
+          ],
+          [
+            "scripts/evaluate_scanpatch.py",
+            2
+          ]
+        ],
+        "scope_counts": {
+          "scripts": {
+            "CRITICAL": 16,
+            "MAJOR": 5,
+            "MINOR": 1
+          },
+          "seif": {
+            "CRITICAL": 13,
+            "MAJOR": 4,
+            "MINOR": 2
+          },
+          "tests": {
+            "MAJOR": 14
+          },
+          "web": {
+            "MAJOR": 9,
+            "CRITICAL": 1,
+            "MINOR": 1
+          }
+        },
+        "hotspots": 0,
+        "measures": {
+          "coverage": "0.0",
+          "complexity": "1315",
+          "reliability_rating": "3.0",
+          "code_smells": "61",
+          "duplicated_lines_density": "0.0",
+          "security_rating": "3.0",
+          "security_hotspots": "0",
+          "sqale_index": "854",
+          "sqale_rating": "1.0",
+          "bugs": "2",
+          "cognitive_complexity": "1321",
+          "ncloc": "7160",
+          "files": "52",
+          "vulnerabilities": "3",
+          "lines": "8480"
+        },
+        "quality_gate": "OK",
+        "parameters": {
+          "sonar.projectKey": "seif-f1922bc-all-source",
+          "sonar.projectVersion": "f1922bc",
+          "sonar.sources": ".",
+          "sonar.projectBaseDir": "<snapshot>/f1922bc",
+          "sonar.sourceEncoding": "UTF-8",
+          "sonar.python.version": "3.14",
+          "sonar.scm.disabled": "true",
+          "sonar.host.url": "http://127.0.0.1:19000",
+          "sonar.scanner.skipJreProvisioning": "true",
+          "sonar.working.directory": "<reports>/f1922bc-all-source/scanner-work"
+        },
+        "quality_gate_response": {
+          "status": "OK",
+          "conditions": [],
+          "ignoredConditions": false,
+          "caycStatus": "compliant"
+        }
+      },
+      "f1922bc-tests-marked": {
+        "project": "seif-f1922bc-tests-marked",
+        "issues_total": 66,
+        "severities": {
+          "CRITICAL": 30,
+          "MAJOR": 32,
+          "MINOR": 4
+        },
+        "types": {
+          "CODE_SMELL": 61,
+          "VULNERABILITY": 3,
+          "BUG": 2
+        },
+        "top_rules": [
+          [
+            "python:S3776",
+            21
+          ],
+          [
+            "python:S5778",
+            13
+          ],
+          [
+            "python:S1192",
+            6
+          ],
+          [
+            "javascript:S3358",
+            3
+          ],
+          [
+            "javascript:S2681",
+            3
+          ],
+          [
+            "python:S2245",
+            2
+          ],
+          [
+            "python:S3358",
+            2
+          ],
+          [
+            "python:S5754",
+            2
+          ],
+          [
+            "python:S5843",
+            2
+          ],
+          [
+            "python:S108",
+            1
+          ],
+          [
+            "python:S5713",
+            1
+          ],
+          [
+            "python:S1045",
+            1
+          ],
+          [
+            "python:S7490",
+            1
+          ],
+          [
+            "python:S7513",
+            1
+          ],
+          [
+            "python:S1481",
+            1
+          ]
+        ],
+        "top_files": [
+          [
+            "web/app.js",
+            10
+          ],
+          [
+            "seif/detector.py",
+            7
+          ],
+          [
+            "scripts/ner_service.py",
+            5
+          ],
+          [
+            "seif/ner.py",
+            5
+          ],
+          [
+            "scripts/local_redis.py",
+            4
+          ],
+          [
+            "seif/app.py",
+            4
+          ],
+          [
+            "tests/test_ner.py",
+            4
+          ],
+          [
+            "tests/test_ner_location.py",
+            4
+          ],
+          [
+            "scripts/evaluate_redmadrobot.py",
+            3
+          ],
+          [
+            "scripts/compare_presidio.py",
+            2
+          ],
+          [
+            "scripts/evaluate_external.py",
+            2
+          ],
+          [
+            "scripts/evaluate_scanpatch.py",
+            2
+          ]
+        ],
+        "scope_counts": {
+          "scripts": {
+            "CRITICAL": 16,
+            "MAJOR": 5,
+            "MINOR": 1
+          },
+          "seif": {
+            "CRITICAL": 13,
+            "MAJOR": 4,
+            "MINOR": 2
+          },
+          "tests": {
+            "MAJOR": 14
+          },
+          "web": {
+            "MAJOR": 9,
+            "CRITICAL": 1,
+            "MINOR": 1
+          }
+        },
+        "hotspots": 0,
+        "measures": {
+          "coverage": "0.0",
+          "complexity": "1011",
+          "reliability_rating": "3.0",
+          "code_smells": "61",
+          "duplicated_lines_density": "0.0",
+          "security_rating": "3.0",
+          "security_hotspots": "0",
+          "sqale_index": "854",
+          "sqale_rating": "1.0",
+          "bugs": "2",
+          "cognitive_complexity": "1202",
+          "ncloc": "4927",
+          "files": "38",
+          "vulnerabilities": "3",
+          "lines": "5689"
+        },
+        "quality_gate": "OK",
+        "parameters": {
+          "sonar.projectKey": "seif-f1922bc-tests-marked",
+          "sonar.projectVersion": "f1922bc",
+          "sonar.sources": ".",
+          "sonar.projectBaseDir": "<snapshot>/f1922bc",
+          "sonar.sourceEncoding": "UTF-8",
+          "sonar.python.version": "3.14",
+          "sonar.scm.disabled": "true",
+          "sonar.host.url": "http://127.0.0.1:19000",
+          "sonar.scanner.skipJreProvisioning": "true",
+          "sonar.working.directory": "<reports>/f1922bc-tests-marked/scanner-work",
+          "sonar.tests": "tests",
+          "sonar.exclusions": "tests/**"
+        },
+        "quality_gate_response": {
+          "status": "OK",
+          "conditions": [],
+          "ignoredConditions": false,
+          "caycStatus": "compliant"
+        }
+      },
+      "75b52e8-all-source": {
+        "project": "seif-75b52e8-all-source",
+        "issues_total": 94,
+        "severities": {
+          "CRITICAL": 40,
+          "MINOR": 12,
+          "MAJOR": 42
+        },
+        "types": {
+          "CODE_SMELL": 89,
+          "VULNERABILITY": 3,
+          "BUG": 2
+        },
+        "top_rules": [
+          [
+            "python:S3776",
+            30
+          ],
+          [
+            "python:S5778",
+            20
+          ],
+          [
+            "python:S1192",
+            7
+          ],
+          [
+            "python:S5713",
+            4
+          ],
+          [
+            "python:S3358",
+            3
+          ],
+          [
+            "python:S9073",
+            3
+          ],
+          [
+            "javascript:S3358",
+            3
+          ],
+          [
+            "javascript:S2681",
+            3
+          ],
+          [
+            "python:S7519",
+            2
+          ],
+          [
+            "python:S2245",
+            2
+          ],
+          [
+            "python:S7498",
+            2
+          ],
+          [
+            "python:S5754",
+            2
+          ],
+          [
+            "python:S5843",
+            2
+          ],
+          [
+            "python:S1940",
+            1
+          ],
+          [
+            "python:S108",
+            1
+          ]
+        ],
+        "top_files": [
+          [
+            "web/app.js",
+            10
+          ],
+          [
+            "seif/detector.py",
+            8
+          ],
+          [
+            "tests/test_benchmark_corpus.py",
+            7
+          ],
+          [
+            "scripts/benchmark_corpus.py",
+            6
+          ],
+          [
+            "scripts/evaluate_annotations.py",
+            5
+          ],
+          [
+            "scripts/ner_service.py",
+            5
+          ],
+          [
+            "seif/ner.py",
+            5
+          ],
+          [
+            "scripts/local_redis.py",
+            4
+          ],
+          [
+            "seif/app.py",
+            4
+          ],
+          [
+            "seif/request_capture.py",
+            4
+          ],
+          [
+            "tests/test_ner.py",
+            4
+          ],
+          [
+            "tests/test_ner_location.py",
+            4
+          ]
+        ],
+        "scope_counts": {
+          "scripts": {
+            "CRITICAL": 23,
+            "MINOR": 7,
+            "MAJOR": 6
+          },
+          "seif": {
+            "CRITICAL": 16,
+            "MAJOR": 4,
+            "MINOR": 4
+          },
+          "tests": {
+            "MAJOR": 23
+          },
+          "web": {
+            "MAJOR": 9,
+            "CRITICAL": 1,
+            "MINOR": 1
+          }
+        },
+        "hotspots": 0,
+        "measures": {
+          "coverage": "0.0",
+          "complexity": "1785",
+          "reliability_rating": "3.0",
+          "code_smells": "89",
+          "duplicated_lines_density": "0.0",
+          "security_rating": "3.0",
+          "security_hotspots": "0",
+          "sqale_index": "1102",
+          "sqale_rating": "1.0",
+          "bugs": "2",
+          "cognitive_complexity": "1755",
+          "ncloc": "9405",
+          "files": "66",
+          "vulnerabilities": "3",
+          "lines": "11253"
+        },
+        "quality_gate": "OK",
+        "parameters": {
+          "sonar.projectKey": "seif-75b52e8-all-source",
+          "sonar.projectVersion": "75b52e8",
+          "sonar.sources": ".",
+          "sonar.projectBaseDir": "<snapshot>/75b52e8",
+          "sonar.sourceEncoding": "UTF-8",
+          "sonar.python.version": "3.14",
+          "sonar.scm.disabled": "true",
+          "sonar.host.url": "http://127.0.0.1:19000",
+          "sonar.scanner.skipJreProvisioning": "true",
+          "sonar.working.directory": "<reports>/75b52e8-all-source/scanner-work"
+        },
+        "quality_gate_response": {
+          "status": "OK",
+          "conditions": [],
+          "ignoredConditions": false,
+          "caycStatus": "compliant"
+        }
+      },
+      "75b52e8-tests-marked": {
+        "project": "seif-75b52e8-tests-marked",
+        "issues_total": 94,
+        "severities": {
+          "CRITICAL": 40,
+          "MINOR": 12,
+          "MAJOR": 42
+        },
+        "types": {
+          "CODE_SMELL": 89,
+          "VULNERABILITY": 3,
+          "BUG": 2
+        },
+        "top_rules": [
+          [
+            "python:S3776",
+            30
+          ],
+          [
+            "python:S5778",
+            20
+          ],
+          [
+            "python:S1192",
+            7
+          ],
+          [
+            "python:S5713",
+            4
+          ],
+          [
+            "python:S3358",
+            3
+          ],
+          [
+            "python:S9073",
+            3
+          ],
+          [
+            "javascript:S3358",
+            3
+          ],
+          [
+            "javascript:S2681",
+            3
+          ],
+          [
+            "python:S7519",
+            2
+          ],
+          [
+            "python:S2245",
+            2
+          ],
+          [
+            "python:S7498",
+            2
+          ],
+          [
+            "python:S5754",
+            2
+          ],
+          [
+            "python:S5843",
+            2
+          ],
+          [
+            "python:S1940",
+            1
+          ],
+          [
+            "python:S108",
+            1
+          ]
+        ],
+        "top_files": [
+          [
+            "web/app.js",
+            10
+          ],
+          [
+            "seif/detector.py",
+            8
+          ],
+          [
+            "tests/test_benchmark_corpus.py",
+            7
+          ],
+          [
+            "scripts/benchmark_corpus.py",
+            6
+          ],
+          [
+            "scripts/evaluate_annotations.py",
+            5
+          ],
+          [
+            "scripts/ner_service.py",
+            5
+          ],
+          [
+            "seif/ner.py",
+            5
+          ],
+          [
+            "scripts/local_redis.py",
+            4
+          ],
+          [
+            "seif/app.py",
+            4
+          ],
+          [
+            "seif/request_capture.py",
+            4
+          ],
+          [
+            "tests/test_ner.py",
+            4
+          ],
+          [
+            "tests/test_ner_location.py",
+            4
+          ]
+        ],
+        "scope_counts": {
+          "scripts": {
+            "CRITICAL": 23,
+            "MINOR": 7,
+            "MAJOR": 6
+          },
+          "seif": {
+            "CRITICAL": 16,
+            "MAJOR": 4,
+            "MINOR": 4
+          },
+          "tests": {
+            "MAJOR": 23
+          },
+          "web": {
+            "MAJOR": 9,
+            "CRITICAL": 1,
+            "MINOR": 1
+          }
+        },
+        "hotspots": 0,
+        "measures": {
+          "coverage": "0.0",
+          "complexity": "1311",
+          "reliability_rating": "3.0",
+          "code_smells": "89",
+          "duplicated_lines_density": "0.0",
+          "security_rating": "3.0",
+          "security_hotspots": "0",
+          "sqale_index": "1102",
+          "sqale_rating": "1.0",
+          "bugs": "2",
+          "cognitive_complexity": "1589",
+          "ncloc": "6064",
+          "files": "42",
+          "vulnerabilities": "3",
+          "lines": "7036"
+        },
+        "quality_gate": "OK",
+        "parameters": {
+          "sonar.projectKey": "seif-75b52e8-tests-marked",
+          "sonar.projectVersion": "75b52e8",
+          "sonar.sources": ".",
+          "sonar.projectBaseDir": "<snapshot>/75b52e8",
+          "sonar.sourceEncoding": "UTF-8",
+          "sonar.python.version": "3.14",
+          "sonar.scm.disabled": "true",
+          "sonar.host.url": "http://127.0.0.1:19000",
+          "sonar.scanner.skipJreProvisioning": "true",
+          "sonar.working.directory": "<reports>/75b52e8-tests-marked/scanner-work",
+          "sonar.tests": "tests",
+          "sonar.exclusions": "tests/**"
+        },
+        "quality_gate_response": {
+          "status": "OK",
+          "conditions": [],
+          "ignoredConditions": false,
+          "caycStatus": "compliant"
+        }
+      },
+      "4c85827-all-source": {
+        "project": "seif-4c85827-all-source",
+        "issues_total": 119,
+        "severities": {
+          "CRITICAL": 47,
+          "MINOR": 23,
+          "MAJOR": 49
+        },
+        "types": {
+          "CODE_SMELL": 114,
+          "VULNERABILITY": 3,
+          "BUG": 2
+        },
+        "top_rules": [
+          [
+            "python:S3776",
+            37
+          ],
+          [
+            "python:S5778",
+            20
+          ],
+          [
+            "python:S6353",
+            11
+          ],
+          [
+            "python:S1192",
+            7
+          ],
+          [
+            "python:S9073",
+            6
+          ],
+          [
+            "python:S5713",
+            4
+          ],
+          [
+            "python:S5843",
+            4
+          ],
+          [
+            "python:S3358",
+            3
+          ],
+          [
+            "javascript:S3358",
+            3
+          ],
+          [
+            "javascript:S2681",
+            3
+          ],
+          [
+            "python:S7519",
+            2
+          ],
+          [
+            "python:S2245",
+            2
+          ],
+          [
+            "python:S7498",
+            2
+          ],
+          [
+            "python:S5754",
+            2
+          ],
+          [
+            "python:S8786",
+            2
+          ]
+        ],
+        "top_files": [
+          [
+            "seif/structured_fields.py",
+            10
+          ],
+          [
+            "web/app.js",
+            10
+          ],
+          [
+            "seif/detector.py",
+            8
+          ],
+          [
+            "seif/person_fields.py",
+            7
+          ],
+          [
+            "tests/test_benchmark_corpus.py",
+            7
+          ],
+          [
+            "scripts/benchmark_corpus.py",
+            6
+          ],
+          [
+            "scripts/evaluate_annotations.py",
+            5
+          ],
+          [
+            "seif/ner.py",
+            5
+          ],
+          [
+            "scripts/local_redis.py",
+            4
+          ],
+          [
+            "scripts/ner_service.py",
+            4
+          ],
+          [
+            "seif/context_filters.py",
+            4
+          ],
+          [
+            "seif/request_capture.py",
+            4
+          ]
+        ],
+        "scope_counts": {
+          "scripts": {
+            "CRITICAL": 23,
+            "MINOR": 7,
+            "MAJOR": 6
+          },
+          "seif": {
+            "CRITICAL": 23,
+            "MAJOR": 8,
+            "MINOR": 15
+          },
+          "tests": {
+            "MAJOR": 26
+          },
+          "web": {
+            "MAJOR": 9,
+            "CRITICAL": 1,
+            "MINOR": 1
+          }
+        },
+        "hotspots": 0,
+        "measures": {
+          "coverage": "0.0",
+          "complexity": "2213",
+          "reliability_rating": "3.0",
+          "code_smells": "114",
+          "duplicated_lines_density": "0.0",
+          "security_rating": "3.0",
+          "security_hotspots": "0",
+          "sqale_index": "1333",
+          "sqale_rating": "1.0",
+          "bugs": "2",
+          "cognitive_complexity": "2174",
+          "ncloc": "10980",
+          "files": "79",
+          "vulnerabilities": "3",
+          "lines": "13225"
+        },
+        "quality_gate": "OK",
+        "parameters": {
+          "sonar.projectKey": "seif-4c85827-all-source",
+          "sonar.projectVersion": "4c85827",
+          "sonar.sources": ".",
+          "sonar.projectBaseDir": "<snapshot>/4c85827",
+          "sonar.sourceEncoding": "UTF-8",
+          "sonar.python.version": "3.14",
+          "sonar.scm.disabled": "true",
+          "sonar.host.url": "http://127.0.0.1:19000",
+          "sonar.scanner.skipJreProvisioning": "true",
+          "sonar.working.directory": "<reports>/4c85827-all-source/scanner-work"
+        },
+        "quality_gate_response": {
+          "status": "OK",
+          "conditions": [],
+          "ignoredConditions": false,
+          "caycStatus": "compliant"
+        }
+      },
+      "4c85827-tests-marked": {
+        "project": "seif-4c85827-tests-marked",
+        "issues_total": 119,
+        "severities": {
+          "CRITICAL": 47,
+          "MINOR": 23,
+          "MAJOR": 49
+        },
+        "types": {
+          "CODE_SMELL": 114,
+          "VULNERABILITY": 3,
+          "BUG": 2
+        },
+        "top_rules": [
+          [
+            "python:S3776",
+            37
+          ],
+          [
+            "python:S5778",
+            20
+          ],
+          [
+            "python:S6353",
+            11
+          ],
+          [
+            "python:S1192",
+            7
+          ],
+          [
+            "python:S9073",
+            6
+          ],
+          [
+            "python:S5713",
+            4
+          ],
+          [
+            "python:S5843",
+            4
+          ],
+          [
+            "python:S3358",
+            3
+          ],
+          [
+            "javascript:S3358",
+            3
+          ],
+          [
+            "javascript:S2681",
+            3
+          ],
+          [
+            "python:S7519",
+            2
+          ],
+          [
+            "python:S2245",
+            2
+          ],
+          [
+            "python:S7498",
+            2
+          ],
+          [
+            "python:S5754",
+            2
+          ],
+          [
+            "python:S8786",
+            2
+          ]
+        ],
+        "top_files": [
+          [
+            "seif/structured_fields.py",
+            10
+          ],
+          [
+            "web/app.js",
+            10
+          ],
+          [
+            "seif/detector.py",
+            8
+          ],
+          [
+            "seif/person_fields.py",
+            7
+          ],
+          [
+            "tests/test_benchmark_corpus.py",
+            7
+          ],
+          [
+            "scripts/benchmark_corpus.py",
+            6
+          ],
+          [
+            "scripts/evaluate_annotations.py",
+            5
+          ],
+          [
+            "seif/ner.py",
+            5
+          ],
+          [
+            "scripts/local_redis.py",
+            4
+          ],
+          [
+            "scripts/ner_service.py",
+            4
+          ],
+          [
+            "seif/context_filters.py",
+            4
+          ],
+          [
+            "seif/request_capture.py",
+            4
+          ]
+        ],
+        "scope_counts": {
+          "scripts": {
+            "CRITICAL": 23,
+            "MINOR": 7,
+            "MAJOR": 6
+          },
+          "seif": {
+            "CRITICAL": 23,
+            "MAJOR": 8,
+            "MINOR": 15
+          },
+          "tests": {
+            "MAJOR": 26
+          },
+          "web": {
+            "MAJOR": 9,
+            "CRITICAL": 1,
+            "MINOR": 1
+          }
+        },
+        "hotspots": 0,
+        "measures": {
+          "coverage": "0.0",
+          "complexity": "1623",
+          "reliability_rating": "3.0",
+          "code_smells": "114",
+          "duplicated_lines_density": "0.0",
+          "security_rating": "3.0",
+          "security_hotspots": "0",
+          "sqale_index": "1333",
+          "sqale_rating": "1.0",
+          "bugs": "2",
+          "cognitive_complexity": "1969",
+          "ncloc": "6940",
+          "files": "47",
+          "vulnerabilities": "3",
+          "lines": "8090"
+        },
+        "quality_gate": "OK",
+        "parameters": {
+          "sonar.projectKey": "seif-4c85827-tests-marked",
+          "sonar.projectVersion": "4c85827",
+          "sonar.sources": ".",
+          "sonar.projectBaseDir": "<snapshot>/4c85827",
+          "sonar.sourceEncoding": "UTF-8",
+          "sonar.python.version": "3.14",
+          "sonar.scm.disabled": "true",
+          "sonar.host.url": "http://127.0.0.1:19000",
+          "sonar.scanner.skipJreProvisioning": "true",
+          "sonar.working.directory": "<reports>/4c85827-tests-marked/scanner-work",
+          "sonar.tests": "tests",
+          "sonar.exclusions": "tests/**"
+        },
+        "quality_gate_response": {
+          "status": "OK",
+          "conditions": [],
+          "ignoredConditions": false,
+          "caycStatus": "compliant"
+        }
+      }
+    },
+    "issues": {
+      "f1922bc": [
+        {
+          "rule": "python:S3776",
+          "path": "scripts/benchmark.py",
+          "line": 40,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 29 to the 15 allowed."
+        },
+        {
+          "rule": "python:S2245",
+          "path": "scripts/compare_presidio.py",
+          "line": 239,
+          "severity": "MAJOR",
+          "type": "VULNERABILITY",
+          "message": "Make sure that using this pseudorandom number generator is safe here."
+        },
+        {
+          "rule": "python:S2245",
+          "path": "scripts/compare_presidio.py",
+          "line": 242,
+          "severity": "MAJOR",
+          "type": "VULNERABILITY",
+          "message": "Make sure that using this pseudorandom number generator is safe here."
+        },
+        {
+          "rule": "python:S3358",
+          "path": "scripts/evaluate.py",
+          "line": 94,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Extract this nested conditional expression into an independent statement."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_external.py",
+          "line": 49,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 24 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_external.py",
+          "line": 184,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 24 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_redmadrobot.py",
+          "line": 68,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 21 to the 15 allowed."
+        },
+        {
+          "rule": "python:S108",
+          "path": "scripts/evaluate_redmadrobot.py",
+          "line": 90,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Either remove or fill this block of code."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_redmadrobot.py",
+          "line": 157,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_scanpatch.py",
+          "line": 52,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_scanpatch.py",
+          "line": 83,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/failover_check.py",
+          "line": 36,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 20 to the 15 allowed."
+        },
+        {
+          "rule": "python:S1192",
+          "path": "scripts/large_input.py",
+          "line": 21,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Define a constant instead of duplicating this literal \" neutral\" 3 times."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/local_redis.py",
+          "line": 84,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 20 to the 15 allowed."
+        },
+        {
+          "rule": "python:S5713",
+          "path": "scripts/local_redis.py",
+          "line": 110,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Remove this redundant Exception class; it derives from another which is already caught."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/local_redis.py",
+          "line": 163,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 27 to the 15 allowed."
+        },
+        {
+          "rule": "python:S1045",
+          "path": "scripts/local_redis.py",
+          "line": 274,
+          "severity": "MAJOR",
+          "type": "BUG",
+          "message": "Catch this exception only once; it is already handled by a previous except clause."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/ner_service.py",
+          "line": 64,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 32 to the 15 allowed."
+        },
+        {
+          "rule": "python:S1192",
+          "path": "scripts/ner_service.py",
+          "line": 89,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Define a constant instead of duplicating this literal \"Invalid request.\" 3 times."
+        },
+        {
+          "rule": "python:S1192",
+          "path": "scripts/ner_service.py",
+          "line": 123,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Define a constant instead of duplicating this literal \"NER temporarily unavailable.\" 4 times."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/ner_service.py",
+          "line": 173,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 39 to the 15 allowed."
+        },
+        {
+          "rule": "python:S5754",
+          "path": "scripts/ner_service.py",
+          "line": 246,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Catch a more specific exception or reraise the exception"
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/app.py",
+          "line": 64,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 28 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/app.py",
+          "line": 134,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 171 to the 15 allowed."
+        },
+        {
+          "rule": "python:S5754",
+          "path": "seif/app.py",
+          "line": 302,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Catch a more specific exception or reraise the exception"
+        },
+        {
+          "rule": "python:S3358",
+          "path": "seif/app.py",
+          "line": 398,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Extract this nested conditional expression into an independent statement."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/config.py",
+          "line": 15,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 28 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/config.py",
+          "line": 104,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 29 to the 15 allowed."
+        },
+        {
+          "rule": "python:S5843",
+          "path": "seif/detector.py",
+          "line": 65,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Simplify this regular expression to reduce its complexity from 26 to the 20 allowed."
+        },
+        {
+          "rule": "python:S5843",
+          "path": "seif/detector.py",
+          "line": 65,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Simplify this regular expression to reduce its complexity from 26 to the 20 allowed."
+        },
+        {
+          "rule": "python:S1192",
+          "path": "seif/detector.py",
+          "line": 258,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Define a constant instead of duplicating this literal \"паспорт\" 5 times."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/detector.py",
+          "line": 516,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 35 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/detector.py",
+          "line": 575,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 19 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/detector.py",
+          "line": 619,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 31 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/detector.py",
+          "line": 728,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 120 to the 15 allowed."
+        },
+        {
+          "rule": "python:S1192",
+          "path": "seif/ner.py",
+          "line": 76,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Define a constant instead of duplicating this literal \"NER is unavailable\" 4 times."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/ner.py",
+          "line": 87,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 31 to the 15 allowed."
+        },
+        {
+          "rule": "python:S1192",
+          "path": "seif/ner.py",
+          "line": 100,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Define a constant instead of duplicating this literal \"Invalid NER response\" 5 times."
+        },
+        {
+          "rule": "python:S7490",
+          "path": "seif/ner.py",
+          "line": 136,
+          "severity": "MAJOR",
+          "type": "BUG",
+          "message": "Add a checkpoint inside this cancellation scope."
+        },
+        {
+          "rule": "python:S7513",
+          "path": "seif/ner.py",
+          "line": 148,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Replace the TaskGroup with a direct function call when it only ever spawns one task."
+        },
+        {
+          "rule": "python:S1481",
+          "path": "seif/vault.py",
+          "line": 91,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Replace the unused local variable \"blob\" with \"_\"."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_api.py",
+          "line": 327,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner.py",
+          "line": 111,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner.py",
+          "line": 119,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner.py",
+          "line": 124,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner.py",
+          "line": 130,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_location.py",
+          "line": 93,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_location.py",
+          "line": 107,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_location.py",
+          "line": 112,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_location.py",
+          "line": 114,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_review.py",
+          "line": 65,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_service.py",
+          "line": 60,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_service.py",
+          "line": 67,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S9073",
+          "path": "tests/test_redis.py",
+          "line": 63,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Split this composite assertion into separate assertions."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_sentinel.py",
+          "line": 151,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "javascript:S2245",
+          "path": "web/app.js",
+          "line": 58,
+          "severity": "MAJOR",
+          "type": "VULNERABILITY",
+          "message": "Make sure that using this pseudorandom number generator is safe here."
+        },
+        {
+          "rule": "javascript:S3776",
+          "path": "web/app.js",
+          "line": 60,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed."
+        },
+        {
+          "rule": "javascript:S3358",
+          "path": "web/app.js",
+          "line": 69,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Extract this nested ternary operation into an independent statement."
+        },
+        {
+          "rule": "javascript:S3358",
+          "path": "web/app.js",
+          "line": 69,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Extract this nested ternary operation into an independent statement."
+        },
+        {
+          "rule": "javascript:S3358",
+          "path": "web/app.js",
+          "line": 170,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Extract this nested ternary operation into an independent statement."
+        },
+        {
+          "rule": "javascript:S2681",
+          "path": "web/app.js",
+          "line": 237,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "This statement will not be executed conditionally; only the first statement will be. The rest will execute unconditionally."
+        },
+        {
+          "rule": "javascript:S2486",
+          "path": "web/app.js",
+          "line": 246,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Handle this exception, don't catch it at all, or explain in a comment why it is ignored."
+        },
+        {
+          "rule": "javascript:S2681",
+          "path": "web/app.js",
+          "line": 251,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "This statement will not be executed conditionally; only the first statement will be. The rest will execute unconditionally."
+        },
+        {
+          "rule": "javascript:S2681",
+          "path": "web/app.js",
+          "line": 252,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "This statement will not be executed conditionally; only the first statement will be. The rest will execute unconditionally."
+        },
+        {
+          "rule": "javascript:S7785",
+          "path": "web/app.js",
+          "line": 262,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Prefer top-level await over an async function `initialize` call."
+        },
+        {
+          "rule": "Web:S6819",
+          "path": "web/index.html",
+          "line": 61,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Use <output> instead of the status role to ensure accessibility across all devices."
+        }
+      ],
+      "75b52e8": [
+        {
+          "rule": "python:S3776",
+          "path": "scripts/benchmark.py",
+          "line": 48,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 29 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/benchmark_corpus.py",
+          "line": 77,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 17 to the 15 allowed."
+        },
+        {
+          "rule": "python:S5713",
+          "path": "scripts/benchmark_corpus.py",
+          "line": 102,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Remove this redundant Exception class; it derives from another which is already caught."
+        },
+        {
+          "rule": "python:S5713",
+          "path": "scripts/benchmark_corpus.py",
+          "line": 183,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Remove this redundant Exception class; it derives from another which is already caught."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/benchmark_corpus.py",
+          "line": 224,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/benchmark_corpus.py",
+          "line": 273,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 22 to the 15 allowed."
+        },
+        {
+          "rule": "python:S7519",
+          "path": "scripts/benchmark_corpus.py",
+          "line": 276,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Replace with dict fromkeys method call"
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/capture_requests.py",
+          "line": 55,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 66 to the 15 allowed."
+        },
+        {
+          "rule": "python:S2245",
+          "path": "scripts/compare_presidio.py",
+          "line": 239,
+          "severity": "MAJOR",
+          "type": "VULNERABILITY",
+          "message": "Make sure that using this pseudorandom number generator is safe here."
+        },
+        {
+          "rule": "python:S2245",
+          "path": "scripts/compare_presidio.py",
+          "line": 242,
+          "severity": "MAJOR",
+          "type": "VULNERABILITY",
+          "message": "Make sure that using this pseudorandom number generator is safe here."
+        },
+        {
+          "rule": "python:S3358",
+          "path": "scripts/evaluate.py",
+          "line": 94,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Extract this nested conditional expression into an independent statement."
+        },
+        {
+          "rule": "python:S3358",
+          "path": "scripts/evaluate_annotations.py",
+          "line": 45,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Extract this nested conditional expression into an independent statement."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_annotations.py",
+          "line": 56,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 31 to the 15 allowed."
+        },
+        {
+          "rule": "python:S7519",
+          "path": "scripts/evaluate_annotations.py",
+          "line": 59,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Replace with dict fromkeys method call"
+        },
+        {
+          "rule": "python:S7498",
+          "path": "scripts/evaluate_annotations.py",
+          "line": 82,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Replace this constructor call with a literal."
+        },
+        {
+          "rule": "python:S1940",
+          "path": "scripts/evaluate_annotations.py",
+          "line": 104,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Use the opposite operator (\">\") instead."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_external.py",
+          "line": 49,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 24 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_external.py",
+          "line": 184,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 24 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_redmadrobot.py",
+          "line": 68,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 21 to the 15 allowed."
+        },
+        {
+          "rule": "python:S108",
+          "path": "scripts/evaluate_redmadrobot.py",
+          "line": 90,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Either remove or fill this block of code."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_redmadrobot.py",
+          "line": 157,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_scanpatch.py",
+          "line": 52,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_scanpatch.py",
+          "line": 83,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/failover_check.py",
+          "line": 36,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 20 to the 15 allowed."
+        },
+        {
+          "rule": "python:S1192",
+          "path": "scripts/large_input.py",
+          "line": 21,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Define a constant instead of duplicating this literal \" neutral\" 3 times."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/local_redis.py",
+          "line": 84,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 20 to the 15 allowed."
+        },
+        {
+          "rule": "python:S5713",
+          "path": "scripts/local_redis.py",
+          "line": 110,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Remove this redundant Exception class; it derives from another which is already caught."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/local_redis.py",
+          "line": 163,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 27 to the 15 allowed."
+        },
+        {
+          "rule": "python:S1045",
+          "path": "scripts/local_redis.py",
+          "line": 274,
+          "severity": "MAJOR",
+          "type": "BUG",
+          "message": "Catch this exception only once; it is already handled by a previous except clause."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/ner_service.py",
+          "line": 65,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 37 to the 15 allowed."
+        },
+        {
+          "rule": "python:S1192",
+          "path": "scripts/ner_service.py",
+          "line": 91,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Define a constant instead of duplicating this literal \"Invalid request.\" 3 times."
+        },
+        {
+          "rule": "python:S1192",
+          "path": "scripts/ner_service.py",
+          "line": 135,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Define a constant instead of duplicating this literal \"NER temporarily unavailable.\" 4 times."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/ner_service.py",
+          "line": 185,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 39 to the 15 allowed."
+        },
+        {
+          "rule": "python:S5754",
+          "path": "scripts/ner_service.py",
+          "line": 258,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Catch a more specific exception or reraise the exception"
+        },
+        {
+          "rule": "python:S1192",
+          "path": "scripts/package.py",
+          "line": 12,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Define a constant instead of duplicating this literal \".yaml\" 3 times."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/package.py",
+          "line": 28,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 19 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/app.py",
+          "line": 101,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 36 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/app.py",
+          "line": 200,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 178 to the 15 allowed."
+        },
+        {
+          "rule": "python:S5754",
+          "path": "seif/app.py",
+          "line": 378,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Catch a more specific exception or reraise the exception"
+        },
+        {
+          "rule": "python:S3358",
+          "path": "seif/app.py",
+          "line": 475,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Extract this nested conditional expression into an independent statement."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/config.py",
+          "line": 16,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 28 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/config.py",
+          "line": 125,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 29 to the 15 allowed."
+        },
+        {
+          "rule": "python:S5843",
+          "path": "seif/detector.py",
+          "line": 65,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Simplify this regular expression to reduce its complexity from 26 to the 20 allowed."
+        },
+        {
+          "rule": "python:S5843",
+          "path": "seif/detector.py",
+          "line": 65,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Simplify this regular expression to reduce its complexity from 26 to the 20 allowed."
+        },
+        {
+          "rule": "python:S1192",
+          "path": "seif/detector.py",
+          "line": 268,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Define a constant instead of duplicating this literal \"паспорт\" 5 times."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/detector.py",
+          "line": 526,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 35 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/detector.py",
+          "line": 585,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 19 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/detector.py",
+          "line": 632,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 17 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/detector.py",
+          "line": 673,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 42 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/detector.py",
+          "line": 797,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 124 to the 15 allowed."
+        },
+        {
+          "rule": "python:S1192",
+          "path": "seif/ner.py",
+          "line": 76,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Define a constant instead of duplicating this literal \"NER is unavailable\" 4 times."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/ner.py",
+          "line": 87,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 31 to the 15 allowed."
+        },
+        {
+          "rule": "python:S1192",
+          "path": "seif/ner.py",
+          "line": 100,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Define a constant instead of duplicating this literal \"Invalid NER response\" 5 times."
+        },
+        {
+          "rule": "python:S7490",
+          "path": "seif/ner.py",
+          "line": 136,
+          "severity": "MAJOR",
+          "type": "BUG",
+          "message": "Add a checkpoint inside this cancellation scope."
+        },
+        {
+          "rule": "python:S7513",
+          "path": "seif/ner.py",
+          "line": 148,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Replace the TaskGroup with a direct function call when it only ever spawns one task."
+        },
+        {
+          "rule": "python:S7498",
+          "path": "seif/request_capture.py",
+          "line": 93,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Replace this constructor call with a literal."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/request_capture.py",
+          "line": 113,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 24 to the 15 allowed."
+        },
+        {
+          "rule": "python:S5713",
+          "path": "seif/request_capture.py",
+          "line": 172,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Remove this redundant Exception class; it derives from another which is already caught."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/request_capture.py",
+          "line": 204,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 16 to the 15 allowed."
+        },
+        {
+          "rule": "python:S1481",
+          "path": "seif/vault.py",
+          "line": 91,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Replace the unused local variable \"blob\" with \"_\"."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_api.py",
+          "line": 327,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_benchmark_corpus.py",
+          "line": 40,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_benchmark_corpus.py",
+          "line": 47,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_benchmark_corpus.py",
+          "line": 88,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_benchmark_corpus.py",
+          "line": 97,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S9073",
+          "path": "tests/test_benchmark_corpus.py",
+          "line": 109,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Split this composite assertion into separate assertions."
+        },
+        {
+          "rule": "python:S9073",
+          "path": "tests/test_benchmark_corpus.py",
+          "line": 166,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Split this composite assertion into separate assertions."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_benchmark_corpus.py",
+          "line": 248,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner.py",
+          "line": 111,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner.py",
+          "line": 119,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner.py",
+          "line": 124,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner.py",
+          "line": 130,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_location.py",
+          "line": 93,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_location.py",
+          "line": 107,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_location.py",
+          "line": 112,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_location.py",
+          "line": 114,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_review.py",
+          "line": 65,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_service.py",
+          "line": 60,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_service.py",
+          "line": 67,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S9073",
+          "path": "tests/test_redis.py",
+          "line": 63,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Split this composite assertion into separate assertions."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_sentinel.py",
+          "line": 151,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_synthetic_benchmark.py",
+          "line": 18,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_synthetic_benchmark.py",
+          "line": 27,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "javascript:S2245",
+          "path": "web/app.js",
+          "line": 58,
+          "severity": "MAJOR",
+          "type": "VULNERABILITY",
+          "message": "Make sure that using this pseudorandom number generator is safe here."
+        },
+        {
+          "rule": "javascript:S3776",
+          "path": "web/app.js",
+          "line": 60,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed."
+        },
+        {
+          "rule": "javascript:S3358",
+          "path": "web/app.js",
+          "line": 69,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Extract this nested ternary operation into an independent statement."
+        },
+        {
+          "rule": "javascript:S3358",
+          "path": "web/app.js",
+          "line": 69,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Extract this nested ternary operation into an independent statement."
+        },
+        {
+          "rule": "javascript:S3358",
+          "path": "web/app.js",
+          "line": 170,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Extract this nested ternary operation into an independent statement."
+        },
+        {
+          "rule": "javascript:S2681",
+          "path": "web/app.js",
+          "line": 237,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "This statement will not be executed conditionally; only the first statement will be. The rest will execute unconditionally."
+        },
+        {
+          "rule": "javascript:S2486",
+          "path": "web/app.js",
+          "line": 246,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Handle this exception, don't catch it at all, or explain in a comment why it is ignored."
+        },
+        {
+          "rule": "javascript:S2681",
+          "path": "web/app.js",
+          "line": 251,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "This statement will not be executed conditionally; only the first statement will be. The rest will execute unconditionally."
+        },
+        {
+          "rule": "javascript:S2681",
+          "path": "web/app.js",
+          "line": 252,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "This statement will not be executed conditionally; only the first statement will be. The rest will execute unconditionally."
+        },
+        {
+          "rule": "javascript:S7785",
+          "path": "web/app.js",
+          "line": 262,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Prefer top-level await over an async function `initialize` call."
+        },
+        {
+          "rule": "Web:S6819",
+          "path": "web/index.html",
+          "line": 61,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Use <output> instead of the status role to ensure accessibility across all devices."
+        }
+      ],
+      "4c85827": [
+        {
+          "rule": "python:S3776",
+          "path": "scripts/benchmark.py",
+          "line": 48,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 29 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/benchmark_corpus.py",
+          "line": 77,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 17 to the 15 allowed."
+        },
+        {
+          "rule": "python:S5713",
+          "path": "scripts/benchmark_corpus.py",
+          "line": 102,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Remove this redundant Exception class; it derives from another which is already caught."
+        },
+        {
+          "rule": "python:S5713",
+          "path": "scripts/benchmark_corpus.py",
+          "line": 183,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Remove this redundant Exception class; it derives from another which is already caught."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/benchmark_corpus.py",
+          "line": 224,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/benchmark_corpus.py",
+          "line": 273,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 22 to the 15 allowed."
+        },
+        {
+          "rule": "python:S7519",
+          "path": "scripts/benchmark_corpus.py",
+          "line": 276,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Replace with dict fromkeys method call"
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/capture_requests.py",
+          "line": 55,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 66 to the 15 allowed."
+        },
+        {
+          "rule": "python:S2245",
+          "path": "scripts/compare_presidio.py",
+          "line": 239,
+          "severity": "MAJOR",
+          "type": "VULNERABILITY",
+          "message": "Make sure that using this pseudorandom number generator is safe here."
+        },
+        {
+          "rule": "python:S2245",
+          "path": "scripts/compare_presidio.py",
+          "line": 242,
+          "severity": "MAJOR",
+          "type": "VULNERABILITY",
+          "message": "Make sure that using this pseudorandom number generator is safe here."
+        },
+        {
+          "rule": "python:S3358",
+          "path": "scripts/evaluate.py",
+          "line": 94,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Extract this nested conditional expression into an independent statement."
+        },
+        {
+          "rule": "python:S3358",
+          "path": "scripts/evaluate_annotations.py",
+          "line": 45,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Extract this nested conditional expression into an independent statement."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_annotations.py",
+          "line": 56,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 31 to the 15 allowed."
+        },
+        {
+          "rule": "python:S7519",
+          "path": "scripts/evaluate_annotations.py",
+          "line": 59,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Replace with dict fromkeys method call"
+        },
+        {
+          "rule": "python:S7498",
+          "path": "scripts/evaluate_annotations.py",
+          "line": 82,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Replace this constructor call with a literal."
+        },
+        {
+          "rule": "python:S1940",
+          "path": "scripts/evaluate_annotations.py",
+          "line": 104,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Use the opposite operator (\">\") instead."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_external.py",
+          "line": 49,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 24 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_external.py",
+          "line": 184,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 24 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_golden.py",
+          "line": 81,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 16 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_redmadrobot.py",
+          "line": 68,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 21 to the 15 allowed."
+        },
+        {
+          "rule": "python:S108",
+          "path": "scripts/evaluate_redmadrobot.py",
+          "line": 90,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Either remove or fill this block of code."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_redmadrobot.py",
+          "line": 157,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_scanpatch.py",
+          "line": 52,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/evaluate_scanpatch.py",
+          "line": 83,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/failover_check.py",
+          "line": 36,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 20 to the 15 allowed."
+        },
+        {
+          "rule": "python:S1192",
+          "path": "scripts/large_input.py",
+          "line": 21,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Define a constant instead of duplicating this literal \" neutral\" 3 times."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/local_redis.py",
+          "line": 84,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 20 to the 15 allowed."
+        },
+        {
+          "rule": "python:S5713",
+          "path": "scripts/local_redis.py",
+          "line": 110,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Remove this redundant Exception class; it derives from another which is already caught."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/local_redis.py",
+          "line": 163,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 27 to the 15 allowed."
+        },
+        {
+          "rule": "python:S1045",
+          "path": "scripts/local_redis.py",
+          "line": 274,
+          "severity": "MAJOR",
+          "type": "BUG",
+          "message": "Catch this exception only once; it is already handled by a previous except clause."
+        },
+        {
+          "rule": "python:S1192",
+          "path": "scripts/ner_service.py",
+          "line": 94,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Define a constant instead of duplicating this literal \"NER temporarily unavailable.\" 4 times."
+        },
+        {
+          "rule": "python:S1192",
+          "path": "scripts/ner_service.py",
+          "line": 103,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Define a constant instead of duplicating this literal \"Invalid request.\" 3 times."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/ner_service.py",
+          "line": 198,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 39 to the 15 allowed."
+        },
+        {
+          "rule": "python:S5754",
+          "path": "scripts/ner_service.py",
+          "line": 271,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Catch a more specific exception or reraise the exception"
+        },
+        {
+          "rule": "python:S1192",
+          "path": "scripts/package.py",
+          "line": 12,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Define a constant instead of duplicating this literal \".yaml\" 3 times."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "scripts/package.py",
+          "line": 28,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 19 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/app.py",
+          "line": 217,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 178 to the 15 allowed."
+        },
+        {
+          "rule": "python:S5754",
+          "path": "seif/app.py",
+          "line": 395,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Catch a more specific exception or reraise the exception"
+        },
+        {
+          "rule": "python:S3358",
+          "path": "seif/app.py",
+          "line": 492,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Extract this nested conditional expression into an independent statement."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/config.py",
+          "line": 16,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 28 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/config.py",
+          "line": 125,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 29 to the 15 allowed."
+        },
+        {
+          "rule": "python:S6353",
+          "path": "seif/context_filters.py",
+          "line": 17,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Use concise character class syntax '\\d' instead of '[0-9]'."
+        },
+        {
+          "rule": "python:S6353",
+          "path": "seif/context_filters.py",
+          "line": 17,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Use concise character class syntax '\\d' instead of '[0-9]'."
+        },
+        {
+          "rule": "python:S6353",
+          "path": "seif/context_filters.py",
+          "line": 31,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Use concise character class syntax '\\d' instead of '[0-9]'."
+        },
+        {
+          "rule": "python:S8786",
+          "path": "seif/context_filters.py",
+          "line": 53,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking."
+        },
+        {
+          "rule": "python:S5843",
+          "path": "seif/detector.py",
+          "line": 70,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Simplify this regular expression to reduce its complexity from 26 to the 20 allowed."
+        },
+        {
+          "rule": "python:S5843",
+          "path": "seif/detector.py",
+          "line": 70,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Simplify this regular expression to reduce its complexity from 26 to the 20 allowed."
+        },
+        {
+          "rule": "python:S1192",
+          "path": "seif/detector.py",
+          "line": 273,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Define a constant instead of duplicating this literal \"паспорт\" 5 times."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/detector.py",
+          "line": 531,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 35 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/detector.py",
+          "line": 590,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 19 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/detector.py",
+          "line": 637,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 17 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/detector.py",
+          "line": 678,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 42 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/detector.py",
+          "line": 802,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 124 to the 15 allowed."
+        },
+        {
+          "rule": "python:S6353",
+          "path": "seif/location_fields.py",
+          "line": 51,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Use concise character class syntax '\\d' instead of '[0-9]'."
+        },
+        {
+          "rule": "python:S6353",
+          "path": "seif/location_fields.py",
+          "line": 51,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Use concise character class syntax '\\d' instead of '[0-9]'."
+        },
+        {
+          "rule": "python:S1192",
+          "path": "seif/ner.py",
+          "line": 76,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Define a constant instead of duplicating this literal \"NER is unavailable\" 4 times."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/ner.py",
+          "line": 87,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 31 to the 15 allowed."
+        },
+        {
+          "rule": "python:S1192",
+          "path": "seif/ner.py",
+          "line": 100,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Define a constant instead of duplicating this literal \"Invalid NER response\" 5 times."
+        },
+        {
+          "rule": "python:S7490",
+          "path": "seif/ner.py",
+          "line": 136,
+          "severity": "MAJOR",
+          "type": "BUG",
+          "message": "Add a checkpoint inside this cancellation scope."
+        },
+        {
+          "rule": "python:S7513",
+          "path": "seif/ner.py",
+          "line": 148,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Replace the TaskGroup with a direct function call when it only ever spawns one task."
+        },
+        {
+          "rule": "python:S5843",
+          "path": "seif/person_fields.py",
+          "line": 27,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Simplify this regular expression to reduce its complexity from 25 to the 20 allowed."
+        },
+        {
+          "rule": "python:S8786",
+          "path": "seif/person_fields.py",
+          "line": 52,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/person_fields.py",
+          "line": 66,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 19 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/person_fields.py",
+          "line": 91,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 32 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/person_fields.py",
+          "line": 119,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 27 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/person_fields.py",
+          "line": 153,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 46 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/person_fields.py",
+          "line": 189,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 19 to the 15 allowed."
+        },
+        {
+          "rule": "python:S7498",
+          "path": "seif/request_capture.py",
+          "line": 93,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Replace this constructor call with a literal."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/request_capture.py",
+          "line": 113,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 24 to the 15 allowed."
+        },
+        {
+          "rule": "python:S5713",
+          "path": "seif/request_capture.py",
+          "line": 172,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Remove this redundant Exception class; it derives from another which is already caught."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/request_capture.py",
+          "line": 204,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 16 to the 15 allowed."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/structured_fields.py",
+          "line": 106,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 22 to the 15 allowed."
+        },
+        {
+          "rule": "python:S6353",
+          "path": "seif/structured_fields.py",
+          "line": 112,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Use concise character class syntax '\\d' instead of '[0-9]'."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/structured_fields.py",
+          "line": 146,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 29 to the 15 allowed."
+        },
+        {
+          "rule": "python:S5843",
+          "path": "seif/structured_fields.py",
+          "line": 211,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Simplify this regular expression to reduce its complexity from 24 to the 20 allowed."
+        },
+        {
+          "rule": "python:S6353",
+          "path": "seif/structured_fields.py",
+          "line": 211,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Use concise character class syntax '\\d' instead of '[0-9]'."
+        },
+        {
+          "rule": "python:S6353",
+          "path": "seif/structured_fields.py",
+          "line": 211,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Use concise character class syntax '\\d' instead of '[0-9]'."
+        },
+        {
+          "rule": "python:S6353",
+          "path": "seif/structured_fields.py",
+          "line": 211,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Use concise character class syntax '\\d' instead of '[0-9]'."
+        },
+        {
+          "rule": "python:S6353",
+          "path": "seif/structured_fields.py",
+          "line": 211,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Use concise character class syntax '\\d' instead of '[0-9]'."
+        },
+        {
+          "rule": "python:S3776",
+          "path": "seif/structured_fields.py",
+          "line": 232,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 34 to the 15 allowed."
+        },
+        {
+          "rule": "python:S6353",
+          "path": "seif/structured_fields.py",
+          "line": 239,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Use concise character class syntax '\\d' instead of '[0-9]'."
+        },
+        {
+          "rule": "python:S1481",
+          "path": "seif/vault.py",
+          "line": 91,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Replace the unused local variable \"blob\" with \"_\"."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_api.py",
+          "line": 327,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_benchmark_corpus.py",
+          "line": 40,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_benchmark_corpus.py",
+          "line": 47,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_benchmark_corpus.py",
+          "line": 88,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_benchmark_corpus.py",
+          "line": 97,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S9073",
+          "path": "tests/test_benchmark_corpus.py",
+          "line": 109,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Split this composite assertion into separate assertions."
+        },
+        {
+          "rule": "python:S9073",
+          "path": "tests/test_benchmark_corpus.py",
+          "line": 166,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Split this composite assertion into separate assertions."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_benchmark_corpus.py",
+          "line": 248,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S9073",
+          "path": "tests/test_golden_dataset.py",
+          "line": 56,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Split this composite assertion into separate assertions."
+        },
+        {
+          "rule": "python:S9073",
+          "path": "tests/test_golden_dataset.py",
+          "line": 68,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Split this composite assertion into separate assertions."
+        },
+        {
+          "rule": "python:S9073",
+          "path": "tests/test_golden_dataset.py",
+          "line": 71,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Split this composite assertion into separate assertions."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner.py",
+          "line": 111,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner.py",
+          "line": 119,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner.py",
+          "line": 124,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner.py",
+          "line": 130,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_location.py",
+          "line": 93,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_location.py",
+          "line": 107,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_location.py",
+          "line": 112,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_location.py",
+          "line": 114,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_review.py",
+          "line": 65,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_service.py",
+          "line": 60,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_ner_service.py",
+          "line": 67,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S9073",
+          "path": "tests/test_redis.py",
+          "line": 63,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Split this composite assertion into separate assertions."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_sentinel.py",
+          "line": 151,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_synthetic_benchmark.py",
+          "line": 18,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "python:S5778",
+          "path": "tests/test_synthetic_benchmark.py",
+          "line": 27,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Refactor this exception test to have only one invocation possibly throwing an exception."
+        },
+        {
+          "rule": "javascript:S2245",
+          "path": "web/app.js",
+          "line": 58,
+          "severity": "MAJOR",
+          "type": "VULNERABILITY",
+          "message": "Make sure that using this pseudorandom number generator is safe here."
+        },
+        {
+          "rule": "javascript:S3776",
+          "path": "web/app.js",
+          "line": 60,
+          "severity": "CRITICAL",
+          "type": "CODE_SMELL",
+          "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed."
+        },
+        {
+          "rule": "javascript:S3358",
+          "path": "web/app.js",
+          "line": 69,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Extract this nested ternary operation into an independent statement."
+        },
+        {
+          "rule": "javascript:S3358",
+          "path": "web/app.js",
+          "line": 69,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Extract this nested ternary operation into an independent statement."
+        },
+        {
+          "rule": "javascript:S3358",
+          "path": "web/app.js",
+          "line": 170,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Extract this nested ternary operation into an independent statement."
+        },
+        {
+          "rule": "javascript:S2681",
+          "path": "web/app.js",
+          "line": 237,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "This statement will not be executed conditionally; only the first statement will be. The rest will execute unconditionally."
+        },
+        {
+          "rule": "javascript:S2486",
+          "path": "web/app.js",
+          "line": 246,
+          "severity": "MINOR",
+          "type": "CODE_SMELL",
+          "message": "Handle this exception, don't catch it at all, or explain in a comment why it is ignored."
+        },
+        {
+          "rule": "javascript:S2681",
+          "path": "web/app.js",
+          "line": 251,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "This statement will not be executed conditionally; only the first statement will be. The rest will execute unconditionally."
+        },
+        {
+          "rule": "javascript:S2681",
+          "path": "web/app.js",
+          "line": 252,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "This statement will not be executed conditionally; only the first statement will be. The rest will execute unconditionally."
+        },
+        {
+          "rule": "javascript:S7785",
+          "path": "web/app.js",
+          "line": 262,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Prefer top-level await over an async function `initialize` call."
+        },
+        {
+          "rule": "Web:S6819",
+          "path": "web/index.html",
+          "line": 61,
+          "severity": "MAJOR",
+          "type": "CODE_SMELL",
+          "message": "Use <output> instead of the status role to ensure accessibility across all devices."
+        }
+      ]
+    },
+    "scope_verification": {
+      "f1922bc": {
+        "issues_equal_after_removing_server_ids": true,
+        "compared_fields": [
+          "rule",
+          "path",
+          "line",
+          "severity",
+          "type",
+          "message"
+        ]
+      },
+      "75b52e8": {
+        "issues_equal_after_removing_server_ids": true,
+        "compared_fields": [
+          "rule",
+          "path",
+          "line",
+          "severity",
+          "type",
+          "message"
+        ]
+      },
+      "4c85827": {
+        "issues_equal_after_removing_server_ids": true,
+        "compared_fields": [
+          "rule",
+          "path",
+          "line",
+          "severity",
+          "type",
+          "message"
+        ]
+      }
+    },
+    "non_smell_findings_unchanged_between_revisions": true
+  },
+  "archives": {
+    "f1922bc": {
+      "archive_name": "seif-pii-source.zip",
+      "archive_sha256": "cee0478dc5bf182638dbe86c9b6bccedc40541370c3c104091d13a286f9667cc",
+      "files": 124
+    },
+    "75b52e8": {
+      "archive_name": "seif-pii-reviewed-75b52e8.zip",
+      "archive_sha256": "9e13b942c1a5246a13f2391690426fe74281068e749348351d22057f5fc276e8",
+      "files": 142
+    },
+    "4c85827": {
+      "archive_name": "seif-pii-golden-4c85827.zip",
+      "archive_sha256": "2f747a77266fa4e877c58fa6faa558ecec8f3747b81ac9164ea5dfbd23b7a398",
+      "files": 158
+    }
+  },
+  "gitlab": {
+    "f1922bc": {
+      "schema_version": 1,
+      "archive": "seif-pii-source.zip",
+      "archive_sha256": "cee0478dc5bf182638dbe86c9b6bccedc40541370c3c104091d13a286f9667cc",
+      "analyzer": "ruff 0.16.8",
+      "profiles": {
+        "project": {
+          "report": "project.gitlab.json",
+          "ruff_arguments": [
+            "check",
+            "--isolated",
+            "--no-cache",
+            "--target-version",
+            "py312",
+            "--exclude",
+            "",
+            "--no-respect-gitignore",
+            "--line-length",
+            "120",
+            "--select",
+            "E4,E7,E9,F,I,B",
+            "--output-format",
+            "gitlab",
+            "."
+          ],
+          "total": 8,
+          "by_scope": {
+            "scripts": 3,
+            "seif": 4,
+            "tests": 1
+          },
+          "by_rule": {
+            "B905": 8
+          },
+          "by_severity": {
+            "major": 8
+          },
+          "top_files": {
+            "seif/detector.py": 4,
+            "scripts/evaluate_scanpatch.py": 2,
+            "scripts/evaluate_redmadrobot.py": 1,
+            "tests/test_detector.py": 1
+          }
+        },
+        "maintainability": {
+          "report": "maintainability.gitlab.json",
+          "ruff_arguments": [
+            "check",
+            "--isolated",
+            "--no-cache",
+            "--target-version",
+            "py312",
+            "--exclude",
+            "",
+            "--no-respect-gitignore",
+            "--line-length",
+            "120",
+            "--select",
+            "C901,C4,SIM,PERF,PLR0911,PLR0912,PLR0913,PLR0915",
+            "--output-format",
+            "gitlab",
+            "."
+          ],
+          "total": 54,
+          "by_scope": {
+            "scripts": 17,
+            "seif": 21,
+            "tests": 16
+          },
+          "by_rule": {
+            "C901": 18,
+            "SIM117": 12,
+            "PLR0915": 10,
+            "PLR0912": 6,
+            "PLR0911": 3,
+            "SIM905": 2,
+            "SIM105": 1,
+            "SIM102": 1,
+            "PERF401": 1
+          },
+          "by_severity": {
+            "major": 54
+          },
+          "top_files": {
+            "seif/detector.py": 9,
+            "seif/app.py": 8,
+            "scripts/ner_service.py": 6,
+            "tests/test_ner_service.py": 6,
+            "tests/test_api.py": 5,
+            "tests/test_sentinel.py": 5,
+            "scripts/evaluate_redmadrobot.py": 3,
+            "scripts/benchmark.py": 2,
+            "scripts/evaluate_external.py": 2,
+            "scripts/local_redis.py": 2,
+            "seif/config.py": 2,
+            "seif/ner.py": 2
+          }
+        },
+        "security": {
+          "report": "security.gitlab.json",
+          "ruff_arguments": [
+            "check",
+            "--isolated",
+            "--no-cache",
+            "--target-version",
+            "py312",
+            "--exclude",
+            "",
+            "--no-respect-gitignore",
+            "--line-length",
+            "120",
+            "--select",
+            "S",
+            "--output-format",
+            "gitlab",
+            "."
+          ],
+          "total": 429,
+          "by_scope": {
+            "deploy": 1,
+            "scripts": 5,
+            "tests": 423
+          },
+          "by_rule": {
+            "S101": 412,
+            "S106": 8,
+            "S603": 4,
+            "S105": 4,
+            "S311": 1
+          },
+          "by_severity": {
+            "major": 429
+          },
+          "top_files": {
+            "tests/test_api.py": 141,
+            "tests/test_ner_service.py": 58,
+            "tests/test_masking_policy.py": 55,
+            "tests/test_sentinel.py": 33,
+            "tests/test_detector.py": 23,
+            "tests/test_ner_client.py": 22,
+            "tests/test_ner_location.py": 17,
+            "tests/test_redis.py": 17,
+            "tests/test_benchmark_protocol.py": 15,
+            "tests/test_ner.py": 13,
+            "tests/test_cis.py": 12,
+            "tests/test_addresses.py": 10
+          }
+        }
+      },
+      "scope": "All Python files under seif/, scripts/, tests/, deploy/ in the source ZIP",
+      "configuration": "Isolated fixed profiles; Ruff default thresholds; inline noqa is honored",
+      "severity": "Native Ruff GitLab severity, unchanged; not Sonar or hackathon severity",
+      "source_files_count": 38,
+      "all_native_reports_equal_to_initial_run": true
+    },
+    "75b52e8": {
+      "schema_version": 1,
+      "archive": "seif-pii-reviewed-75b52e8.zip",
+      "archive_sha256": "9e13b942c1a5246a13f2391690426fe74281068e749348351d22057f5fc276e8",
+      "analyzer": "ruff 0.16.8",
+      "profiles": {
+        "project": {
+          "report": "project.gitlab.json",
+          "ruff_arguments": [
+            "check",
+            "--isolated",
+            "--no-cache",
+            "--target-version",
+            "py312",
+            "--exclude",
+            "",
+            "--no-respect-gitignore",
+            "--line-length",
+            "120",
+            "--select",
+            "E4,E7,E9,F,I,B",
+            "--output-format",
+            "gitlab",
+            "."
+          ],
+          "total": 0,
+          "by_scope": {},
+          "by_rule": {},
+          "by_severity": {},
+          "top_files": {}
+        },
+        "maintainability": {
+          "report": "maintainability.gitlab.json",
+          "ruff_arguments": [
+            "check",
+            "--isolated",
+            "--no-cache",
+            "--target-version",
+            "py312",
+            "--exclude",
+            "",
+            "--no-respect-gitignore",
+            "--line-length",
+            "120",
+            "--select",
+            "C901,C4,SIM,PERF,PLR0911,PLR0912,PLR0913,PLR0915",
+            "--output-format",
+            "gitlab",
+            "."
+          ],
+          "total": 70,
+          "by_scope": {
+            "scripts": 27,
+            "seif": 27,
+            "tests": 16
+          },
+          "by_rule": {
+            "C901": 23,
+            "PLR0915": 13,
+            "SIM117": 12,
+            "PLR0912": 8,
+            "PLR0911": 4,
+            "SIM105": 3,
+            "C420": 2,
+            "C408": 2,
+            "SIM905": 2,
+            "SIM102": 1
+          },
+          "by_severity": {
+            "major": 70
+          },
+          "top_files": {
+            "seif/detector.py": 10,
+            "seif/app.py": 9,
+            "scripts/ner_service.py": 7,
+            "tests/test_ner_service.py": 6,
+            "tests/test_api.py": 5,
+            "tests/test_sentinel.py": 5,
+            "seif/request_capture.py": 4,
+            "scripts/benchmark_corpus.py": 3,
+            "scripts/capture_requests.py": 3,
+            "scripts/evaluate_annotations.py": 3,
+            "scripts/evaluate_redmadrobot.py": 3,
+            "scripts/benchmark.py": 2
+          }
+        },
+        "security": {
+          "report": "security.gitlab.json",
+          "ruff_arguments": [
+            "check",
+            "--isolated",
+            "--no-cache",
+            "--target-version",
+            "py312",
+            "--exclude",
+            "",
+            "--no-respect-gitignore",
+            "--line-length",
+            "120",
+            "--select",
+            "S",
+            "--output-format",
+            "gitlab",
+            "."
+          ],
+          "total": 657,
+          "by_scope": {
+            "deploy": 1,
+            "scripts": 6,
+            "tests": 650
+          },
+          "by_rule": {
+            "S101": 633,
+            "S106": 13,
+            "S603": 5,
+            "S105": 4,
+            "S311": 2
+          },
+          "by_severity": {
+            "major": 657
+          },
+          "top_files": {
+            "tests/test_api.py": 141,
+            "tests/test_ner_service.py": 75,
+            "tests/test_masking_policy.py": 55,
+            "tests/test_request_capture_writer.py": 55,
+            "tests/test_benchmark_corpus.py": 47,
+            "tests/test_request_capture_api.py": 36,
+            "tests/test_sentinel.py": 33,
+            "tests/test_detector.py": 23,
+            "tests/test_ner_client.py": 22,
+            "tests/test_api_hardening.py": 21,
+            "tests/test_ner_location.py": 17,
+            "tests/test_redis.py": 17
+          }
+        }
+      },
+      "scope": "All Python files under seif/, scripts/, tests/, deploy/ in the source ZIP",
+      "configuration": "Isolated fixed profiles; Ruff default thresholds; inline noqa is honored",
+      "severity": "Native Ruff GitLab severity, unchanged; not Sonar or hackathon severity",
+      "source_files_count": 52,
+      "all_native_reports_equal_to_initial_run": true
+    },
+    "4c85827": {
+      "schema_version": 1,
+      "archive": "seif-pii-golden-4c85827.zip",
+      "archive_sha256": "2f747a77266fa4e877c58fa6faa558ecec8f3747b81ac9164ea5dfbd23b7a398",
+      "analyzer": "ruff 0.16.8",
+      "profiles": {
+        "project": {
+          "report": "project.gitlab.json",
+          "ruff_arguments": [
+            "check",
+            "--isolated",
+            "--no-cache",
+            "--target-version",
+            "py312",
+            "--exclude",
+            "",
+            "--no-respect-gitignore",
+            "--line-length",
+            "120",
+            "--select",
+            "E4,E7,E9,F,I,B",
+            "--output-format",
+            "gitlab",
+            "."
+          ],
+          "total": 0,
+          "by_scope": {},
+          "by_rule": {},
+          "by_severity": {},
+          "top_files": {}
+        },
+        "maintainability": {
+          "report": "maintainability.gitlab.json",
+          "ruff_arguments": [
+            "check",
+            "--isolated",
+            "--no-cache",
+            "--target-version",
+            "py312",
+            "--exclude",
+            "",
+            "--no-respect-gitignore",
+            "--line-length",
+            "120",
+            "--select",
+            "C901,C4,SIM,PERF,PLR0911,PLR0912,PLR0913,PLR0915",
+            "--output-format",
+            "gitlab",
+            "."
+          ],
+          "total": 68,
+          "by_scope": {
+            "scripts": 24,
+            "seif": 28,
+            "tests": 16
+          },
+          "by_rule": {
+            "C901": 24,
+            "SIM117": 12,
+            "PLR0915": 11,
+            "PLR0912": 7,
+            "SIM105": 3,
+            "C420": 2,
+            "C408": 2,
+            "PLR0911": 2,
+            "SIM905": 2,
+            "PERF401": 1,
+            "SIM114": 1,
+            "SIM102": 1
+          },
+          "by_severity": {
+            "major": 68
+          },
+          "top_files": {
+            "seif/detector.py": 10,
+            "tests/test_ner_service.py": 6,
+            "seif/app.py": 5,
+            "tests/test_api.py": 5,
+            "tests/test_sentinel.py": 5,
+            "seif/request_capture.py": 4,
+            "scripts/benchmark_corpus.py": 3,
+            "scripts/capture_requests.py": 3,
+            "scripts/evaluate_annotations.py": 3,
+            "scripts/evaluate_redmadrobot.py": 3,
+            "scripts/ner_service.py": 3,
+            "scripts/benchmark.py": 2
+          }
+        },
+        "security": {
+          "report": "security.gitlab.json",
+          "ruff_arguments": [
+            "check",
+            "--isolated",
+            "--no-cache",
+            "--target-version",
+            "py312",
+            "--exclude",
+            "",
+            "--no-respect-gitignore",
+            "--line-length",
+            "120",
+            "--select",
+            "S",
+            "--output-format",
+            "gitlab",
+            "."
+          ],
+          "total": 797,
+          "by_scope": {
+            "deploy": 1,
+            "scripts": 6,
+            "seif": 2,
+            "tests": 788
+          },
+          "by_rule": {
+            "S101": 772,
+            "S106": 13,
+            "S603": 6,
+            "S105": 4,
+            "S311": 2
+          },
+          "by_severity": {
+            "major": 797
+          },
+          "top_files": {
+            "tests/test_api.py": 141,
+            "tests/test_ner_service.py": 75,
+            "tests/test_masking_policy.py": 55,
+            "tests/test_request_capture_writer.py": 55,
+            "tests/test_benchmark_corpus.py": 47,
+            "tests/test_golden_dataset.py": 37,
+            "tests/test_request_capture_api.py": 36,
+            "tests/test_sentinel.py": 33,
+            "tests/test_boundary_upload.py": 27,
+            "tests/test_context_filters.py": 24,
+            "tests/test_detector.py": 24,
+            "tests/test_ner_client.py": 22
+          }
+        }
+      },
+      "scope": "All Python files under seif/, scripts/, tests/, deploy/ in the source ZIP",
+      "configuration": "Isolated fixed profiles; Ruff default thresholds; inline noqa is honored",
+      "severity": "Native Ruff GitLab severity, unchanged; not Sonar or hackathon severity",
+      "source_files_count": 65,
+      "all_native_reports_equal_to_initial_run": true
+    }
+  },
+  "external_logs": {
+    "earlier": {
+      "score": 9089,
+      "issues": 103,
+      "critical": 77,
+      "major": 24,
+      "minor": 2
+    },
+    "later": {
+      "score": 8868,
+      "issues": 130,
+      "critical": 97,
+      "major": 26,
+      "minor": 7
+    },
+    "engine_version_profile_revision_and_score_formula": "not supplied"
+  },
+  "limitations": [
+    "Different ZIP sizes: not an isolated refactor comparison",
+    "Sonar counts do not reproduce organizer counts",
+    "No coverage report imported; coverage=0.0 is not a measured test coverage result",
+    "Quality gate OK had zero evaluated conditions",
+    "Security category and CRITICAL severity do not establish exploitable vulnerabilities",
+    "GitLab output generated locally using Ruff; no GitLab-hosted pipeline or CodeClimate engine run"
+  ]
+}
