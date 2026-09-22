@@ -279,3 +279,45 @@ def test_passport_office_or_control_does_not_own_an_arbitrary_number(text, chang
 ])
 def test_new_equipment_or_order_owner_overrides_a_personal_presentation_context(text):
     assert_only_personal_values_are_masked(text, [])
+
+
+@pytest.mark.parametrize("text, values", [
+    (
+        "Водительское удостоверение предъявлено. Моё удостоверение выдано в 2006 году, серия 6417, номер 208563.",
+        ["6417", "208563"],
+    ),
+    (
+        "Приложена копия удостоверения, оформленного в 2011 году: серия 64 17 номер 208563.",
+        ["64 17", "208563"],
+    ),
+    (
+        "Удостоверение проверено в 2009 году; серия 6417 № 208563.",
+        ["6417", "208563"],
+    ),
+    (
+        "ВЫДАЧА УДОСТОВЕРЕНИЯ СОСТОЯЛАСЬ В 2015 ГОДУ, СЕРИЯ 6417, НОМЕР 208563.",
+        ["6417", "208563"],
+    ),
+])
+def test_unqualified_identity_keeps_paired_values_protected_with_issue_year_visible(text, values):
+    # An uncertain concrete document type must not expose a structurally complete
+    # personal series/number pair. Assert the actual mask, not its entity type.
+    assert_only_personal_values_are_masked(text, values)
+
+
+@pytest.mark.parametrize("text", [
+    "Служебное удостоверение выдано в 2008 году, серия 6417, номер 208563.",
+    "Копия пенсионного удостоверения, оформленного в 2012 году, серия 6417 номер 208563.",
+    "СТУДЕНЧЕСКОЕ УДОСТОВЕРЕНИЕ ОФОРМЛЕНО В 2010 ГОДУ, СЕРИЯ 6417, НОМЕР 208563.",
+    "Техническое удостоверение выдано в 2017 году, серия 6417 номер 208563.",
+    "Транспортное удостоверение оформлено, серия 6417, номер 208563.",
+    "Удостоверение оборудования оформлено в 2014 году, серия 6417 номер 208563.",
+    "Удостоверение проверено. Отчёт о сканере: серия 6417 номер 208563.",
+    "Удостоверение личности предъявлено. Реквизиты договора: серия 6417 номер 208563.",
+    "Удостоверение выдано в 2018 году. Следующая запись: принтер, серия 6417 номер 208563.",
+    "Удостоверение принято. Новая запись: заказ оборудования, серия 6417 номер 208563.",
+])
+def test_generic_identity_fallback_preserves_explicit_other_document_and_business_policy(text):
+    # Qualified non-target documents retain the existing category policy; a
+    # later business record must not inherit the earlier personal owner.
+    assert_only_personal_values_are_masked(text, [])

@@ -183,3 +183,35 @@ def test_generic_identity_document_preserves_explicit_paired_field_policy(prefix
 def test_specific_owner_can_follow_generic_identity_document():
     text = "Удостоверение личности: водительское удостоверение 34 56 876543."
     assert values(text) == [("DRIVER_LICENSE", "34 56 876543")]
+
+
+@pytest.mark.parametrize("prefix", [
+    "Моё удостоверение выдано в 2017 году, ",
+    "Предъявлена копия удостоверения клиента, ",
+    "Водительское удостоверение проверено. Старое удостоверение имеется, ",
+])
+@pytest.mark.parametrize("transform", [str.lower, str.upper])
+def test_unqualified_identity_preserves_paired_number_privacy(prefix, transform):
+    from seif.detector import detect
+
+    text = transform(prefix + "серия 34 56, номер 876543.")
+    spans = detect(text)
+    for value in ("34 56", "876543"):
+        start = text.index(value)
+        assert all(any(s.start <= offset < s.end for s in spans)
+                   for offset in range(start, start + len(value)) if text[offset].isalnum())
+
+
+@pytest.mark.parametrize("prefix", [
+    "Служебное удостоверение выдано, ", "Студенческое удостоверение предъявлено, ",
+    "Пенсионное удостоверение имеется, ", "Удостоверение оборудования проверено, ",
+    "Удостоверение имеется. Новый заказ: ", "Удостоверение работника предъявлено, ",
+    "Удостоверение качества получено, ",
+    "Техническое удостоверение: ", "Транспортное удостоверение выдано, ",
+])
+def test_qualified_or_new_business_owner_does_not_acquire_paired_identity_fields(prefix):
+    assert values(prefix + "серия 34 56, номер 876543.") == []
+
+
+def test_immediate_generic_certificate_label_retains_existing_license_policy():
+    assert values("Удостоверение: серия 34 56, номер 876543.") == NUMBER_PARTS
