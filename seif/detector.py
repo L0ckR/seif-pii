@@ -532,6 +532,46 @@ def _is_public_address(text: str, start: int) -> bool:
     return bool(public and (not private or public[-1].start() > private[-1].start()))
 
 
+def _extend_address(window: str, stop: int) -> tuple[int, int]:
+    extension_count = 0
+    for _ in range(6):
+        extra = _ADDR_EXTRA.match(window, stop)
+        if extra is None:
+            break
+        stop = extra.end()
+        extension_count += 1
+    return stop, extension_count
+
+
+def _attach_suffixes(window: str, stop: int) -> int:
+    # Locality/postcode may trail the street record, in either order.
+    for first, second in ((_ADDR_LOCALITY_SUFFIX, _ADDR_POSTAL_SUFFIX), (_ADDR_POSTAL_SUFFIX, _ADDR_LOCALITY_SUFFIX)):
+        suffix = first.match(window, stop)
+        if suffix:
+            stop = suffix.end()
+            suffix = second.match(window, stop)
+            if suffix:
+                stop = suffix.end()
+            break
+    return stop
+
+
+def _resolve_address_start(text: str, start: int) -> int:
+    prefix_start = max(0, start - 160)
+    prefix = text[prefix_start:start]
+    preceding = _ADDR_LOCALITY_PREFIX.search(prefix) or _ADDR_POSTAL_PREFIX.search(prefix)
+    if preceding:
+        possible_start = prefix_start + preceding.start()
+        # A sliced prefix must not create a new word/number boundary, nor
+        # reinterpret a nearby order number as an address postcode.
+        if (
+            not (possible_start and (text[possible_start - 1].isalnum() or text[possible_start - 1] == "_"))
+            and not _is_nonpersonal_number_field(text, possible_start)
+        ):
+            return possible_start
+    return start
+
+
 def _structured_addresses(text: str) -> Iterable[Span]:
     """Compose adjacent address parts in bounded windows, retaining raw offsets.
 
@@ -544,38 +584,11 @@ def _structured_addresses(text: str) -> Iterable[Span]:
         core = _ADDR_STREET_HOUSE.match(window)
         if core is None:
             continue
-        stop = core.end()
-        extension_count = 0
-        for _ in range(6):
-            extra = _ADDR_EXTRA.match(window, stop)
-            if extra is None:
-                break
-            stop = extra.end()
-            extension_count += 1
+        stop, extension_count = _extend_address(window, core.end())
         if not core.group("label") and not extension_count and not _ADDR_BARE_HOUSE_END.match(window, stop):
             continue
-        # Locality/postcode may trail the street record, in either order.
-        for first, second in ((_ADDR_LOCALITY_SUFFIX, _ADDR_POSTAL_SUFFIX), (_ADDR_POSTAL_SUFFIX, _ADDR_LOCALITY_SUFFIX)):
-            suffix = first.match(window, stop)
-            if suffix:
-                stop = suffix.end()
-                suffix = second.match(window, stop)
-                if suffix:
-                    stop = suffix.end()
-                break
-        start = anchor.start()
-        prefix_start = max(0, start - 160)
-        prefix = text[prefix_start:start]
-        preceding = _ADDR_LOCALITY_PREFIX.search(prefix) or _ADDR_POSTAL_PREFIX.search(prefix)
-        if preceding:
-            possible_start = prefix_start + preceding.start()
-            # A sliced prefix must not create a new word/number boundary, nor
-            # reinterpret a nearby order number as an address postcode.
-            if (
-                not (possible_start and (text[possible_start - 1].isalnum() or text[possible_start - 1] == "_"))
-                and not _is_nonpersonal_number_field(text, possible_start)
-            ):
-                start = possible_start
+        stop = _attach_suffixes(window, stop)
+        start = _resolve_address_start(text, anchor.start())
         if stop == len(window) and anchor.end() + stop < len(text):
             # Never accept a partial house/apartment value at the window edge.
             continue
@@ -591,51 +604,65 @@ def _is_public_inn(text: str, start: int, value: str) -> bool:
     return bool(owner and not _PRIVATE_INN_OWNER.search(owner.group()))
 
 
+def _select_cluster(cluster: list[Span]) -> list[Span]:
+    if len(cluster) == 1:
+        return [cluster[0]]
+    accepted: list[Span] = []
+    starts: list[int] = []
+    for span in sorted(
+        cluster,
+        key=lambda s: (
+            # An explicitly labelled regional personal ID can coincidentally
+            # pass Luhn; its field meaning takes precedence over bare CARD.
+            -max(_PRIORITY.get(s.type, 85), 96 if s.reason == "cis-personal-id" else 0),
+            -(s.end - s.start),
+            -s.confidence,
+            s.start,
+            # Exact ties must not inherit per-process set/hash ordering.
+            s.type,
+            s.reason,
+        ),
+    ):
+        i = bisect_left(starts, span.start)
+        if i and accepted[i - 1].end > span.start:
+            continue
+        if i < len(accepted) and span.end > accepted[i].start:
+            continue
+        accepted.insert(i, span)
+        starts.insert(i, span.start)
+    return accepted
+
+
 def _resolve(candidates: Iterable[Span]) -> list[Span]:
     """Resolve local overlap clusters; adjacent spans remain separate."""
     ordered = sorted(set(candidates), key=lambda s: (s.start, s.end))
     result: list[Span] = []
     cluster: list[Span] = []
     end = -1
-
-    def flush() -> None:
-        if len(cluster) == 1:
-            result.append(cluster[0])
-            return
-        accepted: list[Span] = []
-        starts: list[int] = []
-        for span in sorted(
-            cluster,
-            key=lambda s: (
-                # An explicitly labelled regional personal ID can coincidentally
-                # pass Luhn; its field meaning takes precedence over bare CARD.
-                -max(_PRIORITY.get(s.type, 85), 96 if s.reason == "cis-personal-id" else 0),
-                -(s.end - s.start),
-                -s.confidence,
-                s.start,
-                # Exact ties must not inherit per-process set/hash ordering.
-                s.type,
-                s.reason,
-            ),
-        ):
-            i = bisect_left(starts, span.start)
-            if i and accepted[i - 1].end > span.start:
-                continue
-            if i < len(accepted) and span.end > accepted[i].start:
-                continue
-            accepted.insert(i, span)
-            starts.insert(i, span.start)
-        result.extend(accepted)
-
     for span in ordered:
         if cluster and span.start >= end:
-            flush()
+            result.extend(_select_cluster(cluster))
             cluster = []
         cluster.append(span)
         end = max(end, span.end)
     if cluster:
-        flush()
+        result.extend(_select_cluster(cluster))
     return result
+
+
+def _trim_repeated_roles(text: str, span: Span, start: int) -> int | None:
+    # Repeated explicit labels are still labels. Do not repeatedly remove bare
+    # words: after "Клиент: Клиент Иванович", the second word may be a surname.
+    while role := _NER_CLIENT_ROLE.match(text, start):
+        if role.end() > span.end:
+            break
+        separator = _NER_ROLE_SEPARATOR.match(text, role.end(), min(len(text), span.end + 32))
+        if separator is None or not separator.group("label"):
+            break
+        if separator.end() >= span.end:
+            return None
+        start = separator.end()
+    return start
 
 
 def _trim_ner_person_role(
@@ -664,70 +691,38 @@ def _trim_ner_person_role(
         return span
     if separator.end() >= span.end:
         return None if separator.group("label") else span
-    start = separator.end()
-    # Repeated explicit labels are still labels. Do not repeatedly remove bare
-    # words: after "Клиент: Клиент Иванович", the second word may be a surname.
-    while role := _NER_CLIENT_ROLE.match(text, start):
-        if role.end() > span.end:
-            break
-        separator = _NER_ROLE_SEPARATOR.match(text, role.end(), min(len(text), span.end + 32))
-        if separator is None or not separator.group("label"):
-            break
-        if separator.end() >= span.end:
-            return None
-        start = separator.end()
+    start = _trim_repeated_roles(text, span, separator.end())
+    if start is None:
+        return None
     return Span(start, span.end, span.type, span.confidence, span.reason)
 
 
-def _merge_ner_candidates(
-    text: str, base_spans: Sequence[Span], candidates: Sequence[Span], *, allowed_types: frozenset[str]
-) -> list[Span]:
-    """Merge optional NER results without changing structured field classes.
+def _validate_ner_span(span: Span, external: bool, text: str, allowed_types: frozenset[str]) -> None:
+    if not isinstance(span, Span):
+        raise ValueError("NER merge received an invalid span")
+    if (
+        type(span.start) is not int
+        or type(span.end) is not int
+        or not 0 <= span.start < span.end <= len(text)
+        or not isinstance(span.type, str)
+        or not span.type
+        or isinstance(span.confidence, bool)
+        or not isinstance(span.confidence, (int, float))
+        or not math.isfinite(span.confidence)
+        or not 0 <= span.confidence <= 1
+    ):
+        raise ValueError("NER merge received invalid span bounds or confidence")
+    if external and (span.type not in allowed_types or span.end - span.start > 200):
+        raise ValueError("NER candidates need a supported type and at most 200 characters")
 
-    Coordinates are Unicode code-point offsets into the exact, unnormalized
-    input. The caller owns model loading, deadlines and availability policy.
-    Malformed external output rejects the whole merge rather than silently
-    lowering protection. Scores are bounded heuristics, not probabilities.
-    """
-    if not isinstance(text, str) or not isinstance(base_spans, Sequence) or not isinstance(candidates, Sequence):
-        raise ValueError("NER merge requires text and sequences of spans")
-    if len(candidates) > min(100_000, max(1024, len(text))):
-        raise ValueError("Too many NER candidates")
 
-    def validate(span: Span, external: bool) -> None:
-        if not isinstance(span, Span):
-            raise ValueError("NER merge received an invalid span")
-        if (
-            type(span.start) is not int
-            or type(span.end) is not int
-            or not 0 <= span.start < span.end <= len(text)
-            or not isinstance(span.type, str)
-            or not span.type
-            or isinstance(span.confidence, bool)
-            or not isinstance(span.confidence, (int, float))
-            or not math.isfinite(span.confidence)
-            or not 0 <= span.confidence <= 1
-        ):
-            raise ValueError("NER merge received invalid span bounds or confidence")
-        if external and (span.type not in allowed_types or span.end - span.start > 200):
-            raise ValueError("NER candidates need a supported type and at most 200 characters")
-
-    # Validate every result before filtering any; a public-name exemption must
-    # not hide a broken response from the configured protection component.
-    for span in base_spans:
-        validate(span, external=False)
-    for span in candidates:
-        validate(span, external=True)
-
-    # Prefix maxima support overlapping caller-supplied base spans without a
-    # quadratic scan for each NER candidate. Any core name value stays intact.
-    core_people = sorted((span.start, span.end) for span in base_spans if span.type == "PERSON")
-    person_starts: list[int] = []
-    person_cover_ends: list[int] = []
-    for start, end in core_people:
-        person_starts.append(start)
-        person_cover_ends.append(max(end, person_cover_ends[-1] if person_cover_ends else end))
-    existing = {(span.type, span.start, span.end) for span in base_spans if span.type in allowed_types}
+def _accept_ner_candidates(
+    text: str,
+    candidates: Sequence[Span],
+    existing: set[tuple[str, int, int]],
+    person_starts: Sequence[int],
+    person_cover_ends: Sequence[int],
+) -> dict[tuple[str, int, int], Span]:
     accepted: dict[tuple[str, int, int], Span] = {}
     for span in candidates:
         identity = (span.type, span.start, span.end)
@@ -755,6 +750,41 @@ def _merge_ner_candidates(
                 span.start, span.end, span.type, float(span.confidence),
                 "ner-person" if span.type == "PERSON" else "ner-location",
             )
+    return accepted
+
+
+def _merge_ner_candidates(
+    text: str, base_spans: Sequence[Span], candidates: Sequence[Span], *, allowed_types: frozenset[str]
+) -> list[Span]:
+    """Merge optional NER results without changing structured field classes.
+
+    Coordinates are Unicode code-point offsets into the exact, unnormalized
+    input. The caller owns model loading, deadlines and availability policy.
+    Malformed external output rejects the whole merge rather than silently
+    lowering protection. Scores are bounded heuristics, not probabilities.
+    """
+    if not isinstance(text, str) or not isinstance(base_spans, Sequence) or not isinstance(candidates, Sequence):
+        raise ValueError("NER merge requires text and sequences of spans")
+    if len(candidates) > min(100_000, max(1024, len(text))):
+        raise ValueError("Too many NER candidates")
+
+    # Validate every result before filtering any; a public-name exemption must
+    # not hide a broken response from the configured protection component.
+    for span in base_spans:
+        _validate_ner_span(span, external=False, text=text, allowed_types=allowed_types)
+    for span in candidates:
+        _validate_ner_span(span, external=True, text=text, allowed_types=allowed_types)
+
+    # Prefix maxima support overlapping caller-supplied base spans without a
+    # quadratic scan for each NER candidate. Any core name value stays intact.
+    core_people = sorted((span.start, span.end) for span in base_spans if span.type == "PERSON")
+    person_starts: list[int] = []
+    person_cover_ends: list[int] = []
+    for start, end in core_people:
+        person_starts.append(start)
+        person_cover_ends.append(max(end, person_cover_ends[-1] if person_cover_ends else end))
+    existing = {(span.type, span.start, span.end) for span in base_spans if span.type in allowed_types}
+    accepted = _accept_ner_candidates(text, candidates, existing, person_starts, person_cover_ends)
     # LOCATION is less specific than every structured field, including individual
     # address components; overlaps never relabel CITY/STREET/ADDRESS as LOCATION.
     return _resolve(refine_candidates(text, [*base_spans, *accepted.values()]))
@@ -803,118 +833,119 @@ def validate_extra_rule(rule: dict) -> None:
     _custom_pattern(rule["pattern"])
 
 
-def detect(text: str, *, extra_rules: list[dict] | None = None) -> list[Span]:
-    """Identify PII with case-insensitive rules and return nonoverlapping spans.
-
-    Extension rules use the `regex` engine with a per-rule wall-clock deadline.
-    A timeout raises ValueError: callers must fail closed, never forward plaintext.
-    """
-    if not isinstance(text, str):
-        raise TypeError("text must be a string")
-    if not text:
-        return []
-    candidates: list[Span] = []
-
-    def add(pattern: re.Pattern, kind: str, reason: str = "context", confidence: float = 0.98, check=None) -> None:
-        for match in pattern.finditer(text):
-            start, end = match.span("value")
-            if kind == "PERSON" and reason == "personal-record-context":
-                words = list(re.finditer(_NAMEWORD, text[start:end], _FLAGS))
-                if len(words) == 3 and not any(re.fullmatch(_PATR, word.group(), _FLAGS) for word in words[1:]):
-                    end = start + words[1].end()
-            while end > start and text[end - 1] in " \t,":
+def _add_candidate(
+    candidates: list[Span], text: str, pattern: re.Pattern, kind: str,
+    reason: str = "context", confidence: float = 0.98, check=None,
+) -> None:
+    for match in pattern.finditer(text):
+        start, end = match.span("value")
+        if kind == "PERSON" and reason == "personal-record-context":
+            words = list(re.finditer(_NAMEWORD, text[start:end], _FLAGS))
+            if len(words) == 3 and not any(re.fullmatch(_PATR, word.group(), _FLAGS) for word in words[1:]):
+                end = start + words[1].end()
+        while end > start and text[end - 1] in " \t,":
+            end -= 1
+        if kind in {"ADDRESS", "BIRTH_PLACE", "PASSPORT_ISSUER"}:
+            while end > start and text[end - 1] in ".!?":
                 end -= 1
-            if kind in {"ADDRESS", "BIRTH_PLACE", "PASSPORT_ISSUER"}:
-                while end > start and text[end - 1] in ".!?":
-                    end -= 1
-            value = text[start:end]
-            if value and (check is None or check(value, start, end)):
-                candidates.append(Span(start, end, kind, confidence, reason))
+        value = text[start:end]
+        if value and (check is None or check(value, start, end)):
+            candidates.append(Span(start, end, kind, confidence, reason))
 
-    lower = text.lower()
+
+def _detect_contacts(text: str, lower: str, add) -> None:
     if "@" in text:
         add(_EMAIL, "EMAIL", "format", 0.995)
     for hints, pattern, kind in _CIS_IDENTIFIERS:
         if any(hint in lower for hint in hints):
             add(pattern, kind, "cis-personal-id" if kind == "INN" else "cis-document-context")
-    if any(c.isdigit() for c in text):
+
+
+def _detect_numeric(text: str, lower: str, add) -> None:
+    if not any(c.isdigit() for c in text):
+        return
+    add(
+        _PHONE,
+        "PHONE",
+        "russian-phone-format",
+        0.98,
+        lambda _, start, end: not _is_nonpersonal_number_field(text, start),
+    )
+    if "+" in text:
         add(
-            _PHONE,
+            _INT_PHONE,
             "PHONE",
-            "russian-phone-format",
+            "international-phone-format",
             0.98,
-            lambda _, start, end: not _is_nonpersonal_number_field(text, start),
-        )
-        if "+" in text:
-            add(
-                _INT_PHONE,
-                "PHONE",
-                "international-phone-format",
-                0.98,
-                lambda value, start, end: (
-                    8 <= len(_digits(value)) <= 15 and not _is_nonpersonal_number_field(text, start)
-                ),
-            )
-        if any(label in lower for label in ("тел", "моб", "phone")):
-            add(_LABEL_PHONE, "PHONE", check=lambda value, *_: 7 <= len(_digits(value)) <= 15)
-        if PASSPORT_WORD in lower or "серия" in lower:
-            add(_PASSPORT, "PASSPORT")
-            add(_PASS_SERIES, "PASSPORT")
-        if any(label in lower for label in ("удостоверен", "в/у", "в у", "права")):
-            add(_LICENSE, "DRIVER_LICENSE")
-        if any(label in lower for label in (PASSPORT_WORD, "внж", "жительств", "свидетельство")):
-            add(_FOREIGN_DOC, "FOREIGN_DOCUMENT")
-        if "код" in lower or "к/п" in lower:
-            add(_DEPT, "DEPARTMENT_CODE")
-        add(_INN_LABEL, "INN", check=lambda v, s, e: not _is_public_inn(text, s, v))
-        add(
-            _INN_BARE,
-            "INN",
-            "checksum",
-            0.94,
-            lambda v, s, e: (
-                _valid_inn(v) and not _is_public_inn(text, s, v) and not _is_nonpersonal_number_field(text, s)
+            lambda value, start, end: (
+                8 <= len(_digits(value)) <= 15 and not _is_nonpersonal_number_field(text, start)
             ),
         )
-        add(_CARD_LABEL, "CARD", "explicit-card-context", 0.98)
+    if any(label in lower for label in ("тел", "моб", "phone")):
+        add(_LABEL_PHONE, "PHONE", check=lambda value, *_: 7 <= len(_digits(value)) <= 15)
+    if PASSPORT_WORD in lower or "серия" in lower:
+        add(_PASSPORT, "PASSPORT")
+        add(_PASS_SERIES, "PASSPORT")
+    if any(label in lower for label in ("удостоверен", "в/у", "в у", "права")):
+        add(_LICENSE, "DRIVER_LICENSE")
+    if any(label in lower for label in (PASSPORT_WORD, "внж", "жительств", "свидетельство")):
+        add(_FOREIGN_DOC, "FOREIGN_DOCUMENT")
+    if "код" in lower or "к/п" in lower:
+        add(_DEPT, "DEPARTMENT_CODE")
+    add(_INN_LABEL, "INN", check=lambda v, s, e: not _is_public_inn(text, s, v))
+    add(
+        _INN_BARE,
+        "INN",
+        "checksum",
+        0.94,
+        lambda v, s, e: (
+            _valid_inn(v) and not _is_public_inn(text, s, v) and not _is_nonpersonal_number_field(text, s)
+        ),
+    )
+    add(_CARD_LABEL, "CARD", "explicit-card-context", 0.98)
+    add(
+        _CARD_BARE,
+        "CARD",
+        "luhn-checksum",
+        0.96,
+        lambda v, s, e: _luhn(v) and not _is_nonpersonal_number_field(text, s),
+    )
+    add(_CVV, "CVV")
+    add(_PIN, "PIN")
+    if any(label in lower for label in ("рожд", "родил", "д.р", "д. р", "г.р", "г. р")):
+        add(_BIRTH_DATE, "BIRTH_DATE", check=lambda v, s, e: _valid_date(v) and not _is_public_record(text, s))
+        add(_AFTER_BIRTH, "BIRTH_DATE", check=lambda v, s, e: _valid_date(v) and not _is_public_record(text, s))
+    if "выда" in lower:
         add(
-            _CARD_BARE,
-            "CARD",
-            "luhn-checksum",
-            0.96,
-            lambda v, s, e: _luhn(v) and not _is_nonpersonal_number_field(text, s),
+            _PASS_DATE,
+            "PASSPORT_DATE",
+            check=lambda v, s, e: _valid_date(v) and _has_passport_context(text, s),
         )
-        add(_CVV, "CVV")
-        add(_PIN, "PIN")
-        if any(label in lower for label in ("рожд", "родил", "д.р", "д. р", "г.р", "г. р")):
-            add(_BIRTH_DATE, "BIRTH_DATE", check=lambda v, s, e: _valid_date(v) and not _is_public_record(text, s))
-            add(_AFTER_BIRTH, "BIRTH_DATE", check=lambda v, s, e: _valid_date(v) and not _is_public_record(text, s))
-        if "выда" in lower:
+        if PASSPORT_WORD in lower:
             add(
-                _PASS_DATE,
+                _PASS_DATE_LATE,
                 "PASSPORT_DATE",
                 check=lambda v, s, e: _valid_date(v) and _has_passport_context(text, s),
             )
-            if PASSPORT_WORD in lower:
-                add(
-                    _PASS_DATE_LATE,
-                    "PASSPORT_DATE",
-                    check=lambda v, s, e: _valid_date(v) and _has_passport_context(text, s),
-                )
-        add(_POSTAL, "POSTAL_CODE", check=lambda _, s, e: not _is_public_address(text, s))
-        add(
-            _ADDRESS_POSTAL, "POSTAL_CODE", "address-format", 0.95,
-            lambda _, s, e: not _is_public_address(text, s) and not _is_nonpersonal_number_field(text, s),
-        )
-        add(_HOUSE, "HOUSE", check=lambda _, s, e: not _is_public_address(text, s))
-        add(_APARTMENT, "APARTMENT", check=lambda _, s, e: not _is_public_address(text, s))
+    add(_POSTAL, "POSTAL_CODE", check=lambda _, s, e: not _is_public_address(text, s))
+    add(
+        _ADDRESS_POSTAL, "POSTAL_CODE", "address-format", 0.95,
+        lambda _, s, e: not _is_public_address(text, s) and not _is_nonpersonal_number_field(text, s),
+    )
+    add(_HOUSE, "HOUSE", check=lambda _, s, e: not _is_public_address(text, s))
+    add(_APARTMENT, "APARTMENT", check=lambda _, s, e: not _is_public_address(text, s))
 
+
+def _detect_issuer(text: str, lower: str, add) -> None:
     if any(label in lower for label in ("выдан", "орган", "мвд", "увд", "фмс")):
         add(_ISSUER, "PASSPORT_ISSUER")
         if PASSPORT_WORD in lower:
             add(
                 _ISSUER_DIRECT, "PASSPORT_ISSUER", confidence=0.95, check=lambda v, s, e: _has_passport_context(text, s)
             )
+
+
+def _detect_birth_place(text: str, lower: str, add) -> None:
     if "рождения" in lower or "родил" in lower:
         add(
             _BIRTH_PLACE,
@@ -925,6 +956,9 @@ def detect(text: str, *, extra_rules: list[dict] | None = None) -> list[Span]:
         )
     if "граждан" in lower:
         add(_CITIZENSHIP, "CITIZENSHIP")
+
+
+def _detect_names(text: str, lower: str, add, candidates: list[Span]) -> None:
     add(_CARDHOLDER, "CARDHOLDER")
     add(_STRONG_NAME_FIELD, "PERSON", "explicit-unicode-name-field")
     add(
@@ -966,6 +1000,9 @@ def detect(text: str, *, extra_rules: list[dict] | None = None) -> list[Span]:
         if (_given_name(av) and _surname(bv)) or (_surname(av) and _given_name(bv)):
             if not _is_public_name(text, a.start(), b.end()):
                 candidates.append(Span(a.start(), b.end(), "PERSON", 0.92, "given-name-and-surname"))
+
+
+def _detect_addresses(text: str, lower: str, add, candidates: list[Span]) -> None:
     if any(label in lower for label in ("адрес", "прописан", "зарегистрирован", "прожива", "живёт", "живет")):
         for match in _ADDRESS.finditer(text):
             start, end = match.span("value")
@@ -985,21 +1022,49 @@ def detect(text: str, *, extra_rules: list[dict] | None = None) -> list[Span]:
     add(_CITY, "CITY", check=lambda _, s, e: not _is_public_address(text, s))
     add(_STREET, "STREET", check=lambda _, s, e: not _is_public_address(text, s))
 
-    if extra_rules:
-        if len(extra_rules) > 32:
-            raise ValueError("At most 32 custom rules are supported")
-        for rule in extra_rules:
-            validate_extra_rule(rule)
-            try:
-                for match in _custom_pattern(rule["pattern"]).finditer(text, timeout=0.025):
-                    size = match.end() - match.start()
-                    if size == 0:
-                        raise ValueError("Custom patterns must not match empty text")
-                    if size > 4096:
-                        raise ValueError("Custom detection rule matched more than 4096 characters")
-                    candidates.append(Span(match.start(), match.end(), rule["type"], 1.0, "custom-rule"))
-            except TimeoutError as exc:
-                raise ValueError("Custom detection rule exceeded its time budget") from exc
+
+def _detect_custom(text: str, extra_rules: list[dict] | None, candidates: list[Span]) -> None:
+    if not extra_rules:
+        return
+    if len(extra_rules) > 32:
+        raise ValueError("At most 32 custom rules are supported")
+    for rule in extra_rules:
+        validate_extra_rule(rule)
+        try:
+            for match in _custom_pattern(rule["pattern"]).finditer(text, timeout=0.025):
+                size = match.end() - match.start()
+                if size == 0:
+                    raise ValueError("Custom patterns must not match empty text")
+                if size > 4096:
+                    raise ValueError("Custom detection rule matched more than 4096 characters")
+                candidates.append(Span(match.start(), match.end(), rule["type"], 1.0, "custom-rule"))
+        except TimeoutError as exc:
+            raise ValueError("Custom detection rule exceeded its time budget") from exc
+
+
+def detect(text: str, *, extra_rules: list[dict] | None = None) -> list[Span]:
+    """Identify PII with case-insensitive rules and return nonoverlapping spans.
+
+    Extension rules use the `regex` engine with a per-rule wall-clock deadline.
+    A timeout raises ValueError: callers must fail closed, never forward plaintext.
+    """
+    if not isinstance(text, str):
+        raise TypeError("text must be a string")
+    if not text:
+        return []
+    candidates: list[Span] = []
+
+    def add(pattern: re.Pattern, kind: str, reason: str = "context", confidence: float = 0.98, check=None) -> None:
+        _add_candidate(candidates, text, pattern, kind, reason, confidence, check)
+
+    lower = text.lower()
+    _detect_contacts(text, lower, add)
+    _detect_numeric(text, lower, add)
+    _detect_issuer(text, lower, add)
+    _detect_birth_place(text, lower, add)
+    _detect_names(text, lower, add, candidates)
+    _detect_addresses(text, lower, add, candidates)
+    _detect_custom(text, extra_rules, candidates)
     candidates.extend(Span(*candidate) for candidate in structured_candidates(text))
     candidates.extend(Span(*candidate) for candidate in location_candidates(text))
     candidates.extend(Span(*candidate) for candidate in person_candidates(
