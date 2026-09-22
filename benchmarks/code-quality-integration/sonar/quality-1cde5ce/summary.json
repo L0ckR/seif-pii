@@ -1,0 +1,73 @@
+{
+  "project": "seif-quality-1cde5ce-all-source",
+  "url": "http://127.0.0.1:19000/dashboard?id=seif-quality-1cde5ce-all-source",
+  "issues_total": 7,
+  "severities": {
+    "MAJOR": 2,
+    "MINOR": 5
+  },
+  "types": {
+    "VULNERABILITY": 2,
+    "CODE_SMELL": 5
+  },
+  "top_rules": [
+    [
+      "python:S7503",
+      4
+    ],
+    [
+      "python:S2245",
+      2
+    ],
+    [
+      "python:S7513",
+      1
+    ]
+  ],
+  "top_files": [
+    [
+      "scripts/ner_service.py",
+      3
+    ],
+    [
+      "scripts/compare_presidio.py",
+      2
+    ],
+    [
+      "seif/app.py",
+      1
+    ],
+    [
+      "seif/ner.py",
+      1
+    ]
+  ],
+  "scope_counts": {
+    "scripts": {
+      "MAJOR": 2,
+      "MINOR": 3
+    },
+    "seif": {
+      "MINOR": 2
+    }
+  },
+  "hotspots": 0,
+  "measures": {
+    "coverage": "0.0",
+    "complexity": "2671",
+    "reliability_rating": "1.0",
+    "code_smells": "5",
+    "duplicated_lines_density": "0.0",
+    "security_rating": "3.0",
+    "security_hotspots": "0",
+    "sqale_index": "25",
+    "sqale_rating": "1.0",
+    "bugs": "0",
+    "cognitive_complexity": "1993",
+    "ncloc": "13010",
+    "files": "93",
+    "vulnerabilities": "2",
+    "lines": "15964"
+  },
+  "quality_gate": "OK"
+}

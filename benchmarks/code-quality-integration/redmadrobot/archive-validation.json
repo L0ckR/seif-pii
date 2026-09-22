@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "source_snapshots_match_git_revisions": true,
+  "standalone_aggregate_reproduced_byte_for_byte": true,
+  "publication_files": [
+    "README.md",
+    "runner.py",
+    "aggregate.py",
+    "reference.json",
+    "report.json",
+    "summary.md",
+    "validation.json",
+    "baseline.json.gz",
+    "current.json.gz",
+    "archive-validation.json"
+  ],
+  "publication_sha256": {
+    "README.md": "74dc748757dd845865ebb1ca96bd4d48683dead90cb1ca981a3c553dfd279f9e",
+    "runner.py": "4b2ce0e7da0d41689fb9d0f37c0a1cd60dd1ca1a4a08e01ab7f93f60018a1f81",
+    "aggregate.py": "0047be484df86ca262a37f93313e87a4d0d3a80f25acdb5672c93572d46363ec",
+    "reference.json": "4f0dc749c3ae86b632fb5a4933c225bd24bf5789133e31ac794b4612f149321b",
+    "report.json": "d6edcb8272eccc064b560eb4b60d916685df828038994984f198ac05346cb9c3",
+    "summary.md": "d6c6a053a126154f7341660a5528098812d15cad35222468b99264b4322a965a",
+    "validation.json": "e6539b1cf669895005e7c1f00d8178274b4607d2428394186ecf090c93833910",
+    "baseline.json.gz": "db588492b9805b478a3ce63f135548a3e78161b225ee8894ff16fab9b036218a",
+    "current.json.gz": "299fe19bf021d2922a3754ed995eff1ebf58a0ad191a3a85a4f140e3dfb642d1"
+  },
+  "compressed_artifacts": {
+    "baseline.json.gz": {
+      "bytes": 913125,
+      "sha256": "db588492b9805b478a3ce63f135548a3e78161b225ee8894ff16fab9b036218a"
+    },
+    "current.json.gz": {
+      "bytes": 913084,
+      "sha256": "299fe19bf021d2922a3754ed995eff1ebf58a0ad191a3a85a4f140e3dfb642d1"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "derivation": "Scanner entry only; unrelated earlier source archive entries omitted.",
+  "scanner": {
+    "path": "/tmp/seif-sonar/runtime/sonar-scanner-8.1.0.6389/bin/sonar-scanner",
+    "sha256": "ab76ab3c360025e9108be5b55be066f304a164f8b2850d2f2f333915db51bc1b",
+    "version": "8.1.0.6389"
+  },
+  "source_manifest_sha256": "2b8868cd854ea3655564b9509871bc1c946c9a95db3226a472d1e8148708066d"
+}

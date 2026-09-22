@@ -1,0 +1,2031 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "baseline_revision": "12191083eea106edf85c7bbc6e60a140faf1b4c2",
+  "current_revision": "1cde5ce3c6a70fabfe8f09b56f01de624d69633d",
+  "offered_rows": 2841,
+  "aligned_rows": 2839,
+  "profile_row_pairs": 8517,
+  "excluded_rows": [
+    {
+      "id": "row_0000",
+      "source_row_zero_based": 0,
+      "reason": "token_not_exactly_alignable"
+    },
+    {
+      "id": "row_1628",
+      "source_row_zero_based": 1628,
+      "reason": "token_not_exactly_alignable"
+    }
+  ],
+  "checks": {
+    "raw_predictions": true,
+    "masked_text_sha256": true,
+    "actual_masked_alnum_offsets": true,
+    "paired_mapped_spans": true,
+    "gold_alnum_offsets": true,
+    "scopes": true,
+    "input_sha256": true,
+    "mapping": true,
+    "excluded_rows": true
+  },
+  "baseline_reproduces_accepted_121": {
+    "source_sha256": true,
+    "input_sha256": true,
+    "mapping": true,
+    "excluded_rows": true,
+    "scopes": true,
+    "actual_masked_alnum_offsets": true,
+    "paired_mapped_spans": true,
+    "gold_alnum_offsets": true
+  },
+  "actual_mask_restore_all_rows_both_versions": true,
+  "modes": {
+    "rules": {
+      "cases": 2839,
+      "changed_case_ids": {
+        "raw_predictions": [],
+        "masked_text_sha256": [],
+        "actual_masked_alnum_offsets": [],
+        "paired_mapped_spans": []
+      },
+      "changed_case_counts": {
+        "raw_predictions": 0,
+        "masked_text_sha256": 0,
+        "actual_masked_alnum_offsets": 0,
+        "paired_mapped_spans": 0
+      },
+      "before_raw_prediction_count": 1557,
+      "after_raw_prediction_count": 1557,
+      "case_ids_sha256": "b5157771eb4264febe0efb3873e35ca4aab371758be8baabef2363bff8cbfc72"
+    },
+    "person_only": {
+      "cases": 2839,
+      "changed_case_ids": {
+        "raw_predictions": [],
+        "masked_text_sha256": [],
+        "actual_masked_alnum_offsets": [],
+        "paired_mapped_spans": []
+      },
+      "changed_case_counts": {
+        "raw_predictions": 0,
+        "masked_text_sha256": 0,
+        "actual_masked_alnum_offsets": 0,
+        "paired_mapped_spans": 0
+      },
+      "before_raw_prediction_count": 2022,
+      "after_raw_prediction_count": 2022,
+      "case_ids_sha256": "b5157771eb4264febe0efb3873e35ca4aab371758be8baabef2363bff8cbfc72"
+    },
+    "person_location": {
+      "cases": 2839,
+      "changed_case_ids": {
+        "raw_predictions": [],
+        "masked_text_sha256": [],
+        "actual_masked_alnum_offsets": [],
+        "paired_mapped_spans": []
+      },
+      "changed_case_counts": {
+        "raw_predictions": 0,
+        "masked_text_sha256": 0,
+        "actual_masked_alnum_offsets": 0,
+        "paired_mapped_spans": 0
+      },
+      "before_raw_prediction_count": 2582,
+      "after_raw_prediction_count": 2582,
+      "case_ids_sha256": "b5157771eb4264febe0efb3873e35ca4aab371758be8baabef2363bff8cbfc72"
+    }
+  },
+  "input_sha256": {
+    "redmadrobot-test.csv": "6bf544a380a3ee5bec94b946124bea3afaecce49e734679ad0f0c0e7c12977bb",
+    "redmadrobot-README.md": "a346c4c012bff1cce330d15ef6271db32a8cf83696a9bd7237f180e45c23ac50",
+    "redmadrobot-protocol.json": "30c44a48cd151dc72b61d804a979ddd0e3203fd78ac79dbac2d5d8e7f50e86b1",
+    "redmadrobot-predictions-first.jsonl": "172d64465dc24242d48dd3f9881cb021a621162da2c9852fe4e163f6f8d899ac"
+  },
+  "source_sha256": {
+    "baseline": {
+      "seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+      "seif/app.py": "e0d8051b406eadfb05484d3a5086b8d616b11a09b8c30984597bac94b607e004",
+      "seif/cardholder_fields.py": "586f3f4f30f1bce3a460562dbee2ba053cff44bea527264e617c7e5af087a7cb",
+      "seif/config.py": "de35e12ca073a432f87798950685d49340641bad4303f8094e86667e929b0f07",
+      "seif/context_filters.py": "0e3a8750c62ba3cb136fc13a67d0642aa924aa2106a9bd7346e6899aef24f4a1",
+      "seif/detector.py": "e47a19060307387f7071d0c00be9439c62e424621ead81902153b8e42501bb5c",
+      "seif/document_fields.py": "b56592ad71b66a31ce8abeba82047a3818183d6f9ead81f19e9dbc58ea417c55",
+      "seif/location_fields.py": "1cde438a393d321ad17c954fe88d274825529a6d6d638ab15f051b8303d048cb",
+      "seif/ner.py": "c6454ec976086be8a4d666694499c785d6a21d8a322dd2259e52893cc48095a5",
+      "seif/person_fields.py": "aa30140a816b0df94040d301e557e01f6226f3c3f075bdc889bc165f6a8d74e4",
+      "seif/request_capture.py": "a3372c5f022b328f454272a47deef47e9960ea3624b30e831db8415d8d4533ce",
+      "seif/structured_fields.py": "acfff4efc6d0765bbd46462bdd5467be1dd965b7b2d662ef4a4773d70e5b5d24",
+      "seif/transform.py": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+      "seif/vault.py": "3f8ef93f831cd100cbe9fdd6f020cc49269acfba90f83a445afdc9c3327e356b",
+      "scripts/benchmark.py": "4473cbed22a1cf14fa26151d7301206ed19fe2e494dd96d53ef02c2902341488",
+      "scripts/benchmark_corpus.py": "11e3e41f6f673be43fa6626fed9f409e3c3b1a7a2ba7475b574b59c274a01151",
+      "scripts/capture_requests.py": "b6491909f30906842c38767d015dc11d2c015a3b807fa6f3a246753780cd2efb",
+      "scripts/client_example.py": "4bda224a64ee21d1af48d1beaf3017103f0fafbee50f0677b4c054241392a3bf",
+      "scripts/code_quality.py": "701616b89baa0631a427502e0f164c747661014112a189c22e58daed40a0087b",
+      "scripts/compare_presidio.py": "5ec362a7637c1aa2fd26d130180478eafab0d860bc51a19323daa3eff65648c0",
+      "scripts/evaluate.py": "9c7735b3bcc202dab4ce3fbb7cea91f42632188e943eb673674e3ae08fc9bc3c",
+      "scripts/evaluate_annotations.py": "4e58db67fcea5b8237954551aa0f8cf64a7ed4e03071a5b1e41f601df1d66a6f",
+      "scripts/evaluate_external.py": "4dc5d5c123a4f20f542123ad04596be3a582cdadb62aab5ecb3266137da4c46e",
+      "scripts/evaluate_golden.py": "b6d0a4499323db490470e612b14436aa5d7650ea0e0ebd96e4af8049a620acda",
+      "scripts/evaluate_hybrid.py": "74a96f4a2d1a4a235aa8087e7d23f268b04b3c34dbdf3caa0e0bf134b2312d8c",
+      "scripts/evaluate_location_ablation.py": "4b854f1b42f91af35bd18bf29da50ef52100cb255e2efa93912f710cba4c0956",
+      "scripts/evaluate_redmadrobot.py": "9e63521e827dcb02f9f9cd0a6ee38e09b5b5893cd4dfc7d65802875c112669d0",
+      "scripts/evaluate_scanpatch.py": "b4774eb4df3269d620586f562d8b78b74317351c5ddb0beb51ce42bd61765a4c",
+      "scripts/failover_check.py": "6628d70e33afa1843393b453d67fdc04f67b38ea697525da15cf8b5ffd41331b",
+      "scripts/large_input.py": "28c60696e12a4697e792c7107e9091b4179736fc4b732d04d120015d9879777e",
+      "scripts/local_redis.py": "8c0f6038845b51d23ddc15de43020708f0a8e1822542db4c11a2fe72119d7681",
+      "scripts/ner_service.py": "a9b703624a370260589a3505b40ed2caf24f895421264598b3f82c603dcb9811",
+      "scripts/package.py": "82dc148c640d54f2d27522f65c522ef5f28b64e2f900f3f341968c6a5579b353",
+      "scripts/runtime_probe.py": "9ac64e8f0f5b3f42f93230038b590e78ed07a9877672c47c1df6dafea648352c",
+      "scripts/serve.py": "7a8e564142d93a4619d9f01eea09e40b3753699c93310f1a92a608ec7e492300"
+    },
+    "current": {
+      "seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+      "seif/app.py": "f1f92194bba95fbebb500e59bd7e36cf2547ea0e410faa2ad536b786b44ba3d7",
+      "seif/cardholder_fields.py": "3d80d59636e4b2e1a668325fbb945027b48a37e60aad5297c39b727a51806462",
+      "seif/config.py": "ca9c4e4bc80fcb6847f53f08593b25e5a3b41d6ae5a44ce7c416075ffd7b4b45",
+      "seif/context_filters.py": "c3fbd2c356784e87c481d3ac7d58a8cbf5863d04db96e47d4ef062e348bfd7fb",
+      "seif/detector.py": "e0b09cda385168f401ed1d1aa81ae4b1457d701be977f8f9aee789e444534025",
+      "seif/document_fields.py": "2200ed9f9751ee4894f164a4b43654de6f204c9661da83cdbf7a2a455d46ba51",
+      "seif/location_fields.py": "2d806e7a35bb7669001e796deba5cbac020dddb2887284390d27becebc43009e",
+      "seif/ner.py": "da765f44543aef65e0183bdcb7b58d0416432e90acbe833b39ff517ba6869427",
+      "seif/person_fields.py": "ca843e9b6f8ef9d4739703e83b1438a96d114dc95782626fa2e89366bf29f08d",
+      "seif/request_capture.py": "ce9d53ed7827992cd5c0c4b10914e3f9becc978cc192263116112c642e506855",
+      "seif/structured_fields.py": "26462106b1a29140a3bbf2b2370feab631145932ee44fbb78ca007b6d1d1218c",
+      "seif/transform.py": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+      "seif/vault.py": "b6b4f59bc911bb0a0c745b6801bcd9a034200e016f321e38c2984206c2946554",
+      "scripts/benchmark.py": "494a3da78f56396517ff3094896dd11d7b61977e440e552e3e986add26db70e5",
+      "scripts/benchmark_corpus.py": "8a47252e2bd2e525373c29e0314694bac4c80627ec656ded68d2fef6f46a4606",
+      "scripts/capture_requests.py": "0c5ca76522f41df003596830968ef4267cc47f82d368c35a09ccc0bbbb3419e6",
+      "scripts/client_example.py": "4bda224a64ee21d1af48d1beaf3017103f0fafbee50f0677b4c054241392a3bf",
+      "scripts/code_quality.py": "13372c6b78dd751ce5917a49b72ce2a05077b5d4d40747d5c600a5c96a2a54c2",
+      "scripts/compare_presidio.py": "3b1abd46ebf672070775a5a3cdc1a88f10b33779146e1cda29ff1819ef29db3c",
+      "scripts/evaluate.py": "c50bc7e4f571955be7a76c79c6c15c115d6c7ab5e95829bcbc07e2efc3abe4ff",
+      "scripts/evaluate_annotations.py": "b429e3605b90a9090a8eae0185ee9286708836494235617901fbd6ae4e0d5463",
+      "scripts/evaluate_external.py": "7281551dc7c62ce22b10676f7029de5580b9558f3c1d427a79e2a89497a22e85",
+      "scripts/evaluate_golden.py": "02e1160fbfbb2933e4e90d65573e559962e6b474ab69ddaa1c2c0f66e68226ff",
+      "scripts/evaluate_hybrid.py": "74a96f4a2d1a4a235aa8087e7d23f268b04b3c34dbdf3caa0e0bf134b2312d8c",
+      "scripts/evaluate_location_ablation.py": "4b854f1b42f91af35bd18bf29da50ef52100cb255e2efa93912f710cba4c0956",
+      "scripts/evaluate_redmadrobot.py": "2e94c14034db198cb8718ed8161abe76354c27980f63346e3d34fad439aaa5c4",
+      "scripts/evaluate_scanpatch.py": "49eb2e72da5dd4f36b0efa7fec6f1c1cafca85392b705b8cf3e6f8989511aca8",
+      "scripts/failover_check.py": "9790535a19266f1e11f66ae696e9714cc9d05a1c8e0bf6326344bceab511dde0",
+      "scripts/large_input.py": "5646f5bde88ee5b9f865876a9290fc5a922403248a82320a97a189ae2b10e1d1",
+      "scripts/local_redis.py": "440cbfaecb69ac2c48dbb3101c86b25481904c9e497d55e7770a021c96d2c6d2",
+      "scripts/ner_service.py": "87630a1975e8d805bd5af506ac4ef022fb448486a3e8823c5e2a9b3d641c86c1",
+      "scripts/package.py": "8c1f4bd25be2896aa7c18407bccc4522e9d6fbfdfd9d03498b7e594f8a31c8ea",
+      "scripts/runtime_probe.py": "9ac64e8f0f5b3f42f93230038b590e78ed07a9877672c47c1df6dafea648352c",
+      "scripts/serve.py": "7a8e564142d93a4619d9f01eea09e40b3753699c93310f1a92a608ec7e492300"
+    }
+  },
+  "runner_sha256": "4b2ce0e7da0d41689fb9d0f37c0a1cd60dd1ca1a4a08e01ab7f93f60018a1f81",
+  "runner_identical_between_versions": true,
+  "comparison_scope": [
+    "Ordered raw detector/merged type,start,end triples, before mapping or adjacent-span merging.",
+    "SHA-256 of full actual masked string, all output types, plus exact per-position alphanumeric mask offsets.",
+    "Actual mask→restore_exact round trip for every row/profile/version.",
+    "All frozen typed-character and exact-span metric scopes, labels, mappings and exclusions."
+  ],
+  "canonical_output_sha256": {
+    "baseline": {
+      "raw_predictions": "504afe11c0cc48114e13de7fb44186bd4ff408f16a19fb0be474627504619489",
+      "masked_text_sha256": "0cadbba641b6ec14ad1df92aa5b952186e9c4aa4089f7c116c588395b65a029f",
+      "actual_masked_alnum_offsets": "1c15382cbca3c91b9a7b110299bdf4a3f19f7f60547db381a6fa068d492b6633",
+      "paired_mapped_spans": "30a95a45eaa878134a26a400733e0cfd1aa1493caf5b9c363b56a4ea435395f9",
+      "gold_alnum_offsets": "81bfcbeeffbfad5058775f4ad314ecdcff8ac7e7cd51096c3e166b2695209c18",
+      "scopes": "3fb6453457bdbb3206ccbd483564dca1bb9b95c7478e64ce2cad42d9430a2af2",
+      "input_sha256": "853e6ce33e6656eb8040d23c5068d960ed08dd5393e6e0bf8446edf82952255c",
+      "mapping": "04351b8f4d1e7ee2ba2026d225b3822e7d10c92808122f77525e8231c3f7d4c3",
+      "excluded_rows": "71997ff402ed1571e93063f9a38de14b20742ce5deda250680cf218a6b697d1a"
+    },
+    "current": {
+      "raw_predictions": "504afe11c0cc48114e13de7fb44186bd4ff408f16a19fb0be474627504619489",
+      "masked_text_sha256": "0cadbba641b6ec14ad1df92aa5b952186e9c4aa4089f7c116c588395b65a029f",
+      "actual_masked_alnum_offsets": "1c15382cbca3c91b9a7b110299bdf4a3f19f7f60547db381a6fa068d492b6633",
+      "paired_mapped_spans": "30a95a45eaa878134a26a400733e0cfd1aa1493caf5b9c363b56a4ea435395f9",
+      "gold_alnum_offsets": "81bfcbeeffbfad5058775f4ad314ecdcff8ac7e7cd51096c3e166b2695209c18",
+      "scopes": "3fb6453457bdbb3206ccbd483564dca1bb9b95c7478e64ce2cad42d9430a2af2",
+      "input_sha256": "853e6ce33e6656eb8040d23c5068d960ed08dd5393e6e0bf8446edf82952255c",
+      "mapping": "04351b8f4d1e7ee2ba2026d225b3822e7d10c92808122f77525e8231c3f7d4c3",
+      "excluded_rows": "71997ff402ed1571e93063f9a38de14b20742ce5deda250680cf218a6b697d1a"
+    }
+  },
+  "metrics": {
+    "common5": {
+      "rules": {
+        "typed_character": {
+          "before": {
+            "precision": 0.946152,
+            "recall": 0.332026,
+            "f1": 0.491554,
+            "f2": 0.381558,
+            "true_positive": 8803,
+            "false_positive": 501,
+            "false_negative": 17710,
+            "cases": 1237,
+            "exact_cases": 516,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 15,
+            "by_type": {
+              "CARD": {
+                "precision": 0.982243,
+                "recall": 0.347783,
+                "f1": 0.513685,
+                "f2": 0.399377,
+                "true_positive": 1051,
+                "false_positive": 19,
+                "false_negative": 1971
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.432637,
+                "f1": 0.603973,
+                "f2": 0.488013,
+                "true_positive": 1885,
+                "false_positive": 0,
+                "false_negative": 2472
+              },
+              "LOCATION": {
+                "precision": 0.805608,
+                "recall": 0.160969,
+                "f1": 0.268324,
+                "f2": 0.191638,
+                "true_positive": 1695,
+                "false_positive": 409,
+                "false_negative": 8835
+              },
+              "PERSON": {
+                "precision": 0.967191,
+                "recall": 0.336724,
+                "f1": 0.499536,
+                "f2": 0.387204,
+                "true_positive": 2152,
+                "false_positive": 73,
+                "false_negative": 4239
+              },
+              "PHONE": {
+                "precision": 1.0,
+                "recall": 0.912788,
+                "f1": 0.954406,
+                "f2": 0.928992,
+                "true_positive": 2020,
+                "false_positive": 0,
+                "false_negative": 193
+              }
+            }
+          },
+          "after": {
+            "precision": 0.946152,
+            "recall": 0.332026,
+            "f1": 0.491554,
+            "f2": 0.381558,
+            "true_positive": 8803,
+            "false_positive": 501,
+            "false_negative": 17710,
+            "cases": 1237,
+            "exact_cases": 516,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 15,
+            "by_type": {
+              "CARD": {
+                "precision": 0.982243,
+                "recall": 0.347783,
+                "f1": 0.513685,
+                "f2": 0.399377,
+                "true_positive": 1051,
+                "false_positive": 19,
+                "false_negative": 1971
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.432637,
+                "f1": 0.603973,
+                "f2": 0.488013,
+                "true_positive": 1885,
+                "false_positive": 0,
+                "false_negative": 2472
+              },
+              "LOCATION": {
+                "precision": 0.805608,
+                "recall": 0.160969,
+                "f1": 0.268324,
+                "f2": 0.191638,
+                "true_positive": 1695,
+                "false_positive": 409,
+                "false_negative": 8835
+              },
+              "PERSON": {
+                "precision": 0.967191,
+                "recall": 0.336724,
+                "f1": 0.499536,
+                "f2": 0.387204,
+                "true_positive": 2152,
+                "false_positive": 73,
+                "false_negative": 4239
+              },
+              "PHONE": {
+                "precision": 1.0,
+                "recall": 0.912788,
+                "f1": 0.954406,
+                "f2": 0.928992,
+                "true_positive": 2020,
+                "false_positive": 0,
+                "false_negative": 193
+              }
+            }
+          }
+        },
+        "merged_exact_span": {
+          "before": {
+            "precision": 0.735741,
+            "recall": 0.217294,
+            "f1": 0.335501,
+            "f2": 0.252941,
+            "true_positive": 387,
+            "false_positive": 139,
+            "false_negative": 1394,
+            "cases": 1237,
+            "exact_cases": 516,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 15,
+            "by_type": {
+              "CARD": {
+                "precision": 0.964286,
+                "recall": 0.348387,
+                "f1": 0.511848,
+                "f2": 0.399408,
+                "true_positive": 54,
+                "false_positive": 2,
+                "false_negative": 101
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.466667,
+                "f1": 0.636364,
+                "f2": 0.522388,
+                "true_positive": 91,
+                "false_positive": 0,
+                "false_negative": 104
+              },
+              "LOCATION": {
+                "precision": 0.185484,
+                "recall": 0.027219,
+                "f1": 0.047472,
+                "f2": 0.03282,
+                "true_positive": 23,
+                "false_positive": 101,
+                "false_negative": 822
+              },
+              "PERSON": {
+                "precision": 0.834646,
+                "recall": 0.237136,
+                "f1": 0.369338,
+                "f2": 0.276762,
+                "true_positive": 106,
+                "false_positive": 21,
+                "false_negative": 341
+              },
+              "PHONE": {
+                "precision": 0.882812,
+                "recall": 0.81295,
+                "f1": 0.846442,
+                "f2": 0.826023,
+                "true_positive": 113,
+                "false_positive": 15,
+                "false_negative": 26
+              }
+            }
+          },
+          "after": {
+            "precision": 0.735741,
+            "recall": 0.217294,
+            "f1": 0.335501,
+            "f2": 0.252941,
+            "true_positive": 387,
+            "false_positive": 139,
+            "false_negative": 1394,
+            "cases": 1237,
+            "exact_cases": 516,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 15,
+            "by_type": {
+              "CARD": {
+                "precision": 0.964286,
+                "recall": 0.348387,
+                "f1": 0.511848,
+                "f2": 0.399408,
+                "true_positive": 54,
+                "false_positive": 2,
+                "false_negative": 101
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.466667,
+                "f1": 0.636364,
+                "f2": 0.522388,
+                "true_positive": 91,
+                "false_positive": 0,
+                "false_negative": 104
+              },
+              "LOCATION": {
+                "precision": 0.185484,
+                "recall": 0.027219,
+                "f1": 0.047472,
+                "f2": 0.03282,
+                "true_positive": 23,
+                "false_positive": 101,
+                "false_negative": 822
+              },
+              "PERSON": {
+                "precision": 0.834646,
+                "recall": 0.237136,
+                "f1": 0.369338,
+                "f2": 0.276762,
+                "true_positive": 106,
+                "false_positive": 21,
+                "false_negative": 341
+              },
+              "PHONE": {
+                "precision": 0.882812,
+                "recall": 0.81295,
+                "f1": 0.846442,
+                "f2": 0.826023,
+                "true_positive": 113,
+                "false_positive": 15,
+                "false_negative": 26
+              }
+            }
+          }
+        }
+      },
+      "person_only": {
+        "typed_character": {
+          "before": {
+            "precision": 0.84787,
+            "recall": 0.40003,
+            "f1": 0.543591,
+            "f2": 0.44728,
+            "true_positive": 10606,
+            "false_positive": 1903,
+            "false_negative": 15907,
+            "cases": 1237,
+            "exact_cases": 524,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 63,
+            "by_type": {
+              "CARD": {
+                "precision": 0.982243,
+                "recall": 0.347783,
+                "f1": 0.513685,
+                "f2": 0.399377,
+                "true_positive": 1051,
+                "false_positive": 19,
+                "false_negative": 1971
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.432637,
+                "f1": 0.603973,
+                "f2": 0.488013,
+                "true_positive": 1885,
+                "false_positive": 0,
+                "false_negative": 2472
+              },
+              "LOCATION": {
+                "precision": 0.805608,
+                "recall": 0.160969,
+                "f1": 0.268324,
+                "f2": 0.191638,
+                "true_positive": 1695,
+                "false_positive": 409,
+                "false_negative": 8835
+              },
+              "PERSON": {
+                "precision": 0.728361,
+                "recall": 0.618839,
+                "f1": 0.669148,
+                "f2": 0.638027,
+                "true_positive": 3955,
+                "false_positive": 1475,
+                "false_negative": 2436
+              },
+              "PHONE": {
+                "precision": 1.0,
+                "recall": 0.912788,
+                "f1": 0.954406,
+                "f2": 0.928992,
+                "true_positive": 2020,
+                "false_positive": 0,
+                "false_negative": 193
+              }
+            }
+          },
+          "after": {
+            "precision": 0.84787,
+            "recall": 0.40003,
+            "f1": 0.543591,
+            "f2": 0.44728,
+            "true_positive": 10606,
+            "false_positive": 1903,
+            "false_negative": 15907,
+            "cases": 1237,
+            "exact_cases": 524,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 63,
+            "by_type": {
+              "CARD": {
+                "precision": 0.982243,
+                "recall": 0.347783,
+                "f1": 0.513685,
+                "f2": 0.399377,
+                "true_positive": 1051,
+                "false_positive": 19,
+                "false_negative": 1971
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.432637,
+                "f1": 0.603973,
+                "f2": 0.488013,
+                "true_positive": 1885,
+                "false_positive": 0,
+                "false_negative": 2472
+              },
+              "LOCATION": {
+                "precision": 0.805608,
+                "recall": 0.160969,
+                "f1": 0.268324,
+                "f2": 0.191638,
+                "true_positive": 1695,
+                "false_positive": 409,
+                "false_negative": 8835
+              },
+              "PERSON": {
+                "precision": 0.728361,
+                "recall": 0.618839,
+                "f1": 0.669148,
+                "f2": 0.638027,
+                "true_positive": 3955,
+                "false_positive": 1475,
+                "false_negative": 2436
+              },
+              "PHONE": {
+                "precision": 1.0,
+                "recall": 0.912788,
+                "f1": 0.954406,
+                "f2": 0.928992,
+                "true_positive": 2020,
+                "false_positive": 0,
+                "false_negative": 193
+              }
+            }
+          }
+        },
+        "merged_exact_span": {
+          "before": {
+            "precision": 0.625917,
+            "recall": 0.287479,
+            "f1": 0.393998,
+            "f2": 0.322337,
+            "true_positive": 512,
+            "false_positive": 306,
+            "false_negative": 1269,
+            "cases": 1237,
+            "exact_cases": 524,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 63,
+            "by_type": {
+              "CARD": {
+                "precision": 0.964286,
+                "recall": 0.348387,
+                "f1": 0.511848,
+                "f2": 0.399408,
+                "true_positive": 54,
+                "false_positive": 2,
+                "false_negative": 101
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.466667,
+                "f1": 0.636364,
+                "f2": 0.522388,
+                "true_positive": 91,
+                "false_positive": 0,
+                "false_negative": 104
+              },
+              "LOCATION": {
+                "precision": 0.185484,
+                "recall": 0.027219,
+                "f1": 0.047472,
+                "f2": 0.03282,
+                "true_positive": 23,
+                "false_positive": 101,
+                "false_negative": 822
+              },
+              "PERSON": {
+                "precision": 0.551313,
+                "recall": 0.516779,
+                "f1": 0.533487,
+                "f2": 0.523335,
+                "true_positive": 231,
+                "false_positive": 188,
+                "false_negative": 216
+              },
+              "PHONE": {
+                "precision": 0.882812,
+                "recall": 0.81295,
+                "f1": 0.846442,
+                "f2": 0.826023,
+                "true_positive": 113,
+                "false_positive": 15,
+                "false_negative": 26
+              }
+            }
+          },
+          "after": {
+            "precision": 0.625917,
+            "recall": 0.287479,
+            "f1": 0.393998,
+            "f2": 0.322337,
+            "true_positive": 512,
+            "false_positive": 306,
+            "false_negative": 1269,
+            "cases": 1237,
+            "exact_cases": 524,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 63,
+            "by_type": {
+              "CARD": {
+                "precision": 0.964286,
+                "recall": 0.348387,
+                "f1": 0.511848,
+                "f2": 0.399408,
+                "true_positive": 54,
+                "false_positive": 2,
+                "false_negative": 101
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.466667,
+                "f1": 0.636364,
+                "f2": 0.522388,
+                "true_positive": 91,
+                "false_positive": 0,
+                "false_negative": 104
+              },
+              "LOCATION": {
+                "precision": 0.185484,
+                "recall": 0.027219,
+                "f1": 0.047472,
+                "f2": 0.03282,
+                "true_positive": 23,
+                "false_positive": 101,
+                "false_negative": 822
+              },
+              "PERSON": {
+                "precision": 0.551313,
+                "recall": 0.516779,
+                "f1": 0.533487,
+                "f2": 0.523335,
+                "true_positive": 231,
+                "false_positive": 188,
+                "false_negative": 216
+              },
+              "PHONE": {
+                "precision": 0.882812,
+                "recall": 0.81295,
+                "f1": 0.846442,
+                "f2": 0.826023,
+                "true_positive": 113,
+                "false_positive": 15,
+                "false_negative": 26
+              }
+            }
+          }
+        }
+      },
+      "person_location": {
+        "typed_character": {
+          "before": {
+            "precision": 0.866968,
+            "recall": 0.58575,
+            "f1": 0.69914,
+            "f2": 0.626386,
+            "true_positive": 15530,
+            "false_positive": 2383,
+            "false_negative": 10983,
+            "cases": 1237,
+            "exact_cases": 664,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 74,
+            "by_type": {
+              "CARD": {
+                "precision": 0.982243,
+                "recall": 0.347783,
+                "f1": 0.513685,
+                "f2": 0.399377,
+                "true_positive": 1051,
+                "false_positive": 19,
+                "false_negative": 1971
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.432637,
+                "f1": 0.603973,
+                "f2": 0.488013,
+                "true_positive": 1885,
+                "false_positive": 0,
+                "false_negative": 2472
+              },
+              "LOCATION": {
+                "precision": 0.881593,
+                "recall": 0.628585,
+                "f1": 0.733895,
+                "f2": 0.666861,
+                "true_positive": 6619,
+                "false_positive": 889,
+                "false_negative": 3911
+              },
+              "PERSON": {
+                "precision": 0.728361,
+                "recall": 0.618839,
+                "f1": 0.669148,
+                "f2": 0.638027,
+                "true_positive": 3955,
+                "false_positive": 1475,
+                "false_negative": 2436
+              },
+              "PHONE": {
+                "precision": 1.0,
+                "recall": 0.912788,
+                "f1": 0.954406,
+                "f2": 0.928992,
+                "true_positive": 2020,
+                "false_positive": 0,
+                "false_negative": 193
+              }
+            }
+          },
+          "after": {
+            "precision": 0.866968,
+            "recall": 0.58575,
+            "f1": 0.69914,
+            "f2": 0.626386,
+            "true_positive": 15530,
+            "false_positive": 2383,
+            "false_negative": 10983,
+            "cases": 1237,
+            "exact_cases": 664,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 74,
+            "by_type": {
+              "CARD": {
+                "precision": 0.982243,
+                "recall": 0.347783,
+                "f1": 0.513685,
+                "f2": 0.399377,
+                "true_positive": 1051,
+                "false_positive": 19,
+                "false_negative": 1971
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.432637,
+                "f1": 0.603973,
+                "f2": 0.488013,
+                "true_positive": 1885,
+                "false_positive": 0,
+                "false_negative": 2472
+              },
+              "LOCATION": {
+                "precision": 0.881593,
+                "recall": 0.628585,
+                "f1": 0.733895,
+                "f2": 0.666861,
+                "true_positive": 6619,
+                "false_positive": 889,
+                "false_negative": 3911
+              },
+              "PERSON": {
+                "precision": 0.728361,
+                "recall": 0.618839,
+                "f1": 0.669148,
+                "f2": 0.638027,
+                "true_positive": 3955,
+                "false_positive": 1475,
+                "false_negative": 2436
+              },
+              "PHONE": {
+                "precision": 1.0,
+                "recall": 0.912788,
+                "f1": 0.954406,
+                "f2": 0.928992,
+                "true_positive": 2020,
+                "false_positive": 0,
+                "false_negative": 193
+              }
+            }
+          }
+        },
+        "merged_exact_span": {
+          "before": {
+            "precision": 0.6792,
+            "recall": 0.476698,
+            "f1": 0.560211,
+            "f2": 0.506926,
+            "true_positive": 849,
+            "false_positive": 401,
+            "false_negative": 932,
+            "cases": 1237,
+            "exact_cases": 664,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 74,
+            "by_type": {
+              "CARD": {
+                "precision": 0.964286,
+                "recall": 0.348387,
+                "f1": 0.511848,
+                "f2": 0.399408,
+                "true_positive": 54,
+                "false_positive": 2,
+                "false_negative": 101
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.466667,
+                "f1": 0.636364,
+                "f2": 0.522388,
+                "true_positive": 91,
+                "false_positive": 0,
+                "false_negative": 104
+              },
+              "LOCATION": {
+                "precision": 0.647482,
+                "recall": 0.426036,
+                "f1": 0.513919,
+                "f2": 0.457317,
+                "true_positive": 360,
+                "false_positive": 196,
+                "false_negative": 485
+              },
+              "PERSON": {
+                "precision": 0.551313,
+                "recall": 0.516779,
+                "f1": 0.533487,
+                "f2": 0.523335,
+                "true_positive": 231,
+                "false_positive": 188,
+                "false_negative": 216
+              },
+              "PHONE": {
+                "precision": 0.882812,
+                "recall": 0.81295,
+                "f1": 0.846442,
+                "f2": 0.826023,
+                "true_positive": 113,
+                "false_positive": 15,
+                "false_negative": 26
+              }
+            }
+          },
+          "after": {
+            "precision": 0.6792,
+            "recall": 0.476698,
+            "f1": 0.560211,
+            "f2": 0.506926,
+            "true_positive": 849,
+            "false_positive": 401,
+            "false_negative": 932,
+            "cases": 1237,
+            "exact_cases": 664,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 74,
+            "by_type": {
+              "CARD": {
+                "precision": 0.964286,
+                "recall": 0.348387,
+                "f1": 0.511848,
+                "f2": 0.399408,
+                "true_positive": 54,
+                "false_positive": 2,
+                "false_negative": 101
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.466667,
+                "f1": 0.636364,
+                "f2": 0.522388,
+                "true_positive": 91,
+                "false_positive": 0,
+                "false_negative": 104
+              },
+              "LOCATION": {
+                "precision": 0.647482,
+                "recall": 0.426036,
+                "f1": 0.513919,
+                "f2": 0.457317,
+                "true_positive": 360,
+                "false_positive": 196,
+                "false_negative": 485
+              },
+              "PERSON": {
+                "precision": 0.551313,
+                "recall": 0.516779,
+                "f1": 0.533487,
+                "f2": 0.523335,
+                "true_positive": 231,
+                "false_positive": 188,
+                "false_negative": 216
+              },
+              "PHONE": {
+                "precision": 0.882812,
+                "recall": 0.81295,
+                "f1": 0.846442,
+                "f2": 0.826023,
+                "true_positive": 113,
+                "false_positive": 15,
+                "false_negative": 26
+              }
+            }
+          }
+        }
+      }
+    },
+    "all_mapped8": {
+      "rules": {
+        "typed_character": {
+          "before": {
+            "precision": 0.900542,
+            "recall": 0.376311,
+            "f1": 0.530811,
+            "f2": 0.425896,
+            "true_positive": 14786,
+            "false_positive": 1633,
+            "false_negative": 24506,
+            "cases": 1830,
+            "exact_cases": 713,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 17,
+            "by_type": {
+              "CARD": {
+                "precision": 0.986787,
+                "recall": 0.376592,
+                "f1": 0.54514,
+                "f2": 0.42974,
+                "true_positive": 1419,
+                "false_positive": 19,
+                "false_negative": 2349
+              },
+              "DRIVER_LICENSE": {
+                "precision": 1.0,
+                "recall": 0.244884,
+                "f1": 0.393424,
+                "f2": 0.288446,
+                "true_positive": 694,
+                "false_positive": 0,
+                "false_negative": 2140
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.431751,
+                "f1": 0.603109,
+                "f2": 0.487111,
+                "true_positive": 1901,
+                "false_positive": 0,
+                "false_negative": 2502
+              },
+              "INN": {
+                "precision": 0.973138,
+                "recall": 0.521768,
+                "f1": 0.67931,
+                "f2": 0.575119,
+                "true_positive": 1594,
+                "false_positive": 44,
+                "false_negative": 1461
+              },
+              "LOCATION": {
+                "precision": 0.697754,
+                "recall": 0.209672,
+                "f1": 0.322449,
+                "f2": 0.243776,
+                "true_positive": 2454,
+                "false_positive": 1063,
+                "false_negative": 9250
+              },
+              "PASSPORT": {
+                "precision": 0.834702,
+                "recall": 0.517827,
+                "f1": 0.639145,
+                "f2": 0.560373,
+                "true_positive": 1525,
+                "false_positive": 302,
+                "false_negative": 1420
+              },
+              "PERSON": {
+                "precision": 0.943084,
+                "recall": 0.374165,
+                "f1": 0.535767,
+                "f2": 0.425503,
+                "true_positive": 3082,
+                "false_positive": 186,
+                "false_negative": 5155
+              },
+              "PHONE": {
+                "precision": 0.991105,
+                "recall": 0.902387,
+                "f1": 0.944668,
+                "f2": 0.918837,
+                "true_positive": 2117,
+                "false_positive": 19,
+                "false_negative": 229
+              }
+            }
+          },
+          "after": {
+            "precision": 0.900542,
+            "recall": 0.376311,
+            "f1": 0.530811,
+            "f2": 0.425896,
+            "true_positive": 14786,
+            "false_positive": 1633,
+            "false_negative": 24506,
+            "cases": 1830,
+            "exact_cases": 713,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 17,
+            "by_type": {
+              "CARD": {
+                "precision": 0.986787,
+                "recall": 0.376592,
+                "f1": 0.54514,
+                "f2": 0.42974,
+                "true_positive": 1419,
+                "false_positive": 19,
+                "false_negative": 2349
+              },
+              "DRIVER_LICENSE": {
+                "precision": 1.0,
+                "recall": 0.244884,
+                "f1": 0.393424,
+                "f2": 0.288446,
+                "true_positive": 694,
+                "false_positive": 0,
+                "false_negative": 2140
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.431751,
+                "f1": 0.603109,
+                "f2": 0.487111,
+                "true_positive": 1901,
+                "false_positive": 0,
+                "false_negative": 2502
+              },
+              "INN": {
+                "precision": 0.973138,
+                "recall": 0.521768,
+                "f1": 0.67931,
+                "f2": 0.575119,
+                "true_positive": 1594,
+                "false_positive": 44,
+                "false_negative": 1461
+              },
+              "LOCATION": {
+                "precision": 0.697754,
+                "recall": 0.209672,
+                "f1": 0.322449,
+                "f2": 0.243776,
+                "true_positive": 2454,
+                "false_positive": 1063,
+                "false_negative": 9250
+              },
+              "PASSPORT": {
+                "precision": 0.834702,
+                "recall": 0.517827,
+                "f1": 0.639145,
+                "f2": 0.560373,
+                "true_positive": 1525,
+                "false_positive": 302,
+                "false_negative": 1420
+              },
+              "PERSON": {
+                "precision": 0.943084,
+                "recall": 0.374165,
+                "f1": 0.535767,
+                "f2": 0.425503,
+                "true_positive": 3082,
+                "false_positive": 186,
+                "false_negative": 5155
+              },
+              "PHONE": {
+                "precision": 0.991105,
+                "recall": 0.902387,
+                "f1": 0.944668,
+                "f2": 0.918837,
+                "true_positive": 2117,
+                "false_positive": 19,
+                "false_negative": 229
+              }
+            }
+          }
+        },
+        "merged_exact_span": {
+          "before": {
+            "precision": 0.757504,
+            "recall": 0.316397,
+            "f1": 0.446358,
+            "f2": 0.358103,
+            "true_positive": 959,
+            "false_positive": 307,
+            "false_negative": 2072,
+            "cases": 1830,
+            "exact_cases": 713,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 17,
+            "by_type": {
+              "CARD": {
+                "precision": 0.973684,
+                "recall": 0.375635,
+                "f1": 0.542125,
+                "f2": 0.428241,
+                "true_positive": 74,
+                "false_positive": 2,
+                "false_negative": 123
+              },
+              "DRIVER_LICENSE": {
+                "precision": 1.0,
+                "recall": 0.359133,
+                "f1": 0.528474,
+                "f2": 0.411932,
+                "true_positive": 116,
+                "false_positive": 0,
+                "false_negative": 207
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.467005,
+                "f1": 0.636678,
+                "f2": 0.522727,
+                "true_positive": 92,
+                "false_positive": 0,
+                "false_negative": 105
+              },
+              "INN": {
+                "precision": 0.972603,
+                "recall": 0.631111,
+                "f1": 0.765499,
+                "f2": 0.678776,
+                "true_positive": 142,
+                "false_positive": 4,
+                "false_negative": 83
+              },
+              "LOCATION": {
+                "precision": 0.113861,
+                "recall": 0.02359,
+                "f1": 0.039082,
+                "f2": 0.028035,
+                "true_positive": 23,
+                "false_positive": 179,
+                "false_negative": 952
+              },
+              "PASSPORT": {
+                "precision": 0.812102,
+                "recall": 0.62963,
+                "f1": 0.709318,
+                "f2": 0.659255,
+                "true_positive": 255,
+                "false_positive": 59,
+                "false_negative": 150
+              },
+              "PERSON": {
+                "precision": 0.756757,
+                "recall": 0.24911,
+                "f1": 0.374833,
+                "f2": 0.287711,
+                "true_positive": 140,
+                "false_positive": 45,
+                "false_negative": 422
+              },
+              "PHONE": {
+                "precision": 0.866667,
+                "recall": 0.795918,
+                "f1": 0.829787,
+                "f2": 0.809129,
+                "true_positive": 117,
+                "false_positive": 18,
+                "false_negative": 30
+              }
+            }
+          },
+          "after": {
+            "precision": 0.757504,
+            "recall": 0.316397,
+            "f1": 0.446358,
+            "f2": 0.358103,
+            "true_positive": 959,
+            "false_positive": 307,
+            "false_negative": 2072,
+            "cases": 1830,
+            "exact_cases": 713,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 17,
+            "by_type": {
+              "CARD": {
+                "precision": 0.973684,
+                "recall": 0.375635,
+                "f1": 0.542125,
+                "f2": 0.428241,
+                "true_positive": 74,
+                "false_positive": 2,
+                "false_negative": 123
+              },
+              "DRIVER_LICENSE": {
+                "precision": 1.0,
+                "recall": 0.359133,
+                "f1": 0.528474,
+                "f2": 0.411932,
+                "true_positive": 116,
+                "false_positive": 0,
+                "false_negative": 207
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.467005,
+                "f1": 0.636678,
+                "f2": 0.522727,
+                "true_positive": 92,
+                "false_positive": 0,
+                "false_negative": 105
+              },
+              "INN": {
+                "precision": 0.972603,
+                "recall": 0.631111,
+                "f1": 0.765499,
+                "f2": 0.678776,
+                "true_positive": 142,
+                "false_positive": 4,
+                "false_negative": 83
+              },
+              "LOCATION": {
+                "precision": 0.113861,
+                "recall": 0.02359,
+                "f1": 0.039082,
+                "f2": 0.028035,
+                "true_positive": 23,
+                "false_positive": 179,
+                "false_negative": 952
+              },
+              "PASSPORT": {
+                "precision": 0.812102,
+                "recall": 0.62963,
+                "f1": 0.709318,
+                "f2": 0.659255,
+                "true_positive": 255,
+                "false_positive": 59,
+                "false_negative": 150
+              },
+              "PERSON": {
+                "precision": 0.756757,
+                "recall": 0.24911,
+                "f1": 0.374833,
+                "f2": 0.287711,
+                "true_positive": 140,
+                "false_positive": 45,
+                "false_negative": 422
+              },
+              "PHONE": {
+                "precision": 0.866667,
+                "recall": 0.795918,
+                "f1": 0.829787,
+                "f2": 0.809129,
+                "true_positive": 117,
+                "false_positive": 18,
+                "false_negative": 30
+              }
+            }
+          }
+        }
+      },
+      "person_only": {
+        "typed_character": {
+          "before": {
+            "precision": 0.840709,
+            "recall": 0.440446,
+            "f1": 0.578052,
+            "f2": 0.486799,
+            "true_positive": 17306,
+            "false_positive": 3279,
+            "false_negative": 21986,
+            "cases": 1830,
+            "exact_cases": 741,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 64,
+            "by_type": {
+              "CARD": {
+                "precision": 0.986787,
+                "recall": 0.376592,
+                "f1": 0.54514,
+                "f2": 0.42974,
+                "true_positive": 1419,
+                "false_positive": 19,
+                "false_negative": 2349
+              },
+              "DRIVER_LICENSE": {
+                "precision": 1.0,
+                "recall": 0.244884,
+                "f1": 0.393424,
+                "f2": 0.288446,
+                "true_positive": 694,
+                "false_positive": 0,
+                "false_negative": 2140
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.431751,
+                "f1": 0.603109,
+                "f2": 0.487111,
+                "true_positive": 1901,
+                "false_positive": 0,
+                "false_negative": 2502
+              },
+              "INN": {
+                "precision": 0.973138,
+                "recall": 0.521768,
+                "f1": 0.67931,
+                "f2": 0.575119,
+                "true_positive": 1594,
+                "false_positive": 44,
+                "false_negative": 1461
+              },
+              "LOCATION": {
+                "precision": 0.697754,
+                "recall": 0.209672,
+                "f1": 0.322449,
+                "f2": 0.243776,
+                "true_positive": 2454,
+                "false_positive": 1063,
+                "false_negative": 9250
+              },
+              "PASSPORT": {
+                "precision": 0.834702,
+                "recall": 0.517827,
+                "f1": 0.639145,
+                "f2": 0.560373,
+                "true_positive": 1525,
+                "false_positive": 302,
+                "false_negative": 1420
+              },
+              "PERSON": {
+                "precision": 0.753565,
+                "recall": 0.680102,
+                "f1": 0.714951,
+                "f2": 0.693626,
+                "true_positive": 5602,
+                "false_positive": 1832,
+                "false_negative": 2635
+              },
+              "PHONE": {
+                "precision": 0.991105,
+                "recall": 0.902387,
+                "f1": 0.944668,
+                "f2": 0.918837,
+                "true_positive": 2117,
+                "false_positive": 19,
+                "false_negative": 229
+              }
+            }
+          },
+          "after": {
+            "precision": 0.840709,
+            "recall": 0.440446,
+            "f1": 0.578052,
+            "f2": 0.486799,
+            "true_positive": 17306,
+            "false_positive": 3279,
+            "false_negative": 21986,
+            "cases": 1830,
+            "exact_cases": 741,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 64,
+            "by_type": {
+              "CARD": {
+                "precision": 0.986787,
+                "recall": 0.376592,
+                "f1": 0.54514,
+                "f2": 0.42974,
+                "true_positive": 1419,
+                "false_positive": 19,
+                "false_negative": 2349
+              },
+              "DRIVER_LICENSE": {
+                "precision": 1.0,
+                "recall": 0.244884,
+                "f1": 0.393424,
+                "f2": 0.288446,
+                "true_positive": 694,
+                "false_positive": 0,
+                "false_negative": 2140
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.431751,
+                "f1": 0.603109,
+                "f2": 0.487111,
+                "true_positive": 1901,
+                "false_positive": 0,
+                "false_negative": 2502
+              },
+              "INN": {
+                "precision": 0.973138,
+                "recall": 0.521768,
+                "f1": 0.67931,
+                "f2": 0.575119,
+                "true_positive": 1594,
+                "false_positive": 44,
+                "false_negative": 1461
+              },
+              "LOCATION": {
+                "precision": 0.697754,
+                "recall": 0.209672,
+                "f1": 0.322449,
+                "f2": 0.243776,
+                "true_positive": 2454,
+                "false_positive": 1063,
+                "false_negative": 9250
+              },
+              "PASSPORT": {
+                "precision": 0.834702,
+                "recall": 0.517827,
+                "f1": 0.639145,
+                "f2": 0.560373,
+                "true_positive": 1525,
+                "false_positive": 302,
+                "false_negative": 1420
+              },
+              "PERSON": {
+                "precision": 0.753565,
+                "recall": 0.680102,
+                "f1": 0.714951,
+                "f2": 0.693626,
+                "true_positive": 5602,
+                "false_positive": 1832,
+                "false_negative": 2635
+              },
+              "PHONE": {
+                "precision": 0.991105,
+                "recall": 0.902387,
+                "f1": 0.944668,
+                "f2": 0.918837,
+                "true_positive": 2117,
+                "false_positive": 19,
+                "false_negative": 229
+              }
+            }
+          }
+        },
+        "merged_exact_span": {
+          "before": {
+            "precision": 0.686203,
+            "recall": 0.370835,
+            "f1": 0.481474,
+            "f2": 0.408371,
+            "true_positive": 1124,
+            "false_positive": 514,
+            "false_negative": 1907,
+            "cases": 1830,
+            "exact_cases": 741,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 64,
+            "by_type": {
+              "CARD": {
+                "precision": 0.973684,
+                "recall": 0.375635,
+                "f1": 0.542125,
+                "f2": 0.428241,
+                "true_positive": 74,
+                "false_positive": 2,
+                "false_negative": 123
+              },
+              "DRIVER_LICENSE": {
+                "precision": 1.0,
+                "recall": 0.359133,
+                "f1": 0.528474,
+                "f2": 0.411932,
+                "true_positive": 116,
+                "false_positive": 0,
+                "false_negative": 207
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.467005,
+                "f1": 0.636678,
+                "f2": 0.522727,
+                "true_positive": 92,
+                "false_positive": 0,
+                "false_negative": 105
+              },
+              "INN": {
+                "precision": 0.972603,
+                "recall": 0.631111,
+                "f1": 0.765499,
+                "f2": 0.678776,
+                "true_positive": 142,
+                "false_positive": 4,
+                "false_negative": 83
+              },
+              "LOCATION": {
+                "precision": 0.113861,
+                "recall": 0.02359,
+                "f1": 0.039082,
+                "f2": 0.028035,
+                "true_positive": 23,
+                "false_positive": 179,
+                "false_negative": 952
+              },
+              "PASSPORT": {
+                "precision": 0.812102,
+                "recall": 0.62963,
+                "f1": 0.709318,
+                "f2": 0.659255,
+                "true_positive": 255,
+                "false_positive": 59,
+                "false_negative": 150
+              },
+              "PERSON": {
+                "precision": 0.547576,
+                "recall": 0.542705,
+                "f1": 0.54513,
+                "f2": 0.543672,
+                "true_positive": 305,
+                "false_positive": 252,
+                "false_negative": 257
+              },
+              "PHONE": {
+                "precision": 0.866667,
+                "recall": 0.795918,
+                "f1": 0.829787,
+                "f2": 0.809129,
+                "true_positive": 117,
+                "false_positive": 18,
+                "false_negative": 30
+              }
+            }
+          },
+          "after": {
+            "precision": 0.686203,
+            "recall": 0.370835,
+            "f1": 0.481474,
+            "f2": 0.408371,
+            "true_positive": 1124,
+            "false_positive": 514,
+            "false_negative": 1907,
+            "cases": 1830,
+            "exact_cases": 741,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 64,
+            "by_type": {
+              "CARD": {
+                "precision": 0.973684,
+                "recall": 0.375635,
+                "f1": 0.542125,
+                "f2": 0.428241,
+                "true_positive": 74,
+                "false_positive": 2,
+                "false_negative": 123
+              },
+              "DRIVER_LICENSE": {
+                "precision": 1.0,
+                "recall": 0.359133,
+                "f1": 0.528474,
+                "f2": 0.411932,
+                "true_positive": 116,
+                "false_positive": 0,
+                "false_negative": 207
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.467005,
+                "f1": 0.636678,
+                "f2": 0.522727,
+                "true_positive": 92,
+                "false_positive": 0,
+                "false_negative": 105
+              },
+              "INN": {
+                "precision": 0.972603,
+                "recall": 0.631111,
+                "f1": 0.765499,
+                "f2": 0.678776,
+                "true_positive": 142,
+                "false_positive": 4,
+                "false_negative": 83
+              },
+              "LOCATION": {
+                "precision": 0.113861,
+                "recall": 0.02359,
+                "f1": 0.039082,
+                "f2": 0.028035,
+                "true_positive": 23,
+                "false_positive": 179,
+                "false_negative": 952
+              },
+              "PASSPORT": {
+                "precision": 0.812102,
+                "recall": 0.62963,
+                "f1": 0.709318,
+                "f2": 0.659255,
+                "true_positive": 255,
+                "false_positive": 59,
+                "false_negative": 150
+              },
+              "PERSON": {
+                "precision": 0.547576,
+                "recall": 0.542705,
+                "f1": 0.54513,
+                "f2": 0.543672,
+                "true_positive": 305,
+                "false_positive": 252,
+                "false_negative": 257
+              },
+              "PHONE": {
+                "precision": 0.866667,
+                "recall": 0.795918,
+                "f1": 0.829787,
+                "f2": 0.809129,
+                "true_positive": 117,
+                "false_positive": 18,
+                "false_negative": 30
+              }
+            }
+          }
+        }
+      },
+      "person_location": {
+        "typed_character": {
+          "before": {
+            "precision": 0.854566,
+            "recall": 0.569022,
+            "f1": 0.683156,
+            "f2": 0.609771,
+            "true_positive": 22358,
+            "false_positive": 3805,
+            "false_negative": 16934,
+            "cases": 1830,
+            "exact_cases": 882,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 75,
+            "by_type": {
+              "CARD": {
+                "precision": 0.986787,
+                "recall": 0.376592,
+                "f1": 0.54514,
+                "f2": 0.42974,
+                "true_positive": 1419,
+                "false_positive": 19,
+                "false_negative": 2349
+              },
+              "DRIVER_LICENSE": {
+                "precision": 1.0,
+                "recall": 0.244884,
+                "f1": 0.393424,
+                "f2": 0.288446,
+                "true_positive": 694,
+                "false_positive": 0,
+                "false_negative": 2140
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.431751,
+                "f1": 0.603109,
+                "f2": 0.487111,
+                "true_positive": 1901,
+                "false_positive": 0,
+                "false_negative": 2502
+              },
+              "INN": {
+                "precision": 0.973138,
+                "recall": 0.521768,
+                "f1": 0.67931,
+                "f2": 0.575119,
+                "true_positive": 1594,
+                "false_positive": 44,
+                "false_negative": 1461
+              },
+              "LOCATION": {
+                "precision": 0.825289,
+                "recall": 0.641319,
+                "f1": 0.721765,
+                "f2": 0.671245,
+                "true_positive": 7506,
+                "false_positive": 1589,
+                "false_negative": 4198
+              },
+              "PASSPORT": {
+                "precision": 0.834702,
+                "recall": 0.517827,
+                "f1": 0.639145,
+                "f2": 0.560373,
+                "true_positive": 1525,
+                "false_positive": 302,
+                "false_negative": 1420
+              },
+              "PERSON": {
+                "precision": 0.753565,
+                "recall": 0.680102,
+                "f1": 0.714951,
+                "f2": 0.693626,
+                "true_positive": 5602,
+                "false_positive": 1832,
+                "false_negative": 2635
+              },
+              "PHONE": {
+                "precision": 0.991105,
+                "recall": 0.902387,
+                "f1": 0.944668,
+                "f2": 0.918837,
+                "true_positive": 2117,
+                "false_positive": 19,
+                "false_negative": 229
+              }
+            }
+          },
+          "after": {
+            "precision": 0.854566,
+            "recall": 0.569022,
+            "f1": 0.683156,
+            "f2": 0.609771,
+            "true_positive": 22358,
+            "false_positive": 3805,
+            "false_negative": 16934,
+            "cases": 1830,
+            "exact_cases": 882,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 75,
+            "by_type": {
+              "CARD": {
+                "precision": 0.986787,
+                "recall": 0.376592,
+                "f1": 0.54514,
+                "f2": 0.42974,
+                "true_positive": 1419,
+                "false_positive": 19,
+                "false_negative": 2349
+              },
+              "DRIVER_LICENSE": {
+                "precision": 1.0,
+                "recall": 0.244884,
+                "f1": 0.393424,
+                "f2": 0.288446,
+                "true_positive": 694,
+                "false_positive": 0,
+                "false_negative": 2140
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.431751,
+                "f1": 0.603109,
+                "f2": 0.487111,
+                "true_positive": 1901,
+                "false_positive": 0,
+                "false_negative": 2502
+              },
+              "INN": {
+                "precision": 0.973138,
+                "recall": 0.521768,
+                "f1": 0.67931,
+                "f2": 0.575119,
+                "true_positive": 1594,
+                "false_positive": 44,
+                "false_negative": 1461
+              },
+              "LOCATION": {
+                "precision": 0.825289,
+                "recall": 0.641319,
+                "f1": 0.721765,
+                "f2": 0.671245,
+                "true_positive": 7506,
+                "false_positive": 1589,
+                "false_negative": 4198
+              },
+              "PASSPORT": {
+                "precision": 0.834702,
+                "recall": 0.517827,
+                "f1": 0.639145,
+                "f2": 0.560373,
+                "true_positive": 1525,
+                "false_positive": 302,
+                "false_negative": 1420
+              },
+              "PERSON": {
+                "precision": 0.753565,
+                "recall": 0.680102,
+                "f1": 0.714951,
+                "f2": 0.693626,
+                "true_positive": 5602,
+                "false_positive": 1832,
+                "false_negative": 2635
+              },
+              "PHONE": {
+                "precision": 0.991105,
+                "recall": 0.902387,
+                "f1": 0.944668,
+                "f2": 0.918837,
+                "true_positive": 2117,
+                "false_positive": 19,
+                "false_negative": 229
+              }
+            }
+          }
+        },
+        "merged_exact_span": {
+          "before": {
+            "precision": 0.703349,
+            "recall": 0.484988,
+            "f1": 0.574107,
+            "f2": 0.517096,
+            "true_positive": 1470,
+            "false_positive": 620,
+            "false_negative": 1561,
+            "cases": 1830,
+            "exact_cases": 882,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 75,
+            "by_type": {
+              "CARD": {
+                "precision": 0.973684,
+                "recall": 0.375635,
+                "f1": 0.542125,
+                "f2": 0.428241,
+                "true_positive": 74,
+                "false_positive": 2,
+                "false_negative": 123
+              },
+              "DRIVER_LICENSE": {
+                "precision": 1.0,
+                "recall": 0.359133,
+                "f1": 0.528474,
+                "f2": 0.411932,
+                "true_positive": 116,
+                "false_positive": 0,
+                "false_negative": 207
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.467005,
+                "f1": 0.636678,
+                "f2": 0.522727,
+                "true_positive": 92,
+                "false_positive": 0,
+                "false_negative": 105
+              },
+              "INN": {
+                "precision": 0.972603,
+                "recall": 0.631111,
+                "f1": 0.765499,
+                "f2": 0.678776,
+                "true_positive": 142,
+                "false_positive": 4,
+                "false_negative": 83
+              },
+              "LOCATION": {
+                "precision": 0.56422,
+                "recall": 0.378462,
+                "f1": 0.453039,
+                "f2": 0.405138,
+                "true_positive": 369,
+                "false_positive": 285,
+                "false_negative": 606
+              },
+              "PASSPORT": {
+                "precision": 0.812102,
+                "recall": 0.62963,
+                "f1": 0.709318,
+                "f2": 0.659255,
+                "true_positive": 255,
+                "false_positive": 59,
+                "false_negative": 150
+              },
+              "PERSON": {
+                "precision": 0.547576,
+                "recall": 0.542705,
+                "f1": 0.54513,
+                "f2": 0.543672,
+                "true_positive": 305,
+                "false_positive": 252,
+                "false_negative": 257
+              },
+              "PHONE": {
+                "precision": 0.866667,
+                "recall": 0.795918,
+                "f1": 0.829787,
+                "f2": 0.809129,
+                "true_positive": 117,
+                "false_positive": 18,
+                "false_negative": 30
+              }
+            }
+          },
+          "after": {
+            "precision": 0.703349,
+            "recall": 0.484988,
+            "f1": 0.574107,
+            "f2": 0.517096,
+            "true_positive": 1470,
+            "false_positive": 620,
+            "false_negative": 1561,
+            "cases": 1830,
+            "exact_cases": 882,
+            "negative_cases": 371,
+            "negative_cases_with_fp": 75,
+            "by_type": {
+              "CARD": {
+                "precision": 0.973684,
+                "recall": 0.375635,
+                "f1": 0.542125,
+                "f2": 0.428241,
+                "true_positive": 74,
+                "false_positive": 2,
+                "false_negative": 123
+              },
+              "DRIVER_LICENSE": {
+                "precision": 1.0,
+                "recall": 0.359133,
+                "f1": 0.528474,
+                "f2": 0.411932,
+                "true_positive": 116,
+                "false_positive": 0,
+                "false_negative": 207
+              },
+              "EMAIL": {
+                "precision": 1.0,
+                "recall": 0.467005,
+                "f1": 0.636678,
+                "f2": 0.522727,
+                "true_positive": 92,
+                "false_positive": 0,
+                "false_negative": 105
+              },
+              "INN": {
+                "precision": 0.972603,
+                "recall": 0.631111,
+                "f1": 0.765499,
+                "f2": 0.678776,
+                "true_positive": 142,
+                "false_positive": 4,
+                "false_negative": 83
+              },
+              "LOCATION": {
+                "precision": 0.56422,
+                "recall": 0.378462,
+                "f1": 0.453039,
+                "f2": 0.405138,
+                "true_positive": 369,
+                "false_positive": 285,
+                "false_negative": 606
+              },
+              "PASSPORT": {
+                "precision": 0.812102,
+                "recall": 0.62963,
+                "f1": 0.709318,
+                "f2": 0.659255,
+                "true_positive": 255,
+                "false_positive": 59,
+                "false_negative": 150
+              },
+              "PERSON": {
+                "precision": 0.547576,
+                "recall": 0.542705,
+                "f1": 0.54513,
+                "f2": 0.543672,
+                "true_positive": 305,
+                "false_positive": 252,
+                "false_negative": 257
+              },
+              "PHONE": {
+                "precision": 0.866667,
+                "recall": 0.795918,
+                "f1": 0.829787,
+                "f2": 0.809129,
+                "true_positive": 117,
+                "false_positive": 18,
+                "false_negative": 30
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "runtime_python": {
+    "baseline": "3.13.7",
+    "current": "3.13.7"
+  },
+  "limitations": [
+    "Offline replay of previously used development corpus, not a new quality estimate.",
+    "Frozen PERSON/LOCATION offsets use the established reconstructed score 0.85.",
+    "Prediction equality concerns type/start/end/order; confidence/reason fields are not compared.",
+    "Equal masking is evaluated in mask mode; no randomized token comparison is performed.",
+    "Existing quality limitations of the accepted baseline remain unchanged."
+  ],
+  "bootstrap": "Not performed; all compared outputs are identical."
+}

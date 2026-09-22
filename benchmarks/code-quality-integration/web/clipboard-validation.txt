@@ -1,0 +1,9 @@
+### Result
+{
+  "clipboardRejectedNoticePass": true,
+  "message": "Браузер не разрешил доступ к буферу обмена. Выделите результат и скопируйте его вручную."
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => { const notice = document.getElementById("demo-notice"); if (notice.hidden || !notice.textContent.includes("Браузер не разрешил доступ к буферу обмена")) throw new Error("clipboard fallback missing"); return {clipboardRejectedNoticePass: true, message: notice.textContent}; }');
+```

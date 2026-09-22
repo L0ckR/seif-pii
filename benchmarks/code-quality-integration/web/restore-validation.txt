@@ -1,0 +1,11 @@
+### Result
+{
+  "restoreExactPass": true,
+  "unicodePreserved": true,
+  "healthOnline": true,
+  "moduleScript": true
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => { const output = document.getElementById("output-area").textContent; const original = document.getElementById("source-text").value; if (output !== original || !document.getElementById("restore-button").disabled) throw new Error("restore mismatch"); return {restoreExactPass: true, unicodePreserved: output.startsWith("🙂"), healthOnline: document.getElementById("health-status").classList.contains("online"), moduleScript: document.querySelector("script[src=\\"/app.js\\"]").type === "module"}; }');
+```

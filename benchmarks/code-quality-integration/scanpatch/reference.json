@@ -1,0 +1,10 @@
+{
+  "revision": "12191083eea106edf85c7bbc6e60a140faf1b4c2",
+  "accepted_prediction_file_sha256": "14ee4110f8e0fb3ede72afa59b2d1793064720f8482ed8078024cfaecf9cf4e5",
+  "accepted_report_sha256": "e21ad665d84b31614aee3e479b98939dc68e6e96789ad8b5126a023359af317e",
+  "sorted_raw_prediction_sha256": {
+    "rules": "0bccb910b9a2b56d537f0248e1485d7a23047dd86dea2075a0af407f0ccfbcb2",
+    "hybrid": "eda7e0cac93cf44ed17132a01d001166612803d0b374b225ea141bf42fe36ad0"
+  },
+  "scopes_sha256": "6a40aa19c80c142a631dbab1838d35c4a5aa83fa342addcb87cb4db80e9375e2"
+}

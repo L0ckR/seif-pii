@@ -1,0 +1,1484 @@
+[
+  {
+    "check_name": "C901",
+    "description": "C901: `benchmark` is too complex (18 > 10)",
+    "severity": "major",
+    "fingerprint": "c86920fd17f48e1f",
+    "location": {
+      "path": "scripts/benchmark.py",
+      "positions": {
+        "begin": {
+          "line": 48,
+          "column": 11
+        },
+        "end": {
+          "line": 48,
+          "column": 20
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0915",
+    "description": "PLR0915: Too many statements (76 > 50)",
+    "severity": "major",
+    "fingerprint": "c63b3ae2e3cba89b",
+    "location": {
+      "path": "scripts/benchmark.py",
+      "positions": {
+        "begin": {
+          "line": 48,
+          "column": 11
+        },
+        "end": {
+          "line": 48,
+          "column": 20
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `schedule` is too complex (12 > 10)",
+    "severity": "major",
+    "fingerprint": "bb49772d0aa464dc",
+    "location": {
+      "path": "scripts/benchmark_corpus.py",
+      "positions": {
+        "begin": {
+          "line": 224,
+          "column": 11
+        },
+        "end": {
+          "line": 224,
+          "column": 19
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `run_with_requester` is too complex (11 > 10)",
+    "severity": "major",
+    "fingerprint": "6ef8076503e64c7e",
+    "location": {
+      "path": "scripts/benchmark_corpus.py",
+      "positions": {
+        "begin": {
+          "line": 273,
+          "column": 11
+        },
+        "end": {
+          "line": 273,
+          "column": 29
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C420",
+    "description": "C420: Unnecessary dict comprehension for iterable; use `dict.fromkeys` instead",
+    "severity": "major",
+    "fingerprint": "f2dd8c3ca5ec356c",
+    "location": {
+      "path": "scripts/benchmark_corpus.py",
+      "positions": {
+        "begin": {
+          "line": 276,
+          "column": 24
+        },
+        "end": {
+          "line": 279,
+          "column": 100
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `main` is too complex (23 > 10)",
+    "severity": "major",
+    "fingerprint": "a79a7e705598ad30",
+    "location": {
+      "path": "scripts/capture_requests.py",
+      "positions": {
+        "begin": {
+          "line": 55,
+          "column": 5
+        },
+        "end": {
+          "line": 55,
+          "column": 9
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0912",
+    "description": "PLR0912: Too many branches (22 > 12)",
+    "severity": "major",
+    "fingerprint": "1435f5d668743cf5",
+    "location": {
+      "path": "scripts/capture_requests.py",
+      "positions": {
+        "begin": {
+          "line": 55,
+          "column": 5
+        },
+        "end": {
+          "line": 55,
+          "column": 9
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0915",
+    "description": "PLR0915: Too many statements (111 > 50)",
+    "severity": "major",
+    "fingerprint": "5c3f579c82977c7d",
+    "location": {
+      "path": "scripts/capture_requests.py",
+      "positions": {
+        "begin": {
+          "line": 55,
+          "column": 5
+        },
+        "end": {
+          "line": 55,
+          "column": 9
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `validate_report` is too complex (11 > 10)",
+    "severity": "major",
+    "fingerprint": "81b7c598a9e7932f",
+    "location": {
+      "path": "scripts/code_quality.py",
+      "positions": {
+        "begin": {
+          "line": 59,
+          "column": 5
+        },
+        "end": {
+          "line": 59,
+          "column": 20
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `evaluate` is too complex (11 > 10)",
+    "severity": "major",
+    "fingerprint": "1c9592704b1421c8",
+    "location": {
+      "path": "scripts/evaluate_annotations.py",
+      "positions": {
+        "begin": {
+          "line": 56,
+          "column": 5
+        },
+        "end": {
+          "line": 56,
+          "column": 13
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C420",
+    "description": "C420: Unnecessary dict comprehension for iterable; use `dict.fromkeys` instead",
+    "severity": "major",
+    "fingerprint": "c754f400049ed603",
+    "location": {
+      "path": "scripts/evaluate_annotations.py",
+      "positions": {
+        "begin": {
+          "line": 59,
+          "column": 26
+        },
+        "end": {
+          "line": 59,
+          "column": 52
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C408",
+    "description": "C408: Unnecessary `dict()` call (rewrite as a literal)",
+    "severity": "major",
+    "fingerprint": "8dc812d2e81c0839",
+    "location": {
+      "path": "scripts/evaluate_annotations.py",
+      "positions": {
+        "begin": {
+          "line": 82,
+          "column": 18
+        },
+        "end": {
+          "line": 87,
+          "column": 63
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `main` is too complex (11 > 10)",
+    "severity": "major",
+    "fingerprint": "bafef163a129a492",
+    "location": {
+      "path": "scripts/evaluate_external.py",
+      "positions": {
+        "begin": {
+          "line": 184,
+          "column": 5
+        },
+        "end": {
+          "line": 184,
+          "column": 9
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0915",
+    "description": "PLR0915: Too many statements (67 > 50)",
+    "severity": "major",
+    "fingerprint": "124fa337099ca0a6",
+    "location": {
+      "path": "scripts/evaluate_external.py",
+      "positions": {
+        "begin": {
+          "line": 184,
+          "column": 5
+        },
+        "end": {
+          "line": 184,
+          "column": 9
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PERF401",
+    "description": "PERF401: Use `list.extend` to create a transformed list",
+    "severity": "major",
+    "fingerprint": "22a5fef560c5d5e6",
+    "location": {
+      "path": "scripts/evaluate_golden.py",
+      "positions": {
+        "begin": {
+          "line": 95,
+          "column": 21
+        },
+        "end": {
+          "line": 95,
+          "column": 67
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `parse_bio` is too complex (11 > 10)",
+    "severity": "major",
+    "fingerprint": "9ed5470b8c8e1f52",
+    "location": {
+      "path": "scripts/evaluate_redmadrobot.py",
+      "positions": {
+        "begin": {
+          "line": 68,
+          "column": 5
+        },
+        "end": {
+          "line": 68,
+          "column": 14
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0911",
+    "description": "PLR0911: Too many return statements (7 > 6)",
+    "severity": "major",
+    "fingerprint": "96400ced4095e60b",
+    "location": {
+      "path": "scripts/evaluate_redmadrobot.py",
+      "positions": {
+        "begin": {
+          "line": 68,
+          "column": 5
+        },
+        "end": {
+          "line": 68,
+          "column": 14
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0915",
+    "description": "PLR0915: Too many statements (55 > 50)",
+    "severity": "major",
+    "fingerprint": "b692557df69fee73",
+    "location": {
+      "path": "scripts/evaluate_redmadrobot.py",
+      "positions": {
+        "begin": {
+          "line": 157,
+          "column": 5
+        },
+        "end": {
+          "line": 157,
+          "column": 9
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0915",
+    "description": "PLR0915: Too many statements (53 > 50)",
+    "severity": "major",
+    "fingerprint": "32d24f4a8bf9d4b8",
+    "location": {
+      "path": "scripts/evaluate_scanpatch.py",
+      "positions": {
+        "begin": {
+          "line": 83,
+          "column": 5
+        },
+        "end": {
+          "line": 83,
+          "column": 9
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM105",
+    "description": "SIM105: Use `contextlib.suppress(ValueError)` instead of `try`-`except`-`pass`",
+    "severity": "major",
+    "fingerprint": "e5c59a176db47a32",
+    "location": {
+      "path": "scripts/failover_check.py",
+      "positions": {
+        "begin": {
+          "line": 57,
+          "column": 13
+        },
+        "end": {
+          "line": 60,
+          "column": 21
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `start` is too complex (13 > 10)",
+    "severity": "major",
+    "fingerprint": "6fd5267876afcf8f",
+    "location": {
+      "path": "scripts/local_redis.py",
+      "positions": {
+        "begin": {
+          "line": 163,
+          "column": 5
+        },
+        "end": {
+          "line": 163,
+          "column": 10
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0912",
+    "description": "PLR0912: Too many branches (14 > 12)",
+    "severity": "major",
+    "fingerprint": "a0df481214d2c26c",
+    "location": {
+      "path": "scripts/local_redis.py",
+      "positions": {
+        "begin": {
+          "line": 163,
+          "column": 5
+        },
+        "end": {
+          "line": 163,
+          "column": 10
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `create_app` is too complex (24 > 10)",
+    "severity": "major",
+    "fingerprint": "a2f2994009749902",
+    "location": {
+      "path": "scripts/ner_service.py",
+      "positions": {
+        "begin": {
+          "line": 198,
+          "column": 5
+        },
+        "end": {
+          "line": 198,
+          "column": 15
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0915",
+    "description": "PLR0915: Too many statements (65 > 50)",
+    "severity": "major",
+    "fingerprint": "ac11da75ed8347d7",
+    "location": {
+      "path": "scripts/ner_service.py",
+      "positions": {
+        "begin": {
+          "line": 198,
+          "column": 5
+        },
+        "end": {
+          "line": 198,
+          "column": 15
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `analyze` is too complex (14 > 10)",
+    "severity": "major",
+    "fingerprint": "27c2eac3ebdf88fd",
+    "location": {
+      "path": "scripts/ner_service.py",
+      "positions": {
+        "begin": {
+          "line": 249,
+          "column": 15
+        },
+        "end": {
+          "line": 249,
+          "column": 22
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `create_app` is too complex (64 > 10)",
+    "severity": "major",
+    "fingerprint": "bb28efb5cc92196f",
+    "location": {
+      "path": "seif/app.py",
+      "positions": {
+        "begin": {
+          "line": 217,
+          "column": 5
+        },
+        "end": {
+          "line": 217,
+          "column": 15
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0915",
+    "description": "PLR0915: Too many statements (225 > 50)",
+    "severity": "major",
+    "fingerprint": "d934606627ca0eca",
+    "location": {
+      "path": "seif/app.py",
+      "positions": {
+        "begin": {
+          "line": 217,
+          "column": 5
+        },
+        "end": {
+          "line": 217,
+          "column": 15
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `execute` is too complex (34 > 10)",
+    "severity": "major",
+    "fingerprint": "f302cf60a24aa11e",
+    "location": {
+      "path": "seif/app.py",
+      "positions": {
+        "begin": {
+          "line": 318,
+          "column": 15
+        },
+        "end": {
+          "line": 318,
+          "column": 22
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0912",
+    "description": "PLR0912: Too many branches (30 > 12)",
+    "severity": "major",
+    "fingerprint": "613812c60a0a8472",
+    "location": {
+      "path": "seif/app.py",
+      "positions": {
+        "begin": {
+          "line": 318,
+          "column": 15
+        },
+        "end": {
+          "line": 318,
+          "column": 22
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0915",
+    "description": "PLR0915: Too many statements (123 > 50)",
+    "severity": "major",
+    "fingerprint": "174dd8622bcc2eca",
+    "location": {
+      "path": "seif/app.py",
+      "positions": {
+        "begin": {
+          "line": 318,
+          "column": 15
+        },
+        "end": {
+          "line": 318,
+          "column": 22
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM905",
+    "description": "SIM905: Consider using a list literal instead of `str.split`",
+    "severity": "major",
+    "fingerprint": "9b5bb6ba852205e8",
+    "location": {
+      "path": "seif/cardholder_fields.py",
+      "positions": {
+        "begin": {
+          "line": 31,
+          "column": 5
+        },
+        "end": {
+          "line": 51,
+          "column": 76
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM905",
+    "description": "SIM905: Consider using a list literal instead of `str.split`",
+    "severity": "major",
+    "fingerprint": "29591adcdadc5853",
+    "location": {
+      "path": "seif/cardholder_fields.py",
+      "positions": {
+        "begin": {
+          "line": 71,
+          "column": 5
+        },
+        "end": {
+          "line": 75,
+          "column": 36
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `parse_sentinels` is too complex (12 > 10)",
+    "severity": "major",
+    "fingerprint": "d0e7e0f598e93fb6",
+    "location": {
+      "path": "seif/config.py",
+      "positions": {
+        "begin": {
+          "line": 16,
+          "column": 5
+        },
+        "end": {
+          "line": 16,
+          "column": 20
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `from_env` is too complex (13 > 10)",
+    "severity": "major",
+    "fingerprint": "1be246a6a97cb403",
+    "location": {
+      "path": "seif/config.py",
+      "positions": {
+        "begin": {
+          "line": 125,
+          "column": 9
+        },
+        "end": {
+          "line": 125,
+          "column": 17
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `refine_candidates` is too complex (11 > 10)",
+    "severity": "major",
+    "fingerprint": "aa46dd217b024474",
+    "location": {
+      "path": "seif/context_filters.py",
+      "positions": {
+        "begin": {
+          "line": 192,
+          "column": 5
+        },
+        "end": {
+          "line": 192,
+          "column": 22
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM114",
+    "description": "SIM114: Combine `if` branches using logical `or` operator",
+    "severity": "major",
+    "fingerprint": "bdc8a1d8c482e1ee",
+    "location": {
+      "path": "seif/context_filters.py",
+      "positions": {
+        "begin": {
+          "line": 215,
+          "column": 9
+        },
+        "end": {
+          "line": 220,
+          "column": 21
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM905",
+    "description": "SIM905: Consider using a list literal instead of `str.split`",
+    "severity": "major",
+    "fingerprint": "3e8f0d32df3f3f48",
+    "location": {
+      "path": "seif/detector.py",
+      "positions": {
+        "begin": {
+          "line": 74,
+          "column": 5
+        },
+        "end": {
+          "line": 74,
+          "column": 788
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM905",
+    "description": "SIM905: Consider using a list literal instead of `str.split`",
+    "severity": "major",
+    "fingerprint": "35691849e5046109",
+    "location": {
+      "path": "seif/detector.py",
+      "positions": {
+        "begin": {
+          "line": 104,
+          "column": 17
+        },
+        "end": {
+          "line": 104,
+          "column": 121
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `_structured_addresses` is too complex (15 > 10)",
+    "severity": "major",
+    "fingerprint": "7c852b6b6a76f24c",
+    "location": {
+      "path": "seif/detector.py",
+      "positions": {
+        "begin": {
+          "line": 547,
+          "column": 5
+        },
+        "end": {
+          "line": 547,
+          "column": 26
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0912",
+    "description": "PLR0912: Too many branches (14 > 12)",
+    "severity": "major",
+    "fingerprint": "aa7b730c4e9589b1",
+    "location": {
+      "path": "seif/detector.py",
+      "positions": {
+        "begin": {
+          "line": 547,
+          "column": 5
+        },
+        "end": {
+          "line": 547,
+          "column": 26
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0911",
+    "description": "PLR0911: Too many return statements (7 > 6)",
+    "severity": "major",
+    "fingerprint": "e7bade3b966a0d3d",
+    "location": {
+      "path": "seif/detector.py",
+      "positions": {
+        "begin": {
+          "line": 659,
+          "column": 5
+        },
+        "end": {
+          "line": 659,
+          "column": 26
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `_merge_ner_candidates` is too complex (19 > 10)",
+    "severity": "major",
+    "fingerprint": "2aa022dec9642762",
+    "location": {
+      "path": "seif/detector.py",
+      "positions": {
+        "begin": {
+          "line": 700,
+          "column": 5
+        },
+        "end": {
+          "line": 700,
+          "column": 26
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0912",
+    "description": "PLR0912: Too many branches (14 > 12)",
+    "severity": "major",
+    "fingerprint": "8697d1e82020d66a",
+    "location": {
+      "path": "seif/detector.py",
+      "positions": {
+        "begin": {
+          "line": 700,
+          "column": 5
+        },
+        "end": {
+          "line": 700,
+          "column": 26
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `detect` is too complex (44 > 10)",
+    "severity": "major",
+    "fingerprint": "fcf032571d5d03d4",
+    "location": {
+      "path": "seif/detector.py",
+      "positions": {
+        "begin": {
+          "line": 824,
+          "column": 5
+        },
+        "end": {
+          "line": 824,
+          "column": 11
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0912",
+    "description": "PLR0912: Too many branches (35 > 12)",
+    "severity": "major",
+    "fingerprint": "9cfffaef08cbd3e6",
+    "location": {
+      "path": "seif/detector.py",
+      "positions": {
+        "begin": {
+          "line": 824,
+          "column": 5
+        },
+        "end": {
+          "line": 824,
+          "column": 11
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0915",
+    "description": "PLR0915: Too many statements (109 > 50)",
+    "severity": "major",
+    "fingerprint": "f93b8743e41acc2d",
+    "location": {
+      "path": "seif/detector.py",
+      "positions": {
+        "begin": {
+          "line": 824,
+          "column": 5
+        },
+        "end": {
+          "line": 824,
+          "column": 11
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM102",
+    "description": "SIM102: Use a single `if` statement instead of nested `if` statements",
+    "severity": "major",
+    "fingerprint": "550d0e7493c3e08f",
+    "location": {
+      "path": "seif/detector.py",
+      "positions": {
+        "begin": {
+          "line": 985,
+          "column": 9
+        },
+        "end": {
+          "line": 986,
+          "column": 62
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `location_candidates` is too complex (12 > 10)",
+    "severity": "major",
+    "fingerprint": "f7ecf546fa430163",
+    "location": {
+      "path": "seif/location_fields.py",
+      "positions": {
+        "begin": {
+          "line": 203,
+          "column": 5
+        },
+        "end": {
+          "line": 203,
+          "column": 24
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `_chunk` is too complex (13 > 10)",
+    "severity": "major",
+    "fingerprint": "51e0da0655764cb1",
+    "location": {
+      "path": "seif/ner.py",
+      "positions": {
+        "begin": {
+          "line": 87,
+          "column": 15
+        },
+        "end": {
+          "line": 87,
+          "column": 21
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0912",
+    "description": "PLR0912: Too many branches (13 > 12)",
+    "severity": "major",
+    "fingerprint": "cec2ebe15e9725dd",
+    "location": {
+      "path": "seif/ner.py",
+      "positions": {
+        "begin": {
+          "line": 87,
+          "column": 15
+        },
+        "end": {
+          "line": 87,
+          "column": 21
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM905",
+    "description": "SIM905: Consider using a list literal instead of `str.split`",
+    "severity": "major",
+    "fingerprint": "b2b6e5a71284bb00",
+    "location": {
+      "path": "seif/person_fields.py",
+      "positions": {
+        "begin": {
+          "line": 25,
+          "column": 28
+        },
+        "end": {
+          "line": 27,
+          "column": 90
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM905",
+    "description": "SIM905: Consider using a list literal instead of `str.split`",
+    "severity": "major",
+    "fingerprint": "7511b9a34c00b558",
+    "location": {
+      "path": "seif/person_fields.py",
+      "positions": {
+        "begin": {
+          "line": 28,
+          "column": 30
+        },
+        "end": {
+          "line": 30,
+          "column": 93
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0911",
+    "description": "PLR0911: Too many return statements (7 > 6)",
+    "severity": "major",
+    "fingerprint": "438e2c479b2cc796",
+    "location": {
+      "path": "seif/person_fields.py",
+      "positions": {
+        "begin": {
+          "line": 111,
+          "column": 5
+        },
+        "end": {
+          "line": 111,
+          "column": 19
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `_initial_candidates` is too complex (14 > 10)",
+    "severity": "major",
+    "fingerprint": "600e49d7626e71cf",
+    "location": {
+      "path": "seif/person_fields.py",
+      "positions": {
+        "begin": {
+          "line": 200,
+          "column": 5
+        },
+        "end": {
+          "line": 200,
+          "column": 24
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0912",
+    "description": "PLR0912: Too many branches (13 > 12)",
+    "severity": "major",
+    "fingerprint": "67ecdaf9c5ac17b2",
+    "location": {
+      "path": "seif/person_fields.py",
+      "positions": {
+        "begin": {
+          "line": 200,
+          "column": 5
+        },
+        "end": {
+          "line": 200,
+          "column": 24
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM105",
+    "description": "SIM105: Use `contextlib.suppress(FileExistsError)` instead of `try`-`except`-`pass`",
+    "severity": "major",
+    "fingerprint": "5db1264e8a84e87d",
+    "location": {
+      "path": "seif/request_capture.py",
+      "positions": {
+        "begin": {
+          "line": 40,
+          "column": 13
+        },
+        "end": {
+          "line": 43,
+          "column": 21
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C408",
+    "description": "C408: Unnecessary `dict()` call (rewrite as a literal)",
+    "severity": "major",
+    "fingerprint": "9afa4186d600d817",
+    "location": {
+      "path": "seif/request_capture.py",
+      "positions": {
+        "begin": {
+          "line": 93,
+          "column": 24
+        },
+        "end": {
+          "line": 93,
+          "column": 88
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `submit` is too complex (11 > 10)",
+    "severity": "major",
+    "fingerprint": "feb8d18b8d1bd2a1",
+    "location": {
+      "path": "seif/request_capture.py",
+      "positions": {
+        "begin": {
+          "line": 113,
+          "column": 9
+        },
+        "end": {
+          "line": 113,
+          "column": 15
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM105",
+    "description": "SIM105: Use `contextlib.suppress(FileNotFoundError)` instead of `try`-`except`-`pass`",
+    "severity": "major",
+    "fingerprint": "aeefdac0125a583e",
+    "location": {
+      "path": "seif/request_capture.py",
+      "positions": {
+        "begin": {
+          "line": 199,
+          "column": 13
+        },
+        "end": {
+          "line": 202,
+          "column": 21
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `_valid_field_date` is too complex (11 > 10)",
+    "severity": "major",
+    "fingerprint": "b240f0800893e2bb",
+    "location": {
+      "path": "seif/structured_fields.py",
+      "positions": {
+        "begin": {
+          "line": 108,
+          "column": 5
+        },
+        "end": {
+          "line": 108,
+          "column": 22
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `_document_candidates` is too complex (12 > 10)",
+    "severity": "major",
+    "fingerprint": "d234adc6d7754628",
+    "location": {
+      "path": "seif/structured_fields.py",
+      "positions": {
+        "begin": {
+          "line": 234,
+          "column": 5
+        },
+        "end": {
+          "line": 234,
+          "column": 25
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `structured_candidates` is too complex (11 > 10)",
+    "severity": "major",
+    "fingerprint": "f3b3c77cdbfcdd45",
+    "location": {
+      "path": "seif/structured_fields.py",
+      "positions": {
+        "begin": {
+          "line": 271,
+          "column": 5
+        },
+        "end": {
+          "line": 271,
+          "column": 26
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM117",
+    "description": "SIM117: Use a single `with` statement with multiple contexts instead of nested `with` statements",
+    "severity": "major",
+    "fingerprint": "18442c30c08f3c48",
+    "location": {
+      "path": "tests/test_api.py",
+      "positions": {
+        "begin": {
+          "line": 360,
+          "column": 9
+        },
+        "end": {
+          "line": 361,
+          "column": 116
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM117",
+    "description": "SIM117: Use a single `with` statement with multiple contexts instead of nested `with` statements",
+    "severity": "major",
+    "fingerprint": "62974cc09bb2b7db",
+    "location": {
+      "path": "tests/test_api.py",
+      "positions": {
+        "begin": {
+          "line": 435,
+          "column": 9
+        },
+        "end": {
+          "line": 436,
+          "column": 116
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM117",
+    "description": "SIM117: Use a single `with` statement with multiple contexts instead of nested `with` statements",
+    "severity": "major",
+    "fingerprint": "afa854a7b0cdacf2",
+    "location": {
+      "path": "tests/test_api.py",
+      "positions": {
+        "begin": {
+          "line": 469,
+          "column": 9
+        },
+        "end": {
+          "line": 470,
+          "column": 116
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM117",
+    "description": "SIM117: Use a single `with` statement with multiple contexts instead of nested `with` statements",
+    "severity": "major",
+    "fingerprint": "270a3be987666bd2",
+    "location": {
+      "path": "tests/test_api.py",
+      "positions": {
+        "begin": {
+          "line": 508,
+          "column": 5
+        },
+        "end": {
+          "line": 509,
+          "column": 30
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM117",
+    "description": "SIM117: Use a single `with` statement with multiple contexts instead of nested `with` statements",
+    "severity": "major",
+    "fingerprint": "cd27f57b6fc9d4cc",
+    "location": {
+      "path": "tests/test_api.py",
+      "positions": {
+        "begin": {
+          "line": 526,
+          "column": 5
+        },
+        "end": {
+          "line": 527,
+          "column": 30
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM117",
+    "description": "SIM117: Use a single `with` statement with multiple contexts instead of nested `with` statements",
+    "severity": "major",
+    "fingerprint": "1330cacf52187ce",
+    "location": {
+      "path": "tests/test_ner_service.py",
+      "positions": {
+        "begin": {
+          "line": 60,
+          "column": 5
+        },
+        "end": {
+          "line": 61,
+          "column": 83
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM117",
+    "description": "SIM117: Use a single `with` statement with multiple contexts instead of nested `with` statements",
+    "severity": "major",
+    "fingerprint": "4784395ca0d56bce",
+    "location": {
+      "path": "tests/test_ner_service.py",
+      "positions": {
+        "begin": {
+          "line": 67,
+          "column": 5
+        },
+        "end": {
+          "line": 68,
+          "column": 86
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM117",
+    "description": "SIM117: Use a single `with` statement with multiple contexts instead of nested `with` statements",
+    "severity": "major",
+    "fingerprint": "db280a377ca65f2e",
+    "location": {
+      "path": "tests/test_ner_service.py",
+      "positions": {
+        "begin": {
+          "line": 116,
+          "column": 9
+        },
+        "end": {
+          "line": 117,
+          "column": 115
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM117",
+    "description": "SIM117: Use a single `with` statement with multiple contexts instead of nested `with` statements",
+    "severity": "major",
+    "fingerprint": "74e1a56aed1406c9",
+    "location": {
+      "path": "tests/test_ner_service.py",
+      "positions": {
+        "begin": {
+          "line": 256,
+          "column": 5
+        },
+        "end": {
+          "line": 257,
+          "column": 69
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM117",
+    "description": "SIM117: Use a single `with` statement with multiple contexts instead of nested `with` statements",
+    "severity": "major",
+    "fingerprint": "72bc00ef99e52e3e",
+    "location": {
+      "path": "tests/test_ner_service.py",
+      "positions": {
+        "begin": {
+          "line": 281,
+          "column": 13
+        },
+        "end": {
+          "line": 282,
+          "column": 119
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM117",
+    "description": "SIM117: Use a single `with` statement with multiple contexts instead of nested `with` statements",
+    "severity": "major",
+    "fingerprint": "e2067b397c2986bb",
+    "location": {
+      "path": "tests/test_ner_service.py",
+      "positions": {
+        "begin": {
+          "line": 346,
+          "column": 13
+        },
+        "end": {
+          "line": 347,
+          "column": 119
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `test_real_sentinel_failover_retains_replicated_ciphertext` is too complex (20 > 10)",
+    "severity": "major",
+    "fingerprint": "23d93eacf536d9b1",
+    "location": {
+      "path": "tests/test_sentinel.py",
+      "positions": {
+        "begin": {
+          "line": 163,
+          "column": 5
+        },
+        "end": {
+          "line": 163,
+          "column": 62
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0915",
+    "description": "PLR0915: Too many statements (103 > 50)",
+    "severity": "major",
+    "fingerprint": "3f9cdd2a048b35ec",
+    "location": {
+      "path": "tests/test_sentinel.py",
+      "positions": {
+        "begin": {
+          "line": 163,
+          "column": 5
+        },
+        "end": {
+          "line": 163,
+          "column": 62
+        }
+      }
+    }
+  },
+  {
+    "check_name": "C901",
+    "description": "C901: `verify` is too complex (11 > 10)",
+    "severity": "major",
+    "fingerprint": "a87dac4ddc6e0290",
+    "location": {
+      "path": "tests/test_sentinel.py",
+      "positions": {
+        "begin": {
+          "line": 209,
+          "column": 15
+        },
+        "end": {
+          "line": 209,
+          "column": 21
+        }
+      }
+    }
+  },
+  {
+    "check_name": "PLR0915",
+    "description": "PLR0915: Too many statements (67 > 50)",
+    "severity": "major",
+    "fingerprint": "b6c1982be2df46d",
+    "location": {
+      "path": "tests/test_sentinel.py",
+      "positions": {
+        "begin": {
+          "line": 209,
+          "column": 15
+        },
+        "end": {
+          "line": 209,
+          "column": 21
+        }
+      }
+    }
+  },
+  {
+    "check_name": "SIM117",
+    "description": "SIM117: Use a single `with` statement with multiple contexts instead of nested `with` statements",
+    "severity": "major",
+    "fingerprint": "ff433efc4f1093e",
+    "location": {
+      "path": "tests/test_sentinel.py",
+      "positions": {
+        "begin": {
+          "line": 244,
+          "column": 13
+        },
+        "end": {
+          "line": 247,
+          "column": 29
+        }
+      }
+    }
+  }
+]

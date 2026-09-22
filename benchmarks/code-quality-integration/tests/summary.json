@@ -1,0 +1,22 @@
+{
+  "errors": 0,
+  "failures": 0,
+  "junit_sha256": "0002872765e0e22af73178af08b0f1b84c2637beab321d680f0057edc9d380c5",
+  "revision": "1cde5ce3c6a70fabfe8f09b56f01de624d69633d",
+  "schema_version": 1,
+  "skipped": 0,
+  "source_junit_contains_captured_output": false,
+  "suites": [
+    {
+      "errors": "0",
+      "failures": "0",
+      "hostname": "lockR",
+      "name": "pytest",
+      "skipped": "0",
+      "tests": "2628",
+      "time": "22.220",
+      "timestamp": "2026-09-22T19:42:43.810426+03:00"
+    }
+  ],
+  "tests": 2628
+}

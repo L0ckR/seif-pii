@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "source_snapshots_match_git_revisions": true,
+  "standalone_aggregate_reproduced_byte_for_byte": true,
+  "publication_files": [
+    "README.md",
+    "runner.py",
+    "aggregate.py",
+    "reference.json",
+    "report.json",
+    "summary.md",
+    "validation.json",
+    "baseline.json.gz",
+    "current.json.gz",
+    "original_evaluator.py",
+    "original-report.json",
+    "archive-validation.json"
+  ],
+  "publication_sha256": {
+    "README.md": "4d1fa40486fbabb11f9564bc2429447972a2e3832e6e64986ab737f74b6adcf5",
+    "runner.py": "dfcf2d0342891565339966a92b99ed54fd69ddad46f550657652fb5a507d3c6c",
+    "aggregate.py": "980d01549ee5d9a7fc5bd40e42a9766a88a45d027dc0559717c91777687f8a82",
+    "reference.json": "744c3ff9861783e5889a03fb0b2cde52df2ac5ce52b90ac70ac8938e3bbdc9ad",
+    "report.json": "6797f30f7a37e2e5b5b54692ffcff8cff5bed8ddcde0619e3035e755c6d4e118",
+    "summary.md": "1bb29b837d75dde11ba8448fd3929b710fd57619de863622c2bb7c229e263f7d",
+    "validation.json": "0201d29d344daf25315f44063b70a5def7a9e17557c8d396d0a8711c638a27bb",
+    "baseline.json.gz": "d277ea10853637c1ac94608fa7036c6cc75e24d64cd969ce025b94169fc7befa",
+    "current.json.gz": "ca3656f99097c674e37414dcca02f0cce50903931c271ea1eb53f486a7fb7851",
+    "original_evaluator.py": "e9a1054b8f5fa0b6ba98b1e60a169a1afaa8b7415e120f3f9c6502500a6c4798",
+    "original-report.json": "b1d46a341c3a65bffb8c852e34c2ceb3ebc66742edfa91391dc3a3715e206bf7"
+  },
+  "compressed_artifacts": {
+    "baseline.json.gz": {
+      "bytes": 137118,
+      "sha256": "d277ea10853637c1ac94608fa7036c6cc75e24d64cd969ce025b94169fc7befa"
+    },
+    "current.json.gz": {
+      "bytes": 138832,
+      "sha256": "ca3656f99097c674e37414dcca02f0cce50903931c271ea1eb53f486a7fb7851"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+### Result
+{
+  "maskPass": true,
+  "translatedLabel": "Электронная почта"
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => { const output = document.getElementById("output-area").textContent; const chip = document.querySelector(".entity-chip").textContent; if (output.includes("browser.check@example.invalid") || !output.includes("⟦PD:EMAIL:") || chip !== "Электронная почта") throw new Error("mask/type-label validation failed"); Object.defineProperty(navigator.clipboard, "writeText", { configurable: true, value: async () => { throw new DOMException("Denied for local test", "NotAllowedError"); } }); return {maskPass: true, translatedLabel: chip}; }');
+```

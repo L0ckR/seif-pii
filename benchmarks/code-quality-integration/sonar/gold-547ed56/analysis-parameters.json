@@ -1,0 +1,12 @@
+{
+  "sonar.projectKey": "seif-gold-547ed56-all-source",
+  "sonar.projectVersion": "gold-547ed56",
+  "sonar.sources": ".",
+  "sonar.projectBaseDir": "/home/lockr/projects/seif-pii/local-data/code-analysis/sonar/snapshots/gold-547ed56",
+  "sonar.sourceEncoding": "UTF-8",
+  "sonar.python.version": "3.14",
+  "sonar.scm.disabled": "true",
+  "sonar.host.url": "http://127.0.0.1:19000",
+  "sonar.scanner.skipJreProvisioning": "true",
+  "sonar.working.directory": "/home/lockr/projects/seif-pii/local-data/code-analysis/sonar/runs/gold-547ed56-all-source/scanner-work"
+}

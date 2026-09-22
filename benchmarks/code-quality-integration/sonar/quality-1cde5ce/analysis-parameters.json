@@ -1,0 +1,12 @@
+{
+  "sonar.projectKey": "seif-quality-1cde5ce-all-source",
+  "sonar.projectVersion": "quality-1cde5ce",
+  "sonar.sources": ".",
+  "sonar.projectBaseDir": "/home/lockr/projects/seif-pii/local-data/code-analysis/sonar/snapshots/quality-1cde5ce",
+  "sonar.sourceEncoding": "UTF-8",
+  "sonar.python.version": "3.14",
+  "sonar.scm.disabled": "true",
+  "sonar.host.url": "http://127.0.0.1:19000",
+  "sonar.scanner.skipJreProvisioning": "true",
+  "sonar.working.directory": "/home/lockr/projects/seif-pii/local-data/code-analysis/sonar/runs/quality-1cde5ce-all-source/scanner-work"
+}

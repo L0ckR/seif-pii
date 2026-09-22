@@ -1,0 +1,9 @@
+{
+  "accepted_cached_span_mismatches": [],
+  "model_calls": 0,
+  "network_calls": 0,
+  "output_sha256": "458518354713e4517c1b6860c7f565c1a8a35ccb381e926a3e487c2511fd84dd",
+  "raw_text_outputs": false,
+  "restoration_roundtrips": 3620,
+  "revision": "12191083eea106edf85c7bbc6e60a140faf1b4c2"
+}

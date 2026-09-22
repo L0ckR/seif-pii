@@ -1,0 +1,129 @@
+{
+  "accepted_original_cache_reproduced": true,
+  "accepted_prediction_sha256": "a3bc73087c153de4ccff0fbe67b33c8938df15239682dfd45aed52bd5943005e",
+  "changed_case_profiles": 0,
+  "dataset_file_sha256": {
+    "README.md": "e8f203645e78f712be38a58b795a23f41c18655b76ec67796478135f6bb60e34",
+    "domain-00000-of-00001.parquet": "7ef3574273c0fe3a987981e38e32cd2764031a82766ca5b235bfccd1f27058eb",
+    "entity-00000-of-00001.parquet": "6e0c77d566c2f04e7213917b26f1038336e28fc006551fac7a7f44f7627d5f96"
+  },
+  "dataset_revision": "cd6a18ace16daf23e79247ccf1e2b245d4054654",
+  "differences": [],
+  "frozen_ner_cache_sha256": "70874fcd0170b5ca28a66bac6a5aef6ad7d0b83e6fdfc3a359132a59861079d9",
+  "limitations": [
+    "Parity on this frozen corpus/profile, not a proof for every possible input.",
+    "PERSON-only historical NER cache; not deployed PERSON+LOCATION or HTTP/RPS.",
+    "Actual mask and replacement-record equality are verified with SHA256; original texts and replacement originals remain in memory only."
+  ],
+  "measured_at_utc": "2026-09-22T16:42:43.871482+00:00",
+  "model_calls": 0,
+  "ner_policy": {
+    "entities": [
+      "PERSON"
+    ],
+    "score": 0.85,
+    "source": "same original frozen Presidio cache, no LOCATION, no model inference"
+  },
+  "network_calls": 0,
+  "ordered_span_fields": [
+    "start",
+    "end",
+    "type",
+    "confidence",
+    "reason"
+  ],
+  "original_protocol_sha256": "50d26b14af910da207eb8e1b69c9f61a22305b46193149ee0e29ef690ff7ba39",
+  "outputs_byte_identical": true,
+  "parity": [
+    {
+      "cases": 900,
+      "changed": {
+        "input_sha256": 0,
+        "mask_characters": 0,
+        "mask_sha256": 0,
+        "ordered_spans": 0,
+        "replacement_record_sha256": 0,
+        "restored_sha256": 0
+      },
+      "profile": "hybrid_person_only",
+      "split": "domain"
+    },
+    {
+      "cases": 900,
+      "changed": {
+        "input_sha256": 0,
+        "mask_characters": 0,
+        "mask_sha256": 0,
+        "ordered_spans": 0,
+        "replacement_record_sha256": 0,
+        "restored_sha256": 0
+      },
+      "profile": "rules",
+      "split": "domain"
+    },
+    {
+      "cases": 910,
+      "changed": {
+        "input_sha256": 0,
+        "mask_characters": 0,
+        "mask_sha256": 0,
+        "ordered_spans": 0,
+        "replacement_record_sha256": 0,
+        "restored_sha256": 0
+      },
+      "profile": "hybrid_person_only",
+      "split": "entity"
+    },
+    {
+      "cases": 910,
+      "changed": {
+        "input_sha256": 0,
+        "mask_characters": 0,
+        "mask_sha256": 0,
+        "ordered_spans": 0,
+        "replacement_record_sha256": 0,
+        "restored_sha256": 0
+      },
+      "profile": "rules",
+      "split": "entity"
+    }
+  ],
+  "passed": true,
+  "profiles": [
+    "rules",
+    "hybrid_person_only"
+  ],
+  "raw_corpus_texts_written": false,
+  "restoration_roundtrips": 7240,
+  "revisions": {
+    "accepted": "12191083eea106edf85c7bbc6e60a140faf1b4c2",
+    "integrated": "1cde5ce3c6a70fabfe8f09b56f01de624d69633d"
+  },
+  "runner_sha256": "7c95a1b63f934a54b58b157cb761a6f42eedd784a750e431cd1a7f35ea30f9d2",
+  "runtime": {
+    "executable": "/tmp/seif-presidio-313/bin/python",
+    "packages": {
+      "numpy": "2.4.6",
+      "pyarrow": "25.0.1"
+    },
+    "python": "3.13.7 (main, Aug 18 2025, 19:20:03) [Clang 20.1.4 ]"
+  },
+  "schema_version": 1,
+  "source_manifests": {
+    "accepted": "manifest-accepted.json",
+    "integrated": "manifest-integrated.json"
+  },
+  "source_snapshots_verified": true,
+  "source_tree_sha256": {
+    "accepted": "c86822a10eca48b2597028fd0fbad5a012c390aa6a4acbd356cab60130f1f888",
+    "integrated": "7cc7535e9da79852040e2cacfa0b864f8b62a02244526cc5371f37f3b45bfbe9"
+  },
+  "split_cases": {
+    "domain": 900,
+    "entity": 910
+  },
+  "worker_output_sha256": {
+    "accepted": "458518354713e4517c1b6860c7f565c1a8a35ccb381e926a3e487c2511fd84dd",
+    "integrated": "458518354713e4517c1b6860c7f565c1a8a35ccb381e926a3e487c2511fd84dd"
+  }
+}

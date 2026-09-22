@@ -1,0 +1,80 @@
+{
+  "component": {
+    "key": "seif-gold-547ed56-all-source",
+    "name": "SEIF gold-547ed56 / all-source",
+    "qualifier": "TRK",
+    "measures": [
+      {
+        "metric": "coverage",
+        "value": "0.0",
+        "bestValue": false
+      },
+      {
+        "metric": "complexity",
+        "value": "2540"
+      },
+      {
+        "metric": "reliability_rating",
+        "value": "3.0",
+        "bestValue": false
+      },
+      {
+        "metric": "code_smells",
+        "value": "129",
+        "bestValue": false
+      },
+      {
+        "metric": "duplicated_lines_density",
+        "value": "0.0",
+        "bestValue": true
+      },
+      {
+        "metric": "security_rating",
+        "value": "3.0",
+        "bestValue": false
+      },
+      {
+        "metric": "security_hotspots",
+        "value": "0",
+        "bestValue": true
+      },
+      {
+        "metric": "sqale_index",
+        "value": "1480",
+        "bestValue": false
+      },
+      {
+        "metric": "sqale_rating",
+        "value": "1.0",
+        "bestValue": true
+      },
+      {
+        "metric": "bugs",
+        "value": "2",
+        "bestValue": false
+      },
+      {
+        "metric": "cognitive_complexity",
+        "value": "2383",
+        "bestValue": false
+      },
+      {
+        "metric": "ncloc",
+        "value": "12439"
+      },
+      {
+        "metric": "files",
+        "value": "90"
+      },
+      {
+        "metric": "vulnerabilities",
+        "value": "3",
+        "bestValue": false
+      },
+      {
+        "metric": "lines",
+        "value": "15131"
+      }
+    ]
+  }
+}

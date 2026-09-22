@@ -1,0 +1,33 @@
+{
+  "validated_at": "2026-09-22T16:43:23.216943+00:00",
+  "method": "Actual headless Chromium via Playwright CLI, ephemeral integration FastAPI app on loopback only",
+  "production_changes": false,
+  "public_requests": false,
+  "browser": "Google Chrome for Testing 153.0.8010.12",
+  "source_sha256": {
+    "web/app.js": "91f3b964bd3e1ee45c391988b95fe29699326954a44cac632e6c1e51b84718ee",
+    "web/index.html": "7dab329f5f205773716ec11640acd8ecec7e58056d6f189690cc9a8cf8e3d6b8"
+  },
+  "checks": {
+    "module_script_and_top_level_await_initialize": true,
+    "health_200_online_label": true,
+    "types_200_translated_entity_label": true,
+    "mask_200_token_redaction": true,
+    "unmask_200_exact_unicode_roundtrip": true,
+    "clipboard_rejected_promise_shows_fallback_notice": true,
+    "javascript_console_errors": 0,
+    "javascript_console_warnings": 0
+  },
+  "limits": [
+    "Loopback rules profile and in-memory vault; no deployment or public tunnel.",
+    "Clipboard rejection injected in the browser page to deterministically exercise catch; actual OS permission prompt not used.",
+    "Initial probe assumed illustrative <EMAIL_1> token; corrected to implementation token ⟦PD:EMAIL:…⟧ before final checks."
+  ],
+  "evidence": [
+    "mask-validation.txt",
+    "clipboard-validation.txt",
+    "restore-validation.txt",
+    "network.txt",
+    "console-errors.txt"
+  ]
+}

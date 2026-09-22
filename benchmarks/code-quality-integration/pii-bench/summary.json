@@ -1,0 +1,83 @@
+{
+  "accepted_original_cache_reproduced": true,
+  "changed_case_profiles": 0,
+  "dataset_revision": "cd6a18ace16daf23e79247ccf1e2b245d4054654",
+  "limitations": [
+    "Parity on this frozen corpus/profile, not a proof for every possible input.",
+    "PERSON-only historical NER cache; not deployed PERSON+LOCATION or HTTP/RPS.",
+    "Actual mask and replacement-record equality are verified with SHA256; original texts and replacement originals remain in memory only."
+  ],
+  "outputs_byte_identical": true,
+  "parity": [
+    {
+      "cases": 900,
+      "changed": {
+        "input_sha256": 0,
+        "mask_characters": 0,
+        "mask_sha256": 0,
+        "ordered_spans": 0,
+        "replacement_record_sha256": 0,
+        "restored_sha256": 0
+      },
+      "profile": "hybrid_person_only",
+      "split": "domain"
+    },
+    {
+      "cases": 900,
+      "changed": {
+        "input_sha256": 0,
+        "mask_characters": 0,
+        "mask_sha256": 0,
+        "ordered_spans": 0,
+        "replacement_record_sha256": 0,
+        "restored_sha256": 0
+      },
+      "profile": "rules",
+      "split": "domain"
+    },
+    {
+      "cases": 910,
+      "changed": {
+        "input_sha256": 0,
+        "mask_characters": 0,
+        "mask_sha256": 0,
+        "ordered_spans": 0,
+        "replacement_record_sha256": 0,
+        "restored_sha256": 0
+      },
+      "profile": "hybrid_person_only",
+      "split": "entity"
+    },
+    {
+      "cases": 910,
+      "changed": {
+        "input_sha256": 0,
+        "mask_characters": 0,
+        "mask_sha256": 0,
+        "ordered_spans": 0,
+        "replacement_record_sha256": 0,
+        "restored_sha256": 0
+      },
+      "profile": "rules",
+      "split": "entity"
+    }
+  ],
+  "passed": true,
+  "profiles": [
+    "rules",
+    "hybrid_person_only"
+  ],
+  "restoration_roundtrips": 7240,
+  "revisions": {
+    "accepted": "12191083eea106edf85c7bbc6e60a140faf1b4c2",
+    "integrated": "1cde5ce3c6a70fabfe8f09b56f01de624d69633d"
+  },
+  "source_tree_sha256": {
+    "accepted": "c86822a10eca48b2597028fd0fbad5a012c390aa6a4acbd356cab60130f1f888",
+    "integrated": "7cc7535e9da79852040e2cacfa0b864f8b62a02244526cc5371f37f3b45bfbe9"
+  },
+  "split_cases": {
+    "domain": 900,
+    "entity": 910
+  }
+}

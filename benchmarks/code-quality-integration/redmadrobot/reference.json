@@ -1,0 +1,14 @@
+{
+  "revision": "12191083eea106edf85c7bbc6e60a140faf1b4c2",
+  "accepted_report_sha256": "35a735e6eba9e1acbf74ae54a0cc1f5eb3433ccd5612757468b9c8b164459703",
+  "canonical_field_sha256": {
+    "source_sha256": "6665453250ff72f15439418aebce9997ec6205a8ef7d14161569b76ac94687e4",
+    "input_sha256": "853e6ce33e6656eb8040d23c5068d960ed08dd5393e6e0bf8446edf82952255c",
+    "mapping": "04351b8f4d1e7ee2ba2026d225b3822e7d10c92808122f77525e8231c3f7d4c3",
+    "excluded_rows": "71997ff402ed1571e93063f9a38de14b20742ce5deda250680cf218a6b697d1a",
+    "scopes": "3fb6453457bdbb3206ccbd483564dca1bb9b95c7478e64ce2cad42d9430a2af2",
+    "actual_masked_alnum_offsets": "1c15382cbca3c91b9a7b110299bdf4a3f19f7f60547db381a6fa068d492b6633",
+    "paired_mapped_spans": "30a95a45eaa878134a26a400733e0cfd1aa1493caf5b9c363b56a4ea435395f9",
+    "gold_alnum_offsets": "81bfcbeeffbfad5058775f4ad314ecdcff8ac7e7cd51096c3e166b2695209c18"
+  }
+}

@@ -1,0 +1,980 @@
+{
+  "golden": {
+    "accepted_report_sha256": "5b47849a625974ae8a64c86bb49a5c96d57415bc9140190f8ea64398b0a9f99f",
+    "changed_case_profiles": 0,
+    "compared_case_profiles": 892,
+    "dataset_sha256": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46",
+    "full_report": "benchmarks/code-quality-integration/golden/report.json",
+    "ner_cache_sha256": "c0152894401d87c1848aab145aa5b734b30754c678d66e733545308d596f054f",
+    "parity_proof": "benchmarks/code-quality-integration/golden/prediction-parity.json",
+    "parsed_predictions_identical_to_accepted": true,
+    "primary_and_certain_metrics_identical_to_reference_v2": true,
+    "profiles": {
+      "hybrid": {
+        "cases": 446,
+        "character_metrics": {
+          "f1": 0.968856,
+          "false_negative": 227,
+          "false_positive": 105,
+          "precision": 0.980072,
+          "recall": 0.957893,
+          "true_positive": 5164
+        },
+        "exact_case_rate": 0.930493,
+        "exact_cases": 415,
+        "false_positive_negative_cases": 6,
+        "false_positive_negative_rate": 0.077922,
+        "fully_protected_positive_cases": 344,
+        "fully_protected_positive_rate": 0.932249,
+        "negative_cases": 77,
+        "positive_cases": 369,
+        "uncertain_cases": 117
+      },
+      "rules": {
+        "cases": 446,
+        "character_metrics": {
+          "f1": 0.930011,
+          "false_negative": 614,
+          "false_positive": 105,
+          "precision": 0.978492,
+          "recall": 0.886106,
+          "true_positive": 4777
+        },
+        "exact_case_rate": 0.865471,
+        "exact_cases": 386,
+        "false_positive_negative_cases": 6,
+        "false_positive_negative_rate": 0.077922,
+        "fully_protected_positive_cases": 315,
+        "fully_protected_positive_rate": 0.853659,
+        "negative_cases": 77,
+        "positive_cases": 369,
+        "uncertain_cases": 117
+      }
+    },
+    "quality_profiles_identical_to_accepted_release": true,
+    "reference_sha256": "efa50ed610a6929363afe7c15c37a64f94af749025ed8ce446f38b37fd777f19"
+  },
+  "issuer_regex_parity": {
+    "changed_matches": 0,
+    "compared_suffixes": 37449
+  },
+  "limitations": [
+    "Local Sonar/Ruff results do not reproduce the organizers private code-review algorithm or official hackathon score.",
+    "Zero detected regressions on frozen corpora is not proof of equivalence for every input.",
+    "Golden annotations are provisional AI labels; previously used corpora are regression evidence, not unseen holdouts.",
+    "No HTTP throughput or production deployment result is claimed by this archive."
+  ],
+  "pii_bench": {
+    "accepted_original_cache_reproduced": true,
+    "changed_case_profiles": 0,
+    "dataset_revision": "cd6a18ace16daf23e79247ccf1e2b245d4054654",
+    "full_report": "benchmarks/code-quality-integration/pii-bench/report.json",
+    "limitations": [
+      "Parity on this frozen corpus/profile, not a proof for every possible input.",
+      "PERSON-only historical NER cache; not deployed PERSON+LOCATION or HTTP/RPS.",
+      "Actual mask and replacement-record equality are verified with SHA256; original texts and replacement originals remain in memory only."
+    ],
+    "model_calls": 0,
+    "network_calls": 0,
+    "outputs_byte_identical": true,
+    "parity": [
+      {
+        "cases": 900,
+        "changed": {
+          "input_sha256": 0,
+          "mask_characters": 0,
+          "mask_sha256": 0,
+          "ordered_spans": 0,
+          "replacement_record_sha256": 0,
+          "restored_sha256": 0
+        },
+        "profile": "hybrid_person_only",
+        "split": "domain"
+      },
+      {
+        "cases": 900,
+        "changed": {
+          "input_sha256": 0,
+          "mask_characters": 0,
+          "mask_sha256": 0,
+          "ordered_spans": 0,
+          "replacement_record_sha256": 0,
+          "restored_sha256": 0
+        },
+        "profile": "rules",
+        "split": "domain"
+      },
+      {
+        "cases": 910,
+        "changed": {
+          "input_sha256": 0,
+          "mask_characters": 0,
+          "mask_sha256": 0,
+          "ordered_spans": 0,
+          "replacement_record_sha256": 0,
+          "restored_sha256": 0
+        },
+        "profile": "hybrid_person_only",
+        "split": "entity"
+      },
+      {
+        "cases": 910,
+        "changed": {
+          "input_sha256": 0,
+          "mask_characters": 0,
+          "mask_sha256": 0,
+          "ordered_spans": 0,
+          "replacement_record_sha256": 0,
+          "restored_sha256": 0
+        },
+        "profile": "rules",
+        "split": "entity"
+      }
+    ],
+    "passed": true,
+    "profiles": [
+      "rules",
+      "hybrid_person_only"
+    ],
+    "restoration_roundtrips": 7240,
+    "revisions": {
+      "accepted": "12191083eea106edf85c7bbc6e60a140faf1b4c2",
+      "integrated": "1cde5ce3c6a70fabfe8f09b56f01de624d69633d"
+    },
+    "source_tree_sha256": {
+      "accepted": "c86822a10eca48b2597028fd0fbad5a012c390aa6a4acbd356cab60130f1f888",
+      "integrated": "7cc7535e9da79852040e2cacfa0b864f8b62a02244526cc5371f37f3b45bfbe9"
+    },
+    "split_cases": {
+      "domain": 900,
+      "entity": 910
+    }
+  },
+  "recorded_at_utc": "2026-09-22T16:49:30.519882+00:00",
+  "redmadrobot": {
+    "actual_mask_restore_all_rows_both_versions": true,
+    "aligned_rows": 2839,
+    "baseline_reproduces_accepted_121": {
+      "actual_masked_alnum_offsets": true,
+      "excluded_rows": true,
+      "gold_alnum_offsets": true,
+      "input_sha256": true,
+      "mapping": true,
+      "paired_mapped_spans": true,
+      "scopes": true,
+      "source_sha256": true
+    },
+    "checks": {
+      "actual_masked_alnum_offsets": true,
+      "excluded_rows": true,
+      "gold_alnum_offsets": true,
+      "input_sha256": true,
+      "mapping": true,
+      "masked_text_sha256": true,
+      "paired_mapped_spans": true,
+      "raw_predictions": true,
+      "scopes": true
+    },
+    "full_report": "benchmarks/code-quality-integration/redmadrobot/report.json",
+    "limitations": [
+      "Offline replay of previously used development corpus, not a new quality estimate.",
+      "Frozen PERSON/LOCATION offsets use the established reconstructed score 0.85.",
+      "Prediction equality concerns type/start/end/order; confidence/reason fields are not compared.",
+      "Equal masking is evaluated in mask mode; no randomized token comparison is performed.",
+      "Existing quality limitations of the accepted baseline remain unchanged."
+    ],
+    "modes": {
+      "person_location": {
+        "after_raw_prediction_count": 2582,
+        "before_raw_prediction_count": 2582,
+        "case_ids_sha256": "b5157771eb4264febe0efb3873e35ca4aab371758be8baabef2363bff8cbfc72",
+        "cases": 2839,
+        "changed_case_counts": {
+          "actual_masked_alnum_offsets": 0,
+          "masked_text_sha256": 0,
+          "paired_mapped_spans": 0,
+          "raw_predictions": 0
+        },
+        "changed_case_ids": {
+          "actual_masked_alnum_offsets": [],
+          "masked_text_sha256": [],
+          "paired_mapped_spans": [],
+          "raw_predictions": []
+        }
+      },
+      "person_only": {
+        "after_raw_prediction_count": 2022,
+        "before_raw_prediction_count": 2022,
+        "case_ids_sha256": "b5157771eb4264febe0efb3873e35ca4aab371758be8baabef2363bff8cbfc72",
+        "cases": 2839,
+        "changed_case_counts": {
+          "actual_masked_alnum_offsets": 0,
+          "masked_text_sha256": 0,
+          "paired_mapped_spans": 0,
+          "raw_predictions": 0
+        },
+        "changed_case_ids": {
+          "actual_masked_alnum_offsets": [],
+          "masked_text_sha256": [],
+          "paired_mapped_spans": [],
+          "raw_predictions": []
+        }
+      },
+      "rules": {
+        "after_raw_prediction_count": 1557,
+        "before_raw_prediction_count": 1557,
+        "case_ids_sha256": "b5157771eb4264febe0efb3873e35ca4aab371758be8baabef2363bff8cbfc72",
+        "cases": 2839,
+        "changed_case_counts": {
+          "actual_masked_alnum_offsets": 0,
+          "masked_text_sha256": 0,
+          "paired_mapped_spans": 0,
+          "raw_predictions": 0
+        },
+        "changed_case_ids": {
+          "actual_masked_alnum_offsets": [],
+          "masked_text_sha256": [],
+          "paired_mapped_spans": [],
+          "raw_predictions": []
+        }
+      }
+    },
+    "offered_rows": 2841,
+    "profile_row_pairs": 8517,
+    "runtime_python": {
+      "baseline": "3.13.7",
+      "current": "3.13.7"
+    },
+    "status": "PASS"
+  },
+  "regex_parity": [
+    {
+      "cases": 88,
+      "differences": 0,
+      "pattern": "_PATR"
+    },
+    {
+      "cases": 448,
+      "differences": 0,
+      "pattern": "_CORPORATE_ADDRESS"
+    },
+    {
+      "cases": 448,
+      "differences": 0,
+      "pattern": "_NUMERIC_TAIL"
+    },
+    {
+      "cases": 448,
+      "differences": 0,
+      "pattern": "_NUMERIC_HEAD"
+    },
+    {
+      "cases": 448,
+      "differences": 0,
+      "pattern": "_PART_LABEL_SUFFIX"
+    },
+    {
+      "cases": 448,
+      "differences": 0,
+      "pattern": "_OWNER_BOUNDARY"
+    },
+    {
+      "cases": 448,
+      "differences": 0,
+      "pattern": "_AFTER_BIRTH_DATE_PLACE"
+    }
+  ],
+  "revisions": {
+    "accepted": "12191083eea106edf85c7bbc6e60a140faf1b4c2",
+    "integrated": "1cde5ce3c6a70fabfe8f09b56f01de624d69633d",
+    "quality_baseline": "547ed56d2e033a3e41ffff2c1b8e6bb79a20eb50"
+  },
+  "ruff": {
+    "analyzer": "ruff 0.16.8",
+    "baseline": {
+      "archive": "seif-pii-generalized-1219108.zip",
+      "archive_sha256": "424d28b2e4beca96cb91181e7d83ad4ee1f3e4f3ea2bd10d4ac51b2d7e6c9320",
+      "profiles": {
+        "maintainability": {
+          "by_rule": {
+            "C408": 2,
+            "C420": 2,
+            "C901": 28,
+            "PERF401": 1,
+            "PLR0911": 3,
+            "PLR0912": 8,
+            "PLR0915": 11,
+            "SIM102": 1,
+            "SIM105": 3,
+            "SIM114": 1,
+            "SIM117": 12,
+            "SIM905": 6
+          },
+          "by_scope": {
+            "scripts": 25,
+            "seif": 37,
+            "tests": 16
+          },
+          "by_severity": {
+            "major": 78
+          },
+          "report": "maintainability.gitlab.json",
+          "ruff_arguments": [
+            "check",
+            "--isolated",
+            "--no-cache",
+            "--target-version",
+            "py312",
+            "--exclude",
+            "",
+            "--no-respect-gitignore",
+            "--line-length",
+            "120",
+            "--select",
+            "C901,C4,SIM,PERF,PLR0911,PLR0912,PLR0913,PLR0915",
+            "--output-format",
+            "gitlab",
+            "."
+          ],
+          "top_files": {
+            "scripts/benchmark_corpus.py": 3,
+            "scripts/capture_requests.py": 3,
+            "scripts/evaluate_annotations.py": 3,
+            "scripts/evaluate_redmadrobot.py": 3,
+            "scripts/ner_service.py": 3,
+            "seif/app.py": 5,
+            "seif/detector.py": 11,
+            "seif/person_fields.py": 5,
+            "seif/request_capture.py": 4,
+            "tests/test_api.py": 5,
+            "tests/test_ner_service.py": 6,
+            "tests/test_sentinel.py": 5
+          },
+          "total": 78
+        },
+        "project": {
+          "by_rule": {},
+          "by_scope": {},
+          "by_severity": {},
+          "report": "project.gitlab.json",
+          "ruff_arguments": [
+            "check",
+            "--isolated",
+            "--no-cache",
+            "--target-version",
+            "py312",
+            "--exclude",
+            "",
+            "--no-respect-gitignore",
+            "--line-length",
+            "120",
+            "--select",
+            "E4,E7,E9,F,I,B",
+            "--output-format",
+            "gitlab",
+            "."
+          ],
+          "top_files": {},
+          "total": 0
+        },
+        "security": {
+          "by_rule": {
+            "S101": 912,
+            "S105": 4,
+            "S106": 13,
+            "S311": 2,
+            "S603": 8
+          },
+          "by_scope": {
+            "deploy": 1,
+            "scripts": 8,
+            "seif": 2,
+            "tests": 928
+          },
+          "by_severity": {
+            "major": 939
+          },
+          "report": "security.gitlab.json",
+          "ruff_arguments": [
+            "check",
+            "--isolated",
+            "--no-cache",
+            "--target-version",
+            "py312",
+            "--exclude",
+            "",
+            "--no-respect-gitignore",
+            "--line-length",
+            "120",
+            "--select",
+            "S",
+            "--output-format",
+            "gitlab",
+            "."
+          ],
+          "top_files": {
+            "tests/test_api.py": 141,
+            "tests/test_benchmark_corpus.py": 47,
+            "tests/test_boundary_upload.py": 27,
+            "tests/test_cardholder_fields.py": 27,
+            "tests/test_document_context_generalization.py": 26,
+            "tests/test_generalization_adversarial.py": 29,
+            "tests/test_golden_dataset.py": 37,
+            "tests/test_masking_policy.py": 55,
+            "tests/test_ner_service.py": 75,
+            "tests/test_request_capture_api.py": 36,
+            "tests/test_request_capture_writer.py": 55,
+            "tests/test_sentinel.py": 33
+          },
+          "total": 939
+        }
+      }
+    },
+    "final": {
+      "archive": "seif-1cde5ce.zip",
+      "archive_sha256": "88c1ac603a43eab0b482e3ceb1fa25b258c67a6ec3889be6744bc5b4e64a7052",
+      "profiles": {
+        "maintainability": {
+          "by_rule": {},
+          "by_scope": {},
+          "by_severity": {},
+          "report": "maintainability.gitlab.json",
+          "ruff_arguments": [
+            "check",
+            "--isolated",
+            "--no-cache",
+            "--target-version",
+            "py312",
+            "--exclude",
+            "",
+            "--no-respect-gitignore",
+            "--line-length",
+            "120",
+            "--select",
+            "C901,C4,SIM,PERF,PLR0911,PLR0912,PLR0913,PLR0915",
+            "--output-format",
+            "gitlab",
+            "."
+          ],
+          "top_files": {},
+          "total": 0
+        },
+        "project": {
+          "by_rule": {},
+          "by_scope": {},
+          "by_severity": {},
+          "report": "project.gitlab.json",
+          "ruff_arguments": [
+            "check",
+            "--isolated",
+            "--no-cache",
+            "--target-version",
+            "py312",
+            "--exclude",
+            "",
+            "--no-respect-gitignore",
+            "--line-length",
+            "120",
+            "--select",
+            "E4,E7,E9,F,I,B",
+            "--output-format",
+            "gitlab",
+            "."
+          ],
+          "top_files": {},
+          "total": 0
+        },
+        "security": {
+          "by_rule": {
+            "S101": 942,
+            "S105": 4,
+            "S106": 13,
+            "S311": 2,
+            "S603": 8
+          },
+          "by_scope": {
+            "deploy": 1,
+            "scripts": 5,
+            "tests": 963
+          },
+          "by_severity": {
+            "major": 969
+          },
+          "report": "security.gitlab.json",
+          "ruff_arguments": [
+            "check",
+            "--isolated",
+            "--no-cache",
+            "--target-version",
+            "py312",
+            "--exclude",
+            "",
+            "--no-respect-gitignore",
+            "--line-length",
+            "120",
+            "--select",
+            "S",
+            "--output-format",
+            "gitlab",
+            "."
+          ],
+          "top_files": {
+            "tests/test_api.py": 141,
+            "tests/test_benchmark_corpus.py": 49,
+            "tests/test_boundary_upload.py": 27,
+            "tests/test_cardholder_fields.py": 27,
+            "tests/test_document_context_generalization.py": 26,
+            "tests/test_generalization_adversarial.py": 29,
+            "tests/test_golden_dataset.py": 40,
+            "tests/test_masking_policy.py": 55,
+            "tests/test_ner_service.py": 75,
+            "tests/test_request_capture_api.py": 36,
+            "tests/test_request_capture_writer.py": 55,
+            "tests/test_sentinel.py": 33
+          },
+          "total": 969
+        }
+      }
+    },
+    "raw_security_findings_omitted": 0,
+    "reviewed_ci_policy_is_separate_from_raw_security_report": true
+  },
+  "scanpatch": {
+    "actual_mask_restore_all_rows_both_versions": true,
+    "baseline_reproduces_accepted_121": {
+      "hybrid": true,
+      "rules": true,
+      "scopes": true
+    },
+    "cases": 532,
+    "changed_case_counts": {
+      "hybrid": {
+        "actual_masked_alnum_offsets": 0,
+        "mapped_predictions": 0,
+        "masked_text_sha256": 0,
+        "raw_predictions": 0
+      },
+      "rules": {
+        "actual_masked_alnum_offsets": 0,
+        "mapped_predictions": 0,
+        "masked_text_sha256": 0,
+        "raw_predictions": 0
+      }
+    },
+    "checks": {
+      "actual_masked_alnum_offsets": true,
+      "fine_gold": true,
+      "input_sha256": true,
+      "mapped_gold": true,
+      "mapped_predictions": true,
+      "mapping": true,
+      "masked_text_sha256": true,
+      "raw_predictions": true,
+      "scopes": true,
+      "score_reconstruction_evidence": true,
+      "support_source_sha256": true
+    },
+    "full_report": "benchmarks/code-quality-integration/scanpatch/report.json",
+    "limitations": [
+      "Offline behavior parity on already-used frozen corpus; not a new quality estimate.",
+      "Original 532 rows, labels, coarse mapping and 164 primary whole cases retained; no per-language inference.",
+      "Fixed accepted evaluator helpers are used for both detectors; actual detector/transform source uses the selected Git revision.",
+      "Only type/start/end/order are compared, not confidence or reason fields.",
+      "Actual masking and exact restoration are checked in mask mode; randomized token strings are not compared.",
+      "Original PERSON/LOCATION offsets are reused at validated score 0.85; no model inference or bootstrap."
+    ],
+    "primary_cases": 164,
+    "profile_row_pairs": 1064,
+    "profiles": [
+      "rules",
+      "hybrid"
+    ],
+    "roundtrip_checks_both_versions": 2128,
+    "status": "PASS"
+  },
+  "schema_version": 1,
+  "scope": {
+    "analyzed_source_revision": "1cde5ce3c6a70fabfe8f09b56f01de624d69633d",
+    "archive_manifest": "benchmarks/code-quality-integration/artifact-sha256.json",
+    "corpus_parity": "Golden, PII-Bench, RedMadRobot and Scanpatch frozen predictions and actual masking/restoration; cached models, no network/model calls.",
+    "documentation_added_after_analysis": true,
+    "raw_ruff": "All Python files in seif/, scripts/, tests/, deploy/ from source ZIP; --isolated fixed profiles and native GitLab severity.",
+    "sonar": "Same local Sonar way all-source scan; tests included as source; no coverage report imported."
+  },
+  "sonar": {
+    "default_profiles": [
+      {
+        "activeRuleCount": 40,
+        "isBuiltIn": true,
+        "isDefault": true,
+        "language": "css",
+        "name": "Sonar way",
+        "rulesUpdatedAt": "2026-09-22T12:45:42+0000"
+      },
+      {
+        "activeRuleCount": 25,
+        "isBuiltIn": true,
+        "isDefault": true,
+        "language": "docker",
+        "name": "Sonar way",
+        "rulesUpdatedAt": "2026-09-22T12:45:43+0000"
+      },
+      {
+        "activeRuleCount": 420,
+        "isBuiltIn": true,
+        "isDefault": true,
+        "language": "js",
+        "name": "Sonar way",
+        "rulesUpdatedAt": "2026-09-22T12:45:43+0000"
+      },
+      {
+        "activeRuleCount": 23,
+        "isBuiltIn": true,
+        "isDefault": true,
+        "language": "kubernetes",
+        "name": "Sonar way",
+        "rulesUpdatedAt": "2026-09-22T12:45:42+0000"
+      },
+      {
+        "activeRuleCount": 398,
+        "isBuiltIn": true,
+        "isDefault": true,
+        "language": "py",
+        "name": "Sonar way",
+        "rulesUpdatedAt": "2026-09-22T12:45:43+0000"
+      },
+      {
+        "activeRuleCount": 61,
+        "isBuiltIn": true,
+        "isDefault": true,
+        "language": "web",
+        "name": "Sonar way",
+        "rulesUpdatedAt": "2026-09-22T12:45:44+0000"
+      },
+      {
+        "activeRuleCount": 0,
+        "isBuiltIn": true,
+        "isDefault": true,
+        "language": "yaml",
+        "name": "Sonar way",
+        "rulesUpdatedAt": "2026-09-22T12:45:44+0000"
+      }
+    ],
+    "final_review": {
+      "code_smell_rationale": "Four async callbacks preserve event-loop dispatch without artificial awaits; one structured TaskGroup preserves exception/cancellation semantics.",
+      "coverage_0_is_missing_imported_coverage_not_measured_test_coverage": true,
+      "native_code_smells": 5,
+      "native_vulnerabilities": 2,
+      "quality_gate_ok_does_not_mean_zero_findings": true,
+      "rationale": "Both S2245 findings are fixed-seed benchmark shuffles, not secret/token/nonce generation; native classification remains unchanged."
+    },
+    "raw_findings_omitted": 0,
+    "runs": {
+      "gold-547ed56": {
+        "issues_total": 134,
+        "measures": {
+          "bugs": "2",
+          "code_smells": "129",
+          "cognitive_complexity": "2383",
+          "complexity": "2540",
+          "coverage": "0.0",
+          "duplicated_lines_density": "0.0",
+          "files": "90",
+          "lines": "15131",
+          "ncloc": "12439",
+          "reliability_rating": "3.0",
+          "security_hotspots": "0",
+          "security_rating": "3.0",
+          "sqale_index": "1480",
+          "sqale_rating": "1.0",
+          "vulnerabilities": "3"
+        },
+        "native_report": "benchmarks/code-quality-integration/sonar/gold-547ed56/summary.json",
+        "quality_gate": "OK",
+        "severities": {
+          "CRITICAL": 52,
+          "MAJOR": 55,
+          "MINOR": 27
+        },
+        "top_rules": [
+          [
+            "python:S3776",
+            42
+          ],
+          [
+            "python:S5778",
+            22
+          ],
+          [
+            "python:S6353",
+            15
+          ],
+          [
+            "python:S1192",
+            7
+          ],
+          [
+            "python:S9073",
+            6
+          ],
+          [
+            "python:S5843",
+            5
+          ],
+          [
+            "python:S5713",
+            4
+          ],
+          [
+            "python:S8786",
+            4
+          ],
+          [
+            "python:S3358",
+            3
+          ],
+          [
+            "javascript:S3358",
+            3
+          ],
+          [
+            "javascript:S2681",
+            3
+          ],
+          [
+            "python:S7519",
+            2
+          ],
+          [
+            "python:S2245",
+            2
+          ],
+          [
+            "python:S7498",
+            2
+          ],
+          [
+            "python:S5754",
+            2
+          ]
+        ],
+        "types": {
+          "BUG": 2,
+          "CODE_SMELL": 129,
+          "VULNERABILITY": 3
+        }
+      },
+      "quality-1cde5ce": {
+        "issues_total": 7,
+        "measures": {
+          "bugs": "0",
+          "code_smells": "5",
+          "cognitive_complexity": "1993",
+          "complexity": "2671",
+          "coverage": "0.0",
+          "duplicated_lines_density": "0.0",
+          "files": "93",
+          "lines": "15964",
+          "ncloc": "13010",
+          "reliability_rating": "1.0",
+          "security_hotspots": "0",
+          "security_rating": "3.0",
+          "sqale_index": "25",
+          "sqale_rating": "1.0",
+          "vulnerabilities": "2"
+        },
+        "native_report": "benchmarks/code-quality-integration/sonar/quality-1cde5ce/summary.json",
+        "quality_gate": "OK",
+        "severities": {
+          "MAJOR": 2,
+          "MINOR": 5
+        },
+        "top_rules": [
+          [
+            "python:S7503",
+            4
+          ],
+          [
+            "python:S2245",
+            2
+          ],
+          [
+            "python:S7513",
+            1
+          ]
+        ],
+        "types": {
+          "CODE_SMELL": 5,
+          "VULNERABILITY": 2
+        }
+      },
+      "quality-44df456": {
+        "issues_total": 41,
+        "measures": {
+          "bugs": "0",
+          "code_smells": "39",
+          "cognitive_complexity": "2024",
+          "complexity": "2653",
+          "coverage": "0.0",
+          "duplicated_lines_density": "0.0",
+          "files": "92",
+          "lines": "15818",
+          "ncloc": "12908",
+          "reliability_rating": "1.0",
+          "security_hotspots": "0",
+          "security_rating": "3.0",
+          "sqale_index": "337",
+          "sqale_rating": "1.0",
+          "vulnerabilities": "2"
+        },
+        "native_report": "benchmarks/code-quality-integration/sonar/quality-44df456/summary.json",
+        "quality_gate": "OK",
+        "severities": {
+          "CRITICAL": 13,
+          "MAJOR": 16,
+          "MINOR": 12
+        },
+        "top_rules": [
+          [
+            "python:S3776",
+            9
+          ],
+          [
+            "python:S6353",
+            6
+          ],
+          [
+            "python:S5778",
+            5
+          ],
+          [
+            "python:S7503",
+            4
+          ],
+          [
+            "python:S1192",
+            3
+          ],
+          [
+            "python:S5843",
+            3
+          ],
+          [
+            "python:S2245",
+            2
+          ],
+          [
+            "python:S8786",
+            2
+          ],
+          [
+            "python:S1172",
+            2
+          ],
+          [
+            "python:S5754",
+            1
+          ],
+          [
+            "python:S6395",
+            1
+          ],
+          [
+            "python:S7513",
+            1
+          ],
+          [
+            "javascript:S2486",
+            1
+          ],
+          [
+            "javascript:S7785",
+            1
+          ]
+        ],
+        "types": {
+          "CODE_SMELL": 39,
+          "VULNERABILITY": 2
+        }
+      },
+      "quality-e852254": {
+        "issues_total": 8,
+        "measures": {
+          "bugs": "0",
+          "code_smells": "6",
+          "cognitive_complexity": "1993",
+          "complexity": "2671",
+          "coverage": "0.0",
+          "duplicated_lines_density": "0.0",
+          "files": "93",
+          "lines": "15964",
+          "ncloc": "13010",
+          "reliability_rating": "1.0",
+          "security_hotspots": "0",
+          "security_rating": "3.0",
+          "sqale_index": "35",
+          "sqale_rating": "1.0",
+          "vulnerabilities": "2"
+        },
+        "native_report": "benchmarks/code-quality-integration/sonar/quality-e852254/summary.json",
+        "quality_gate": "OK",
+        "severities": {
+          "MAJOR": 3,
+          "MINOR": 5
+        },
+        "top_rules": [
+          [
+            "python:S7503",
+            4
+          ],
+          [
+            "python:S2245",
+            2
+          ],
+          [
+            "python:S5843",
+            1
+          ],
+          [
+            "python:S7513",
+            1
+          ]
+        ],
+        "types": {
+          "CODE_SMELL": 6,
+          "VULNERABILITY": 2
+        }
+      }
+    },
+    "scanner": {
+      "path": "/tmp/seif-sonar/runtime/sonar-scanner-8.1.0.6389/bin/sonar-scanner",
+      "sha256": "ab76ab3c360025e9108be5b55be066f304a164f8b2850d2f2f333915db51bc1b",
+      "version": "8.1.0.6389"
+    },
+    "server_version": "26.9.0.129388"
+  },
+  "status": "complete",
+  "tests": {
+    "archived_junit": "benchmarks/code-quality-integration/tests/junit.xml.gz",
+    "errors": 0,
+    "failures": 0,
+    "junit_sha256": "0002872765e0e22af73178af08b0f1b84c2637beab321d680f0057edc9d380c5",
+    "revision": "1cde5ce3c6a70fabfe8f09b56f01de624d69633d",
+    "schema_version": 1,
+    "skipped": 0,
+    "source_junit_contains_captured_output": false,
+    "suites": [
+      {
+        "errors": "0",
+        "failures": "0",
+        "hostname": "lockR",
+        "name": "pytest",
+        "skipped": "0",
+        "tests": "2628",
+        "time": "22.220",
+        "timestamp": "2026-09-22T19:42:43.810426+03:00"
+      }
+    ],
+    "tests": 2628
+  }
+}

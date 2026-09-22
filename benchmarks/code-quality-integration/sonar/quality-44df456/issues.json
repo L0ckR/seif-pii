@@ -1,0 +1,4573 @@
+[
+  {
+    "key": "8fc002df-f2f3-4b69-9358-80d773440e1c",
+    "rule": "python:S3776",
+    "severity": "CRITICAL",
+    "component": "seif-quality-44df456-all-source:scripts/benchmark_corpus.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 77,
+    "hash": "7d62f51aba8e522c82435c8e913d9ca1",
+    "textRange": {
+      "startLine": 77,
+      "endLine": 77,
+      "startOffset": 4,
+      "endOffset": 15
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/benchmark_corpus.py",
+            "textRange": {
+              "startLine": 82,
+              "endLine": 82,
+              "startOffset": 12,
+              "endOffset": 15
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/benchmark_corpus.py",
+            "textRange": {
+              "startLine": 84,
+              "endLine": 84,
+              "startOffset": 16,
+              "endOffset": 18
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/benchmark_corpus.py",
+            "textRange": {
+              "startLine": 87,
+              "endLine": 87,
+              "startOffset": 16,
+              "endOffset": 18
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/benchmark_corpus.py",
+            "textRange": {
+              "startLine": 91,
+              "endLine": 91,
+              "startOffset": 20,
+              "endOffset": 22
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/benchmark_corpus.py",
+            "textRange": {
+              "startLine": 91,
+              "endLine": 91,
+              "startOffset": 49,
+              "endOffset": 51
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/benchmark_corpus.py",
+            "textRange": {
+              "startLine": 95,
+              "endLine": 95,
+              "startOffset": 20,
+              "endOffset": 22
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/benchmark_corpus.py",
+            "textRange": {
+              "startLine": 98,
+              "endLine": 98,
+              "startOffset": 57,
+              "endOffset": 59
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/benchmark_corpus.py",
+            "textRange": {
+              "startLine": 102,
+              "endLine": 102,
+              "startOffset": 16,
+              "endOffset": 22
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/benchmark_corpus.py",
+            "textRange": {
+              "startLine": 106,
+              "endLine": 106,
+              "startOffset": 16,
+              "endOffset": 18
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/benchmark_corpus.py",
+            "textRange": {
+              "startLine": 108,
+              "endLine": 108,
+              "startOffset": 4,
+              "endOffset": 10
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/benchmark_corpus.py",
+            "textRange": {
+              "startLine": 110,
+              "endLine": 110,
+              "startOffset": 4,
+              "endOffset": 6
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Refactor this function to reduce its Cognitive Complexity from 17 to the 15 allowed.",
+    "effort": "7min",
+    "debt": "7min",
+    "author": "",
+    "tags": [
+      "brain-overload"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "FOCUSED",
+    "cleanCodeAttributeCategory": "ADAPTABLE",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "HIGH"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "d3fd2cca-29ca-492a-ab3e-e47bb357aa18",
+    "rule": "python:S2245",
+    "severity": "MAJOR",
+    "component": "seif-quality-44df456-all-source:scripts/compare_presidio.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 240,
+    "hash": "b47cdf7c9c6696a5771654fb81e7ac1f",
+    "textRange": {
+      "startLine": 240,
+      "endLine": 240,
+      "startOffset": 8,
+      "endOffset": 25
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Make sure that using this pseudorandom number generator is safe here.",
+    "effort": "10min",
+    "debt": "10min",
+    "author": "",
+    "tags": [
+      "cwe",
+      "former-hotspot"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "VULNERABILITY",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "TRUSTWORTHY",
+    "cleanCodeAttributeCategory": "RESPONSIBLE",
+    "impacts": [
+      {
+        "softwareQuality": "SECURITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "72696bec-cb9d-4632-8bd8-898a569ef3b6",
+    "rule": "python:S2245",
+    "severity": "MAJOR",
+    "component": "seif-quality-44df456-all-source:scripts/compare_presidio.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 243,
+    "hash": "d290dec80055b80394732b444db04e00",
+    "textRange": {
+      "startLine": 243,
+      "endLine": 243,
+      "startOffset": 12,
+      "endOffset": 30
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Make sure that using this pseudorandom number generator is safe here.",
+    "effort": "10min",
+    "debt": "10min",
+    "author": "",
+    "tags": [
+      "cwe",
+      "former-hotspot"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "VULNERABILITY",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "TRUSTWORTHY",
+    "cleanCodeAttributeCategory": "RESPONSIBLE",
+    "impacts": [
+      {
+        "softwareQuality": "SECURITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "f706e596-b0e1-4842-9561-1c3ad0b80dba",
+    "rule": "python:S3776",
+    "severity": "CRITICAL",
+    "component": "seif-quality-44df456-all-source:scripts/evaluate_annotations.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 84,
+    "hash": "a3bf3534c4a7445e18080999699d8ef0",
+    "textRange": {
+      "startLine": 84,
+      "endLine": 84,
+      "startOffset": 4,
+      "endOffset": 12
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_annotations.py",
+            "textRange": {
+              "startLine": 85,
+              "endLine": 85,
+              "startOffset": 4,
+              "endOffset": 6
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_annotations.py",
+            "textRange": {
+              "startLine": 85,
+              "endLine": 85,
+              "startOffset": 39,
+              "endOffset": 41
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_annotations.py",
+            "textRange": {
+              "startLine": 87,
+              "endLine": 87,
+              "startOffset": 22,
+              "endOffset": 24
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_annotations.py",
+            "textRange": {
+              "startLine": 88,
+              "endLine": 88,
+              "startOffset": 4,
+              "endOffset": 6
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_annotations.py",
+            "textRange": {
+              "startLine": 88,
+              "endLine": 88,
+              "startOffset": 35,
+              "endOffset": 37
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_annotations.py",
+            "textRange": {
+              "startLine": 88,
+              "endLine": 88,
+              "startOffset": 65,
+              "endOffset": 67
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_annotations.py",
+            "textRange": {
+              "startLine": 97,
+              "endLine": 97,
+              "startOffset": 4,
+              "endOffset": 7
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_annotations.py",
+            "textRange": {
+              "startLine": 103,
+              "endLine": 103,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_annotations.py",
+            "textRange": {
+              "startLine": 105,
+              "endLine": 105,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_annotations.py",
+            "textRange": {
+              "startLine": 105,
+              "endLine": 105,
+              "startOffset": 48,
+              "endOffset": 50
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_annotations.py",
+            "textRange": {
+              "startLine": 108,
+              "endLine": 108,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_annotations.py",
+            "textRange": {
+              "startLine": 113,
+              "endLine": 113,
+              "startOffset": 75,
+              "endOffset": 78
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_annotations.py",
+            "textRange": {
+              "startLine": 114,
+              "endLine": 114,
+              "startOffset": 72,
+              "endOffset": 75
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_annotations.py",
+            "textRange": {
+              "startLine": 118,
+              "endLine": 118,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_annotations.py",
+            "textRange": {
+              "startLine": 138,
+              "endLine": 138,
+              "startOffset": 75,
+              "endOffset": 77
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Refactor this function to reduce its Cognitive Complexity from 20 to the 15 allowed.",
+    "effort": "10min",
+    "debt": "10min",
+    "author": "",
+    "tags": [
+      "brain-overload"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "FOCUSED",
+    "cleanCodeAttributeCategory": "ADAPTABLE",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "HIGH"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "4ab7ce18-3006-4475-a530-a7631f9fd2c1",
+    "rule": "python:S3776",
+    "severity": "CRITICAL",
+    "component": "seif-quality-44df456-all-source:scripts/evaluate_redmadrobot.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 79,
+    "hash": "cc11ae1c4bd688e9a74ae79fc22b09fb",
+    "textRange": {
+      "startLine": 79,
+      "endLine": 79,
+      "startOffset": 4,
+      "endOffset": 14
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_redmadrobot.py",
+            "textRange": {
+              "startLine": 81,
+              "endLine": 81,
+              "startOffset": 4,
+              "endOffset": 7
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_redmadrobot.py",
+            "textRange": {
+              "startLine": 84,
+              "endLine": 84,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_redmadrobot.py",
+            "textRange": {
+              "startLine": 84,
+              "endLine": 84,
+              "startOffset": 23,
+              "endOffset": 26
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_redmadrobot.py",
+            "textRange": {
+              "startLine": 87,
+              "endLine": 87,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_redmadrobot.py",
+            "textRange": {
+              "startLine": 87,
+              "endLine": 87,
+              "startOffset": 51,
+              "endOffset": 53
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_redmadrobot.py",
+            "textRange": {
+              "startLine": 90,
+              "endLine": 90,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_redmadrobot.py",
+            "textRange": {
+              "startLine": 90,
+              "endLine": 90,
+              "startOffset": 21,
+              "endOffset": 23
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_redmadrobot.py",
+            "textRange": {
+              "startLine": 93,
+              "endLine": 93,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_redmadrobot.py",
+            "textRange": {
+              "startLine": 93,
+              "endLine": 93,
+              "startOffset": 34,
+              "endOffset": 37
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_redmadrobot.py",
+            "textRange": {
+              "startLine": 95,
+              "endLine": 95,
+              "startOffset": 8,
+              "endOffset": 12
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_redmadrobot.py",
+            "textRange": {
+              "startLine": 95,
+              "endLine": 95,
+              "startOffset": 62,
+              "endOffset": 65
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_redmadrobot.py",
+            "textRange": {
+              "startLine": 98,
+              "endLine": 98,
+              "startOffset": 8,
+              "endOffset": 12
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/evaluate_redmadrobot.py",
+            "textRange": {
+              "startLine": 101,
+              "endLine": 101,
+              "startOffset": 4,
+              "endOffset": 6
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Refactor this function to reduce its Cognitive Complexity from 17 to the 15 allowed.",
+    "effort": "7min",
+    "debt": "7min",
+    "author": "",
+    "tags": [
+      "brain-overload"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "FOCUSED",
+    "cleanCodeAttributeCategory": "ADAPTABLE",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "HIGH"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "f0e5943b-ed9f-4597-a526-c2f87dd11576",
+    "rule": "python:S3776",
+    "severity": "CRITICAL",
+    "component": "seif-quality-44df456-all-source:scripts/failover_check.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 37,
+    "hash": "776431b334c5d5ce8a01de4c015066a6",
+    "textRange": {
+      "startLine": 37,
+      "endLine": 37,
+      "startOffset": 4,
+      "endOffset": 11
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/failover_check.py",
+            "textRange": {
+              "startLine": 41,
+              "endLine": 41,
+              "startOffset": 4,
+              "endOffset": 9
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/failover_check.py",
+            "textRange": {
+              "startLine": 46,
+              "endLine": 46,
+              "startOffset": 12,
+              "endOffset": 14
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/failover_check.py",
+            "textRange": {
+              "startLine": 49,
+              "endLine": 49,
+              "startOffset": 16,
+              "endOffset": 22
+            },
+            "msg": "+3 (incl 2 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/failover_check.py",
+            "textRange": {
+              "startLine": 51,
+              "endLine": 51,
+              "startOffset": 16,
+              "endOffset": 18
+            },
+            "msg": "+3 (incl 2 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/failover_check.py",
+            "textRange": {
+              "startLine": 51,
+              "endLine": 51,
+              "startOffset": 73,
+              "endOffset": 75
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/failover_check.py",
+            "textRange": {
+              "startLine": 55,
+              "endLine": 55,
+              "startOffset": 12,
+              "endOffset": 14
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/failover_check.py",
+            "textRange": {
+              "startLine": 60,
+              "endLine": 60,
+              "startOffset": 8,
+              "endOffset": 14
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/failover_check.py",
+            "textRange": {
+              "startLine": 62,
+              "endLine": 62,
+              "startOffset": 8,
+              "endOffset": 14
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/failover_check.py",
+            "textRange": {
+              "startLine": 65,
+              "endLine": 65,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed.",
+    "effort": "8min",
+    "debt": "8min",
+    "author": "",
+    "tags": [
+      "brain-overload"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "FOCUSED",
+    "cleanCodeAttributeCategory": "ADAPTABLE",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "HIGH"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "8aabb930-8513-45c3-848a-7f5af95f66b5",
+    "rule": "python:S7503",
+    "severity": "MINOR",
+    "component": "seif-quality-44df456-all-source:scripts/ner_service.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 224,
+    "hash": "de1904f5da03eb39bf54c1ab093610a7",
+    "textRange": {
+      "startLine": 224,
+      "endLine": 224,
+      "startOffset": 10,
+      "endOffset": 27
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/ner_service.py",
+            "textRange": {
+              "startLine": 224,
+              "endLine": 224,
+              "startOffset": 0,
+              "endOffset": 5
+            },
+            "msg": "This function is async.",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Use asynchronous features in this function or remove the `async` keyword.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "async"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CONVENTIONAL",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      },
+      {
+        "softwareQuality": "RELIABILITY",
+        "severity": "LOW"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "b5cd0c22-6d8d-4b13-b7ba-11dc582d38d1",
+    "rule": "python:S7503",
+    "severity": "MINOR",
+    "component": "seif-quality-44df456-all-source:scripts/ner_service.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 228,
+    "hash": "5683189476612b0142d27b580d59bfa4",
+    "textRange": {
+      "startLine": 228,
+      "endLine": 228,
+      "startOffset": 10,
+      "endOffset": 21
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/ner_service.py",
+            "textRange": {
+              "startLine": 228,
+              "endLine": 228,
+              "startOffset": 0,
+              "endOffset": 5
+            },
+            "msg": "This function is async.",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Use asynchronous features in this function or remove the `async` keyword.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "async"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CONVENTIONAL",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      },
+      {
+        "softwareQuality": "RELIABILITY",
+        "severity": "LOW"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "272aa438-e9b6-45fb-82a7-230b292a87d7",
+    "rule": "python:S7503",
+    "severity": "MINOR",
+    "component": "seif-quality-44df456-all-source:scripts/ner_service.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 232,
+    "hash": "bcb1271d67cb2204993762b8ed877f6b",
+    "textRange": {
+      "startLine": 232,
+      "endLine": 232,
+      "startOffset": 10,
+      "endOffset": 27
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:scripts/ner_service.py",
+            "textRange": {
+              "startLine": 232,
+              "endLine": 232,
+              "startOffset": 0,
+              "endOffset": 5
+            },
+            "msg": "This function is async.",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Use asynchronous features in this function or remove the `async` keyword.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "async"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CONVENTIONAL",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      },
+      {
+        "softwareQuality": "RELIABILITY",
+        "severity": "LOW"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "8cf6fc75-d472-4c3e-a3be-07f8c3fd895a",
+    "rule": "python:S5754",
+    "severity": "CRITICAL",
+    "component": "seif-quality-44df456-all-source:scripts/ner_service.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 249,
+    "hash": "3263a0f2e515d52afdba06c03d02b373",
+    "textRange": {
+      "startLine": 249,
+      "endLine": 249,
+      "startOffset": 11,
+      "endOffset": 24
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Catch a more specific exception or reraise the exception",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "error-handling",
+      "bad-practice",
+      "suspicious"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "COMPLETE",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "HIGH"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "3524f6ac-487d-496c-9300-c29220ddef95",
+    "rule": "python:S1192",
+    "severity": "CRITICAL",
+    "component": "seif-quality-44df456-all-source:seif/app.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 115,
+    "hash": "465569fd975bb1e76648333befd5cf7f",
+    "textRange": {
+      "startLine": 115,
+      "endLine": 115,
+      "startOffset": 45,
+      "endOffset": 55
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/app.py",
+            "textRange": {
+              "startLine": 123,
+              "endLine": 123,
+              "startOffset": 24,
+              "endOffset": 34
+            },
+            "msg": "Duplication",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/app.py",
+            "textRange": {
+              "startLine": 565,
+              "endLine": 565,
+              "startOffset": 13,
+              "endOffset": 23
+            },
+            "msg": "Duplication",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Define a constant instead of duplicating this literal \"/v1/mask\" 3 times.",
+    "effort": "6min",
+    "debt": "6min",
+    "author": "",
+    "tags": [
+      "design"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "DISTINCT",
+    "cleanCodeAttributeCategory": "ADAPTABLE",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "HIGH"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "3cf598ed-b8c5-4bf9-8112-26aef1840597",
+    "rule": "python:S1192",
+    "severity": "CRITICAL",
+    "component": "seif-quality-44df456-all-source:seif/app.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 115,
+    "hash": "465569fd975bb1e76648333befd5cf7f",
+    "textRange": {
+      "startLine": 115,
+      "endLine": 115,
+      "startOffset": 33,
+      "endOffset": 43
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/app.py",
+            "textRange": {
+              "startLine": 123,
+              "endLine": 123,
+              "startOffset": 12,
+              "endOffset": 22
+            },
+            "msg": "Duplication",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/app.py",
+            "textRange": {
+              "startLine": 564,
+              "endLine": 564,
+              "startOffset": 13,
+              "endOffset": 23
+            },
+            "msg": "Duplication",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Define a constant instead of duplicating this literal \"/process\" 3 times.",
+    "effort": "6min",
+    "debt": "6min",
+    "author": "",
+    "tags": [
+      "design"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "DISTINCT",
+    "cleanCodeAttributeCategory": "ADAPTABLE",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "HIGH"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "dd987264-105e-40c2-a5e4-8728cc0ad74d",
+    "rule": "python:S1192",
+    "severity": "CRITICAL",
+    "component": "seif-quality-44df456-all-source:seif/app.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 115,
+    "hash": "465569fd975bb1e76648333befd5cf7f",
+    "textRange": {
+      "startLine": 115,
+      "endLine": 115,
+      "startOffset": 57,
+      "endOffset": 69
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/app.py",
+            "textRange": {
+              "startLine": 123,
+              "endLine": 123,
+              "startOffset": 36,
+              "endOffset": 48
+            },
+            "msg": "Duplication",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/app.py",
+            "textRange": {
+              "startLine": 566,
+              "endLine": 566,
+              "startOffset": 13,
+              "endOffset": 25
+            },
+            "msg": "Duplication",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Define a constant instead of duplicating this literal \"/v1/unmask\" 3 times.",
+    "effort": "6min",
+    "debt": "6min",
+    "author": "",
+    "tags": [
+      "design"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "DISTINCT",
+    "cleanCodeAttributeCategory": "ADAPTABLE",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "HIGH"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "9e7a6b64-0c0b-46b5-a62a-bac8e6d5becc",
+    "rule": "python:S7503",
+    "severity": "MINOR",
+    "component": "seif-quality-44df456-all-source:seif/app.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 521,
+    "hash": "dd22b9e900dbe1edd16e5b21004f9120",
+    "textRange": {
+      "startLine": 521,
+      "endLine": 521,
+      "startOffset": 14,
+      "endOffset": 19
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/app.py",
+            "textRange": {
+              "startLine": 521,
+              "endLine": 521,
+              "startOffset": 4,
+              "endOffset": 9
+            },
+            "msg": "This function is async.",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Use asynchronous features in this function or remove the `async` keyword.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "async"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CONVENTIONAL",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      },
+      {
+        "softwareQuality": "RELIABILITY",
+        "severity": "LOW"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "3007a1a7-6cb6-400f-baeb-eff4622ff3ba",
+    "rule": "python:S8786",
+    "severity": "MAJOR",
+    "component": "seif-quality-44df456-all-source:seif/context_filters.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 57,
+    "hash": "391d3ce78902808257dbce6224b651c6",
+    "textRange": {
+      "startLine": 57,
+      "endLine": 57,
+      "startOffset": 34,
+      "endOffset": 83
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking.",
+    "effort": "20min",
+    "debt": "20min",
+    "author": "",
+    "tags": [
+      "regex",
+      "performance"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "EFFICIENT",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "RELIABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "0adbdc17-3e1d-4063-97f9-c57d070a0589",
+    "rule": "python:S6353",
+    "severity": "MINOR",
+    "component": "seif-quality-44df456-all-source:seif/context_filters.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 58,
+    "hash": "d025cae76ce0e1378fb66cae9a3c4390",
+    "textRange": {
+      "startLine": 58,
+      "endLine": 58,
+      "startOffset": 49,
+      "endOffset": 54
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Use concise character class syntax '\\d' instead of '[0-9]'.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "regex"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "LOW"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "d72c4c87-fd3f-4291-bfa3-1a31eae5b0c5",
+    "rule": "python:S6353",
+    "severity": "MINOR",
+    "component": "seif-quality-44df456-all-source:seif/context_filters.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 58,
+    "hash": "d025cae76ce0e1378fb66cae9a3c4390",
+    "textRange": {
+      "startLine": 58,
+      "endLine": 58,
+      "startOffset": 34,
+      "endOffset": 39
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Use concise character class syntax '\\d' instead of '[0-9]'.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "regex"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "LOW"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "2a844df4-ac27-4998-836e-b5ef37151ff7",
+    "rule": "python:S6353",
+    "severity": "MINOR",
+    "component": "seif-quality-44df456-all-source:seif/context_filters.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 59,
+    "hash": "21b71ed9ed393f14b7cf01bbe0fb303d",
+    "textRange": {
+      "startLine": 59,
+      "endLine": 59,
+      "startOffset": 33,
+      "endOffset": 38
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Use concise character class syntax '\\d' instead of '[0-9]'.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "regex"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "LOW"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "a758429c-1c7c-40e4-9d91-8bb243a09726",
+    "rule": "python:S6353",
+    "severity": "MINOR",
+    "component": "seif-quality-44df456-all-source:seif/context_filters.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 59,
+    "hash": "21b71ed9ed393f14b7cf01bbe0fb303d",
+    "textRange": {
+      "startLine": 59,
+      "endLine": 59,
+      "startOffset": 40,
+      "endOffset": 45
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Use concise character class syntax '\\d' instead of '[0-9]'.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "regex"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "LOW"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "695e81f5-6c0c-4a27-b71b-95be300eef5e",
+    "rule": "python:S5843",
+    "severity": "MAJOR",
+    "component": "seif-quality-44df456-all-source:seif/detector.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 74,
+    "hash": "758f0ee9ad9fdd1e6eb7283ab2d7e7f7",
+    "textRange": {
+      "startLine": 74,
+      "endLine": 74,
+      "startOffset": 8,
+      "endOffset": 9
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 17,
+              "endOffset": 23
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 10,
+              "endOffset": 11
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 43,
+              "endOffset": 44
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 61,
+              "endOffset": 62
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 64,
+              "endOffset": 65
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 74,
+              "endOffset": 75
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 84,
+              "endOffset": 85
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 90,
+              "endOffset": 91
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 96,
+              "endOffset": 97
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 42,
+              "endOffset": 43
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 34,
+              "endOffset": 35
+            },
+            "msg": "+3 (incl 2 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 36,
+              "endOffset": 37
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 39,
+              "endOffset": 40
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 60,
+              "endOffset": 61
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 52,
+              "endOffset": 53
+            },
+            "msg": "+3 (incl 2 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 54,
+              "endOffset": 55
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 57,
+              "endOffset": 58
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 68,
+              "endOffset": 69
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 78,
+              "endOffset": 79
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 102,
+              "endOffset": 103
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Simplify this regular expression to reduce its complexity from 26 to the 20 allowed.",
+    "effort": "10min",
+    "debt": "10min",
+    "author": "",
+    "tags": [
+      "regex"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "c32c961e-0a4b-4627-bbda-484329275909",
+    "rule": "python:S5843",
+    "severity": "MAJOR",
+    "component": "seif-quality-44df456-all-source:seif/detector.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 74,
+    "hash": "758f0ee9ad9fdd1e6eb7283ab2d7e7f7",
+    "textRange": {
+      "startLine": 74,
+      "endLine": 74,
+      "startOffset": 8,
+      "endOffset": 9
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 17,
+              "endOffset": 23
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 10,
+              "endOffset": 11
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 43,
+              "endOffset": 44
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 61,
+              "endOffset": 62
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 64,
+              "endOffset": 65
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 74,
+              "endOffset": 75
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 84,
+              "endOffset": 85
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 90,
+              "endOffset": 91
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 96,
+              "endOffset": 97
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 42,
+              "endOffset": 43
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 34,
+              "endOffset": 35
+            },
+            "msg": "+3 (incl 2 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 36,
+              "endOffset": 37
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 39,
+              "endOffset": 40
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 60,
+              "endOffset": 61
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 52,
+              "endOffset": 53
+            },
+            "msg": "+3 (incl 2 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 54,
+              "endOffset": 55
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 57,
+              "endOffset": 58
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 68,
+              "endOffset": 69
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 78,
+              "endOffset": 79
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 74,
+              "endLine": 74,
+              "startOffset": 102,
+              "endOffset": 103
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Simplify this regular expression to reduce its complexity from 26 to the 20 allowed.",
+    "effort": "10min",
+    "debt": "10min",
+    "author": "",
+    "tags": [
+      "regex"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "09471c69-0246-48b1-839a-0ff21b1df85f",
+    "rule": "python:S3776",
+    "severity": "CRITICAL",
+    "component": "seif-quality-44df456-all-source:seif/detector.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 734,
+    "hash": "dcab02a8d5c6ae0b9a50bd235fe498f7",
+    "textRange": {
+      "startLine": 734,
+      "endLine": 734,
+      "startOffset": 4,
+      "endOffset": 26
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 742,
+              "endLine": 742,
+              "startOffset": 4,
+              "endOffset": 7
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 744,
+              "endLine": 744,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 746,
+              "endLine": 746,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 746,
+              "endLine": 746,
+              "startOffset": 33,
+              "endOffset": 36
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 748,
+              "endLine": 748,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 750,
+              "endLine": 750,
+              "startOffset": 12,
+              "endOffset": 14
+            },
+            "msg": "+3 (incl 2 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 753,
+              "endLine": 753,
+              "startOffset": 12,
+              "endOffset": 14
+            },
+            "msg": "+3 (incl 2 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 755,
+              "endLine": 755,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 759,
+              "endLine": 759,
+              "startOffset": 12,
+              "endOffset": 14
+            },
+            "msg": "+3 (incl 2 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 762,
+              "endLine": 762,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 762,
+              "endLine": 762,
+              "startOffset": 28,
+              "endOffset": 30
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 766,
+              "endLine": 766,
+              "startOffset": 29,
+              "endOffset": 31
+            },
+            "msg": "+3 (incl 2 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Refactor this function to reduce its Cognitive Complexity from 25 to the 15 allowed.",
+    "effort": "15min",
+    "debt": "15min",
+    "author": "",
+    "tags": [
+      "brain-overload"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "FOCUSED",
+    "cleanCodeAttributeCategory": "ADAPTABLE",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "HIGH"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "1fe9b57f-da4f-45d5-a05c-3b59dae15a94",
+    "rule": "python:S3776",
+    "severity": "CRITICAL",
+    "component": "seif-quality-44df456-all-source:seif/detector.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 856,
+    "hash": "eb36514565a00d30925e425947d97eae",
+    "textRange": {
+      "startLine": 856,
+      "endLine": 856,
+      "startOffset": 8,
+      "endOffset": 11
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 857,
+              "endLine": 857,
+              "startOffset": 8,
+              "endOffset": 11
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 859,
+              "endLine": 859,
+              "startOffset": 12,
+              "endOffset": 14
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 859,
+              "endLine": 859,
+              "startOffset": 32,
+              "endOffset": 35
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 861,
+              "endLine": 861,
+              "startOffset": 16,
+              "endOffset": 18
+            },
+            "msg": "+3 (incl 2 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 861,
+              "endLine": 861,
+              "startOffset": 35,
+              "endOffset": 38
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 863,
+              "endLine": 863,
+              "startOffset": 12,
+              "endOffset": 17
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 863,
+              "endLine": 863,
+              "startOffset": 30,
+              "endOffset": 33
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 865,
+              "endLine": 865,
+              "startOffset": 12,
+              "endOffset": 14
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 866,
+              "endLine": 866,
+              "startOffset": 16,
+              "endOffset": 21
+            },
+            "msg": "+3 (incl 2 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 866,
+              "endLine": 866,
+              "startOffset": 34,
+              "endOffset": 37
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 869,
+              "endLine": 869,
+              "startOffset": 12,
+              "endOffset": 14
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 869,
+              "endLine": 869,
+              "startOffset": 21,
+              "endOffset": 24
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/detector.py",
+            "textRange": {
+              "startLine": 869,
+              "endLine": 869,
+              "startOffset": 40,
+              "endOffset": 42
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Refactor this function to reduce its Cognitive Complexity from 21 to the 15 allowed.",
+    "effort": "11min",
+    "debt": "11min",
+    "author": "",
+    "tags": [
+      "brain-overload"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "FOCUSED",
+    "cleanCodeAttributeCategory": "ADAPTABLE",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "HIGH"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "f8a7afd5-7814-4095-8397-2cf8d929f68c",
+    "rule": "python:S1172",
+    "severity": "MAJOR",
+    "component": "seif-quality-44df456-all-source:seif/detector.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 892,
+    "hash": "3f202cf5a9fd0812a9ffbf8e059be74f",
+    "textRange": {
+      "startLine": 892,
+      "endLine": 892,
+      "startOffset": 35,
+      "endOffset": 45
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Remove the unused function parameter \"lower\".",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "unused"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "6bf42088-49c9-4d59-8c2c-6970e18a5a56",
+    "rule": "python:S1172",
+    "severity": "MAJOR",
+    "component": "seif-quality-44df456-all-source:seif/detector.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 990,
+    "hash": "d8379a586c1d2e4dcc600dda4aee8a11",
+    "textRange": {
+      "startLine": 990,
+      "endLine": 990,
+      "startOffset": 29,
+      "endOffset": 39
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Remove the unused function parameter \"lower\".",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "unused"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "e6d81689-6f73-4ada-b6b2-32943c031434",
+    "rule": "python:S8786",
+    "severity": "MAJOR",
+    "component": "seif-quality-44df456-all-source:seif/document_fields.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 28,
+    "hash": "6d14b74b2c9e92bcc14e8772172a3f92",
+    "textRange": {
+      "startLine": 28,
+      "endLine": 28,
+      "startOffset": 6,
+      "endOffset": 85
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking.",
+    "effort": "20min",
+    "debt": "20min",
+    "author": "",
+    "tags": [
+      "regex",
+      "performance"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "EFFICIENT",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "RELIABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "e6e4252b-aea1-4131-951c-d464b58b1e9b",
+    "rule": "python:S6395",
+    "severity": "MAJOR",
+    "component": "seif-quality-44df456-all-source:seif/document_fields.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 75,
+    "hash": "3e598d26a9e42ce78b0bee6619f9bf2d",
+    "textRange": {
+      "startLine": 75,
+      "endLine": 75,
+      "startOffset": 37,
+      "endOffset": 46
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Unwrap this unnecessarily grouped subpattern.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "regex"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "4e54af39-5678-4223-a9c8-5d869b5e990f",
+    "rule": "python:S3776",
+    "severity": "CRITICAL",
+    "component": "seif-quality-44df456-all-source:seif/document_fields.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 182,
+    "hash": "d6c743f0643bc54d9681c87d603bcdb6",
+    "textRange": {
+      "startLine": 182,
+      "endLine": 182,
+      "startOffset": 4,
+      "endOffset": 20
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/document_fields.py",
+            "textRange": {
+              "startLine": 184,
+              "endLine": 184,
+              "startOffset": 4,
+              "endOffset": 7
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/document_fields.py",
+            "textRange": {
+              "startLine": 185,
+              "endLine": 185,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/document_fields.py",
+            "textRange": {
+              "startLine": 185,
+              "endLine": 185,
+              "startOffset": 32,
+              "endOffset": 35
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/document_fields.py",
+            "textRange": {
+              "startLine": 188,
+              "endLine": 188,
+              "startOffset": 12,
+              "endOffset": 14
+            },
+            "msg": "+3 (incl 2 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/document_fields.py",
+            "textRange": {
+              "startLine": 188,
+              "endLine": 188,
+              "startOffset": 61,
+              "endOffset": 64
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/document_fields.py",
+            "textRange": {
+              "startLine": 190,
+              "endLine": 190,
+              "startOffset": 16,
+              "endOffset": 18
+            },
+            "msg": "+4 (incl 3 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/document_fields.py",
+            "textRange": {
+              "startLine": 191,
+              "endLine": 191,
+              "startOffset": 20,
+              "endOffset": 23
+            },
+            "msg": "+5 (incl 4 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/document_fields.py",
+            "textRange": {
+              "startLine": 192,
+              "endLine": 192,
+              "startOffset": 47,
+              "endOffset": 49
+            },
+            "msg": "+6 (incl 5 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Refactor this function to reduce its Cognitive Complexity from 23 to the 15 allowed.",
+    "effort": "13min",
+    "debt": "13min",
+    "author": "",
+    "tags": [
+      "brain-overload"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "FOCUSED",
+    "cleanCodeAttributeCategory": "ADAPTABLE",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "HIGH"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "a6a77d22-2a4d-4e35-a6d9-c8dea481a5cb",
+    "rule": "python:S5843",
+    "severity": "MAJOR",
+    "component": "seif-quality-44df456-all-source:seif/location_fields.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 47,
+    "hash": "ffb9cd560f666c5b1946bba94664fb22",
+    "textRange": {
+      "startLine": 47,
+      "endLine": 47,
+      "startOffset": 4,
+      "endOffset": 5
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/location_fields.py",
+            "textRange": {
+              "startLine": 47,
+              "endLine": 47,
+              "startOffset": 56,
+              "endOffset": 57
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/location_fields.py",
+            "textRange": {
+              "startLine": 47,
+              "endLine": 47,
+              "startOffset": 48,
+              "endOffset": 49
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/location_fields.py",
+            "textRange": {
+              "startLine": 47,
+              "endLine": 47,
+              "startOffset": 47,
+              "endOffset": 48
+            },
+            "msg": "+3 (incl 2 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/location_fields.py",
+            "textRange": {
+              "startLine": 47,
+              "endLine": 47,
+              "startOffset": 25,
+              "endOffset": 26
+            },
+            "msg": "+4 (incl 3 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/location_fields.py",
+            "textRange": {
+              "startLine": 47,
+              "endLine": 47,
+              "startOffset": 29,
+              "endOffset": 30
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/location_fields.py",
+            "textRange": {
+              "startLine": 47,
+              "endLine": 47,
+              "startOffset": 33,
+              "endOffset": 34
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/location_fields.py",
+            "textRange": {
+              "startLine": 47,
+              "endLine": 47,
+              "startOffset": 37,
+              "endOffset": 38
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/location_fields.py",
+            "textRange": {
+              "startLine": 47,
+              "endLine": 47,
+              "startOffset": 42,
+              "endOffset": 43
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/location_fields.py",
+            "textRange": {
+              "startLine": 47,
+              "endLine": 47,
+              "startOffset": 44,
+              "endOffset": 45
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/location_fields.py",
+            "textRange": {
+              "startLine": 47,
+              "endLine": 47,
+              "startOffset": 54,
+              "endOffset": 55
+            },
+            "msg": "+3 (incl 2 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/location_fields.py",
+            "textRange": {
+              "startLine": 47,
+              "endLine": 47,
+              "startOffset": 50,
+              "endOffset": 51
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/location_fields.py",
+            "textRange": {
+              "startLine": 47,
+              "endLine": 47,
+              "startOffset": 67,
+              "endOffset": 68
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/location_fields.py",
+            "textRange": {
+              "startLine": 47,
+              "endLine": 47,
+              "startOffset": 62,
+              "endOffset": 63
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Simplify this regular expression to reduce its complexity from 22 to the 20 allowed.",
+    "effort": "10min",
+    "debt": "10min",
+    "author": "",
+    "tags": [
+      "regex"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "07f86447-73cb-42a8-be2b-955c414aac2b",
+    "rule": "python:S7513",
+    "severity": "MINOR",
+    "component": "seif-quality-44df456-all-source:seif/ner.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 153,
+    "hash": "926ca07063c6f8ad6d4e8200ef747dbd",
+    "textRange": {
+      "startLine": 153,
+      "endLine": 153,
+      "startOffset": 42,
+      "endOffset": 47
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/ner.py",
+            "textRange": {
+              "startLine": 154,
+              "endLine": 154,
+              "startOffset": 20,
+              "endOffset": 37
+            },
+            "msg": "Only task created here",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Replace the TaskGroup with a direct function call when it only ever spawns one task.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "async",
+      "trio",
+      "asyncio",
+      "anyio"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CONVENTIONAL",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "LOW"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "41d81c78-cecf-41c3-9530-cf5972335f2b",
+    "rule": "python:S3776",
+    "severity": "CRITICAL",
+    "component": "seif-quality-44df456-all-source:seif/person_fields.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 191,
+    "hash": "16344f6f1d2f3fad97300893d731bce7",
+    "textRange": {
+      "startLine": 191,
+      "endLine": 191,
+      "startOffset": 4,
+      "endOffset": 21
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/person_fields.py",
+            "textRange": {
+              "startLine": 192,
+              "endLine": 192,
+              "startOffset": 4,
+              "endOffset": 7
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/person_fields.py",
+            "textRange": {
+              "startLine": 193,
+              "endLine": 193,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/person_fields.py",
+            "textRange": {
+              "startLine": 196,
+              "endLine": 196,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/person_fields.py",
+            "textRange": {
+              "startLine": 196,
+              "endLine": 196,
+              "startOffset": 26,
+              "endOffset": 28
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/person_fields.py",
+            "textRange": {
+              "startLine": 199,
+              "endLine": 199,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/person_fields.py",
+            "textRange": {
+              "startLine": 199,
+              "endLine": 199,
+              "startOffset": 35,
+              "endOffset": 37
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/person_fields.py",
+            "textRange": {
+              "startLine": 204,
+              "endLine": 204,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/person_fields.py",
+            "textRange": {
+              "startLine": 209,
+              "endLine": 209,
+              "startOffset": 8,
+              "endOffset": 11
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/person_fields.py",
+            "textRange": {
+              "startLine": 211,
+              "endLine": 211,
+              "startOffset": 12,
+              "endOffset": 14
+            },
+            "msg": "+3 (incl 2 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Refactor this function to reduce its Cognitive Complexity from 16 to the 15 allowed.",
+    "effort": "6min",
+    "debt": "6min",
+    "author": "",
+    "tags": [
+      "brain-overload"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "FOCUSED",
+    "cleanCodeAttributeCategory": "ADAPTABLE",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "HIGH"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "a760b342-b640-4d81-9602-b0b2ab01e048",
+    "rule": "python:S6353",
+    "severity": "MINOR",
+    "component": "seif-quality-44df456-all-source:seif/structured_fields.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 138,
+    "hash": "a191eb26e1ad0d3806e39f906bf23cab",
+    "textRange": {
+      "startLine": 138,
+      "endLine": 138,
+      "startOffset": 50,
+      "endOffset": 55
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Use concise character class syntax '\\d' instead of '[0-9]'.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "regex"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "LOW"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "2811c185-f72a-4274-a539-8035ae540f11",
+    "rule": "python:S3776",
+    "severity": "CRITICAL",
+    "component": "seif-quality-44df456-all-source:seif/structured_fields.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 165,
+    "hash": "592e03f35fa0a4e311ee6b547e365294",
+    "textRange": {
+      "startLine": 165,
+      "endLine": 165,
+      "startOffset": 4,
+      "endOffset": 18
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/structured_fields.py",
+            "textRange": {
+              "startLine": 170,
+              "endLine": 170,
+              "startOffset": 4,
+              "endOffset": 6
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/structured_fields.py",
+            "textRange": {
+              "startLine": 172,
+              "endLine": 172,
+              "startOffset": 4,
+              "endOffset": 6
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/structured_fields.py",
+            "textRange": {
+              "startLine": 175,
+              "endLine": 175,
+              "startOffset": 4,
+              "endOffset": 6
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/structured_fields.py",
+            "textRange": {
+              "startLine": 175,
+              "endLine": 175,
+              "startOffset": 36,
+              "endOffset": 38
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/structured_fields.py",
+            "textRange": {
+              "startLine": 179,
+              "endLine": 179,
+              "startOffset": 4,
+              "endOffset": 6
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/structured_fields.py",
+            "textRange": {
+              "startLine": 179,
+              "endLine": 179,
+              "startOffset": 73,
+              "endOffset": 76
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/structured_fields.py",
+            "textRange": {
+              "startLine": 179,
+              "endLine": 179,
+              "startOffset": 36,
+              "endOffset": 38
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/structured_fields.py",
+            "textRange": {
+              "startLine": 182,
+              "endLine": 182,
+              "startOffset": 4,
+              "endOffset": 6
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/structured_fields.py",
+            "textRange": {
+              "startLine": 182,
+              "endLine": 182,
+              "startOffset": 25,
+              "endOffset": 28
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/structured_fields.py",
+            "textRange": {
+              "startLine": 183,
+              "endLine": 183,
+              "startOffset": 28,
+              "endOffset": 30
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/structured_fields.py",
+            "textRange": {
+              "startLine": 185,
+              "endLine": 185,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/structured_fields.py",
+            "textRange": {
+              "startLine": 185,
+              "endLine": 185,
+              "startOffset": 23,
+              "endOffset": 26
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/structured_fields.py",
+            "textRange": {
+              "startLine": 187,
+              "endLine": 187,
+              "startOffset": 8,
+              "endOffset": 10
+            },
+            "msg": "+2 (incl 1 for nesting)",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:seif/structured_fields.py",
+            "textRange": {
+              "startLine": 187,
+              "endLine": 187,
+              "startOffset": 33,
+              "endOffset": 36
+            },
+            "msg": "+1",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Refactor this function to reduce its Cognitive Complexity from 17 to the 15 allowed.",
+    "effort": "7min",
+    "debt": "7min",
+    "author": "",
+    "tags": [
+      "brain-overload"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "FOCUSED",
+    "cleanCodeAttributeCategory": "ADAPTABLE",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "HIGH"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "3d5b7f59-5f58-4c5b-90f3-6ca96fef2aed",
+    "rule": "python:S6353",
+    "severity": "MINOR",
+    "component": "seif-quality-44df456-all-source:seif/structured_fields.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 249,
+    "hash": "0955911aa79dc8ba95ec4a05ceae3971",
+    "textRange": {
+      "startLine": 249,
+      "endLine": 249,
+      "startOffset": 30,
+      "endOffset": 35
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Use concise character class syntax '\\d' instead of '[0-9]'.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "regex"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "LOW"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "3ea22be6-d63d-450a-95de-7d0bdbb09a36",
+    "rule": "python:S5778",
+    "severity": "MAJOR",
+    "component": "seif-quality-44df456-all-source:tests/test_benchmark_corpus.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 255,
+    "hash": "092cdac9ad539e6e067b43df895337af",
+    "textRange": {
+      "startLine": 255,
+      "endLine": 255,
+      "startOffset": 4,
+      "endOffset": 85
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:tests/test_benchmark_corpus.py",
+            "textRange": {
+              "startLine": 256,
+              "endLine": 256,
+              "startOffset": 16,
+              "endOffset": 81
+            },
+            "msg": "Invocation possibly throwing an exception.",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:tests/test_benchmark_corpus.py",
+            "textRange": {
+              "startLine": 256,
+              "endLine": 256,
+              "startOffset": 26,
+              "endOffset": 80
+            },
+            "msg": "Invocation possibly throwing an exception.",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:tests/test_benchmark_corpus.py",
+            "textRange": {
+              "startLine": 256,
+              "endLine": 256,
+              "startOffset": 49,
+              "endOffset": 58
+            },
+            "msg": "Invocation possibly throwing an exception.",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Refactor this exception test to have only one invocation possibly throwing an exception.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "tests",
+      "pytest",
+      "unittest"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "8c0d7f64-447e-4a2f-8504-a56161a3a3db",
+    "rule": "python:S5778",
+    "severity": "MAJOR",
+    "component": "seif-quality-44df456-all-source:tests/test_code_quality.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 53,
+    "hash": "6f2f84fbbad215c7724eb16925f14744",
+    "textRange": {
+      "startLine": 53,
+      "endLine": 53,
+      "startOffset": 4,
+      "endOffset": 35
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:tests/test_code_quality.py",
+            "textRange": {
+              "startLine": 54,
+              "endLine": 54,
+              "startOffset": 8,
+              "endOffset": 61
+            },
+            "msg": "Invocation possibly throwing an exception.",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:tests/test_code_quality.py",
+            "textRange": {
+              "startLine": 54,
+              "endLine": 54,
+              "startOffset": 25,
+              "endOffset": 42
+            },
+            "msg": "Invocation possibly throwing an exception.",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Refactor this exception test to have only one invocation possibly throwing an exception.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "tests",
+      "pytest",
+      "unittest"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "8cb85976-dd93-4c4e-b692-8b7e128eede5",
+    "rule": "python:S5778",
+    "severity": "MAJOR",
+    "component": "seif-quality-44df456-all-source:tests/test_code_quality.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 68,
+    "hash": "7a9af794bcf62b3de71cf98a180c51ee",
+    "textRange": {
+      "startLine": 68,
+      "endLine": 68,
+      "startOffset": 4,
+      "endOffset": 66
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:tests/test_code_quality.py",
+            "textRange": {
+              "startLine": 69,
+              "endLine": 69,
+              "startOffset": 8,
+              "endOffset": 77
+            },
+            "msg": "Invocation possibly throwing an exception.",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:tests/test_code_quality.py",
+            "textRange": {
+              "startLine": 69,
+              "endLine": 69,
+              "startOffset": 25,
+              "endOffset": 32
+            },
+            "msg": "Invocation possibly throwing an exception.",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:tests/test_code_quality.py",
+            "textRange": {
+              "startLine": 69,
+              "endLine": 69,
+              "startOffset": 34,
+              "endOffset": 58
+            },
+            "msg": "Invocation possibly throwing an exception.",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Refactor this exception test to have only one invocation possibly throwing an exception.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "tests",
+      "pytest",
+      "unittest"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "fa9a27c9-04be-4947-9325-5c8b24f9754f",
+    "rule": "python:S5778",
+    "severity": "MAJOR",
+    "component": "seif-quality-44df456-all-source:tests/test_cpu_completion.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 77,
+    "hash": "fbe4efa65f1a0fd9ae3603767fa9dac4",
+    "textRange": {
+      "startLine": 77,
+      "endLine": 77,
+      "startOffset": 8,
+      "endOffset": 49
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:tests/test_cpu_completion.py",
+            "textRange": {
+              "startLine": 78,
+              "endLine": 78,
+              "startOffset": 30,
+              "endOffset": 68
+            },
+            "msg": "Invocation possibly throwing an exception.",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:tests/test_cpu_completion.py",
+            "textRange": {
+              "startLine": 78,
+              "endLine": 78,
+              "startOffset": 53,
+              "endOffset": 61
+            },
+            "msg": "Invocation possibly throwing an exception.",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Refactor this exception test to have only one invocation possibly throwing an exception.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "tests",
+      "pytest",
+      "unittest"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "7a241504-0408-4479-87c1-aa61a07b0a29",
+    "rule": "python:S5778",
+    "severity": "MAJOR",
+    "component": "seif-quality-44df456-all-source:tests/test_synthetic_benchmark.py",
+    "project": "seif-quality-44df456-all-source",
+    "line": 19,
+    "hash": "0d8b441083a904bdc0a027a6ab8ea5d0",
+    "textRange": {
+      "startLine": 19,
+      "endLine": 19,
+      "startOffset": 4,
+      "endOffset": 64
+    },
+    "flows": [
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:tests/test_synthetic_benchmark.py",
+            "textRange": {
+              "startLine": 20,
+              "endLine": 20,
+              "startOffset": 16,
+              "endOffset": 36
+            },
+            "msg": "Invocation possibly throwing an exception.",
+            "msgFormattings": []
+          }
+        ]
+      },
+      {
+        "locations": [
+          {
+            "component": "seif-quality-44df456-all-source:tests/test_synthetic_benchmark.py",
+            "textRange": {
+              "startLine": 20,
+              "endLine": 20,
+              "startOffset": 20,
+              "endOffset": 35
+            },
+            "msg": "Invocation possibly throwing an exception.",
+            "msgFormattings": []
+          }
+        ]
+      }
+    ],
+    "status": "OPEN",
+    "message": "Refactor this exception test to have only one invocation possibly throwing an exception.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "tests",
+      "pytest",
+      "unittest"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "4a6869f8-1054-4b02-b471-85398b46e71a",
+    "rule": "javascript:S2486",
+    "severity": "MINOR",
+    "component": "seif-quality-44df456-all-source:web/app.js",
+    "project": "seif-quality-44df456-all-source",
+    "line": 260,
+    "hash": "4bc40279c16e9ee911eeb6665c1a8317",
+    "textRange": {
+      "startLine": 260,
+      "endLine": 260,
+      "startOffset": 2,
+      "endOffset": 206
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Handle this exception, don't catch it at all, or explain in a comment why it is ignored.",
+    "effort": "1h",
+    "debt": "1h",
+    "author": "",
+    "tags": [
+      "cwe",
+      "error-handling",
+      "suspicious"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "LOW"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  },
+  {
+    "key": "f70fb38f-39a7-44e6-ba1b-0fbc1cb4d423",
+    "rule": "javascript:S7785",
+    "severity": "MAJOR",
+    "component": "seif-quality-44df456-all-source:web/app.js",
+    "project": "seif-quality-44df456-all-source",
+    "line": 276,
+    "hash": "5d9c65e16fd96b4ea0779186aaad4ec0",
+    "textRange": {
+      "startLine": 276,
+      "endLine": 276,
+      "startOffset": 0,
+      "endOffset": 12
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Prefer top-level await over an async function `initialize` call.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "",
+    "tags": [
+      "async",
+      "editable-source",
+      "type-dependent",
+      "es2022",
+      "esm-only",
+      "modernize"
+    ],
+    "creationDate": "2026-09-22T19:28:49+0300",
+    "updateDate": "2026-09-22T19:28:49+0300",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": true,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CONVENTIONAL",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+  }
+]

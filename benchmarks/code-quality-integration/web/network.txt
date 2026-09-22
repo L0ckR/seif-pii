@@ -1,0 +1,7 @@
+### Result
+4. [GET] http://127.0.0.1:46091/health => [200] OK
+5. [GET] http://127.0.0.1:46091/v1/types => [200] OK
+7. [POST] http://127.0.0.1:46091/v1/mask => [200] OK
+8. [POST] http://127.0.0.1:46091/v1/unmask => [200] OK
+
+Note: 4 static requests not shown, run with --static option to see them.

@@ -1,0 +1,160 @@
+{
+  "project": "seif-quality-44df456-all-source",
+  "url": "http://127.0.0.1:19000/dashboard?id=seif-quality-44df456-all-source",
+  "issues_total": 41,
+  "severities": {
+    "CRITICAL": 13,
+    "MAJOR": 16,
+    "MINOR": 12
+  },
+  "types": {
+    "CODE_SMELL": 39,
+    "VULNERABILITY": 2
+  },
+  "top_rules": [
+    [
+      "python:S3776",
+      9
+    ],
+    [
+      "python:S6353",
+      6
+    ],
+    [
+      "python:S5778",
+      5
+    ],
+    [
+      "python:S7503",
+      4
+    ],
+    [
+      "python:S1192",
+      3
+    ],
+    [
+      "python:S5843",
+      3
+    ],
+    [
+      "python:S2245",
+      2
+    ],
+    [
+      "python:S8786",
+      2
+    ],
+    [
+      "python:S1172",
+      2
+    ],
+    [
+      "python:S5754",
+      1
+    ],
+    [
+      "python:S6395",
+      1
+    ],
+    [
+      "python:S7513",
+      1
+    ],
+    [
+      "javascript:S2486",
+      1
+    ],
+    [
+      "javascript:S7785",
+      1
+    ]
+  ],
+  "top_files": [
+    [
+      "seif/detector.py",
+      6
+    ],
+    [
+      "seif/context_filters.py",
+      5
+    ],
+    [
+      "scripts/ner_service.py",
+      4
+    ],
+    [
+      "seif/app.py",
+      4
+    ],
+    [
+      "seif/document_fields.py",
+      3
+    ],
+    [
+      "seif/structured_fields.py",
+      3
+    ],
+    [
+      "scripts/compare_presidio.py",
+      2
+    ],
+    [
+      "tests/test_code_quality.py",
+      2
+    ],
+    [
+      "web/app.js",
+      2
+    ],
+    [
+      "scripts/benchmark_corpus.py",
+      1
+    ],
+    [
+      "scripts/evaluate_annotations.py",
+      1
+    ],
+    [
+      "scripts/evaluate_redmadrobot.py",
+      1
+    ]
+  ],
+  "scope_counts": {
+    "scripts": {
+      "CRITICAL": 5,
+      "MAJOR": 2,
+      "MINOR": 3
+    },
+    "seif": {
+      "CRITICAL": 8,
+      "MINOR": 8,
+      "MAJOR": 8
+    },
+    "tests": {
+      "MAJOR": 5
+    },
+    "web": {
+      "MINOR": 1,
+      "MAJOR": 1
+    }
+  },
+  "hotspots": 0,
+  "measures": {
+    "coverage": "0.0",
+    "complexity": "2653",
+    "reliability_rating": "1.0",
+    "code_smells": "39",
+    "duplicated_lines_density": "0.0",
+    "security_rating": "3.0",
+    "security_hotspots": "0",
+    "sqale_index": "337",
+    "sqale_rating": "1.0",
+    "bugs": "0",
+    "cognitive_complexity": "2024",
+    "ncloc": "12908",
+    "files": "92",
+    "vulnerabilities": "2",
+    "lines": "15818"
+  },
+  "quality_gate": "OK"
+}

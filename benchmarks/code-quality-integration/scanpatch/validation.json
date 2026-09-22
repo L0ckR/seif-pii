@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "network_disabled_both_versions": true,
+  "no_live_inference": true,
+  "source_and_inputs_immutable": true,
+  "actual_roundtrip_checks": 2128,
+  "artifact_sha256": {
+    "baseline.json": "5b1ddeea91bdc83bb12aabf6b4c2057ec4db5458566d0b443c579a1dcb0da652",
+    "current.json": "a3c2505910f731257e09ad03328813cb410032d579b4331e2bffe1ac378378c5",
+    "runner.py": "dfcf2d0342891565339966a92b99ed54fd69ddad46f550657652fb5a507d3c6c",
+    "aggregate.py": "980d01549ee5d9a7fc5bd40e42a9766a88a45d027dc0559717c91777687f8a82",
+    "reference.json": "744c3ff9861783e5889a03fb0b2cde52df2ac5ce52b90ac70ac8938e3bbdc9ad",
+    "report.json": "6797f30f7a37e2e5b5b54692ffcff8cff5bed8ddcde0619e3035e755c6d4e118",
+    "summary.md": "1bb29b837d75dde11ba8448fd3929b710fd57619de863622c2bb7c229e263f7d"
+  }
+}

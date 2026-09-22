@@ -1,0 +1,37 @@
+[
+  {
+    "pattern": "_PATR",
+    "cases": 88,
+    "differences": 0
+  },
+  {
+    "pattern": "_CORPORATE_ADDRESS",
+    "cases": 448,
+    "differences": 0
+  },
+  {
+    "pattern": "_NUMERIC_TAIL",
+    "cases": 448,
+    "differences": 0
+  },
+  {
+    "pattern": "_NUMERIC_HEAD",
+    "cases": 448,
+    "differences": 0
+  },
+  {
+    "pattern": "_PART_LABEL_SUFFIX",
+    "cases": 448,
+    "differences": 0
+  },
+  {
+    "pattern": "_OWNER_BOUNDARY",
+    "cases": 448,
+    "differences": 0
+  },
+  {
+    "pattern": "_AFTER_BIRTH_DATE_PLACE",
+    "cases": 448,
+    "differences": 0
+  }
+]

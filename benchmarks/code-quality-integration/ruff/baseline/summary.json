@@ -1,0 +1,526 @@
+{
+  "schema_version": 1,
+  "archive": "seif-pii-generalized-1219108.zip",
+  "archive_sha256": "424d28b2e4beca96cb91181e7d83ad4ee1f3e4f3ea2bd10d4ac51b2d7e6c9320",
+  "analyzer": "ruff 0.16.8",
+  "profiles": {
+    "project": {
+      "report": "project.gitlab.json",
+      "ruff_arguments": [
+        "check",
+        "--isolated",
+        "--no-cache",
+        "--target-version",
+        "py312",
+        "--exclude",
+        "",
+        "--no-respect-gitignore",
+        "--line-length",
+        "120",
+        "--select",
+        "E4,E7,E9,F,I,B",
+        "--output-format",
+        "gitlab",
+        "."
+      ],
+      "total": 0,
+      "by_scope": {},
+      "by_rule": {},
+      "by_severity": {},
+      "top_files": {}
+    },
+    "maintainability": {
+      "report": "maintainability.gitlab.json",
+      "ruff_arguments": [
+        "check",
+        "--isolated",
+        "--no-cache",
+        "--target-version",
+        "py312",
+        "--exclude",
+        "",
+        "--no-respect-gitignore",
+        "--line-length",
+        "120",
+        "--select",
+        "C901,C4,SIM,PERF,PLR0911,PLR0912,PLR0913,PLR0915",
+        "--output-format",
+        "gitlab",
+        "."
+      ],
+      "total": 78,
+      "by_scope": {
+        "scripts": 25,
+        "seif": 37,
+        "tests": 16
+      },
+      "by_rule": {
+        "C901": 28,
+        "SIM117": 12,
+        "PLR0915": 11,
+        "PLR0912": 8,
+        "SIM905": 6,
+        "PLR0911": 3,
+        "SIM105": 3,
+        "C420": 2,
+        "C408": 2,
+        "PERF401": 1,
+        "SIM114": 1,
+        "SIM102": 1
+      },
+      "by_severity": {
+        "major": 78
+      },
+      "top_files": {
+        "seif/detector.py": 11,
+        "tests/test_ner_service.py": 6,
+        "seif/app.py": 5,
+        "seif/person_fields.py": 5,
+        "tests/test_api.py": 5,
+        "tests/test_sentinel.py": 5,
+        "seif/request_capture.py": 4,
+        "scripts/benchmark_corpus.py": 3,
+        "scripts/capture_requests.py": 3,
+        "scripts/evaluate_annotations.py": 3,
+        "scripts/evaluate_redmadrobot.py": 3,
+        "scripts/ner_service.py": 3
+      }
+    },
+    "security": {
+      "report": "security.gitlab.json",
+      "ruff_arguments": [
+        "check",
+        "--isolated",
+        "--no-cache",
+        "--target-version",
+        "py312",
+        "--exclude",
+        "",
+        "--no-respect-gitignore",
+        "--line-length",
+        "120",
+        "--select",
+        "S",
+        "--output-format",
+        "gitlab",
+        "."
+      ],
+      "total": 939,
+      "by_scope": {
+        "deploy": 1,
+        "scripts": 8,
+        "seif": 2,
+        "tests": 928
+      },
+      "by_rule": {
+        "S101": 912,
+        "S106": 13,
+        "S603": 8,
+        "S105": 4,
+        "S311": 2
+      },
+      "by_severity": {
+        "major": 939
+      },
+      "top_files": {
+        "tests/test_api.py": 141,
+        "tests/test_ner_service.py": 75,
+        "tests/test_masking_policy.py": 55,
+        "tests/test_request_capture_writer.py": 55,
+        "tests/test_benchmark_corpus.py": 47,
+        "tests/test_golden_dataset.py": 37,
+        "tests/test_request_capture_api.py": 36,
+        "tests/test_sentinel.py": 33,
+        "tests/test_generalization_adversarial.py": 29,
+        "tests/test_boundary_upload.py": 27,
+        "tests/test_cardholder_fields.py": 27,
+        "tests/test_document_context_generalization.py": 26
+      }
+    }
+  },
+  "scope": "All Python files under seif/, scripts/, tests/, deploy/ in the source ZIP",
+  "configuration": "Isolated fixed profiles; Ruff default thresholds; inline noqa is honored",
+  "severity": "Native Ruff GitLab severity, unchanged; not Sonar or hackathon severity",
+  "source_files": {
+    "deploy/k8s/create-secrets.py": {
+      "sha256": "e95c0ef4df4fdd844132c55614262b5e8cfb72ff8b4773ebad0f863e26605c28",
+      "bytes": 1309,
+      "lines": 39
+    },
+    "scripts/benchmark.py": {
+      "sha256": "4473cbed22a1cf14fa26151d7301206ed19fe2e494dd96d53ef02c2902341488",
+      "bytes": 8692,
+      "lines": 198
+    },
+    "scripts/benchmark_corpus.py": {
+      "sha256": "11e3e41f6f673be43fa6626fed9f409e3c3b1a7a2ba7475b574b59c274a01151",
+      "bytes": 20791,
+      "lines": 451
+    },
+    "scripts/capture_requests.py": {
+      "sha256": "b6491909f30906842c38767d015dc11d2c015a3b807fa6f3a246753780cd2efb",
+      "bytes": 9581,
+      "lines": 194
+    },
+    "scripts/client_example.py": {
+      "sha256": "4bda224a64ee21d1af48d1beaf3017103f0fafbee50f0677b4c054241392a3bf",
+      "bytes": 1035,
+      "lines": 19
+    },
+    "scripts/code_quality.py": {
+      "sha256": "701616b89baa0631a427502e0f164c747661014112a189c22e58daed40a0087b",
+      "bytes": 7624,
+      "lines": 159
+    },
+    "scripts/compare_presidio.py": {
+      "sha256": "5ec362a7637c1aa2fd26d130180478eafab0d860bc51a19323daa3eff65648c0",
+      "bytes": 20855,
+      "lines": 325
+    },
+    "scripts/evaluate.py": {
+      "sha256": "9c7735b3bcc202dab4ce3fbb7cea91f42632188e943eb673674e3ae08fc9bc3c",
+      "bytes": 8214,
+      "lines": 151
+    },
+    "scripts/evaluate_annotations.py": {
+      "sha256": "4e58db67fcea5b8237954551aa0f8cf64a7ed4e03071a5b1e41f601df1d66a6f",
+      "bytes": 9265,
+      "lines": 167
+    },
+    "scripts/evaluate_external.py": {
+      "sha256": "4dc5d5c123a4f20f542123ad04596be3a582cdadb62aab5ecb3266137da4c46e",
+      "bytes": 20588,
+      "lines": 316
+    },
+    "scripts/evaluate_golden.py": {
+      "sha256": "b6d0a4499323db490470e612b14436aa5d7650ea0e0ebd96e4af8049a620acda",
+      "bytes": 7415,
+      "lines": 150
+    },
+    "scripts/evaluate_hybrid.py": {
+      "sha256": "74a96f4a2d1a4a235aa8087e7d23f268b04b3c34dbdf3caa0e0bf134b2312d8c",
+      "bytes": 5064,
+      "lines": 87
+    },
+    "scripts/evaluate_location_ablation.py": {
+      "sha256": "4b854f1b42f91af35bd18bf29da50ef52100cb255e2efa93912f710cba4c0956",
+      "bytes": 4998,
+      "lines": 94
+    },
+    "scripts/evaluate_redmadrobot.py": {
+      "sha256": "9e63521e827dcb02f9f9cd0a6ee38e09b5b5893cd4dfc7d65802875c112669d0",
+      "bytes": 17669,
+      "lines": 280
+    },
+    "scripts/evaluate_scanpatch.py": {
+      "sha256": "b4774eb4df3269d620586f562d8b78b74317351c5ddb0beb51ce42bd61765a4c",
+      "bytes": 14489,
+      "lines": 208
+    },
+    "scripts/failover_check.py": {
+      "sha256": "6628d70e33afa1843393b453d67fdc04f67b38ea697525da15cf8b5ffd41331b",
+      "bytes": 7574,
+      "lines": 162
+    },
+    "scripts/large_input.py": {
+      "sha256": "28c60696e12a4697e792c7107e9091b4179736fc4b732d04d120015d9879777e",
+      "bytes": 2277,
+      "lines": 47
+    },
+    "scripts/local_redis.py": {
+      "sha256": "8c0f6038845b51d23ddc15de43020708f0a8e1822542db4c11a2fe72119d7681",
+      "bytes": 12032,
+      "lines": 284
+    },
+    "scripts/ner_service.py": {
+      "sha256": "a9b703624a370260589a3505b40ed2caf24f895421264598b3f82c603dcb9811",
+      "bytes": 13677,
+      "lines": 316
+    },
+    "scripts/package.py": {
+      "sha256": "82dc148c640d54f2d27522f65c522ef5f28b64e2f900f3f341968c6a5579b353",
+      "bytes": 3657,
+      "lines": 82
+    },
+    "scripts/runtime_probe.py": {
+      "sha256": "9ac64e8f0f5b3f42f93230038b590e78ed07a9877672c47c1df6dafea648352c",
+      "bytes": 1938,
+      "lines": 45
+    },
+    "scripts/serve.py": {
+      "sha256": "7a8e564142d93a4619d9f01eea09e40b3753699c93310f1a92a608ec7e492300",
+      "bytes": 1189,
+      "lines": 33
+    },
+    "seif/__init__.py": {
+      "sha256": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+      "bytes": 122,
+      "lines": 3
+    },
+    "seif/app.py": {
+      "sha256": "e0d8051b406eadfb05484d3a5086b8d616b11a09b8c30984597bac94b607e004",
+      "bytes": 27191,
+      "lines": 515
+    },
+    "seif/cardholder_fields.py": {
+      "sha256": "586f3f4f30f1bce3a460562dbee2ba053cff44bea527264e617c7e5af087a7cb",
+      "bytes": 8819,
+      "lines": 132
+    },
+    "seif/config.py": {
+      "sha256": "de35e12ca073a432f87798950685d49340641bad4303f8094e86667e929b0f07",
+      "bytes": 8020,
+      "lines": 179
+    },
+    "seif/context_filters.py": {
+      "sha256": "0e3a8750c62ba3cb136fc13a67d0642aa924aa2106a9bd7346e6899aef24f4a1",
+      "bytes": 10426,
+      "lines": 223
+    },
+    "seif/detector.py": {
+      "sha256": "e47a19060307387f7071d0c00be9439c62e424621ead81902153b8e42501bb5c",
+      "bytes": 53564,
+      "lines": 1027
+    },
+    "seif/document_fields.py": {
+      "sha256": "b56592ad71b66a31ce8abeba82047a3818183d6f9ead81f19e9dbc58ea417c55",
+      "bytes": 12263,
+      "lines": 213
+    },
+    "seif/location_fields.py": {
+      "sha256": "1cde438a393d321ad17c954fe88d274825529a6d6d638ab15f051b8303d048cb",
+      "bytes": 11985,
+      "lines": 227
+    },
+    "seif/ner.py": {
+      "sha256": "c6454ec976086be8a4d666694499c785d6a21d8a322dd2259e52893cc48095a5",
+      "bytes": 6900,
+      "lines": 155
+    },
+    "seif/person_fields.py": {
+      "sha256": "aa30140a816b0df94040d301e557e01f6226f3c3f075bdc889bc165f6a8d74e4",
+      "bytes": 15550,
+      "lines": 286
+    },
+    "seif/request_capture.py": {
+      "sha256": "a3372c5f022b328f454272a47deef47e9960ea3624b30e831db8415d8d4533ce",
+      "bytes": 10070,
+      "lines": 250
+    },
+    "seif/structured_fields.py": {
+      "sha256": "acfff4efc6d0765bbd46462bdd5467be1dd965b7b2d662ef4a4773d70e5b5d24",
+      "bytes": 14687,
+      "lines": 299
+    },
+    "seif/transform.py": {
+      "sha256": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+      "bytes": 4637,
+      "lines": 101
+    },
+    "seif/vault.py": {
+      "sha256": "3f8ef93f831cd100cbe9fdd6f020cc49269acfba90f83a445afdc9c3327e356b",
+      "bytes": 5482,
+      "lines": 143
+    },
+    "tests/test_addresses.py": {
+      "sha256": "8d4b072de3a5cb5363071ed0ba23bec584f9bc78a52d9e542865f91b77eeee11",
+      "bytes": 7023,
+      "lines": 125
+    },
+    "tests/test_annotation_evaluation.py": {
+      "sha256": "fcff21527bb2185172bc9b589291247165ac2fc1074495c3bc0db6ea2f81a6c8",
+      "bytes": 2329,
+      "lines": 44
+    },
+    "tests/test_api.py": {
+      "sha256": "bb2de41054c6204f83b46f69cfc2d55c31391ad957eae2abd8f67b5b8fddf30d",
+      "bytes": 28561,
+      "lines": 638
+    },
+    "tests/test_api_hardening.py": {
+      "sha256": "1098798772fc8d7c7ee501c5ff173015a9ff2100f0c16c1da171a73b6ad64b37",
+      "bytes": 6867,
+      "lines": 158
+    },
+    "tests/test_benchmark_corpus.py": {
+      "sha256": "b04cdc4bb4f6b903a70d48c6fdaa16dce1ea010ecf73c7782557421a22b580cc",
+      "bytes": 10627,
+      "lines": 250
+    },
+    "tests/test_benchmark_protocol.py": {
+      "sha256": "4df5f3fe430f6ac7c610f98921bc9e8f45e320956aa156e102f946f241e8e477",
+      "bytes": 2793,
+      "lines": 53
+    },
+    "tests/test_boundary_upload.py": {
+      "sha256": "397360f795ceb75cc89c25b8fa6c6bfa7487b014340c5f3f5030f340a50c3270",
+      "bytes": 6035,
+      "lines": 161
+    },
+    "tests/test_capture_requests.py": {
+      "sha256": "41680aeea4ec64ce95f2d6ec95a8a5feb6805ea8f7c8284de7ea533b5157b8e5",
+      "bytes": 3880,
+      "lines": 105
+    },
+    "tests/test_cardholder_fields.py": {
+      "sha256": "c7060f626426a1979b7b6c1d84005c16fd6f4dbe8e916222834617d4bd475952",
+      "bytes": 13156,
+      "lines": 209
+    },
+    "tests/test_cis.py": {
+      "sha256": "98478084dc6e1da5b935c67b698fbf4b95dfcfe0edce2e9d67477fb25ffaa164",
+      "bytes": 8363,
+      "lines": 145
+    },
+    "tests/test_code_quality.py": {
+      "sha256": "c0b1d1ca2fc568f7e9d6a3dbda1a621e052468ebe1c935d03471c0d6c7bfe329",
+      "bytes": 4300,
+      "lines": 103
+    },
+    "tests/test_context_filters.py": {
+      "sha256": "9451f69124de7f680ae8074a787baa12d953f617a5432737f8e49f884d30f9ec",
+      "bytes": 7707,
+      "lines": 151
+    },
+    "tests/test_detector.py": {
+      "sha256": "3d54be1451c84a74e6b3453cf93e3f3229c604811f6e1cd40e045458a1bee612",
+      "bytes": 13723,
+      "lines": 255
+    },
+    "tests/test_document_context_generalization.py": {
+      "sha256": "aedcd92414c21b19ec859b83c0eb16243d5a513d9f34f67e52fdf94a4f4532a2",
+      "bytes": 13084,
+      "lines": 217
+    },
+    "tests/test_document_context_integration.py": {
+      "sha256": "84c26a3aefa7e1260b0d3fc3d7046851f5d64ebf92a4fa73a2242212f4a7d569",
+      "bytes": 1755,
+      "lines": 38
+    },
+    "tests/test_document_fields.py": {
+      "sha256": "a261278ee06c857f6163a29c919c735a4d61c364c83ef4f607a81d569abbf57c",
+      "bytes": 3345,
+      "lines": 67
+    },
+    "tests/test_field_adversarial.py": {
+      "sha256": "a716fccf68ca9cc10bcd0ba694c1b8f30a8d322fcf21ecdf98e9b9fe08e912ac",
+      "bytes": 4951,
+      "lines": 107
+    },
+    "tests/test_generalization_adversarial.py": {
+      "sha256": "921c6caf247867d627ef9a799348e9b051df619cc6588a100a9bb1177d46bcb5",
+      "bytes": 16308,
+      "lines": 323
+    },
+    "tests/test_golden_context_adversarial.py": {
+      "sha256": "520e4504b675360184e9398d4a295e0a0a880aaa2f0d51ab2ff50c9339c8ae85",
+      "bytes": 3521,
+      "lines": 78
+    },
+    "tests/test_golden_dataset.py": {
+      "sha256": "6a9bf9cda33adea6556e5239917490b97a292f7f365f30bbb17dd4c00c696268",
+      "bytes": 4589,
+      "lines": 96
+    },
+    "tests/test_golden_evaluation.py": {
+      "sha256": "81b21fd3e0bc6a427d8b158390a4a445a0d50d5596d4b145e47bf7f13e8cb30f",
+      "bytes": 3304,
+      "lines": 81
+    },
+    "tests/test_golden_format_improvements.py": {
+      "sha256": "62ac3398671283104418df31514627f234e03a146faf53b773d1120bfb230979",
+      "bytes": 5152,
+      "lines": 104
+    },
+    "tests/test_location_fields.py": {
+      "sha256": "3770c3aac0036993bb6c075f53b541a4d294ebc770a973ba2a6675d98a72c80b",
+      "bytes": 5961,
+      "lines": 102
+    },
+    "tests/test_masking_policy.py": {
+      "sha256": "78e5a1e041ec1cf307c3d0a5d9d64c8a4f352326fa1cb34acc911ee170f5d3d8",
+      "bytes": 9958,
+      "lines": 217
+    },
+    "tests/test_ner.py": {
+      "sha256": "b97ebfd0594ed41c2af7dadf1d56b61884014286a2ceda6f6da6433026165605",
+      "bytes": 6242,
+      "lines": 131
+    },
+    "tests/test_ner_client.py": {
+      "sha256": "c48e2834d4e71167ddbec22f6a7e88a895769b0eddac4e2e752490b53371a8be",
+      "bytes": 7659,
+      "lines": 198
+    },
+    "tests/test_ner_location.py": {
+      "sha256": "f61ece2b6087d301ff3fd8d89904dde8c45de6b7401639c145b3bd0082d47096",
+      "bytes": 6681,
+      "lines": 133
+    },
+    "tests/test_ner_review.py": {
+      "sha256": "ac95bdca4398b29a4f251166d8af99d5727ec5debbf7ebc110cdcfa66b38a717",
+      "bytes": 2595,
+      "lines": 71
+    },
+    "tests/test_ner_roles.py": {
+      "sha256": "aa26abacfe711889211b42b28c4bbc4b79e5a99e30582155480a2ad4daa9f524",
+      "bytes": 8144,
+      "lines": 186
+    },
+    "tests/test_ner_service.py": {
+      "sha256": "646f16c69ae181887a294fd4f736cffa90d71f1a03aaf074c5110e023397b265",
+      "bytes": 15725,
+      "lines": 374
+    },
+    "tests/test_package.py": {
+      "sha256": "c1dee4b219c323fa5cbb3bf8951b0ed7e989a17bbe0c7eab7540bb94e444df92",
+      "bytes": 3336,
+      "lines": 79
+    },
+    "tests/test_person_fields.py": {
+      "sha256": "e3dad2c28ddecbacc440f600eee21f7040d442a6ba9429cc37efdaa49a0354d4",
+      "bytes": 7260,
+      "lines": 130
+    },
+    "tests/test_presidio_lessons.py": {
+      "sha256": "36b24964e4970c223688583c5f32cb053ea1c6129e7a6c330750cab36318b4a8",
+      "bytes": 4520,
+      "lines": 80
+    },
+    "tests/test_redis.py": {
+      "sha256": "4a9c229d2eff7c7987456edcbef2a52320f1374ff0bdb74678e30b6b00dc63ff",
+      "bytes": 5147,
+      "lines": 122
+    },
+    "tests/test_request_capture_api.py": {
+      "sha256": "72ef1fb0d16b1fd5e6106f1b1b0bff34b6d9fc2e40790c1bd381d22ed5057922",
+      "bytes": 4381,
+      "lines": 91
+    },
+    "tests/test_request_capture_writer.py": {
+      "sha256": "445271f35338214553c412cabad589c9bffa76b8a6d6350b524f5e96c565abc4",
+      "bytes": 6905,
+      "lines": 181
+    },
+    "tests/test_sentinel.py": {
+      "sha256": "82585109b197197852d889be0986659341055455b8d5d94637f6817869feab43",
+      "bytes": 15201,
+      "lines": 351
+    },
+    "tests/test_structured_fields.py": {
+      "sha256": "e0ee0f1e4842064d2c5fb7a07f5ba450da2fa554611b38a6b62b1665a9919079",
+      "bytes": 7229,
+      "lines": 130
+    },
+    "tests/test_synthetic_benchmark.py": {
+      "sha256": "a038514c50fc614456ffb17ddf252d78a9846e7094c4812b9a0b1a3aad4ede0f",
+      "bytes": 2697,
+      "lines": 71
+    },
+    "tests/test_transform_review.py": {
+      "sha256": "8d57f9e7905511a1adfca38fb9461709bac3fbfb85de57fc0920c0e84711f8de",
+      "bytes": 6063,
+      "lines": 140
+    }
+  }
+}
