@@ -1,5 +1,7 @@
 """Authored cardholder cases include names absent from the organizer corpus."""
 
+import unicodedata
+
 import pytest
 
 from seif.cardholder_fields import cardholder_candidates
@@ -95,7 +97,7 @@ def test_unknown_foreign_pair_needs_closed_form_field(name, change_case, label, 
 
 @pytest.mark.parametrize("text", [
     "Держатель карты: Рауль Мендес подтвердил получение.",
-    "Держатель карты Рауль Мендес.", "Name on card: Jean Dupont@example.com",
+    "Name on card: Jean Dupont@example.com",
     "Name on card: Jean Dupont.example.com", "Name on card: Jean Dupont/path",
     "Name on card: Successful Operation", "Name on card: Payment Approved",
     "Держатель карты: Успешная операция.", "Держатель карты: Доступ запрещён.",
@@ -106,3 +108,102 @@ def test_unknown_foreign_pair_needs_closed_form_field(name, change_case, label, 
 @pytest.mark.parametrize("change_case", [str.lower, str.title, str.upper])
 def test_closed_field_does_not_validate_action_business_or_partial_values(text, change_case):
     assert values(change_case(text)) == []
+
+
+
+def test_strong_cardholder_label_does_not_require_a_colon_for_unknown_pair():
+    """Policy change: a full cardholder label plus a closed value proves the field.
+
+    This was an authored negative when the fallback required punctuation. The
+    unknown name is now accepted without adding it to a given-name dictionary.
+    """
+    assert values("Держатель карты Рауль Мендес.") == ["Рауль Мендес"]
+
+
+@pytest.mark.parametrize("name", ["Рашид Хамдани", "Haruto Yamazaki", "Zeynep Demir"])
+@pytest.mark.parametrize("label", ["Держатель карты", "Имя держателя карты", "Эмбоссированное имя",
+                                   "CARDHOLDER", "card holder", "name on card"])
+@pytest.mark.parametrize("separator,ending", [(" ", ". Следующее поле."), (": ", "; next field"),
+                                              ("=", "\n"), (" - ", "."), (" — ", "."),
+                                              (" – ", "."), (" «", "»."), (' "', '".')])
+@pytest.mark.parametrize("change_case", [str.lower, str.upper, str.title])
+def test_unknown_closed_cardholder_field_is_independent_of_dictionary_and_case(name, label, separator, ending,
+                                                                              change_case):
+    text = change_case(label + separator + name + ending)
+    found = [text[start:end] for start, end, *_ in cardholder_candidates(text, given_names=frozenset())]
+    assert found == [change_case(name)]
+
+
+@pytest.mark.parametrize("text", [
+    "Держатель Haruto Yamazaki.", "держателя Рашид Хамдани.",
+    "Держатель карты Рашид Хамдани подтвердил данные.",
+    "CARDHOLDER Haruto Yamazaki called yesterday.",
+    "Держатель карты ожидает звонка.", "Держатель карты позвонил вчера.",
+    "Cardholder called yesterday.", "Card holder returned today.",
+    "Держатель карты: ООО Феникс.", "Name on card corporate account.",
+    "Держатель карты отсутствует значение.", "Cardholder not specified.",
+    "Name on card Haruto Yamazaki@example.com", "Name on card Haruto Yamazaki.example.com",
+    "Name on card Haruto Yamazaki/path", "Name on card https://example.com",
+])
+@pytest.mark.parametrize("change_case", [str.lower, str.upper, str.title])
+def test_closed_value_extension_preserves_prose_business_and_network_boundaries(text, change_case):
+    assert values(change_case(text)) == []
+
+
+def test_unknown_name_offsets_preserve_both_closed_fields_and_intervening_text():
+    text = "🔐 Держатель карты Рашид Хамдани; другое поле: значение. Name on card — Haruto Yamazaki."
+    spans = list(cardholder_candidates(text, given_names=frozenset()))
+    assert [(text[start:end], kind) for start, end, kind, *_ in spans] == [
+        ("Рашид Хамдани", "CARDHOLDER"), ("Haruto Yamazaki", "CARDHOLDER")]
+    assert spans[0][0] == text.index("Рашид")
+    assert spans[1][0] == text.index("Haruto")
+
+
+@pytest.mark.parametrize("value", ["неизвестной компании", "неизвестную организацию", "отсутствующего клиента"])
+@pytest.mark.parametrize("change_case", [str.lower, str.upper, str.title])
+def test_missing_or_corporate_field_values_keep_their_inflected_meaning(value, change_case):
+    assert values(change_case("Карта выпущена на имя " + value)) == []
+
+
+@pytest.mark.parametrize("name", ["İlhan Durmaz", "Björk Guðmundsdóttir", "Léonie Noël"])
+@pytest.mark.parametrize("normalization", ["NFC", "NFD"])
+@pytest.mark.parametrize("change_case", [str.lower, str.upper, str.title, str.swapcase])
+def test_foreign_name_case_expansion_and_combining_accents_preserve_original_offsets(name, normalization, change_case):
+    value = unicodedata.normalize(normalization, change_case(name))
+    text = "🔐 Cardholder — " + value + ". Next field."
+    spans = list(cardholder_candidates(text, given_names=frozenset()))
+    assert [(start, end) for start, end, *_ in spans] == [(len("🔐 Cardholder — "), len("🔐 Cardholder — ") + len(value))]
+    assert text[spans[0][0]:spans[0][1]] == value
+
+
+@pytest.mark.parametrize("card_field", [
+    "Карта 1111 2222 3333 4444, ", "Номер карты: 9876-5432-1098-7654, ",
+    "CARD NUMBER=1111222233334444 ", "карта № 1111222233334, ", "card 1111222233334444555, ",
+])
+@pytest.mark.parametrize("name", ["Haruto Yamazaki", "Рашид Хамдани", "Zeynep Demir"])
+@pytest.mark.parametrize("change_case", [str.lower, str.upper, str.title])
+def test_adjacent_explicit_card_number_establishes_generic_holder_field(card_field, name, change_case):
+    text = change_case(card_field + "держатель " + name + ".")
+    result = list(cardholder_candidates(text, given_names=frozenset()))
+    assert [text[start:end] for start, end, *_ in result] == [change_case(name)]
+
+
+@pytest.mark.parametrize("prefix", [
+    "Карта, ", "номер карты неизвестен, ", "Карта 123456789012, ",
+    "Карта 12345678901234567890, ", "Номер заказа: 1111222233334444, ",
+    "Карта 1111222233334444. ", "Карта 1111222233334444; ",
+    "Карта 1111222233334444,\n", "Карта 1111222233334444,\n\n",
+    "Карта 1111222233334444, номер заказа 1234, ", "Карта 1111222233334444, сумма 40, ",
+    "Номер счёта 1111222233334444, ", "Карта зарегистрирована для операции, ",
+])
+@pytest.mark.parametrize("change_case", [str.lower, str.upper, str.title])
+def test_generic_holder_does_not_inherit_card_context_across_records_or_fields(prefix, change_case):
+    text = change_case(prefix + "держатель Haruto Yamazaki.")
+    assert list(cardholder_candidates(text, given_names=frozenset())) == []
+
+
+@pytest.mark.parametrize("value", ["отдел взыскания", "департамент обслуживания", "отделение банка",
+                                    "управление взыскания", "служба поддержки"])
+@pytest.mark.parametrize("change_case", [str.lower, str.upper, str.title])
+def test_explicit_cardholder_field_does_not_turn_organization_units_into_names(value, change_case):
+    assert values(change_case("Имя держателя карты: " + value + ".")) == []

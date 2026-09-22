@@ -17,6 +17,7 @@ from typing import Iterable
 
 from seif.cardholder_fields import cardholder_candidates
 from seif.context_filters import refine_candidates
+from seif.document_fields import document_kind_at_value
 from seif.location_fields import location_candidates
 from seif.person_fields import person_candidates
 from seif.structured_fields import structured_candidates
@@ -394,11 +395,6 @@ def _has_passport_context(text: str, start: int) -> bool:
     # sentence, but must not acquire the PASSPORT_DATE type by default.
     earlier = list(_DOCUMENT_OWNER.finditer(text[max(0, start - 180):start]))
     return not earlier or earlier[-1].lastgroup != "license"
-
-
-def _license_owns_number(text: str, start: int) -> bool:
-    owners = list(_DOCUMENT_OWNER.finditer(_local_record_prefix(text, start)))
-    return bool(owners and owners[-1].lastgroup == "license")
 
 
 def _is_nonpersonal_number_field(text: str, start: int) -> bool:
@@ -880,7 +876,7 @@ def detect(text: str, *, extra_rules: list[dict] | None = None) -> list[Span]:
         if any(label in lower for label in ("тел", "моб", "phone")):
             add(_LABEL_PHONE, "PHONE", check=lambda value, *_: 7 <= len(_digits(value)) <= 15)
         if "паспорт" in lower or "серия" in lower:
-            add(_PASSPORT, "PASSPORT", check=lambda _, s, e: not _license_owns_number(text, s))
+            add(_PASSPORT, "PASSPORT", check=lambda _, s, e: document_kind_at_value(text, s) == "PASSPORT")
             add(_PASS_SERIES, "PASSPORT")
         if any(label in lower for label in ("удостоверен", "в/у", "в у", "права")):
             add(_LICENSE, "DRIVER_LICENSE")

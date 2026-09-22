@@ -24,8 +24,20 @@ _PART = re.compile(
     r"(?P<number>номер(?:ом)?|ном[.]|№)[ \t]*[:=—–-]?[ \t]*(?P<number_value>[0-9]{6})(?!\w))",
     _FLAGS,
 )
-_PART_JOIN = re.compile(r"[ \t,;./—–-]*(?:и[ \t]+)?", _FLAGS)
+_PART_LABEL_SUFFIX = re.compile(
+    r"(?<!\w)(?:серия|серии|серией|сер[.]|номер(?:ом)?|ном[.]|№)[ \t]*[:=—–-]?[ \t]*$", _FLAGS,
+)
+_PART_JOIN = re.compile(r"[ \t,;./—–-]*(?:\r?\n[ \t]*)?(?:и[ \t]+)?", _FLAGS)
+_DRIVER_CARD = (
+    r"(?:карточк(?:а|и|у|ой|е|ою)[ \t]+водителя|"
+    r"водительск(?:ая|ой|ую)[ \t]+карточк(?:а|и|у|ой|е|ою))"
+)
+_CARD_QUALIFIER = r"(?:тахографическ[а-яё]*|топливн[а-яё]*|корпоративн[а-яё]*|коммерческ[а-яё]*)"
 _OWNER = re.compile(
+    rf"\b(?P<other_card>{_CARD_QUALIFIER}[ \t]+{_DRIVER_CARD}|"
+    rf"(?:{_CARD_QUALIFIER}[ \t]+)?карт(?:а|ы|у|ой|е)[ \t]+водителя|"
+    r"водительск(?:ая|ой|ую)[ \t]+карт(?:а|ы|у|ой|е))\b|"
+    rf"\b(?P<driver_card>{_DRIVER_CARD})\b|"
     r"\b(?P<license>водительск[а-яё]*[ \t]+удостоверени[а-яё]*|в[ /]?у|права)\b|"
     r"\b(?P<passport>паспорт(?:а|ом|е)?|документ(?:а|ом|е)?)\b|"
     r"\b(?P<generic_license>удостоверени[ея])(?=[ \t]*[:=])|"
@@ -34,7 +46,9 @@ _OWNER = re.compile(
     r"договор[а-яё]*|контракт[а-яё]*|сч[её]т[а-яё]*|издели[а-яё]*|оборудовани[а-яё]*|"
     r"станк[а-яё]*|партия|партии|плат[её]ж[а-яё]*|сумм[а-яё]*|сертификат[а-яё]*|"
     r"техническ[а-яё]*|транспортн[а-яё]*|телефон[а-яё]*|инн|снилс|id|sku|"
-    r"удостоверени[ея]|студенческ[а-яё]*|служебн[а-яё]*|пенсионн[а-яё]*)\b",
+    r"удостоверени[ея]|студенческ[а-яё]*|служебн[а-яё]*|пенсионн[а-яё]*|"
+    r"тахограф[а-яё]*|топлив[а-яё]*|оплат[а-яё]*|устройств[а-яё]*|принтер[а-яё]*|"
+    r"сканер[а-яё]*|компьютер[а-яё]*|ноутбук[а-яё]*|двигател[а-яё]*|автомобил[а-яё]*)\b",
     _FLAGS,
 )
 _BUSINESS_SUFFIX = re.compile(
@@ -49,18 +63,82 @@ _DEPARTMENT = re.compile(
 )
 
 
+# A sentence/line may continue an owned record only with an explicit field
+# introduction. Paragraphs, other records and unrelated narrative cannot carry
+# document ownership. Numeric references such as "2. 3" are not sentence ends.
+_CARD_PURPOSE = re.compile(r"\b(?:для|к)[ \t]+(?:цифров[а-яё]*[ \t]+)?тахограф[а-яё]*[ ,:—–-]*$", _FLAGS)
+_OWNER_BOUNDARY = re.compile(r"[!?;]|(?:\r?\n)[ \t]*(?:\r?\n)?|[.]")
+_FIELD_ABBREVIATION = re.compile(r"\b(?:сер|ном|п|стр|гл)[.]$", _FLAGS)
+_OWNER_CLAUSE_END = re.compile(
+    r"[ \t]*(?:(?:клиента|заявителя|водителя|владельца|представителя)[ \t]*)?"
+    r"(?:(?:проверен[аоы]?|предъявлен[аоы]?|получен[аоы]?|принят[аоы]?|оформлен[аоы]?|зарегистрирован[аоы]?)[ \t]*)?[, \t]*", _FLAGS,
+)
+_FIELD_CONTINUATION = re.compile(
+    r"[ \t]*(?:(?:в|на)[ \t]+(?:пункте|поле|графе|разделе|строке|странице|обороте|ней|нем|нём)"
+    r"[ \t]*(?:№[ \t]*)?(?:[0-9]{1,3}(?:[.][ \t]*[0-9]{1,3}){0,3})?[ \t]*)?"
+    r"(?:(?:указан[аоы]?|записан[аоы]?|привед[её]н[аоы]?|содержится|содержатся)[ \t]*"
+    r"(?:,[ \t]*)?(?:что[ \t]+)?)?[:=—– \t]*", _FLAGS,
+)
+_RECORD_SWITCH = re.compile(
+    r"\b(?:новая|другая|следующая)[ \t]+(?:запись|анкета|заявка|операция)\b", _FLAGS,
+)
+
+
+def _record_boundaries(tail: str) -> Iterator[re.Match[str]]:
+    for boundary in _OWNER_BOUNDARY.finditer(tail):
+        if boundary.group() == ".":
+            if _FIELD_ABBREVIATION.search(tail, max(0, boundary.start() - 4), boundary.end()):
+                continue
+            after = tail[boundary.end():].lstrip(" \t")
+            if boundary.start() and tail[boundary.start() - 1].isdigit() and after[:1].isdigit():
+                continue
+        yield boundary
+
+
+def _owner_continues(prefix: str, owner_end: int, *, paired: bool) -> bool:
+    tail = prefix[owner_end:]
+    if _RECORD_SWITCH.search(tail):
+        return False
+    boundaries = list(_record_boundaries(tail))
+    if not boundaries:
+        return True
+    if not paired or any(b.group() in {"!", "?"} or b.group().count("\n") > 1 for b in boundaries):
+        return False
+    # Period + line break is one transition; another substantive clause is not.
+    if any(tail[first.end():second.start()].strip() for first, second in zip(boundaries, boundaries[1:], strict=False)):
+        return False
+    return bool(_OWNER_CLAUSE_END.fullmatch(tail[:boundaries[0].start()])
+                and _FIELD_CONTINUATION.fullmatch(tail[boundaries[-1].end():]))
+
+
 def _number_kind(text: str, start: int, *, paired: bool = False) -> str | None:
-    prefix = text[max(0, start - 100):start]
-    # A line or completed sentence starts a new record, while abbreviated field
-    # labels such as 'сер.' must stay attached to their number.
-    prefix = re.split(r"[!?\n]|\.(?=[ \t]+[А-ЯЁA-Z])", prefix)[-1]
-    owners = list(_OWNER.finditer(prefix))
-    if not owners:
-        return "PASSPORT" if paired else None
+    begin = max(0, start - 160)
+    prefix = text[begin:start]
+    owners = [owner for owner in _OWNER.finditer(prefix)
+              if owner.start() or not begin or not (text[begin - 1].isalnum() or text[begin - 1] == "_")]
+    default = "PASSPORT" if paired else None
+    if not owners or not _owner_continues(prefix, owners[-1].end(), paired=paired):
+        return default
     group = owners[-1].lastgroup
-    if group == "business":
+    if group == "driver_card" and _CARD_PURPOSE.search(prefix, max(0, owners[-1].start() - 48), owners[-1].start()):
         return None
-    return "DRIVER_LICENSE" if group in {"license", "generic_license"} else "PASSPORT"
+    if group in {"business", "other_card"}:
+        return None
+    return "DRIVER_LICENSE" if group in {"license", "generic_license", "driver_card"} else "PASSPORT"
+
+
+def document_kind_at_value(text: str, start: int) -> str | None:
+    """Classify a legacy numeric match using the same bounded field ownership.
+
+    The general passport regexp starts at the series value rather than at its
+    label. Remove only that adjacent label before checking record continuation,
+    so a legacy PASSPORT candidate cannot override explicit licence/business
+    ownership merely because it has a higher overlap priority.
+    """
+    begin = max(0, start - 24)
+    label = _PART_LABEL_SUFFIX.search(text, begin, start)
+    owner_start = label.start() if label is not None else start
+    return _number_kind(text, owner_start, paired=True)
 
 
 def _part_candidates(text: str) -> Iterator[Candidate]:
