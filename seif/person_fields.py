@@ -64,6 +64,20 @@ def _patronymic(word: str) -> bool:
     return _PATRONYMIC.fullmatch(word) is not None
 
 
+def _pair_sequence(first: str, second: str, given_names: Collection[str]) -> bool:
+    return bool(
+        (first.lower() in given_names and (_surname(second) or _patronymic(second)))
+        or (second.lower() in given_names and (_surname(first) or _patronymic(first)))
+        or (_surname(first) and _patronymic(second))
+        or (_surname(second) and _patronymic(first))
+    )
+
+
+def _triple_sequence(full: list[str], given_names: Collection[str]) -> bool:
+    return any(first.lower() in given_names and _surname(second) and _patronymic(third)
+               for first, second, third in permutations(full))
+
+
 def _name_sequence(words: list[str], given_names: Collection[str], *, field: bool = False) -> bool:
     """Require actual name grammar; capitalization alone cannot validate prose."""
     if not words or any(word.lower().strip(".") in _NON_NAMES for word in words):
@@ -76,17 +90,20 @@ def _name_sequence(words: list[str], given_names: Collection[str], *, field: boo
         word = full[0]
         return bool((field or initials) and (word.lower() in given_names or _surname(word) or _patronymic(word)))
     if len(full) == 2:
-        first, second = full
-        return bool(
-            (first.lower() in given_names and (_surname(second) or _patronymic(second)))
-            or (second.lower() in given_names and (_surname(first) or _patronymic(first)))
-            or (_surname(first) and _patronymic(second))
-            or (_surname(second) and _patronymic(first))
-        )
+        return _pair_sequence(full[0], full[1], given_names)
     if len(full) == 3 and not initials:
-        return any(first.lower() in given_names and _surname(second) and _patronymic(third)
-                   for first, second, third in permutations(full))
+        return _triple_sequence(full, given_names)
     return False
+
+
+def _joined_split(lower: str, start: int, end: int, given_names: Collection[str]) -> bool:
+    def family_parts(first: str, second: str) -> bool:
+        return (_surname(first) and _patronymic(second)) or (_patronymic(first) and _surname(second))
+
+    if start and end < len(lower):
+        return family_parts(lower[:start], lower[end:])
+    remaining = lower[end:] if start == 0 else lower[:start]
+    return any(family_parts(remaining[:cut], remaining[cut:]) for cut in range(3, len(remaining) - 3))
 
 
 def _joined_name(value: str, given_names: Collection[str], max_given_length: int) -> bool:
@@ -95,26 +112,32 @@ def _joined_name(value: str, given_names: Collection[str], max_given_length: int
         return False
     # Every accepted split consists of one known given name, a surname and a
     # patronymic. Dictionary membership does not depend on casing or CamelCase.
-    def family_parts(first: str, second: str) -> bool:
-        return (_surname(first) and _patronymic(second)) or (_patronymic(first) and _surname(second))
-
     for start in range(len(lower) - 1):
         for end in range(start + 2, min(start + max_given_length, len(lower)) + 1):
             if lower[start:end] not in given_names:
                 continue
-            if start and end < len(lower):
-                if family_parts(lower[:start], lower[end:]):
-                    return True
-            else:
-                remaining = lower[end:] if start == 0 else lower[:start]
-                for cut in range(3, len(remaining) - 3):
-                    if family_parts(remaining[:cut], remaining[cut:]):
-                        return True
+            if _joined_split(lower, start, end, given_names):
+                return True
     return False
 
 
 def _is_street_value(text: str, start: int) -> bool:
     return _STREET_PREFIX.search(text[max(0, start - 80):start]) is not None
+
+
+def _field_value_valid(
+    label, words, count, parts, given_names, max_given_length
+) -> bool:
+    valid = _patronymic(parts[0]) if label.lastgroup == "patronymic" and count == 1 else False
+    valid = valid or _name_sequence(parts, given_names, field=True)
+    joined = count == 1 and _joined_name(parts[0], given_names, max_given_length)
+    valid = valid or joined
+    if (count == 1 and len(words) > 1 and parts[0].lower() not in given_names
+            and not _patronymic(parts[0]) and not joined):
+        # A surname-shaped adjective at the start of an organization
+        # name cannot become a personal surname by truncating the name.
+        valid = False
+    return valid
 
 
 def _field_candidates(text: str, given_names: Collection[str], max_given_length: int) -> Iterator[Candidate]:
@@ -137,18 +160,39 @@ def _field_candidates(text: str, given_names: Collection[str], max_given_length:
         # words need a real patronymic, never merely three capitalized words.
         for count in range(len(words), 0, -1):
             parts = [word.group() for word in words[:count]]
-            valid = _patronymic(parts[0]) if label.lastgroup == "patronymic" and count == 1 else False
-            valid = valid or _name_sequence(parts, given_names, field=True)
-            joined = count == 1 and _joined_name(parts[0], given_names, max_given_length)
-            valid = valid or joined
-            if (count == 1 and len(words) > 1 and parts[0].lower() not in given_names
-                    and not _patronymic(parts[0]) and not joined):
-                # A surname-shaped adjective at the start of an organization
-                # name cannot become a personal surname by truncating the name.
-                valid = False
-            if valid:
+            if _field_value_valid(label, words, count, parts, given_names, max_given_length):
                 yield words[0].start(), words[count - 1].end(), "PERSON", 0.98, "explicit-personal-name-field"
                 break
+
+
+def _before_candidates(text: str, initials, before) -> list[tuple[int, int]]:
+    candidates = []
+    for count in (1, 2):
+        if len(before) >= count:
+            chosen = before[-count:]
+            if all(text[left.end():right.start()].isspace()
+                   for left, right in zip(chosen, chosen[1:], strict=False)):
+                gap = text[chosen[-1].end():initials.start()]
+                if gap and gap.isspace():
+                    candidates.append((chosen[0].start(), initials.end()))
+    return candidates
+
+
+def _after_candidates(text: str, initials, after) -> list[tuple[int, int]]:
+    candidates = []
+    for count in (1, 2):
+        if len(after) >= count:
+            chosen = after[:count]
+            if all(text[left.end():right.start()].isspace()
+                   for left, right in zip(chosen, chosen[1:], strict=False)):
+                gap = text[initials.end():chosen[0].start()]
+                if gap and gap.isspace():
+                    # Lowercase city/building abbreviations are not a lone
+                    # personal initial; explicit field values are handled above.
+                    if count == 1 and initials.group().strip() in {"г.", "д."}:
+                        continue
+                    candidates.append((initials.start(), chosen[-1].end()))
+    return candidates
 
 
 def _initial_candidates(text: str, given_names: Collection[str]) -> Iterator[Candidate]:
@@ -159,32 +203,31 @@ def _initial_candidates(text: str, given_names: Collection[str]) -> Iterator[Can
         # another field. All resulting words must form a valid name sequence.
         before = list(_WORDS.finditer(text, max(0, initials.start() - 100), initials.start()))[-2:]
         after = list(_WORDS.finditer(text, initials.end(), min(len(text), initials.end() + 100)))[:2]
-        candidates: list[tuple[int, int]] = []
-        for count in (1, 2):
-            if len(before) >= count:
-                chosen = before[-count:]
-                if all(text[left.end():right.start()].isspace()
-                       for left, right in zip(chosen, chosen[1:], strict=False)):
-                    gap = text[chosen[-1].end():initials.start()]
-                    if gap and gap.isspace():
-                        candidates.append((chosen[0].start(), initials.end()))
-            if len(after) >= count:
-                chosen = after[:count]
-                if all(text[left.end():right.start()].isspace()
-                       for left, right in zip(chosen, chosen[1:], strict=False)):
-                    gap = text[initials.end():chosen[0].start()]
-                    if gap and gap.isspace():
-                        # Lowercase city/building abbreviations are not a lone
-                        # personal initial; explicit field values are handled above.
-                        if count == 1 and initials.group().strip() in {"г.", "д."}:
-                            continue
-                        candidates.append((initials.start(), chosen[-1].end()))
+        candidates = _before_candidates(text, initials, before) + _after_candidates(text, initials, after)
         for start, end in candidates:
             if _is_street_value(text, start):
                 continue
             words = [match.group() for match in _PARTS.finditer(text, start, end)]
             if _name_sequence(words, given_names):
                 yield start, end, "PERSON", 0.96, "personal-name-with-initials"
+
+
+def _surname_patronymic_pair(text: str, words) -> Iterator[Candidate]:
+    for offset in range(max(0, len(words) - 1)):
+        pair = words[offset:offset + 2]
+        if (len(pair) == 2 and _surname(pair[0].group()) and not _patronymic(pair[0].group())
+                and _patronymic(pair[1].group())
+                and not _is_street_value(text, pair[0].start())):
+            yield pair[0].start(), pair[-1].end(), "PERSON", 0.95, "surname-and-patronymic"
+
+
+def _triple_permutation(text: str, words, given_names: Collection[str]) -> Iterator[Candidate]:
+    for offset in range(max(0, len(words) - 2)):
+        group = words[offset:offset + 3]
+        if (len(group) == 3 and all(len(word.group()) > 2 for word in group)
+                and _name_sequence([word.group() for word in group], given_names)
+                and not _is_street_value(text, group[0].start())):
+            yield group[0].start(), group[-1].end(), "PERSON", 0.97, "three-part-name-permutation"
 
 
 def _all_candidates(text: str, given_names: Collection[str]) -> Iterator[Candidate]:
@@ -200,18 +243,8 @@ def _all_candidates(text: str, given_names: Collection[str]) -> Iterator[Candida
     # Other permutations of three separated name parts are common in forms.
     for sequence in _SEQUENCE.finditer(text):
         words = list(_PARTS.finditer(text, sequence.start(), sequence.end()))
-        for offset in range(max(0, len(words) - 1)):
-            pair = words[offset:offset + 2]
-            if (len(pair) == 2 and _surname(pair[0].group()) and not _patronymic(pair[0].group())
-                    and _patronymic(pair[1].group())
-                    and not _is_street_value(text, pair[0].start())):
-                yield pair[0].start(), pair[-1].end(), "PERSON", 0.95, "surname-and-patronymic"
-        for offset in range(max(0, len(words) - 2)):
-            group = words[offset:offset + 3]
-            if (len(group) == 3 and all(len(word.group()) > 2 for word in group)
-                    and _name_sequence([word.group() for word in group], given_names)
-                    and not _is_street_value(text, group[0].start())):
-                yield group[0].start(), group[-1].end(), "PERSON", 0.97, "three-part-name-permutation"
+        yield from _surname_patronymic_pair(text, words)
+        yield from _triple_permutation(text, words, given_names)
 
 
 def person_candidates(
