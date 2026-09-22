@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 import hmac
+import ipaddress
 import json
 import logging
 import os
@@ -13,6 +14,7 @@ import uuid
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import asynccontextmanager, contextmanager
 from dataclasses import asdict
+from datetime import datetime, timezone
 from functools import partial
 from pathlib import Path
 
@@ -27,6 +29,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from .config import Settings
 from .detector import TYPES, detect, merge_ner_candidates, validate_extra_rule
 from .ner import NerClient, validate_ner_settings
+from .request_capture import RequestCapture
 from .transform import mask, restore_exact, restore_tokens
 from .vault import Vault, VaultFull
 
@@ -52,10 +55,44 @@ def error(status, code, message, headers=None):
     return JSONResponse({"error": {"code": code, "message": message}}, status_code=status, headers=headers)
 
 
+def capture_origin(scope, headers):
+    """Record selected provenance fields, never credentials or arbitrary headers.
+
+    ASGI client may already reflect Uvicorn's trusted proxy handling. Preserve
+    the Cloudflare address separately; neither is an organizer identity.
+    """
+    def address(value):
+        try:
+            return str(ipaddress.ip_address(value.strip()))
+        except ValueError:
+            return None
+
+    def header(name, limit=512):
+        return headers.get(name, b"")[:limit].decode("latin-1")
+
+    client = scope.get("client")
+    client_ip = address(client[0]) if client else None
+    cf_ip = address(header(b"cf-connecting-ip", 64))
+    forwarded = header(b"x-forwarded-for", 1024)
+    chain = [address(value) for value in forwarded.split(",")] if forwarded else []
+    return {
+        "client_ip": client_ip,
+        "cf_connecting_ip": cf_ip,
+        "source_ip": cf_ip or client_ip,
+        "ip_source": "cf_connecting_ip_header" if cf_ip else "asgi_client",
+        "forwarded_for": ", ".join(chain) if chain and all(chain) else None,
+        "cf_ray": header(b"cf-ray", 128),
+        "user_agent": header(b"user-agent"),
+        "capture_probe": header(b"x-seif-capture-probe", 128),
+        "organizer_identity_verified": False,
+    }
+
+
 class Boundary:
     """Pure ASGI middleware avoids per-request task overhead and raw access logs."""
-    def __init__(self, app, settings, registry):
+    def __init__(self, app, settings, registry, capture=None):
         self.app, self.settings, self.inflight = app, settings, 0
+        self.capture = capture
         self.buffered_bytes = 0
         self.count = Counter("seif_http_requests_total", "Requests by fixed route and status", ["route", "status"], registry=registry)
         self.latency = Histogram("seif_http_duration_seconds", "Full request duration", ["route"],
@@ -72,6 +109,11 @@ class Boundary:
         held_body_bytes = 0
         scope.setdefault("state", {})["request_id"] = request_id
         headers = dict(scope.get("headers", []))
+        capture_this = self.capture is not None and scope["method"] == "POST" and path in {
+            "/process", "/v1/mask", "/v1/unmask",
+        }
+        received_at = datetime.now(timezone.utc).isoformat() if capture_this else None
+        request_body, body_complete = b"", False
 
         async def safe_send(message):
             nonlocal status
@@ -112,13 +154,14 @@ class Boundary:
                     body.extend(chunk)
                     if not message.get("more_body", False):
                         break
+                request_body, body_complete = bytes(body), True
                 delivered = False
 
                 async def bounded_receive():
                     nonlocal delivered
                     if not delivered:
                         delivered = True
-                        return {"type": "http.request", "body": bytes(body), "more_body": False}
+                        return {"type": "http.request", "body": request_body, "more_body": False}
                     return await receive()
 
                 await self.app(scope, bounded_receive, safe_send)
@@ -129,6 +172,16 @@ class Boundary:
             self.inflight -= 1
             self.count.labels(route, str(status)).inc()
             self.latency.labels(route).observe(time.perf_counter() - start)
+            if capture_this:
+                self.capture.submit({
+                    "received_at": received_at,
+                    "completed_at": datetime.now(timezone.utc).isoformat(),
+                    "request_id": request_id, "route": route, "method": scope["method"],
+                    "status_code": status, "elapsed_ms": round((time.perf_counter() - start) * 1000, 3),
+                    "body_complete": body_complete,
+                    "operation": scope["state"].get("capture_operation"),
+                    **capture_origin(scope, headers),
+                }, request_body)
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -158,6 +211,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     tokens = Counter("seif_input_tokens_estimated_total", "Estimated tokens = characters / 4, not a model tokenizer", registry=registry)
     stages = Histogram("seif_stage_duration_seconds", "Processing stages", ["stage"], registry=registry)
     limits = {}
+    capture = RequestCapture.from_env()
 
     @asynccontextmanager
     async def lifespan(app):
@@ -181,13 +235,18 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                     if ner:
                         await ner.close()
                 finally:
-                    await vault.close()
+                    try:
+                        await vault.close()
+                    finally:
+                        if capture:
+                            await asyncio.to_thread(capture.close)
 
     app = FastAPI(title="СЕЙФ · Personal Data Gateway", version="1.0.0", lifespan=lifespan,
                   docs_url=None, redoc_url=None)
     app.state.vault, app.state.settings = vault, settings
     app.state.ner = ner
-    app.add_middleware(Boundary, settings=settings, registry=registry)
+    app.state.capture = capture
+    app.add_middleware(Boundary, settings=settings, registry=registry, capture=capture)
 
     @app.exception_handler(RequestValidationError)
     async def validation_error(request, exc):
@@ -352,6 +411,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 detected.labels(kind if kind in TYPES else "CUSTOM").inc()
             chars.inc(len(body.payload))
             tokens.inc(len(body.payload) / 4)
+            request.state.capture_operation = direction
             LOG.info(json.dumps({"event": "processed", "request_id": request.state.request_id,
                                  "system": tenant, "operation": direction, "types": kinds,
                                  "detected_types": record.get("detected_types", kinds),
