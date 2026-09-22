@@ -5,7 +5,10 @@ MASTER_NAME=${MASTER_NAME:-seif-master}
 
 case "${1:-}" in
   redis-live)
-    [ "$(redis-cli --raw -h 127.0.0.1 -p 6379 PING 2>/dev/null)" = PONG ]
+    # PING is rejected by a stale replica when replica-serve-stale-data=no.
+    # INFO is explicitly permitted during STALE/LOADING in Redis 7.4.
+    server=$(redis-cli --raw -h 127.0.0.1 -p 6379 INFO server 2>/dev/null)
+    case "$server" in *redis_version:*) exit 0 ;; *) exit 1 ;; esac
     ;;
   sentinel-live)
     [ "$(redis-cli --raw -h 127.0.0.1 -p 26379 PING 2>/dev/null)" = PONG ]
@@ -24,7 +27,8 @@ case "${1:-}" in
         ;;
       slave)
         link=$(printf '%s\n' "$replication" | sed -n 's/^master_link_status://p')
-        [ "$link" = up ]
+        syncing=$(printf '%s\n' "$replication" | sed -n 's/^master_sync_in_progress://p')
+        [ "$link" = up ] && [ "$syncing" = 0 ]
         ;;
       *) exit 1 ;;
     esac
