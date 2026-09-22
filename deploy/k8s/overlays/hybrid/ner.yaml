@@ -1,0 +1,135 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seif-ner
+  labels:
+    app.kubernetes.io/name: seif-ner
+    app.kubernetes.io/part-of: seif
+spec:
+  replicas: 2
+  revisionHistoryLimit: 3
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: seif-ner
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: seif-ner
+        app.kubernetes.io/part-of: seif
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 45
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: seif-ner
+                topologyKey: kubernetes.io/hostname
+      containers:
+        - name: ner
+          # Separate artifact. Build/publish before applying this overlay.
+          image: ghcr.io/l0ckr/seif-pii-ner:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8770
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          env:
+            - name: SEIF_NER_WORKERS
+              value: "1"
+            - name: SEIF_NER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: seif-secrets
+                  key: ner-key
+            - name: OMP_NUM_THREADS
+              value: "1"
+            - name: OPENBLAS_NUM_THREADS
+              value: "1"
+            - name: MKL_NUM_THREADS
+              value: "1"
+          resources:
+            requests:
+              cpu: "1"
+              memory: 512Mi
+            limits:
+              cpu: "2"
+              memory: 1Gi
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+            failureThreshold: 120
+            timeoutSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+            failureThreshold: 2
+            timeoutSeconds: 3
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 15
+            failureThreshold: 4
+            timeoutSeconds: 3
+          lifecycle:
+            preStop:
+              exec:
+                command: [python, -c, "import time; time.sleep(5)"]
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir:
+            medium: Memory
+            sizeLimit: 64Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: seif-ner
+  labels:
+    app.kubernetes.io/name: seif-ner
+    app.kubernetes.io/part-of: seif
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: seif-ner
+  ports:
+    - name: http
+      port: 8770
+      targetPort: http
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: seif-ner
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: seif-ner

@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: api-to-ner
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: seif-api
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: seif-ner
+      ports:
+        - protocol: TCP
+          port: 8770
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ner-from-api
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: seif-ner
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: seif-api
+      ports:
+        - protocol: TCP
+          port: 8770

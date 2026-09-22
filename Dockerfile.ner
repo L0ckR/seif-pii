@@ -1,0 +1,16 @@
+FROM python:3.13.7-slim
+LABEL org.opencontainers.image.source="https://github.com/L0ckR/seif-pii"
+WORKDIR /app
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 \
+    OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+    SEIF_NER_HOST=0.0.0.0 SEIF_NER_PORT=8770 SEIF_NER_WORKERS=4
+COPY deploy/ner/requirements-ner.txt /tmp/requirements-ner.txt
+RUN pip install --no-cache-dir -r /tmp/requirements-ner.txt \
+    && python -c "import spacy; spacy.load('ru_core_news_sm')" \
+    && useradd --uid 10001 --create-home seif
+COPY scripts/ner_service.py ./scripts/ner_service.py
+USER seif
+EXPOSE 8770
+HEALTHCHECK --interval=30s --timeout=5s --start-period=60s \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8770/health', timeout=4).close()"
+CMD ["python", "-m", "scripts.ner_service"]

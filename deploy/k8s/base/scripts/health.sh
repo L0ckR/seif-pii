@@ -15,7 +15,12 @@ case "${1:-}" in
     ;;
   sentinel-ready)
     reply=$(redis-cli --raw -h 127.0.0.1 -p 26379 SENTINEL CKQUORUM "$MASTER_NAME" 2>/dev/null)
-    case "$reply" in OK*) exit 0 ;; *) exit 1 ;; esac
+    case "$reply" in OK*) ;; *) exit 1 ;; esac
+    # Quorum alone does not mean this Sentinel has discovered failover
+    # candidates yet. Initial rollout waits for both replica records.
+    details=$(redis-cli --raw -h 127.0.0.1 -p 26379 SENTINEL MASTER "$MASTER_NAME" 2>/dev/null | tr -d '\r')
+    known=$(printf '%s\n' "$details" | awk 'previous == "num-slaves" { print; exit } { previous = $0 }')
+    [ "${known:-0}" -ge 2 ]
     ;;
   redis-ready)
     replication=$(redis-cli --raw -h 127.0.0.1 -p 6379 INFO replication 2>/dev/null | tr -d '\r')

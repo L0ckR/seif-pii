@@ -10,9 +10,38 @@ jobs:
       - run: |
           kubectl kustomize deploy/k8s > /tmp/seif-base.yaml
           kubectl kustomize deploy/k8s/overlays/production > /tmp/seif-production.yaml
+          kubectl kustomize deploy/k8s/overlays/hybrid > /tmp/seif-hybrid.yaml
           curl -fsSL https://github.com/yannh/kubeconform/releases/download/v0.8.0/kubeconform-linux-amd64.tar.gz -o /tmp/kubeconform.tar.gz
           tar -xzf /tmp/kubeconform.tar.gz -C /tmp kubeconform
-          /tmp/kubeconform -strict -summary -kubernetes-version 1.35.0 /tmp/seif-base.yaml /tmp/seif-production.yaml
+          /tmp/kubeconform -strict -summary -kubernetes-version 1.35.0 /tmp/seif-base.yaml /tmp/seif-production.yaml /tmp/seif-hybrid.yaml
+  ner-container:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -f Dockerfile.ner -t seif-pii-ner:ci .
+      - name: Check real Russian model behind authenticated endpoint
+        run: |
+          docker run -d --name ner-smoke -e SEIF_NER_TOKEN=ci-only-test-key -e SEIF_NER_WORKERS=1 -p 127.0.0.1:8770:8770 seif-pii-ner:ci
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:8770/health; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:8770/analyze -H 'Authorization: Bearer ci-only-test-key' -H 'Content-Type: application/json' -d '{"text":"Передайте заявление Дине Шварц."}' > /tmp/ner-result.json
+          python3 -c "import json; r=json.load(open('/tmp/ner-result.json')); assert r['entities'] and all(set(e)=={'start','end','score','entity_type'} for e in r['entities'])"
+      - name: Publish optional NER image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          image_name="ghcr.io/${GITHUB_REPOSITORY,,}-ner"
+          printf '%s' "$GHCR_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          docker tag seif-pii-ner:ci "$image_name:1.0.0"
+          docker tag seif-pii-ner:ci "$image_name:$GITHUB_SHA"
+          docker push "$image_name:1.0.0"
+          docker push "$image_name:$GITHUB_SHA"
   container:
     runs-on: ubuntu-latest
     permissions:

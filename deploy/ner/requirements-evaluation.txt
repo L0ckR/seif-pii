@@ -1,0 +1,3 @@
+# Optional local evaluators only; never added to the production gateway runtime.
+-r requirements-ner.txt
+pyarrow==25.0.1

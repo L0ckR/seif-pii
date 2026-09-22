@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "method": "open-loop correlation pairs; 2 offered HTTP requests/pair; no retries",
+  "transport": "aiohttp",
+  "event_loop": "uvloop",
+  "target_url": "http://127.0.0.1:8765",
+  "synthetic_data_only": true,
+  "configured_duration_seconds": 300.0,
+  "observed_elapsed_seconds_including_drain": 300.003,
+  "offered_http_rps": 2100.0,
+  "max_concurrent_pairs": 256,
+  "achieved_attempted_http_rps": 2099.98,
+  "achieved_successful_http_rps": 2099.98,
+  "counts": {
+    "pairs_offered": 315000,
+    "pairs_dispatched": 315000,
+    "requests_attempted": 630000,
+    "requests_successful": 630000,
+    "pairs_verified": 315000
+  },
+  "http_statuses": {
+    "200": 630000
+  },
+  "errors": {},
+  "latency_ms_all_attempts": {
+    "p50": 2.847,
+    "p95": 7.339,
+    "p99": 15.902,
+    "max": 177.441
+  },
+  "client_scheduler_max_lag_ms": 33.181,
+  "limitations": [
+    "This is a local synthetic sample, not the organizer's closed evaluation dataset.",
+    "Reported throughput includes request completion after the scheduling window.",
+    "Client drops or significant scheduler lag mean the client could not offer the target load.",
+    "Fast responses do not establish PII detection quality or production availability."
+  ],
+  "run_configuration": {
+    "measured_on": "2026-09-22",
+    "python": "3.14.7t",
+    "gil_enabled": false,
+    "api_workers": 3,
+    "cpu_workers_per_process": 4,
+    "storage": "Redis Sentinel: 1 primary, 2 replicas, 3 Sentinels, AOF everysec",
+    "audit_level": "INFO",
+    "cpu": "AMD Ryzen 7 7800X3D, 8 cores / 16 logical CPUs",
+    "placement": "client, API, Redis and Sentinel on the same WSL2 host",
+    "detector_source_commit": "f2fcf6d0 (before the subsequent Presidio-inspired context improvements)"
+  }
+}

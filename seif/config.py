@@ -88,6 +88,9 @@ class Settings:
     max_inflight_body_bytes: int = 64 * 1024 * 1024
     max_inflight: int = 128
     cpu_workers: int = 4
+    ner_url: str = field(default="", repr=False)
+    ner_token: str = field(default="", repr=False)
+    ner_timeout_seconds: float = 20.0
     policies: dict[str, Policy] = field(default_factory=lambda: {"demo": Policy()})
 
     @classmethod
@@ -140,5 +143,8 @@ class Settings:
             sentinel_password=sentinel_password,
             ttl_seconds=int(os.getenv("SEIF_TTL_SECONDS", "900")),
             cpu_workers=int(os.getenv("SEIF_CPU_WORKERS", "4")),
+            ner_url=os.getenv("SEIF_NER_URL", ""),
+            ner_token=os.getenv("SEIF_NER_TOKEN", ""),
+            ner_timeout_seconds=float(os.getenv("SEIF_NER_TIMEOUT_SECONDS", "20")),
             policies=policies,
         )

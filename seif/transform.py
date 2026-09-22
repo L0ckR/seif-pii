@@ -17,7 +17,7 @@ def synthetic_value(kind: str, value: str, ordinal: int) -> str:
         "CARD": "0000 0000 0000 0000", "CVV": "***", "PIN": "****",
         "ADDRESS": f"г. Макетный, ул. Тестовая, д. {ordinal}", "CITY": "Макетный",
         "STREET": "Тестовая", "HOUSE": "0", "APARTMENT": "0", "POSTAL_CODE": "000000",
-        "COUNTRY": "Тестовая страна", "CITIZENSHIP": "Тестовое гражданство",
+        "LOCATION": "Макетная область", "COUNTRY": "Тестовая страна", "CITIZENSHIP": "Тестовое гражданство",
         "BIRTH_PLACE": "г. Макетный", "PASSPORT_ISSUER": "ТЕСТОВЫЙ ОРГАН",
         "DEPARTMENT_CODE": "000-000", "BIRTH_DATE": "01.01.1900", "PASSPORT_DATE": "01.01.2000",
         "FOREIGN_DOCUMENT": "DEMO000000",

@@ -24,6 +24,7 @@ def main() -> None:
         "master-key": base64.b64encode(secrets.token_bytes(32)).decode("ascii"),
         "api-key": secrets.token_urlsafe(48),
         "redis-password": secrets.token_hex(32),
+        "ner-key": secrets.token_urlsafe(48),
     }
     with tempfile.TemporaryDirectory(prefix="seif-k8s-secrets-") as temporary:
         command = ["kubectl", "--namespace", args.namespace, "create", "secret", "generic", "seif-secrets"]

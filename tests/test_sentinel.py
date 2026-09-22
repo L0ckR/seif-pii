@@ -257,8 +257,30 @@ def test_real_sentinel_failover_retains_replicated_ciphertext(tmp_path):
 
                     async def replicated_and_discovered():
                         blobs = await asyncio.gather(*(replica.get(key) for replica in replicas))
-                        sentinel_state = await vault.sentinel.sentinels[0].sentinel_master("seif-master")
-                        return all(blobs) and sentinel_state["num-other-sentinels"] >= 2
+                        if not all(blobs):
+                            return False
+                        # Replicated data and peer discovery are insufficient:
+                        # Sentinel learns eligible replicas on its own INFO cycle.
+                        # The old guard raced this cycle under concurrent test load,
+                        # allowing a primary kill before any election candidate existed.
+                        expected_ports = set(ports[1:3])
+                        for sentinel_client in vault.sentinel.sentinels:
+                            master, candidates = await asyncio.gather(
+                                sentinel_client.sentinel_master("seif-master"),
+                                sentinel_client.sentinel_slaves("seif-master"),
+                            )
+                            eligible = {
+                                candidate["port"]
+                                for candidate in candidates
+                                if candidate.get("master-link-status") == "ok"
+                                and candidate.get("slave-priority", 0) > 0
+                                and candidate.get("role-reported") == "slave"
+                                and not any(candidate.get(flag) for flag in ("is_sdown", "is_odown", "is_disconnected"))
+                            }
+                            if master["num-other-sentinels"] < 2 or not expected_ports <= eligible:
+                                return False
+                            await sentinel_client.execute_command("SENTINEL", "CKQUORUM", "seif-master")
+                        return True
 
                     await until(replicated_and_discovered)
                     raw = await replicas[0].get(key)
@@ -295,6 +317,7 @@ def test_real_sentinel_failover_retains_replicated_ciphertext(tmp_path):
                         "recovery_seconds": round(recovered_seconds, 3),
                         "same_vault_and_client_after_failover": True,
                         "record_verified_on_both_replicas_before_failure": True,
+                        "all_sentinels_confirmed_both_eligible_replicas_and_quorum_before_failure": True,
                         "redis_payload_ciphertext_only": True,
                         "http_process_roundtrip_exact_after_failover": True,
                         "new_http_writes_after_failover": True,

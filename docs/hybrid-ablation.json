@@ -1,0 +1,3424 @@
+{
+  "schema_version": 1,
+  "measured_at_utc": "2026-09-22T08:05:06.067781+00:00",
+  "status": "Post-result development ablation, not independent held-out evidence",
+  "baseline_report_sha256": "4a8cd992942d41440ad2dd78006cee6228978f751b977d45a6e23c21a0026bb5",
+  "baseline_detector_sha256": "737fcfbd6b8e0a798060a23c87e1006bfc844e6504a6fcdc465b12db7e4fa84f",
+  "current_detector_sha256": "00ef9ba65ed053d59ec821917616b58c168618bbe7d7531523f4745660e3f2bb",
+  "evaluator_sha256": "74a96f4a2d1a4a235aa8087e7d23f268b04b3c34dbdf3caa0e0bf134b2312d8c",
+  "prediction_source": "Unchanged cached PERSON spans/scores from the original Russian Presidio comparison; no label or threshold edits",
+  "method": "Exact typed Unicode character spans; same whole-case common4 selection as the original report",
+  "corpora": {
+    "development48": {
+      "case_count": 48,
+      "canonical_corpus_sha256": "012a95331293c7fb69dad730a39b1ac80767498469b6372ff42465fd65b33edd",
+      "common_case_ids": [
+        "full_name",
+        "full_name_lowercase",
+        "full_name_uppercase",
+        "email",
+        "email_uppercase",
+        "phone",
+        "phone_8",
+        "card",
+        "card_dashes",
+        "unicode",
+        "repeated_email",
+        "public_poet",
+        "bank_office",
+        "weather_city",
+        "release_date",
+        "arithmetic",
+        "no_pii",
+        "label_only"
+      ],
+      "common_strict4": {
+        "current_fast": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "true_positive": 13,
+          "false_positive": 0,
+          "false_negative": 0,
+          "exact_cases": 18,
+          "evaluated_cases": 18,
+          "negative_cases": 7,
+          "negative_cases_with_fp": 0,
+          "by_type": {
+            "CARD": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 2,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "EMAIL": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 5,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PERSON": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 3,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PHONE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 3,
+              "false_positive": 0,
+              "false_negative": 0
+            }
+          },
+          "failures": []
+        },
+        "hybrid": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "true_positive": 13,
+          "false_positive": 0,
+          "false_negative": 0,
+          "exact_cases": 18,
+          "evaluated_cases": 18,
+          "negative_cases": 7,
+          "negative_cases_with_fp": 0,
+          "by_type": {
+            "CARD": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 2,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "EMAIL": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 5,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PERSON": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 3,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PHONE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 3,
+              "false_positive": 0,
+              "false_negative": 0
+            }
+          },
+          "failures": []
+        }
+      },
+      "fine_taxonomy_requirement_fit": {
+        "current_fast": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "true_positive": 46,
+          "false_positive": 0,
+          "false_negative": 0,
+          "exact_cases": 48,
+          "evaluated_cases": 48,
+          "negative_cases": 7,
+          "negative_cases_with_fp": 0,
+          "by_type": {
+            "ADDRESS": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "APARTMENT": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "BIRTH_DATE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 4,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "BIRTH_PLACE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "CARD": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 2,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "CARDHOLDER": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "CITIZENSHIP": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 2,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "CITY": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "COUNTRY": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "CVV": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "DEPARTMENT_CODE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "DRIVER_LICENSE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 2,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "EMAIL": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 6,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "FOREIGN_DOCUMENT": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "HOUSE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "INN": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 2,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PASSPORT": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 4,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PASSPORT_DATE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 2,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PASSPORT_ISSUER": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PERSON": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 4,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PHONE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 4,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PIN": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "POSTAL_CODE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "STREET": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            }
+          },
+          "failures": []
+        },
+        "hybrid": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "true_positive": 46,
+          "false_positive": 0,
+          "false_negative": 0,
+          "exact_cases": 48,
+          "evaluated_cases": 48,
+          "negative_cases": 7,
+          "negative_cases_with_fp": 0,
+          "by_type": {
+            "ADDRESS": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "APARTMENT": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "BIRTH_DATE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 4,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "BIRTH_PLACE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "CARD": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 2,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "CARDHOLDER": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "CITIZENSHIP": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 2,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "CITY": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "COUNTRY": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "CVV": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "DEPARTMENT_CODE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "DRIVER_LICENSE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 2,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "EMAIL": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 6,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "FOREIGN_DOCUMENT": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "HOUSE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "INN": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 2,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PASSPORT": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 4,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PASSPORT_DATE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 2,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PASSPORT_ISSUER": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PERSON": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 4,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PHONE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 4,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PIN": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "POSTAL_CODE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "STREET": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            }
+          },
+          "failures": []
+        }
+      },
+      "original_presidio_common_strict4": {
+        "precision": 0.769231,
+        "recall": 0.769231,
+        "f1": 0.769231,
+        "true_positive": 10,
+        "false_positive": 3,
+        "false_negative": 3,
+        "exact_cases": 14,
+        "evaluated_cases": 18,
+        "negative_cases": 7,
+        "negative_cases_with_fp": 1,
+        "by_type": {
+          "CARD": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "true_positive": 2,
+            "false_positive": 0,
+            "false_negative": 0
+          },
+          "EMAIL": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "true_positive": 5,
+            "false_positive": 0,
+            "false_negative": 0
+          },
+          "PERSON": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "true_positive": 0,
+            "false_positive": 3,
+            "false_negative": 3
+          },
+          "PHONE": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "true_positive": 3,
+            "false_positive": 0,
+            "false_negative": 0
+          }
+        },
+        "failures": [
+          {
+            "case_id": "full_name",
+            "false_positive": [
+              [
+                "PERSON",
+                0,
+                13
+              ],
+              [
+                "PERSON",
+                14,
+                27
+              ]
+            ],
+            "false_negative": [
+              [
+                "PERSON",
+                7,
+                27
+              ]
+            ]
+          },
+          {
+            "case_id": "full_name_lowercase",
+            "false_positive": [],
+            "false_negative": [
+              [
+                "PERSON",
+                5,
+                25
+              ]
+            ]
+          },
+          {
+            "case_id": "full_name_uppercase",
+            "false_positive": [],
+            "false_negative": [
+              [
+                "PERSON",
+                5,
+                28
+              ]
+            ]
+          },
+          {
+            "case_id": "public_poet",
+            "false_positive": [
+              [
+                "PERSON",
+                17,
+                35
+              ]
+            ],
+            "false_negative": []
+          }
+        ]
+      },
+      "raw_cases": [
+        {
+          "case_id": "full_name",
+          "expected": [
+            [
+              "PERSON",
+              7,
+              27
+            ]
+          ],
+          "current_fast": [
+            [
+              "PERSON",
+              7,
+              27
+            ]
+          ],
+          "hybrid": [
+            [
+              "PERSON",
+              7,
+              27
+            ]
+          ],
+          "original_fast": [
+            [
+              "PERSON",
+              7,
+              27
+            ]
+          ],
+          "cached_ner_candidates": 2
+        },
+        {
+          "case_id": "full_name_lowercase",
+          "expected": [
+            [
+              "PERSON",
+              5,
+              25
+            ]
+          ],
+          "current_fast": [
+            [
+              "PERSON",
+              5,
+              25
+            ]
+          ],
+          "hybrid": [
+            [
+              "PERSON",
+              5,
+              25
+            ]
+          ],
+          "original_fast": [
+            [
+              "PERSON",
+              5,
+              25
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "full_name_uppercase",
+          "expected": [
+            [
+              "PERSON",
+              5,
+              28
+            ]
+          ],
+          "current_fast": [
+            [
+              "PERSON",
+              5,
+              28
+            ]
+          ],
+          "hybrid": [
+            [
+              "PERSON",
+              5,
+              28
+            ]
+          ],
+          "original_fast": [
+            [
+              "PERSON",
+              5,
+              28
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "birth_dotted",
+          "expected": [
+            [
+              "BIRTH_DATE",
+              15,
+              25
+            ]
+          ],
+          "current_fast": [
+            [
+              "BIRTH_DATE",
+              15,
+              25
+            ]
+          ],
+          "hybrid": [
+            [
+              "BIRTH_DATE",
+              15,
+              25
+            ]
+          ],
+          "original_fast": [
+            [
+              "BIRTH_DATE",
+              15,
+              25
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "birth_iso",
+          "expected": [
+            [
+              "BIRTH_DATE",
+              15,
+              25
+            ]
+          ],
+          "current_fast": [
+            [
+              "BIRTH_DATE",
+              15,
+              25
+            ]
+          ],
+          "hybrid": [
+            [
+              "BIRTH_DATE",
+              15,
+              25
+            ]
+          ],
+          "original_fast": [
+            [
+              "BIRTH_DATE",
+              15,
+              25
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "birth_words",
+          "expected": [
+            [
+              "BIRTH_DATE",
+              8,
+              26
+            ]
+          ],
+          "current_fast": [
+            [
+              "BIRTH_DATE",
+              8,
+              26
+            ]
+          ],
+          "hybrid": [
+            [
+              "BIRTH_DATE",
+              8,
+              26
+            ]
+          ],
+          "original_fast": [
+            [
+              "BIRTH_DATE",
+              8,
+              26
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "birth_uppercase",
+          "expected": [
+            [
+              "BIRTH_DATE",
+              15,
+              33
+            ]
+          ],
+          "current_fast": [
+            [
+              "BIRTH_DATE",
+              15,
+              33
+            ]
+          ],
+          "hybrid": [
+            [
+              "BIRTH_DATE",
+              15,
+              33
+            ]
+          ],
+          "original_fast": [
+            [
+              "BIRTH_DATE",
+              15,
+              33
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "birth_place",
+          "expected": [
+            [
+              "BIRTH_PLACE",
+              16,
+              25
+            ]
+          ],
+          "current_fast": [
+            [
+              "BIRTH_PLACE",
+              16,
+              25
+            ]
+          ],
+          "hybrid": [
+            [
+              "BIRTH_PLACE",
+              16,
+              25
+            ]
+          ],
+          "original_fast": [
+            [
+              "BIRTH_PLACE",
+              16,
+              25
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "passport_compact",
+          "expected": [
+            [
+              "PASSPORT",
+              9,
+              20
+            ]
+          ],
+          "current_fast": [
+            [
+              "PASSPORT",
+              9,
+              20
+            ]
+          ],
+          "hybrid": [
+            [
+              "PASSPORT",
+              9,
+              20
+            ]
+          ],
+          "original_fast": [
+            [
+              "PASSPORT",
+              9,
+              20
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "passport_split",
+          "expected": [
+            [
+              "PASSPORT",
+              15,
+              32
+            ]
+          ],
+          "current_fast": [
+            [
+              "PASSPORT",
+              15,
+              32
+            ]
+          ],
+          "hybrid": [
+            [
+              "PASSPORT",
+              15,
+              32
+            ]
+          ],
+          "original_fast": [
+            [
+              "PASSPORT",
+              15,
+              32
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "passport_uppercase",
+          "expected": [
+            [
+              "PASSPORT",
+              8,
+              20
+            ]
+          ],
+          "current_fast": [
+            [
+              "PASSPORT",
+              8,
+              20
+            ]
+          ],
+          "hybrid": [
+            [
+              "PASSPORT",
+              8,
+              20
+            ]
+          ],
+          "original_fast": [
+            [
+              "PASSPORT",
+              8,
+              20
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "citizenship",
+          "expected": [
+            [
+              "CITIZENSHIP",
+              13,
+              33
+            ]
+          ],
+          "current_fast": [
+            [
+              "CITIZENSHIP",
+              13,
+              33
+            ]
+          ],
+          "hybrid": [
+            [
+              "CITIZENSHIP",
+              13,
+              33
+            ]
+          ],
+          "original_fast": [
+            [
+              "CITIZENSHIP",
+              13,
+              33
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "citizenship_lowercase",
+          "expected": [
+            [
+              "CITIZENSHIP",
+              13,
+              19
+            ]
+          ],
+          "current_fast": [
+            [
+              "CITIZENSHIP",
+              13,
+              19
+            ]
+          ],
+          "hybrid": [
+            [
+              "CITIZENSHIP",
+              13,
+              19
+            ]
+          ],
+          "original_fast": [
+            [
+              "CITIZENSHIP",
+              13,
+              19
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "issuer",
+          "expected": [
+            [
+              "PASSPORT_ISSUER",
+              14,
+              46
+            ]
+          ],
+          "current_fast": [
+            [
+              "PASSPORT_ISSUER",
+              14,
+              46
+            ]
+          ],
+          "hybrid": [
+            [
+              "PASSPORT_ISSUER",
+              14,
+              46
+            ]
+          ],
+          "original_fast": [
+            [
+              "PASSPORT_ISSUER",
+              14,
+              46
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "department",
+          "expected": [
+            [
+              "DEPARTMENT_CODE",
+              19,
+              26
+            ]
+          ],
+          "current_fast": [
+            [
+              "DEPARTMENT_CODE",
+              19,
+              26
+            ]
+          ],
+          "hybrid": [
+            [
+              "DEPARTMENT_CODE",
+              19,
+              26
+            ]
+          ],
+          "original_fast": [
+            [
+              "DEPARTMENT_CODE",
+              19,
+              26
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "passport_date",
+          "expected": [
+            [
+              "PASSPORT_DATE",
+              22,
+              32
+            ]
+          ],
+          "current_fast": [
+            [
+              "PASSPORT_DATE",
+              22,
+              32
+            ]
+          ],
+          "hybrid": [
+            [
+              "PASSPORT_DATE",
+              22,
+              32
+            ]
+          ],
+          "original_fast": [
+            [
+              "PASSPORT_DATE",
+              22,
+              32
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "passport_date_words",
+          "expected": [
+            [
+              "PASSPORT_DATE",
+              13,
+              32
+            ]
+          ],
+          "current_fast": [
+            [
+              "PASSPORT_DATE",
+              13,
+              32
+            ]
+          ],
+          "hybrid": [
+            [
+              "PASSPORT_DATE",
+              13,
+              32
+            ]
+          ],
+          "original_fast": [
+            [
+              "PASSPORT_DATE",
+              13,
+              32
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "driver_license",
+          "expected": [
+            [
+              "DRIVER_LICENSE",
+              28,
+              40
+            ]
+          ],
+          "current_fast": [
+            [
+              "DRIVER_LICENSE",
+              28,
+              40
+            ]
+          ],
+          "hybrid": [
+            [
+              "DRIVER_LICENSE",
+              28,
+              40
+            ]
+          ],
+          "original_fast": [
+            [
+              "DRIVER_LICENSE",
+              28,
+              40
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "driver_license_short",
+          "expected": [
+            [
+              "DRIVER_LICENSE",
+              5,
+              16
+            ]
+          ],
+          "current_fast": [
+            [
+              "DRIVER_LICENSE",
+              5,
+              16
+            ]
+          ],
+          "hybrid": [
+            [
+              "DRIVER_LICENSE",
+              5,
+              16
+            ]
+          ],
+          "original_fast": [
+            [
+              "DRIVER_LICENSE",
+              5,
+              16
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "address",
+          "expected": [
+            [
+              "ADDRESS",
+              18,
+              55
+            ]
+          ],
+          "current_fast": [
+            [
+              "ADDRESS",
+              18,
+              55
+            ]
+          ],
+          "hybrid": [
+            [
+              "ADDRESS",
+              18,
+              55
+            ]
+          ],
+          "original_fast": [
+            [
+              "ADDRESS",
+              18,
+              55
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "country",
+          "expected": [
+            [
+              "COUNTRY",
+              19,
+              25
+            ]
+          ],
+          "current_fast": [
+            [
+              "COUNTRY",
+              19,
+              25
+            ]
+          ],
+          "hybrid": [
+            [
+              "COUNTRY",
+              19,
+              25
+            ]
+          ],
+          "original_fast": [
+            [
+              "COUNTRY",
+              19,
+              25
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "postal_code",
+          "expected": [
+            [
+              "POSTAL_CODE",
+              8,
+              14
+            ]
+          ],
+          "current_fast": [
+            [
+              "POSTAL_CODE",
+              8,
+              14
+            ]
+          ],
+          "hybrid": [
+            [
+              "POSTAL_CODE",
+              8,
+              14
+            ]
+          ],
+          "original_fast": [
+            [
+              "POSTAL_CODE",
+              8,
+              14
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "city",
+          "expected": [
+            [
+              "CITY",
+              7,
+              13
+            ]
+          ],
+          "current_fast": [
+            [
+              "CITY",
+              7,
+              13
+            ]
+          ],
+          "hybrid": [
+            [
+              "CITY",
+              7,
+              13
+            ]
+          ],
+          "original_fast": [
+            [
+              "CITY",
+              7,
+              13
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "street",
+          "expected": [
+            [
+              "STREET",
+              7,
+              15
+            ]
+          ],
+          "current_fast": [
+            [
+              "STREET",
+              7,
+              15
+            ]
+          ],
+          "hybrid": [
+            [
+              "STREET",
+              7,
+              15
+            ]
+          ],
+          "original_fast": [
+            [
+              "STREET",
+              7,
+              15
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "house",
+          "expected": [
+            [
+              "HOUSE",
+              5,
+              8
+            ]
+          ],
+          "current_fast": [
+            [
+              "HOUSE",
+              5,
+              8
+            ]
+          ],
+          "hybrid": [
+            [
+              "HOUSE",
+              5,
+              8
+            ]
+          ],
+          "original_fast": [
+            [
+              "HOUSE",
+              5,
+              8
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "apartment",
+          "expected": [
+            [
+              "APARTMENT",
+              10,
+              11
+            ]
+          ],
+          "current_fast": [
+            [
+              "APARTMENT",
+              10,
+              11
+            ]
+          ],
+          "hybrid": [
+            [
+              "APARTMENT",
+              10,
+              11
+            ]
+          ],
+          "original_fast": [
+            [
+              "APARTMENT",
+              10,
+              11
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "email",
+          "expected": [
+            [
+              "EMAIL",
+              9,
+              37
+            ]
+          ],
+          "current_fast": [
+            [
+              "EMAIL",
+              9,
+              37
+            ]
+          ],
+          "hybrid": [
+            [
+              "EMAIL",
+              9,
+              37
+            ]
+          ],
+          "original_fast": [
+            [
+              "EMAIL",
+              9,
+              37
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "email_uppercase",
+          "expected": [
+            [
+              "EMAIL",
+              7,
+              23
+            ]
+          ],
+          "current_fast": [
+            [
+              "EMAIL",
+              7,
+              23
+            ]
+          ],
+          "hybrid": [
+            [
+              "EMAIL",
+              7,
+              23
+            ]
+          ],
+          "original_fast": [
+            [
+              "EMAIL",
+              7,
+              23
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "phone",
+          "expected": [
+            [
+              "PHONE",
+              9,
+              27
+            ]
+          ],
+          "current_fast": [
+            [
+              "PHONE",
+              9,
+              27
+            ]
+          ],
+          "hybrid": [
+            [
+              "PHONE",
+              9,
+              27
+            ]
+          ],
+          "original_fast": [
+            [
+              "PHONE",
+              9,
+              27
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "phone_8",
+          "expected": [
+            [
+              "PHONE",
+              9,
+              24
+            ]
+          ],
+          "current_fast": [
+            [
+              "PHONE",
+              9,
+              24
+            ]
+          ],
+          "hybrid": [
+            [
+              "PHONE",
+              9,
+              24
+            ]
+          ],
+          "original_fast": [
+            [
+              "PHONE",
+              9,
+              24
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "inn",
+          "expected": [
+            [
+              "INN",
+              5,
+              15
+            ]
+          ],
+          "current_fast": [
+            [
+              "INN",
+              5,
+              15
+            ]
+          ],
+          "hybrid": [
+            [
+              "INN",
+              5,
+              15
+            ]
+          ],
+          "original_fast": [
+            [
+              "INN",
+              5,
+              15
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "inn_person",
+          "expected": [
+            [
+              "INN",
+              13,
+              25
+            ]
+          ],
+          "current_fast": [
+            [
+              "INN",
+              13,
+              25
+            ]
+          ],
+          "hybrid": [
+            [
+              "INN",
+              13,
+              25
+            ]
+          ],
+          "original_fast": [
+            [
+              "INN",
+              13,
+              25
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "card",
+          "expected": [
+            [
+              "CARD",
+              13,
+              32
+            ]
+          ],
+          "current_fast": [
+            [
+              "CARD",
+              13,
+              32
+            ]
+          ],
+          "hybrid": [
+            [
+              "CARD",
+              13,
+              32
+            ]
+          ],
+          "original_fast": [
+            [
+              "CARD",
+              13,
+              32
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "card_dashes",
+          "expected": [
+            [
+              "CARD",
+              6,
+              25
+            ]
+          ],
+          "current_fast": [
+            [
+              "CARD",
+              6,
+              25
+            ]
+          ],
+          "hybrid": [
+            [
+              "CARD",
+              6,
+              25
+            ]
+          ],
+          "original_fast": [
+            [
+              "CARD",
+              6,
+              25
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "cvv",
+          "expected": [
+            [
+              "CVV",
+              5,
+              8
+            ]
+          ],
+          "current_fast": [
+            [
+              "CVV",
+              5,
+              8
+            ]
+          ],
+          "hybrid": [
+            [
+              "CVV",
+              5,
+              8
+            ]
+          ],
+          "original_fast": [
+            [
+              "CVV",
+              5,
+              8
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "pin",
+          "expected": [
+            [
+              "PIN",
+              15,
+              19
+            ]
+          ],
+          "current_fast": [
+            [
+              "PIN",
+              15,
+              19
+            ]
+          ],
+          "hybrid": [
+            [
+              "PIN",
+              15,
+              19
+            ]
+          ],
+          "original_fast": [
+            [
+              "PIN",
+              15,
+              19
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "cardholder",
+          "expected": [
+            [
+              "CARDHOLDER",
+              21,
+              32
+            ]
+          ],
+          "current_fast": [
+            [
+              "CARDHOLDER",
+              21,
+              32
+            ]
+          ],
+          "hybrid": [
+            [
+              "CARDHOLDER",
+              21,
+              32
+            ]
+          ],
+          "original_fast": [
+            [
+              "CARDHOLDER",
+              21,
+              32
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "foreign_passport",
+          "expected": [
+            [
+              "FOREIGN_DOCUMENT",
+              15,
+              25
+            ]
+          ],
+          "current_fast": [
+            [
+              "FOREIGN_DOCUMENT",
+              15,
+              25
+            ]
+          ],
+          "hybrid": [
+            [
+              "FOREIGN_DOCUMENT",
+              15,
+              25
+            ]
+          ],
+          "original_fast": [
+            [
+              "FOREIGN_DOCUMENT",
+              15,
+              25
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "complex",
+          "expected": [
+            [
+              "EMAIL",
+              36,
+              52
+            ],
+            [
+              "PASSPORT",
+              63,
+              74
+            ],
+            [
+              "PERSON",
+              7,
+              27
+            ],
+            [
+              "PHONE",
+              84,
+              102
+            ]
+          ],
+          "current_fast": [
+            [
+              "EMAIL",
+              36,
+              52
+            ],
+            [
+              "PASSPORT",
+              63,
+              74
+            ],
+            [
+              "PERSON",
+              7,
+              27
+            ],
+            [
+              "PHONE",
+              84,
+              102
+            ]
+          ],
+          "hybrid": [
+            [
+              "EMAIL",
+              36,
+              52
+            ],
+            [
+              "PASSPORT",
+              63,
+              74
+            ],
+            [
+              "PERSON",
+              7,
+              27
+            ],
+            [
+              "PHONE",
+              84,
+              102
+            ]
+          ],
+          "original_fast": [
+            [
+              "EMAIL",
+              36,
+              52
+            ],
+            [
+              "PASSPORT",
+              63,
+              74
+            ],
+            [
+              "PERSON",
+              7,
+              27
+            ],
+            [
+              "PHONE",
+              84,
+              102
+            ]
+          ],
+          "cached_ner_candidates": 2
+        },
+        {
+          "case_id": "unicode",
+          "expected": [
+            [
+              "EMAIL",
+              8,
+              25
+            ],
+            [
+              "PHONE",
+              41,
+              59
+            ]
+          ],
+          "current_fast": [
+            [
+              "EMAIL",
+              8,
+              25
+            ],
+            [
+              "PHONE",
+              41,
+              59
+            ]
+          ],
+          "hybrid": [
+            [
+              "EMAIL",
+              8,
+              25
+            ],
+            [
+              "PHONE",
+              41,
+              59
+            ]
+          ],
+          "original_fast": [
+            [
+              "EMAIL",
+              8,
+              25
+            ],
+            [
+              "PHONE",
+              41,
+              59
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "repeated_email",
+          "expected": [
+            [
+              "EMAIL",
+              0,
+              15
+            ],
+            [
+              "EMAIL",
+              24,
+              39
+            ]
+          ],
+          "current_fast": [
+            [
+              "EMAIL",
+              0,
+              15
+            ],
+            [
+              "EMAIL",
+              24,
+              39
+            ]
+          ],
+          "hybrid": [
+            [
+              "EMAIL",
+              0,
+              15
+            ],
+            [
+              "EMAIL",
+              24,
+              39
+            ]
+          ],
+          "original_fast": [
+            [
+              "EMAIL",
+              0,
+              15
+            ],
+            [
+              "EMAIL",
+              24,
+              39
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "public_poet",
+          "expected": [],
+          "current_fast": [],
+          "hybrid": [],
+          "original_fast": [],
+          "cached_ner_candidates": 1
+        },
+        {
+          "case_id": "bank_office",
+          "expected": [],
+          "current_fast": [],
+          "hybrid": [],
+          "original_fast": [],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "weather_city",
+          "expected": [],
+          "current_fast": [],
+          "hybrid": [],
+          "original_fast": [],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "release_date",
+          "expected": [],
+          "current_fast": [],
+          "hybrid": [],
+          "original_fast": [],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "arithmetic",
+          "expected": [],
+          "current_fast": [],
+          "hybrid": [],
+          "original_fast": [],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "no_pii",
+          "expected": [],
+          "current_fast": [],
+          "hybrid": [],
+          "original_fast": [],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "label_only",
+          "expected": [],
+          "current_fast": [],
+          "hybrid": [],
+          "original_fast": [],
+          "cached_ner_candidates": 0
+        }
+      ]
+    },
+    "fresh28": {
+      "case_count": 28,
+      "canonical_corpus_sha256": "9a8e804ef00f22890e2e556a5820bd0dfb084ad9ccf55ca64292dda4e286e8c2",
+      "common_case_ids": [
+        "fresh_01",
+        "fresh_02",
+        "fresh_03",
+        "fresh_04",
+        "fresh_05",
+        "fresh_06",
+        "fresh_07",
+        "fresh_08",
+        "fresh_09",
+        "fresh_10",
+        "fresh_11",
+        "fresh_12",
+        "fresh_13",
+        "fresh_14",
+        "fresh_15",
+        "fresh_21",
+        "fresh_22",
+        "fresh_23",
+        "fresh_24",
+        "fresh_25",
+        "fresh_26",
+        "fresh_27",
+        "fresh_28"
+      ],
+      "common_strict4": {
+        "current_fast": {
+          "precision": 1.0,
+          "recall": 0.764706,
+          "f1": 0.866667,
+          "true_positive": 13,
+          "false_positive": 0,
+          "false_negative": 4,
+          "exact_cases": 19,
+          "evaluated_cases": 23,
+          "negative_cases": 7,
+          "negative_cases_with_fp": 0,
+          "by_type": {
+            "CARD": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 2,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "EMAIL": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 3,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PERSON": {
+              "precision": 1.0,
+              "recall": 0.428571,
+              "f1": 0.6,
+              "true_positive": 3,
+              "false_positive": 0,
+              "false_negative": 4
+            },
+            "PHONE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 5,
+              "false_positive": 0,
+              "false_negative": 0
+            }
+          },
+          "failures": [
+            {
+              "case_id": "fresh_01",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  18,
+                  28
+                ]
+              ]
+            },
+            {
+              "case_id": "fresh_03",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  11,
+                  22
+                ]
+              ]
+            },
+            {
+              "case_id": "fresh_05",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  9,
+                  21
+                ]
+              ]
+            },
+            {
+              "case_id": "fresh_06",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  12,
+                  30
+                ]
+              ]
+            }
+          ]
+        },
+        "hybrid": {
+          "precision": 1.0,
+          "recall": 0.941176,
+          "f1": 0.969697,
+          "true_positive": 16,
+          "false_positive": 0,
+          "false_negative": 1,
+          "exact_cases": 22,
+          "evaluated_cases": 23,
+          "negative_cases": 7,
+          "negative_cases_with_fp": 0,
+          "by_type": {
+            "CARD": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 2,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "EMAIL": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 3,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PERSON": {
+              "precision": 1.0,
+              "recall": 0.857143,
+              "f1": 0.923077,
+              "true_positive": 6,
+              "false_positive": 0,
+              "false_negative": 1
+            },
+            "PHONE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 5,
+              "false_positive": 0,
+              "false_negative": 0
+            }
+          },
+          "failures": [
+            {
+              "case_id": "fresh_05",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  9,
+                  21
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "fine_taxonomy_requirement_fit": {
+        "current_fast": {
+          "precision": 1.0,
+          "recall": 0.84,
+          "f1": 0.913043,
+          "true_positive": 21,
+          "false_positive": 0,
+          "false_negative": 4,
+          "exact_cases": 24,
+          "evaluated_cases": 28,
+          "negative_cases": 7,
+          "negative_cases_with_fp": 0,
+          "by_type": {
+            "ADDRESS": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "BIRTH_DATE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 2,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "BIRTH_PLACE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "CARD": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 2,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "EMAIL": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 3,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "INN": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PASSPORT": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PASSPORT_DATE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PERSON": {
+              "precision": 1.0,
+              "recall": 0.428571,
+              "f1": 0.6,
+              "true_positive": 3,
+              "false_positive": 0,
+              "false_negative": 4
+            },
+            "PHONE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 5,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PIN": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            }
+          },
+          "failures": [
+            {
+              "case_id": "fresh_01",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  18,
+                  28
+                ]
+              ]
+            },
+            {
+              "case_id": "fresh_03",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  11,
+                  22
+                ]
+              ]
+            },
+            {
+              "case_id": "fresh_05",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  9,
+                  21
+                ]
+              ]
+            },
+            {
+              "case_id": "fresh_06",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  12,
+                  30
+                ]
+              ]
+            }
+          ]
+        },
+        "hybrid": {
+          "precision": 1.0,
+          "recall": 0.96,
+          "f1": 0.979592,
+          "true_positive": 24,
+          "false_positive": 0,
+          "false_negative": 1,
+          "exact_cases": 27,
+          "evaluated_cases": 28,
+          "negative_cases": 7,
+          "negative_cases_with_fp": 0,
+          "by_type": {
+            "ADDRESS": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "BIRTH_DATE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 2,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "BIRTH_PLACE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "CARD": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 2,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "EMAIL": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 3,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "INN": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PASSPORT": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PASSPORT_DATE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PERSON": {
+              "precision": 1.0,
+              "recall": 0.857143,
+              "f1": 0.923077,
+              "true_positive": 6,
+              "false_positive": 0,
+              "false_negative": 1
+            },
+            "PHONE": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 5,
+              "false_positive": 0,
+              "false_negative": 0
+            },
+            "PIN": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "true_positive": 1,
+              "false_positive": 0,
+              "false_negative": 0
+            }
+          },
+          "failures": [
+            {
+              "case_id": "fresh_05",
+              "false_positive": [],
+              "false_negative": [
+                [
+                  "PERSON",
+                  9,
+                  21
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "original_presidio_common_strict4": {
+        "precision": 0.842105,
+        "recall": 0.941176,
+        "f1": 0.888889,
+        "true_positive": 16,
+        "false_positive": 3,
+        "false_negative": 1,
+        "exact_cases": 19,
+        "evaluated_cases": 23,
+        "negative_cases": 7,
+        "negative_cases_with_fp": 2,
+        "by_type": {
+          "CARD": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "true_positive": 2,
+            "false_positive": 0,
+            "false_negative": 0
+          },
+          "EMAIL": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "true_positive": 3,
+            "false_positive": 0,
+            "false_negative": 0
+          },
+          "PERSON": {
+            "precision": 0.666667,
+            "recall": 0.857143,
+            "f1": 0.75,
+            "true_positive": 6,
+            "false_positive": 3,
+            "false_negative": 1
+          },
+          "PHONE": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "true_positive": 5,
+            "false_positive": 0,
+            "false_negative": 0
+          }
+        },
+        "failures": [
+          {
+            "case_id": "fresh_05",
+            "false_positive": [],
+            "false_negative": [
+              [
+                "PERSON",
+                9,
+                21
+              ]
+            ]
+          },
+          {
+            "case_id": "fresh_21",
+            "false_positive": [
+              [
+                "PERSON",
+                9,
+                27
+              ]
+            ],
+            "false_negative": []
+          },
+          {
+            "case_id": "fresh_22",
+            "false_positive": [
+              [
+                "PERSON",
+                26,
+                43
+              ]
+            ],
+            "false_negative": []
+          },
+          {
+            "case_id": "fresh_28",
+            "false_positive": [
+              [
+                "PERSON",
+                17,
+                34
+              ]
+            ],
+            "false_negative": []
+          }
+        ]
+      },
+      "raw_cases": [
+        {
+          "case_id": "fresh_01",
+          "expected": [
+            [
+              "PERSON",
+              18,
+              28
+            ]
+          ],
+          "current_fast": [],
+          "hybrid": [
+            [
+              "PERSON",
+              18,
+              28
+            ]
+          ],
+          "original_fast": [],
+          "cached_ner_candidates": 1
+        },
+        {
+          "case_id": "fresh_02",
+          "expected": [
+            [
+              "PERSON",
+              17,
+              48
+            ]
+          ],
+          "current_fast": [
+            [
+              "PERSON",
+              17,
+              48
+            ]
+          ],
+          "hybrid": [
+            [
+              "PERSON",
+              17,
+              48
+            ]
+          ],
+          "original_fast": [
+            [
+              "PERSON",
+              17,
+              48
+            ]
+          ],
+          "cached_ner_candidates": 1
+        },
+        {
+          "case_id": "fresh_03",
+          "expected": [
+            [
+              "PERSON",
+              11,
+              22
+            ]
+          ],
+          "current_fast": [],
+          "hybrid": [
+            [
+              "PERSON",
+              11,
+              22
+            ]
+          ],
+          "original_fast": [],
+          "cached_ner_candidates": 1
+        },
+        {
+          "case_id": "fresh_04",
+          "expected": [
+            [
+              "PERSON",
+              8,
+              23
+            ]
+          ],
+          "current_fast": [
+            [
+              "PERSON",
+              8,
+              23
+            ]
+          ],
+          "hybrid": [
+            [
+              "PERSON",
+              8,
+              23
+            ]
+          ],
+          "original_fast": [
+            [
+              "PERSON",
+              8,
+              23
+            ]
+          ],
+          "cached_ner_candidates": 1
+        },
+        {
+          "case_id": "fresh_05",
+          "expected": [
+            [
+              "PERSON",
+              9,
+              21
+            ]
+          ],
+          "current_fast": [],
+          "hybrid": [],
+          "original_fast": [],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "fresh_06",
+          "expected": [
+            [
+              "PERSON",
+              12,
+              30
+            ]
+          ],
+          "current_fast": [],
+          "hybrid": [
+            [
+              "PERSON",
+              12,
+              30
+            ]
+          ],
+          "original_fast": [],
+          "cached_ner_candidates": 1
+        },
+        {
+          "case_id": "fresh_07",
+          "expected": [
+            [
+              "PHONE",
+              25,
+              41
+            ]
+          ],
+          "current_fast": [
+            [
+              "PHONE",
+              25,
+              41
+            ]
+          ],
+          "hybrid": [
+            [
+              "PHONE",
+              25,
+              41
+            ]
+          ],
+          "original_fast": [
+            [
+              "PHONE",
+              25,
+              41
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "fresh_08",
+          "expected": [
+            [
+              "PHONE",
+              11,
+              28
+            ]
+          ],
+          "current_fast": [
+            [
+              "PHONE",
+              11,
+              28
+            ]
+          ],
+          "hybrid": [
+            [
+              "PHONE",
+              11,
+              28
+            ]
+          ],
+          "original_fast": [
+            [
+              "PHONE",
+              11,
+              28
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "fresh_09",
+          "expected": [
+            [
+              "PHONE",
+              14,
+              27
+            ]
+          ],
+          "current_fast": [
+            [
+              "PHONE",
+              14,
+              27
+            ]
+          ],
+          "hybrid": [
+            [
+              "PHONE",
+              14,
+              27
+            ]
+          ],
+          "original_fast": [
+            [
+              "PHONE",
+              14,
+              27
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "fresh_10",
+          "expected": [
+            [
+              "PHONE",
+              18,
+              35
+            ]
+          ],
+          "current_fast": [
+            [
+              "PHONE",
+              18,
+              35
+            ]
+          ],
+          "hybrid": [
+            [
+              "PHONE",
+              18,
+              35
+            ]
+          ],
+          "original_fast": [
+            [
+              "PHONE",
+              18,
+              35
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "fresh_11",
+          "expected": [
+            [
+              "PHONE",
+              19,
+              35
+            ]
+          ],
+          "current_fast": [
+            [
+              "PHONE",
+              19,
+              35
+            ]
+          ],
+          "hybrid": [
+            [
+              "PHONE",
+              19,
+              35
+            ]
+          ],
+          "original_fast": [
+            [
+              "PHONE",
+              19,
+              35
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "fresh_12",
+          "expected": [
+            [
+              "EMAIL",
+              18,
+              47
+            ]
+          ],
+          "current_fast": [
+            [
+              "EMAIL",
+              18,
+              47
+            ]
+          ],
+          "hybrid": [
+            [
+              "EMAIL",
+              18,
+              47
+            ]
+          ],
+          "original_fast": [
+            [
+              "EMAIL",
+              18,
+              47
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "fresh_13",
+          "expected": [
+            [
+              "EMAIL",
+              13,
+              30
+            ]
+          ],
+          "current_fast": [
+            [
+              "EMAIL",
+              13,
+              30
+            ]
+          ],
+          "hybrid": [
+            [
+              "EMAIL",
+              13,
+              30
+            ]
+          ],
+          "original_fast": [
+            [
+              "EMAIL",
+              13,
+              30
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "fresh_14",
+          "expected": [
+            [
+              "CARD",
+              14,
+              33
+            ]
+          ],
+          "current_fast": [
+            [
+              "CARD",
+              14,
+              33
+            ]
+          ],
+          "hybrid": [
+            [
+              "CARD",
+              14,
+              33
+            ]
+          ],
+          "original_fast": [
+            [
+              "CARD",
+              14,
+              33
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "fresh_15",
+          "expected": [
+            [
+              "CARD",
+              25,
+              40
+            ]
+          ],
+          "current_fast": [
+            [
+              "CARD",
+              25,
+              40
+            ]
+          ],
+          "hybrid": [
+            [
+              "CARD",
+              25,
+              40
+            ]
+          ],
+          "original_fast": [
+            [
+              "CARD",
+              25,
+              40
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "fresh_16",
+          "expected": [
+            [
+              "BIRTH_DATE",
+              8,
+              28
+            ],
+            [
+              "BIRTH_PLACE",
+              46,
+              54
+            ]
+          ],
+          "current_fast": [
+            [
+              "BIRTH_DATE",
+              8,
+              28
+            ],
+            [
+              "BIRTH_PLACE",
+              46,
+              54
+            ]
+          ],
+          "hybrid": [
+            [
+              "BIRTH_DATE",
+              8,
+              28
+            ],
+            [
+              "BIRTH_PLACE",
+              46,
+              54
+            ]
+          ],
+          "original_fast": [
+            [
+              "BIRTH_DATE",
+              8,
+              28
+            ],
+            [
+              "BIRTH_PLACE",
+              46,
+              54
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "fresh_17",
+          "expected": [
+            [
+              "BIRTH_DATE",
+              15,
+              25
+            ],
+            [
+              "PASSPORT_DATE",
+              40,
+              50
+            ]
+          ],
+          "current_fast": [
+            [
+              "BIRTH_DATE",
+              15,
+              25
+            ],
+            [
+              "PASSPORT_DATE",
+              40,
+              50
+            ]
+          ],
+          "hybrid": [
+            [
+              "BIRTH_DATE",
+              15,
+              25
+            ],
+            [
+              "PASSPORT_DATE",
+              40,
+              50
+            ]
+          ],
+          "original_fast": [
+            [
+              "BIRTH_DATE",
+              15,
+              25
+            ],
+            [
+              "PASSPORT_DATE",
+              40,
+              50
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "fresh_18",
+          "expected": [
+            [
+              "PASSPORT",
+              14,
+              32
+            ]
+          ],
+          "current_fast": [
+            [
+              "PASSPORT",
+              14,
+              32
+            ]
+          ],
+          "hybrid": [
+            [
+              "PASSPORT",
+              14,
+              32
+            ]
+          ],
+          "original_fast": [
+            [
+              "PASSPORT",
+              14,
+              32
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "fresh_19",
+          "expected": [
+            [
+              "INN",
+              5,
+              17
+            ],
+            [
+              "PIN",
+              24,
+              28
+            ]
+          ],
+          "current_fast": [
+            [
+              "INN",
+              5,
+              17
+            ],
+            [
+              "PIN",
+              24,
+              28
+            ]
+          ],
+          "hybrid": [
+            [
+              "INN",
+              5,
+              17
+            ],
+            [
+              "PIN",
+              24,
+              28
+            ]
+          ],
+          "original_fast": [
+            [
+              "INN",
+              5,
+              17
+            ],
+            [
+              "PIN",
+              24,
+              28
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "fresh_20",
+          "expected": [
+            [
+              "ADDRESS",
+              19,
+              57
+            ]
+          ],
+          "current_fast": [
+            [
+              "ADDRESS",
+              19,
+              57
+            ]
+          ],
+          "hybrid": [
+            [
+              "ADDRESS",
+              19,
+              57
+            ]
+          ],
+          "original_fast": [
+            [
+              "ADDRESS",
+              19,
+              57
+            ]
+          ],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "fresh_21",
+          "expected": [],
+          "current_fast": [],
+          "hybrid": [],
+          "original_fast": [],
+          "cached_ner_candidates": 1
+        },
+        {
+          "case_id": "fresh_22",
+          "expected": [],
+          "current_fast": [],
+          "hybrid": [],
+          "original_fast": [],
+          "cached_ner_candidates": 1
+        },
+        {
+          "case_id": "fresh_23",
+          "expected": [],
+          "current_fast": [],
+          "hybrid": [],
+          "original_fast": [],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "fresh_24",
+          "expected": [],
+          "current_fast": [],
+          "hybrid": [],
+          "original_fast": [],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "fresh_25",
+          "expected": [],
+          "current_fast": [],
+          "hybrid": [],
+          "original_fast": [],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "fresh_26",
+          "expected": [],
+          "current_fast": [],
+          "hybrid": [],
+          "original_fast": [],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "fresh_27",
+          "expected": [],
+          "current_fast": [],
+          "hybrid": [],
+          "original_fast": [],
+          "cached_ner_candidates": 0
+        },
+        {
+          "case_id": "fresh_28",
+          "expected": [
+            [
+              "EMAIL",
+              65,
+              83
+            ],
+            [
+              "PERSON",
+              42,
+              57
+            ]
+          ],
+          "current_fast": [
+            [
+              "EMAIL",
+              65,
+              83
+            ],
+            [
+              "PERSON",
+              42,
+              57
+            ]
+          ],
+          "hybrid": [
+            [
+              "EMAIL",
+              65,
+              83
+            ],
+            [
+              "PERSON",
+              42,
+              57
+            ]
+          ],
+          "original_fast": [
+            [
+              "EMAIL",
+              65,
+              83
+            ],
+            [
+              "PERSON",
+              42,
+              57
+            ]
+          ],
+          "cached_ner_candidates": 2
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "Hybrid architecture was selected after seeing the original results; fresh28 is now development evidence.",
+    "Original dev48 was already used for detector development.",
+    "This is offline merge quality using cached model outputs, not end-to-end API, availability, throughput or latency validation.",
+    "Original report is preserved; current fast results are recomputed and source hashes distinguish revisions.",
+    "Small authored synthetic examples cannot establish general superiority or replace external corpus evaluation."
+  ]
+}

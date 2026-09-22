@@ -1,0 +1,34 @@
+{
+  "python": "3.13.7",
+  "cases": 76,
+  "matches": 76,
+  "different_case_ids": [],
+  "before_pipeline": [
+    "tok2vec",
+    "morphologizer",
+    "parser",
+    "attribute_ruler",
+    "lemmatizer",
+    "ner"
+  ],
+  "after_pipeline": [
+    "tok2vec",
+    "ner"
+  ],
+  "before": {
+    "calls": 760,
+    "mean_ms": 4.0638714605263155,
+    "p50_ms": 3.786846,
+    "p95_ms": 6.122761,
+    "p99_ms": 7.760299
+  },
+  "after": {
+    "calls": 760,
+    "mean_ms": 2.7519632460526315,
+    "p50_ms": 2.64536,
+    "p95_ms": 3.738183,
+    "p99_ms": 4.474682
+  },
+  "baseline_report_sha256": "4a8cd992942d41440ad2dd78006cee6228978f751b977d45a6e23c21a0026bb5",
+  "scope": "PERSON-only NER service; exact type/start/end/score equivalence on authored76 only; no guarantee for arbitrary inputs; same pretrained model and threshold"
+}

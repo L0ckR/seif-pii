@@ -177,7 +177,8 @@ def test_large_text_has_bounded_runtime_and_preserves_end_offsets():
 
 
 def test_every_documented_type_has_russian_label():
-    assert len(TYPES) == 24
+    # 24 core categories plus optional model-only geographical LOCATION.
+    assert len(TYPES) == 25
     assert all(repr(label) and any("А" <= c <= "я" for c in label) for label in TYPES.values())
 
 

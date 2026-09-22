@@ -2,7 +2,7 @@
 
 Подготовлен Kustomize-комплект в `deploy/k8s`: три реплики API, три Redis-пода с Sentinel, постоянные тома и автоматический выбор нового primary. **Наличие YAML и успешный рендер не означают, что кластер развёрнут.** В среде подготовки не было доступного Kubernetes-контекста; фактический failover и HPA нужно принять на целевом кластере по процедуре ниже.
 
-Образ приложения в манифесте — `ghcr.io/l0ckr/seif-pii:1.0.0`. Это имя предполагаемого артефакта; публикация образа в GHCR не подтверждена. До применения нужно собрать и загрузить образ в доступный кластеру registry либо заранее загрузить его в локальные узлы.
+Образ приложения в манифесте — `ghcr.io/l0ckr/seif-pii:1.0.0`. Его сборка, запуск и публикация в GHCR прошли в [GitHub Actions run 35700204670](https://github.com/L0ckR/seif-pii/actions/runs/35700204670), для коммита `f2fcf6d`. Это подтверждает публикацию артефакта, но не развёртывание Kubernetes. До применения обеспечьте кластеру доступ к приватному registry или загрузите образ на локальные узлы.
 
 ```mermaid
 flowchart LR
@@ -47,7 +47,7 @@ Base можно запустить на одном локальном узле, 
 
 Команды выполняются из корня репозитория. Сначала убедитесь, что `kubectl config current-context` указывает на нужный кластер. Нужны доступ к registry, StorageClass по умолчанию, DNS и CNI с поддержкой NetworkPolicy.
 
-Соберите образ и опубликуйте его в доступном registry:
+Готовый образ опубликован указанным выше CI. Если нужен собственный образ или registry, соберите и опубликуйте его:
 
 ```bash
 docker build -t ghcr.io/l0ckr/seif-pii:1.0.0 .
@@ -63,9 +63,9 @@ kubectl apply -f deploy/k8s/base/namespace.yaml
 python3 deploy/k8s/create-secrets.py
 ```
 
-Генератор создаёт 32-байтовый мастер-ключ в base64, API-ключ и Redis-пароль. Он передаёт значения `kubectl create secret --from-file` через временные файлы с правами `0600` вне репозитория; сами значения не выводятся и не появляются в аргументах команд. Существующий Secret не перезаписывается. Повторный запуск с ошибкой `AlreadyExists` не является причиной удалять секрет: замена мастер-ключа лишит приложение возможности прочитать прежние соответствия.
+Генератор создаёт 32-байтовый мастер-ключ в base64, API-ключ, Redis-пароль и отдельный `ner-key` для необязательного NER-сервиса. Он передаёт значения `kubectl create secret --from-file` через временные файлы с правами `0600` вне репозитория; сами значения не выводятся и не появляются в аргументах команд. Существующий Secret не перезаписывается. Повторный запуск с ошибкой `AlreadyExists` не является причиной удалять секрет: замена мастер-ключа лишит приложение возможности прочитать прежние соответствия.
 
-Secret `seif-secrets` содержит ключи `master-key`, `api-key`, `redis-password`. `secret.template.yaml` — только схема, она не включена в Kustomize и не предназначена для применения. Секреты следует сохранять в управляемом secret-store и ограничивать доступ к ним RBAC; генератор не создаёт резервную копию.
+Secret `seif-secrets` содержит ключи `master-key`, `api-key`, `redis-password`, `ner-key`; базовый профиль не использует `ner-key`. `secret.template.yaml` — только схема, она не включена в Kustomize и не предназначена для применения. Секреты следует сохранять в управляемом secret-store и ограничивать доступ к ним RBAC; генератор не создаёт резервную копию.
 
 Если registry приватный, создайте pull-secret **из уже подготовленного Docker config-файла** и добавьте `imagePullSecrets: [{name: ghcr-auth}]` в `spec.template.spec` API через свой overlay:
 
@@ -127,7 +127,7 @@ kubectl -n seif exec redis-0 -c sentinel -- sh -c \
   'export REDISCLI_AUTH="$REDIS_PASSWORD"; redis-cli -p 26379 SENTINEL get-master-addr-by-name seif-master'
 ```
 
-Ожидаются один `role:master`, две `role:slave` с `master_link_status:up`, а у primary — две подключённые реплики. `CKQUORUM` должен возвращать `OK`; все три Sentinel должны сообщать один FQDN primary и видеть двух других Sentinel. Readiness Redis проверяет роль/связь с primary, readiness Sentinel — доступность quorum. API readiness проверяет `/health`; liveness API не зависит от доступности Redis и поэтому не создаёт каскад рестартов при его отказе.
+Ожидаются один `role:master`, две `role:slave` с `master_link_status:up`, а у primary — две подключённые реплики. `CKQUORUM` должен возвращать `OK`; все три Sentinel должны сообщать один FQDN primary и видеть двух других Sentinel. Readiness Redis проверяет роль/связь с primary и завершение синхронизации replica. Readiness Sentinel требует quorum и два известных replica-узла (`num-slaves >= 2`): один только доступный quorum ещё не означает, что Sentinel успел обнаружить кандидатов для failover. API readiness проверяет `/health`; liveness API не зависит от доступности Redis и поэтому не создаёт каскад рестартов при его отказе.
 
 Откройте локальный доступ:
 
@@ -187,3 +187,62 @@ NetworkPolicy допускает API → Redis/Sentinel, взаимный обм
 API использует TLS на Ingress, если применён `deploy/k8s/optional/ingress.example.yaml` с реальным доменом и TLS Secret. Внутренние Redis/Sentinel в этом комплекте используют пароль без TLS; шифрование межподового транспорта требует отдельной настройки Redis TLS или доверенного сетевого шифрования. В AOF находятся шифротексты приложения, а конфигурация Sentinel содержит Redis-пароль, поэтому права на тома и шифрование storage также важны.
 
 Не меняйте одновременно Redis-пароль во всех подах без плана ротации: Secret, живые Redis, репликация, Sentinels и клиенты должны перейти согласованно. Не пересоздавайте мастер-ключ приложения во время обычного rollout. Для обновления policies требуется rollout API после обновления ConfigMap: приложение читает настройки при запуске.
+
+## Необязательный hybrid-профиль с Presidio NER
+
+`deploy/k8s/overlays/hybrid` добавляет отдельный PERSON/LOCATION NER-сервис на обычном Python 3.13, сохраняя основной API на Python 3.14t. Две NER-реплики используют по одному worker; запросы ресурсов — 1 CPU / 512 MiB, лимиты — 2 CPU / 1 GiB. Service `seif-ner:8770` доступен только внутри кластера, NetworkPolicy разрешает к нему вход только от API. NER не получает Redis-пароль, мастер-ключ или API-ключ клиента. Общий `ner-key` служит только для аутентификации запросов API к NER.
+
+У NER есть startup/readiness/liveness probes, PDB, non-root/readonly rootfs и `/tmp` в RAM. Образ содержит модель заранее; загрузка модели из интернета при запуске не требуется. Исходящий доступ NER ограничен общим DNS-разрешением. Здесь нет HPA для NER: две реплики — исходная конфигурация для проверки, а масштабирование API само по себе не увеличивает пропускную способность NER.
+
+Hybrid наследует **base**, включая мягкое распределение по узлам. Он не включает строгие правила `overlays/production`. Для production-гибрида создайте собственный overlay над `hybrid` и перенесите две placement-поправки из `overlays/production/kustomization.yaml`; не объединяйте оба overlay как два независимых ресурса, иначе ресурсы base будут продублированы.
+
+Перед применением должен быть собран и опубликован отдельный образ `ghcr.io/l0ckr/seif-pii-ner:1.0.0` из `Dockerfile.ner`. Его публикация на момент подготовки данного профиля ещё не подтверждена; наличие манифеста не означает доступность образа. При приватном registry `imagePullSecrets` нужно добавить **и API, и NER** через свой overlay.
+
+### Существующий Secret
+
+Для новой установки обычный `create-secrets.py` уже создаёт `ner-key`. Для существующего Secret добавьте только отсутствующий ключ следующим фрагментом; мастер-ключ, Redis-пароль и клиентский ключ остаются прежними. Секрет не выводится в терминал и не передаётся через аргументы CLI. Проверка `resourceVersion` отклонит запись при конкурентном изменении Secret; в таком случае изучите изменение и повторите чтение.
+
+```bash
+python3 - <<'PY'
+import base64
+import json
+import os
+import secrets
+import subprocess
+import tempfile
+from pathlib import Path
+
+os.umask(0o077)
+command = ['kubectl', '-n', 'seif']
+current = json.loads(subprocess.check_output(
+    command + ['get', 'secret', 'seif-secrets', '-o', 'json']))
+if 'ner-key' in current.get('data', {}):
+    raise SystemExit('ner-key already exists; no changes made.')
+patch = [
+    {'op': 'test', 'path': '/metadata/resourceVersion',
+     'value': current['metadata']['resourceVersion']},
+    {'op': 'add', 'path': '/data/ner-key',
+     'value': base64.b64encode(secrets.token_urlsafe(48).encode()).decode()},
+]
+with tempfile.TemporaryDirectory(prefix='seif-ner-key-') as temporary:
+    path = Path(temporary) / 'patch.json'
+    path.write_text(json.dumps(patch), encoding='utf-8')
+    subprocess.run(command + ['patch', 'secret', 'seif-secrets',
+                   '--type=json', '--patch-file', str(path)], check=True)
+PY
+```
+
+Не удаляйте Secret ради повторного запуска генератора. Если ключ уже существует, фрагмент завершится без изменения; ротация требует согласованного обновления API и NER.
+
+### Запуск и приёмка
+
+```bash
+kubectl kustomize deploy/k8s/overlays/hybrid
+kubectl apply -k deploy/k8s/overlays/hybrid
+kubectl -n seif rollout status deployment/seif-ner --timeout=10m
+kubectl -n seif rollout status deployment/seif-api --timeout=10m
+```
+
+Для совершенно новой установки также выполните описанный выше bootstrap Redis. Для уже работающего Redis повторно разрешать bootstrap не нужно. Проверьте через API нетипичное личное имя, публичного автора, обратимость и остановку NER; убедитесь, что режим отказа совпадает с настройкой API, затем проведите нагрузку с реальными размерами текстов. Локальные 2100 RPS базового режима нельзя переносить на гибридный профиль. [Сравнение и границы NER](presidio.md).
+
+Kustomize hybrid прошёл рендер и строгую проверку схем Kubernetes 1.35: 20 ресурсов, 0 ошибок. Это статическая проверка; Kubernetes deployment и межузловая работоспособность гибридного профиля пока не подтверждены.

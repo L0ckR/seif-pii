@@ -1,0 +1,10 @@
+{
+  "tokenizer": "cl100k_base",
+  "tokens": 100000,
+  "characters": 799973,
+  "mask_ms": 168.17,
+  "unmask_ms": 31.034,
+  "sensitive_span_masked": true,
+  "exact_roundtrip": true,
+  "scope": "One synthetic document, isolated HTTP request, not 1000 RPS of large documents"
+}

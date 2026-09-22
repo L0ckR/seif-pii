@@ -1,0 +1,29 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: seif
+resources:
+  - ../../base
+  - ner.yaml
+  - network-policies.yaml
+patches:
+  - target:
+      kind: Deployment
+      name: seif-api
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: seif-api
+      spec:
+        template:
+          spec:
+            containers:
+              - name: api
+                env:
+                  - name: SEIF_NER_URL
+                    value: http://seif-ner:8770
+                  - name: SEIF_NER_TOKEN
+                    valueFrom:
+                      secretKeyRef:
+                        name: seif-secrets
+                        key: ner-key

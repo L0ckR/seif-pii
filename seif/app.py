@@ -25,7 +25,8 @@ from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from .config import Settings
-from .detector import TYPES, detect, validate_extra_rule
+from .detector import TYPES, detect, merge_ner_candidates, validate_extra_rule
+from .ner import NerClient, validate_ner_settings
 from .transform import mask, restore_exact, restore_tokens
 from .vault import Vault, VaultFull
 
@@ -132,6 +133,8 @@ class Boundary:
 
 def create_app(settings: Settings | None = None) -> FastAPI:
     settings = settings or Settings.from_env()
+    validate_ner_settings(settings.ner_url, settings.ner_token, settings.ner_timeout_seconds)
+    ner = NerClient(settings.ner_url, settings.ner_token, settings.ner_timeout_seconds) if settings.ner_url else None
     if settings.ttl_seconds < 1 or settings.max_records < 1 or len(settings.encryption_key) != 32:
         raise ValueError("Invalid vault settings")
     vault, registry = Vault(settings), CollectorRegistry()
@@ -163,6 +166,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             ):
                 raise RuntimeError("This deployment requires a free-threaded Python with GIL disabled")
             await vault.ping()
+            if ner:
+                await ner.health()
             yield
         finally:
             try:
@@ -170,11 +175,16 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 # blocking the event loop, including jobs whose HTTP task was cancelled.
                 await asyncio.to_thread(cpu_pool.shutdown, wait=True, cancel_futures=True)
             finally:
-                await vault.close()
+                try:
+                    if ner:
+                        await ner.close()
+                finally:
+                    await vault.close()
 
     app = FastAPI(title="СЕЙФ · Personal Data Gateway", version="1.0.0", lifespan=lifespan,
                   docs_url=None, redoc_url=None)
     app.state.vault, app.state.settings = vault, settings
+    app.state.ner = ner
     app.add_middleware(Boundary, settings=settings, registry=registry)
 
     @app.exception_handler(RequestValidationError)
@@ -307,6 +317,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                         spans = await pending
                     else:
                         spans = detect(body.payload, extra_rules=list(policy.extra_rules))
+                if ner:
+                    with stage("ner"):
+                        candidates = await ner.detect(body.payload)
+                        spans = merge_ner_candidates(body.payload, spans, candidates)
                 selected = [s for s in spans if not policy.types or s.type in policy.types]
                 type_set = {s.type for s in selected}
                 if len(type_set) < policy.min_types or not set(policy.required_types).issubset(type_set):
@@ -315,7 +329,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                     result, replacements = mask(body.payload, selected, mode)
                 record = {"original_hash": fingerprint, "masked_hash": vault.digest(result),
                           "masked": result, "replacements": replacements if policy.allow_unmask else [],
-                          "entities": [asdict(s) for s in selected], "mode": mode}
+                          "entities": [asdict(s) for s in selected], "mode": mode,
+                          "detector_profile": "hybrid" if ner else "rules"}
                 with stage("vault_write"):
                     record = await vault.put_if_absent(key, record)
                 if record["original_hash"] != fingerprint:
@@ -332,6 +347,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             LOG.info(json.dumps({"event": "processed", "request_id": request.state.request_id,
                                  "system": tenant, "operation": direction, "types": kinds,
                                  "mode": record["mode"], "latency_ms": round(elapsed, 3),
+                                 "detector_profile": record.get("detector_profile", "rules"),
                                  "stages_ms": stage_times}, ensure_ascii=False))
             if operation == "process":
                 return {"result": result}
@@ -363,12 +379,15 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def health():
         try:
             await vault.ping()
+            if ner:
+                await ner.health()
         except Exception:
             return error(503, "storage_unavailable", "Хранилище недоступно.")
         return {"status": "ok", "mode": "demo" if settings.demo else "restricted",
                 "storage": "sentinel" if vault.sentinel else "redis" if vault.redis else "memory", "python": sys.version.split()[0],
                 "free_threaded": bool(sysconfig.get_config_var("Py_GIL_DISABLED")),
-                "gil_enabled": getattr(sys, "_is_gil_enabled", lambda: True)()}
+                "gil_enabled": getattr(sys, "_is_gil_enabled", lambda: True)(),
+                "detector_profile": "hybrid" if ner else "rules"}
 
     @app.get("/v1/types")
     async def types():
