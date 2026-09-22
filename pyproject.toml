@@ -39,5 +39,4 @@ select = ["E4", "E7", "E9", "F", "I", "B", "C901", "C4", "SIM", "PERF", "PLR0911
 "scripts/local_redis.py" = ["S603"]
 "deploy/k8s/create-secrets.py" = ["S603"]
 # Seeded shuffling determines benchmark order, never credentials or identifiers.
-"scripts/compare_presidio.py" = ["S311"]
 "scripts/benchmark_corpus.py" = ["S311"]

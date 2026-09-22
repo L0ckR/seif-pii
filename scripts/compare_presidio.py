@@ -16,7 +16,6 @@ import logging
 import math
 import os
 import platform
-import random
 import resource
 import sys
 import time
@@ -227,6 +226,26 @@ def percentile(values, q):
     return round(ordered[low] + (ordered[high] - ordered[low]) * (position - low), 6)
 
 
+BENCHMARK_ORDER_ALGORITHM = "sha256-rank-v1"
+BENCHMARK_ORDER_SEED = 20260922
+
+
+def _ranked_order(items, pass_index, *, domain, seed=BENCHMARK_ORDER_SEED):
+    """Reproducible permutation by position; no payload text enters the hash.
+
+    Each pass ranks the original input positions independently. The position
+    also breaks a digest tie, so duplicates and every occurrence are retained.
+    This is an intentionally predictable benchmark schedule, not secret entropy.
+    """
+    def rank(indexed):
+        position, _ = indexed
+        label = [BENCHMARK_ORDER_ALGORITHM, seed, pass_index, domain, position]
+        digest = hashlib.sha256(json.dumps(label, separators=(",", ":")).encode("utf-8")).digest()
+        return digest, position
+
+    return [item for _, item in sorted(enumerate(items), key=rank)]
+
+
 def benchmark(texts_by_corpus, detect, analyzer, repeats, warmup):
     calls = {"seif": lambda text: detect(text), "presidio": lambda text: analyzer.analyze(text=text, language="ru", score_threshold=0.0)}
     rows = [(corpus, case_id, text) for corpus, texts in texts_by_corpus.items() for case_id, text in texts.items()]
@@ -234,20 +253,26 @@ def benchmark(texts_by_corpus, detect, analyzer, repeats, warmup):
         for _, _, text in rows:
             for call in calls.values():
                 call(text)
-    rng = random.Random(20260922)
     samples = {corpus: {name: [] for name in calls} for corpus in texts_by_corpus}
-    for _ in range(repeats):
-        rng.shuffle(rows)
-        for corpus, _, text in rows:
-            order = list(calls)
-            rng.shuffle(order)
+    for pass_index in range(repeats):
+        ordered_rows = _ranked_order(rows, pass_index, domain="rows")
+        for row_position, (corpus, _, text) in enumerate(ordered_rows):
+            order = _ranked_order(calls, pass_index, domain=f"systems:{row_position}")
             for name in order:
                 start = time.perf_counter_ns()
                 calls[name](text)
                 samples[corpus][name].append((time.perf_counter_ns() - start) / 1_000_000)
     return {
         "scope": "detector-only, same process/interpreter, one caller, full analyzer including NLP versus full local detector; no mask/vault/HTTP",
-        "warmup_full_corpus_passes": warmup, "measured_passes": repeats, "order": "seeded interleaved random order, seed=20260922",
+        "warmup_full_corpus_passes": warmup, "measured_passes": repeats,
+        "order": "deterministic interleaved SHA256 ranking; each pass ranks original positions",
+        "order_protocol": {
+            "algorithm": BENCHMARK_ORDER_ALGORITHM, "seed": BENCHMARK_ORDER_SEED,
+            "input_order": "corpus and case dictionary insertion order; system order seif, presidio",
+            "ranking_key": "SHA256 of compact JSON [algorithm, seed, pass, domain, position]; position breaks ties",
+            "domains": "rows; systems:<position in that pass's row order>",
+            "historical_compatibility": "Order differs from the earlier random.Random shuffle protocol; timing runs are not order-identical.",
+        },
         "corpora": {corpus: {name: {"samples": len(values), "mean_ms": round(sum(values) / len(values), 6),
                                    "p50_ms": percentile(values, 50), "p95_ms": percentile(values, 95),
                                    "p99_ms": percentile(values, 99), "max_ms": round(max(values), 6)}

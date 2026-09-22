@@ -521,10 +521,8 @@ class _AppContext:
                 "gil_enabled": getattr(sys, "_is_gil_enabled", lambda: True)(),
                 "detector_profile": "hybrid" if self.ner else "rules"}
 
-    async def types(self):
-        # FastAPI executes async endpoints directly on the event loop. This
-        # constant response performs no blocking work; a sync handler would
-        # consume thread-pool capacity, while an artificial await adds overhead.
+    def types(self):
+        """Return fixed type metadata as a bounded synchronous endpoint."""
         return {"types": TYPES}
 
     async def metrics(self, request: Request):

@@ -222,19 +222,17 @@ def _lifespan(settings, analyzer_factory):
     return lifespan
 
 
-# Starlette dispatches synchronous exception handlers through a worker thread.
-# These handlers perform only constant-time response construction; keeping the
-# async callback contract avoids an extra thread-pool hop under invalid traffic.
-# No artificial checkpoint is required or useful for this bounded work.
-async def _validation_error(_request, _exc):
+# These bounded response constructors follow Starlette's synchronous handler
+# contract. Model execution and successful protection requests remain async.
+def _validation_error(_request, _exc):
     return error(422, "invalid_request", "Expected one text string of at most 20000 characters.")
 
 
-async def _http_error(_request, exc):
+def _http_error(_request, exc):
     return error(exc.status_code, "invalid_request", INVALID_REQUEST)
 
 
-async def _unexpected_error(_request, _exc):
+def _unexpected_error(_request, _exc):
     LOG.warning("ner_request_failed")
     return error(503, "unavailable", NER_UNAVAILABLE)
 
