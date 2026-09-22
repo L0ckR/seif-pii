@@ -5,6 +5,123 @@
 `main` и опубликованный сервис остаются на spaCy. Здесь проверяется модель
 локально; HTTP backend, Docker и production на LFM не переключались.
 
+## Результаты
+
+LFM **не улучшила замену NER в нашем сервисе** на этих трёх корпусах.
+Её самостоятельный детектор с официальными правилами показал хороший результат
+на PII Bench, однако перенести этот выигрыш на organizer и Red Mad Robot
+не получилось. Все 5095 текстов обработаны без ошибок и обрезания;
+настройки модели и правила СЕЙФ после оценки не менялись.
+Полные метрики, включая precision/recall, точные границы, типы и sensitivity
+по уверенности разметки, находятся в [`comparison.json`](comparison.json).
+
+**Вставка NER в неизменённый СЕЙФ: F1 маскирования символов, %.**
+Считаются все исходные категории разметки, включая неподдерживаемые.
+Для LFM здесь показан явно обозначенный address-proxy: PERSON и адрес,
+для spaCy/GLiNER — PERSON и LOCATION. Обычной географической LOCATION у LFM нет,
+поэтому ниже дополнительно приведено сравнение только общей метки PERSON.
+
+| Корпус | Текстов | spaCy | GLiNER выбранный | LFM raw + СЕЙФ | LFM official hybrid + СЕЙФ |
+|---|---:|---:|---:|---:|---:|
+| Organizer | 446 | 96,89 | 97,46 | 94,61 | 94,58 |
+| HiveTrace PII Bench | 1810 | 71,95 | 71,76 | 70,88 | 70,86 |
+| Red Mad Robot | 2839 | 59,50 | 65,66 | 53,59 | 53,66 |
+
+На organizer полностью совпали маски в 415/446 случаях у spaCy,
+423/446 у GLiNER и 398/446 у обоих вариантов LFM.
+На 329 случаях с уверенной разметкой F1 составил 99,49% у spaCy/GLiNER
+и 97,11% у LFM hybrid: просадка не ограничивается спорной частью разметки.
+Отклонений от контракта gateway в измеренных профилях нет: ничего не пришлось
+исключать из оценки из-за слишком длинных spans.
+
+**Изолированные PERSON-предсказания до правил СЕЙФ: typed character F1, %.**
+Здесь одна общая категория и одинаковые тексты; метрика учитывает все позиции
+внутри span, включая пробелы, в отличие от маскирования букв и цифр выше.
+
+| Корпус | spaCy | GLiNER | LFM raw | LFM official hybrid |
+|---|---:|---:|---:|---:|
+| Organizer | 75,24 | 94,93 | 68,45 | 68,36 |
+| HiveTrace PII Bench | 90,67 | 94,96 | 92,70 | 92,68 |
+| Red Mad Robot | 63,06 | 77,22 | 77,10 | 77,57 |
+
+На organizer основная слабость LFM — пропуски имён: recall PERSON у raw
+**54,60%**, у GLiNER **96,01%**. На Red Mad Robot LFM hybrid точнее GLiNER
+(precision **90,81% против 67,89%**), но пропускает больше PERSON
+(recall **67,70% против 89,52%**). Близкий F1 скрывает этот важный для защиты
+данных обмен precision на recall.
+
+**Самостоятельная LFM без правил СЕЙФ: F1 маскирования всех 40 категорий, %.**
+Это отдельный способ применения модели, а не результат замены нашего NER.
+
+| Корпус | LFM raw | LFM official hybrid |
+|---|---:|---:|
+| Organizer | 59,86 | 60,68 |
+| HiveTrace PII Bench | 77,22 | 84,18 |
+| Red Mad Robot | 60,44 | 57,09 |
+
+Официальный hybrid улучшил PII Bench, но ухудшил Red Mad Robot.
+Объявлять его лучшим на основании только 84,18% PII Bench нельзя.
+Итог эксперимента: сохранить LFM как отдельного кандидата, не заменять ею
+текущий NER без дополнительной проверки покрытия имён и российских форматов.
+
+### Почему различаются результаты
+
+Отдельный [аудит ошибок](error-attribution.json), сверенный с агрегатами,
+показывает, что в сервисном профиле LFM hybrid теряет 233 защищённых символа
+относительно spaCy при тех же 105 лишних маскированных символах. Потери:
+PERSON −85, гражданство −68, место рождения −59, адрес −15, город −6.
+Address-proxy на organizer вообще не добавляет защиты к PERSON-only.
+Raw LFM полностью пропускает 52/126 кириллических gold-имён, spaCy — 40,
+GLiNER — 1. Это диагностика фиксированной разметки, не доказательство
+качества на всех русских именах или отсутствия данных в pretraining.
+
+В [официальном hybrid-декодере](https://huggingface.co/LiquidAI/LFM2.5-Encoder-350M-PII-Detector/blob/b8c9cf3d2d6ae52501b35a27ba46f271449c9ce2/pii_hybrid_decode.py)
+для AUTH-типов нейросетевые spans заменяются regex/валидаторами, а не просто
+дополняются ими. Используются IPv4, Luhn для карт, ASCII-email и американский
+формат SSN. Это может снижать покрытие относительно российских и синтетических
+меток; аудит не утверждает, что каждый размеченный номер валиден.
+
+| Native raw → official hybrid | Δ защищённых gold-символов | Δ лишних символов | Основные изменения по исходным gold-типам |
+|---|---:|---:|---|
+| Organizer | +55 | +18 | ИНН +30, email +29, телефон +25, карты −32 |
+| PII Bench | +2800 | +62 | TOKEN +3046, СНИЛС −304, телефон −153, ОГРНИП −150 |
+| Red Mad Robot | −1768 | +442 | URL +1857, IP −1577, карты −1411, СНИЛС −352 |
+
+Рост PII Bench в основном связан с TOKEN. Правила LFM для таких категорий
+можно исследовать отдельно, но этот эксперимент не меняет конфигурацию
+после просмотра результатов и не заявляет проверенный ансамбль.
+
+## Скорость
+
+Последовательные вызовы, batch=1, FP32; у LFM один neural forward плюс
+оба официальных декодера. Загрузка весов и прогрев исключены.
+Это **тексты/с нативного inference, не HTTP RPS сервиса**: маскирование,
+Redis, конкуренция запросов и batching здесь не измерялись.
+
+| Модель / корпус | Устройство | Текстов/с | p50, мс | p95, мс |
+|---|---|---:|---:|---:|
+| spaCy / organizer | CPU, 1 поток | 343,89 | 2,76 | 4,20 |
+| GLiNER выбранный / organizer | RTX 4070 Ti SUPER | 29,76 | 27,56 | 61,08 |
+| LFM / organizer | RTX 4070 Ti SUPER | 61,05 | 11,99 | 37,62 |
+| LFM / organizer | CPU, 4 потока | 10,17 | 95,45 | 156,69 |
+| LFM / PII Bench | RTX 4070 Ti SUPER | 60,97 | 12,51 | 34,30 |
+| LFM / Red Mad Robot | RTX 4070 Ti SUPER | 54,41 | 13,94 | 39,55 |
+
+Все 5095 GPU-входов вместе с записью кэша заняли **89,33 с**
+(**57,04 текста/с**). Максимум выделенной Torch GPU-памяти — **1,51 GB**;
+это allocated memory процесса, не полное потребление видеокарты.
+Значения spaCy/GLiNER взяты из [предыдущего эксперимента](../gliner25-multi-v1/README.md)
+на том же оборудовании и тех же organizer-текстах; это отдельные последовательные
+запуски, а не одновременный нагрузочный тест. GPU timing по корпусам сохранён
+в [`gpu-metadata.json`](gpu-metadata.json).
+
+CPU-прогон всех 446 organizer-текстов занял 43,86 с с записью кэша;
+[`cpu-organizer.json`](cpu-organizer.json) содержит исходники, хеши и задержку
+каждого вызова. Оба декодера на CPU и GPU дали **точно одинаковые spans во всех
+446 случаях** — [`cpu-gpu-parity.json`](cpu-gpu-parity.json).
+Для публичных корпусов CPU-паритет этим не заявляется. Повторных замеров
+и распределения между запусками нет; скорость зависит от параллельной нагрузки.
+
 ## Зафиксированный протокол
 
 Модель: [`LiquidAI/LFM2.5-Encoder-350M-PII-Detector`](https://huggingface.co/LiquidAI/LFM2.5-Encoder-350M-PII-Detector/tree/b8c9cf3d2d6ae52501b35a27ba46f271449c9ce2),
@@ -74,6 +191,12 @@ Native full masking измеряет объединение всех предс�
 примерах, включая пустой ввод и Unicode/emoji. Это проверка нативного inference,
 не HTTP или заявленная производительность сервиса.
 
+Полный тестовый набор экспериментальной ветки: **2884 passed, 5 skipped**;
+пять opt-in Redis/Sentinel проверок требуют отдельных тестовых сервисов.
+Ruff и `git diff --check` проходят. Тесты включают mock-проверки wrapper,
+валидацию типов/границ и инвариантов протокола, а реальная загрузка проверена
+отдельным CUDA smoke и полными GPU/CPU прогонами.
+
 ## Лицензия и область применимости
 
 Модель опубликована под [LFM Open License v1.0](https://huggingface.co/LiquidAI/LFM2.5-Encoder-350M-PII-Detector/blob/b8c9cf3d2d6ae52501b35a27ba46f271449c9ce2/LICENSE).
@@ -84,3 +207,61 @@ $10 млн; это не MIT/Apache и не безусловное разреше
 В metadata заявлен русский среди 16 языков. Это не подтверждает все языки СНГ
 и все национальные форматы документов. Наши исходные правила российских и
 СНГ ПД в NER-профилях остаются прежними.
+
+## Воспроизведение
+
+Из корня экспериментального checkout:
+
+```bash
+uv venv --python 3.13 .venv-lfm
+uv pip install --python .venv-lfm/bin/python -r deploy/ner/requirements-lfm.txt
+.venv-lfm/bin/python - <<'PY'
+from huggingface_hub import snapshot_download
+print(snapshot_download(
+    "LiquidAI/LFM2.5-Encoder-350M-PII-Detector",
+    revision="b8c9cf3d2d6ae52501b35a27ba46f271449c9ce2",
+    allow_patterns=["*.py", "*.json", "model.safetensors", "README.md", "LICENSE"],
+))
+PY
+```
+
+Присвойте `MODEL_PATH` напечатанный путь. `PUBLIC_RUN_DIR` указывает на
+зафиксированный каталог с протоколом, исходными текстами и обоими свежими
+baseline-кэшами из [GLiNER эксперимента](../gliner25-multi-v1/README.md).
+Его можно восстановить описанными там командами; данные и кэши находятся
+локально, а не в Git. Organizer и его оба baseline-кэша входят в репозиторий.
+
+```bash
+RUN_DIR="$PWD/local-data/lfm25-repeat"
+.venv-lfm/bin/python scripts/compare_lfm.py prepare \
+  --run-dir "$RUN_DIR" --public-run-dir "$PUBLIC_RUN_DIR" --model-path "$MODEL_PATH"
+.venv-lfm/bin/python scripts/compare_lfm.py cache \
+  --run-dir "$RUN_DIR" --public-run-dir "$PUBLIC_RUN_DIR" --model-path "$MODEL_PATH"
+.venv-lfm/bin/python scripts/compare_lfm.py evaluate \
+  --run-dir "$RUN_DIR" --public-run-dir "$PUBLIC_RUN_DIR" --output "$RUN_DIR/comparison.json"
+```
+
+`prepare` проверяет происхождение baseline-кэшей и фиксирует все входы
+до model inference. Совпадение baseline-агрегатов проверяется в `evaluate`;
+перед этим экспериментом также выполнена отдельная контрольная проверка,
+сохранённая в [`baseline-control.json`](baseline-control.json).
+Последующие фазы проверяют неизменность файлов и версий;
+повторная запись существующих результатов запрещена. Все model calls локальны,
+сетевые соединения во время подготовки, inference и подсчёта отключены.
+[`protocol.json`](protocol.json) содержит исходный протокол этого запуска.
+
+CPU-замер запускается отдельно, когда другие inference/нагрузочные тесты
+завершены. Имена выходов должны быть новыми:
+
+```bash
+.venv-lfm/bin/python benchmarks/ner-models/lfm25-pii/measure_cpu.py \
+  --model-path "$MODEL_PATH" \
+  --cache "$PWD/local-data/lfm25-cpu-repeat/lfm.jsonl" \
+  --report "$PWD/local-data/lfm25-cpu-repeat/cpu-organizer.json"
+.venv-lfm/bin/python benchmarks/ner-models/lfm25-pii/error_attribution.py \
+  --run-dir "$RUN_DIR" --public-run-dir "$PUBLIC_RUN_DIR" \
+  --output "$RUN_DIR/error-attribution.json"
+```
+
+Сравнение CPU/GPU выполняется по `case_id`, SHA-256 текста и точному равенству
+упорядоченных `decoders.raw`/`decoders.hybrid` для всех 446 organizer-записей.

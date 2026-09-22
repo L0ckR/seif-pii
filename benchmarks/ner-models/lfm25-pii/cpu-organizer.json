@@ -1,0 +1,1928 @@
+{
+  "schema_version": 1,
+  "measured_at_utc": "2026-09-22T18:58:06.561883+00:00",
+  "finished_at_utc": "2026-09-22T18:58:51.177241+00:00",
+  "source_sha256": {
+    "seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+    "seif/app.py": "e958559569fae134ace1e54ef02af655dc65a4fc481a93545c315721bc1f8951",
+    "seif/async_callbacks.py": "b5ce7aae9979e6251c827d3e2099a4377266bcb8076606d67dbe86c38fa21ebe",
+    "seif/cardholder_fields.py": "3d80d59636e4b2e1a668325fbb945027b48a37e60aad5297c39b727a51806462",
+    "seif/config.py": "ca9c4e4bc80fcb6847f53f08593b25e5a3b41d6ae5a44ce7c416075ffd7b4b45",
+    "seif/context_filters.py": "c3fbd2c356784e87c481d3ac7d58a8cbf5863d04db96e47d4ef062e348bfd7fb",
+    "seif/detector.py": "e0b09cda385168f401ed1d1aa81ae4b1457d701be977f8f9aee789e444534025",
+    "seif/document_fields.py": "2200ed9f9751ee4894f164a4b43654de6f204c9661da83cdbf7a2a455d46ba51",
+    "seif/gliner_ner.py": "8012d0c3fc83b6c0a0defd4a07735d6e9cd4aa0c5debb1f7c395ddafb7431311",
+    "seif/lfm_pii.py": "acab90003298090c8f637cf6db586320022324d01fe8cd7b9fd4b51a8f1f99a0",
+    "seif/location_fields.py": "2d806e7a35bb7669001e796deba5cbac020dddb2887284390d27becebc43009e",
+    "seif/ner.py": "66c64453390bd851f2283c01bd995145e3a21e4cd23ad9af1f8330a665816068",
+    "seif/person_fields.py": "ca843e9b6f8ef9d4739703e83b1438a96d114dc95782626fa2e89366bf29f08d",
+    "seif/request_capture.py": "ce9d53ed7827992cd5c0c4b10914e3f9becc978cc192263116112c642e506855",
+    "seif/structured_fields.py": "26462106b1a29140a3bbf2b2370feab631145932ee44fbb78ca007b6d1d1218c",
+    "seif/transform.py": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+    "seif/vault.py": "b6b4f59bc911bb0a0c745b6801bcd9a034200e016f321e38c2984206c2946554",
+    "benchmarks/ner-models/lfm25-pii/measure_cpu.py": "d42d6327999dc77e61f6a6042c4bd3bcb51c82f67a663e643363e3960400996a",
+    "scripts/evaluate_golden.py": "02e1160fbfbb2933e4e90d65573e559962e6b474ab69ddaa1c2c0f66e68226ff",
+    "scripts/evaluate_annotations.py": "b429e3605b90a9090a8eae0185ee9286708836494235617901fbd6ae4e0d5463"
+  },
+  "dataset_sha256": {
+    "cases": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46",
+    "manifest": "74f6b661ff33cbc88b53fde91cb1103acaa1f6002a4008463d3100b7c9b2305a"
+  },
+  "ordered_membership_sha256": "f47a646ec67d9fffd76706f14f7ce34b21cbba5ebf27353114105ffec3c3a0fb",
+  "model": {
+    "model": "LiquidAI/LFM2.5-Encoder-350M-PII-Detector",
+    "revision": "b8c9cf3d2d6ae52501b35a27ba46f271449c9ce2",
+    "file_sha256": {
+      "config.json": "ced1b2917ec78c766b309233a38dd3351b6bd1cb4ba22c18363ce47c190679ac",
+      "tokenizer.json": "1efc3a6609abf6b63b1f47188d139f3b59973a6a434dffe970a7261a51ed2711",
+      "tokenizer_config.json": "2892f908f7cc397e412a92be1526234079542d139b3c2bc7e1b06921b6f55cd0",
+      "modeling_phase2_tc.py": "e48f084a44f25a43389a153dba6c94d53cb8f8fa4afd9f95b36ea697bf24d863",
+      "pii_hybrid_decode.py": "798ee81182e1a5a68307d01e8bb350bcd36fa68ebe68e58bb5bacdc2a6c95ed5",
+      "context_cued.py": "2a65a71e7625267b6dae4afd9a3256faa02ec3a724a754622f5c295d6252c33c",
+      "model.safetensors": "fbfec8b59db250a1d35b4ddc0d73571777f7088946ee22a5d7962e37c02ea6a8"
+    },
+    "device": "cpu",
+    "dtype": "torch.float32",
+    "versions": {
+      "torch": "2.14.0",
+      "transformers": "5.11.0",
+      "tokenizers": "0.22.2",
+      "safetensors": "0.8.0"
+    },
+    "decoder": "Official model_spans once, followed by unchanged hybrid_spans.",
+    "max_tokens_including_special": 2048,
+    "label_count": 161,
+    "native_types": [
+      "contact.address",
+      "contact.email",
+      "contact.ip_address",
+      "contact.phone",
+      "contact.postal_code",
+      "credential.api_key",
+      "credential.connection_string",
+      "credential.jwt",
+      "credential.password",
+      "credential.private_key",
+      "developer.device_id",
+      "developer.login_credentials",
+      "device.imei",
+      "device.mac_address",
+      "financial.amount",
+      "financial.bank_account",
+      "financial.credit_card",
+      "financial.crypto_wallet",
+      "financial.iban",
+      "financial.swift_bic",
+      "healthcare.condition",
+      "healthcare.health_plan_id",
+      "healthcare.medical_record",
+      "healthcare.medication",
+      "identity.date_of_birth",
+      "identity.drivers_license",
+      "identity.national_id",
+      "identity.passport",
+      "identity.person_name",
+      "identity.ssn",
+      "identity.tax_id",
+      "legal.case_number",
+      "location.gps_coordinates",
+      "online.url",
+      "online.username",
+      "org.company_name",
+      "special.health_status",
+      "special.orientation",
+      "special.political",
+      "special.religion"
+    ],
+    "scores": "No confidence scores produced."
+  },
+  "cache_sha256": "2bbdeeb4e6b5597ef9a06b5e41b1489bb5de2f695d29672187d475c0f10a328d",
+  "decoder_prediction_sha256": {
+    "raw": "2d3c711123d172b5acdad7e3bc6df4523c3641ec72e5c5613d4462d1f93ee334",
+    "hybrid": "4f256cdd7bceb6f956687910a52c0617022bd9ce2403005f1adf5fd0257cebb8"
+  },
+  "configuration": {
+    "device": "cpu",
+    "batch_size": 1,
+    "cpu_threads": 4,
+    "cpu_interop_threads": 16,
+    "seed": 20260922,
+    "warmup": 5,
+    "offline": true,
+    "threshold_tuning": false,
+    "maximum_tokens": 2048,
+    "maximum_observed_tokens": 416,
+    "tokenizers_parallelism": false
+  },
+  "hardware": {
+    "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "processor": "x86_64",
+    "logical_cpu_count": 16,
+    "python": "3.13.7"
+  },
+  "timing": {
+    "cases": 446,
+    "summed_call_seconds": 43.834658000014315,
+    "sequential_documents_per_second": 10.174597461211043,
+    "elapsed_seconds_including_cache": 43.85720112499985,
+    "documents_per_second_including_cache": 10.169367596642353,
+    "p50_ms": 95.45498349689296,
+    "p95_ms": 156.69188099855091,
+    "p99_ms": 217.97015099582495,
+    "max_ms": 1090.6370010052342,
+    "mean_ms": 98.2839865471173,
+    "per_case_latency_ms": [
+      {
+        "case_id": "organizer/org_0001",
+        "latency_ms": 146.75254900066648
+      },
+      {
+        "case_id": "organizer/org_0002",
+        "latency_ms": 92.66454599855933
+      },
+      {
+        "case_id": "organizer/org_0003",
+        "latency_ms": 105.607527999382
+      },
+      {
+        "case_id": "organizer/org_0004",
+        "latency_ms": 80.04686600179411
+      },
+      {
+        "case_id": "organizer/org_0005",
+        "latency_ms": 66.98247999884188
+      },
+      {
+        "case_id": "organizer/org_0006",
+        "latency_ms": 60.394740001356695
+      },
+      {
+        "case_id": "organizer/org_0007",
+        "latency_ms": 86.30334500048775
+      },
+      {
+        "case_id": "organizer/org_0008",
+        "latency_ms": 101.16912800003774
+      },
+      {
+        "case_id": "organizer/org_0009",
+        "latency_ms": 109.16721299872734
+      },
+      {
+        "case_id": "organizer/org_0010",
+        "latency_ms": 80.21539299807046
+      },
+      {
+        "case_id": "organizer/org_0011",
+        "latency_ms": 56.05510399618652
+      },
+      {
+        "case_id": "organizer/org_0012",
+        "latency_ms": 65.17288600298343
+      },
+      {
+        "case_id": "organizer/org_0013",
+        "latency_ms": 68.74726500245742
+      },
+      {
+        "case_id": "organizer/org_0014",
+        "latency_ms": 113.73156399349682
+      },
+      {
+        "case_id": "organizer/org_0015",
+        "latency_ms": 60.538879995874595
+      },
+      {
+        "case_id": "organizer/org_0016",
+        "latency_ms": 110.25130499911029
+      },
+      {
+        "case_id": "organizer/org_0017",
+        "latency_ms": 101.76772400154732
+      },
+      {
+        "case_id": "organizer/org_0018",
+        "latency_ms": 110.40997499367222
+      },
+      {
+        "case_id": "organizer/org_0019",
+        "latency_ms": 87.29013000265695
+      },
+      {
+        "case_id": "organizer/org_0020",
+        "latency_ms": 103.177548997337
+      },
+      {
+        "case_id": "organizer/org_0021",
+        "latency_ms": 48.38236099749338
+      },
+      {
+        "case_id": "organizer/org_0022",
+        "latency_ms": 74.31718499719864
+      },
+      {
+        "case_id": "organizer/org_0023",
+        "latency_ms": 68.93584100180306
+      },
+      {
+        "case_id": "organizer/org_0024",
+        "latency_ms": 112.5820509987534
+      },
+      {
+        "case_id": "organizer/org_0025",
+        "latency_ms": 112.86361899692565
+      },
+      {
+        "case_id": "organizer/org_0026",
+        "latency_ms": 100.58548799861455
+      },
+      {
+        "case_id": "organizer/org_0027",
+        "latency_ms": 67.24534100067103
+      },
+      {
+        "case_id": "organizer/org_0028",
+        "latency_ms": 80.55557100306032
+      },
+      {
+        "case_id": "organizer/org_0029",
+        "latency_ms": 110.31610599457053
+      },
+      {
+        "case_id": "organizer/org_0030",
+        "latency_ms": 124.86240699945483
+      },
+      {
+        "case_id": "organizer/org_0031",
+        "latency_ms": 83.77367300272454
+      },
+      {
+        "case_id": "organizer/org_0032",
+        "latency_ms": 118.3877660005237
+      },
+      {
+        "case_id": "organizer/org_0033",
+        "latency_ms": 100.81997999805026
+      },
+      {
+        "case_id": "organizer/org_0034",
+        "latency_ms": 77.09697200334631
+      },
+      {
+        "case_id": "organizer/org_0035",
+        "latency_ms": 86.51198400184512
+      },
+      {
+        "case_id": "organizer/org_0036",
+        "latency_ms": 87.97744999901624
+      },
+      {
+        "case_id": "organizer/org_0037",
+        "latency_ms": 63.31664499884937
+      },
+      {
+        "case_id": "organizer/org_0038",
+        "latency_ms": 106.38651299814228
+      },
+      {
+        "case_id": "organizer/org_0039",
+        "latency_ms": 81.66166199953295
+      },
+      {
+        "case_id": "organizer/org_0040",
+        "latency_ms": 95.98473899677629
+      },
+      {
+        "case_id": "organizer/org_0041",
+        "latency_ms": 76.87935799913248
+      },
+      {
+        "case_id": "organizer/org_0042",
+        "latency_ms": 94.78554099769099
+      },
+      {
+        "case_id": "organizer/org_0043",
+        "latency_ms": 60.29981699975906
+      },
+      {
+        "case_id": "organizer/org_0044",
+        "latency_ms": 185.0336710049305
+      },
+      {
+        "case_id": "organizer/org_0045",
+        "latency_ms": 68.35482199676335
+      },
+      {
+        "case_id": "organizer/org_0046",
+        "latency_ms": 86.60275099828141
+      },
+      {
+        "case_id": "organizer/org_0047",
+        "latency_ms": 88.60406100575346
+      },
+      {
+        "case_id": "organizer/org_0048",
+        "latency_ms": 74.7809620006592
+      },
+      {
+        "case_id": "organizer/org_0049",
+        "latency_ms": 80.48393599892734
+      },
+      {
+        "case_id": "organizer/org_0050",
+        "latency_ms": 97.4317450018134
+      },
+      {
+        "case_id": "organizer/org_0051",
+        "latency_ms": 91.92498300399166
+      },
+      {
+        "case_id": "organizer/org_0052",
+        "latency_ms": 96.6965390034602
+      },
+      {
+        "case_id": "organizer/org_0053",
+        "latency_ms": 235.0532410055166
+      },
+      {
+        "case_id": "organizer/org_0054",
+        "latency_ms": 172.24999500467675
+      },
+      {
+        "case_id": "organizer/org_0055",
+        "latency_ms": 132.82505599636352
+      },
+      {
+        "case_id": "organizer/org_0056",
+        "latency_ms": 106.3157999960822
+      },
+      {
+        "case_id": "organizer/org_0057",
+        "latency_ms": 111.9415530047263
+      },
+      {
+        "case_id": "organizer/org_0058",
+        "latency_ms": 142.562603999977
+      },
+      {
+        "case_id": "organizer/org_0059",
+        "latency_ms": 120.63883599330438
+      },
+      {
+        "case_id": "organizer/org_0060",
+        "latency_ms": 187.03784699755488
+      },
+      {
+        "case_id": "organizer/org_0061",
+        "latency_ms": 97.90918700309703
+      },
+      {
+        "case_id": "organizer/org_0062",
+        "latency_ms": 132.72982900525676
+      },
+      {
+        "case_id": "organizer/org_0063",
+        "latency_ms": 99.71635499823606
+      },
+      {
+        "case_id": "organizer/org_0064",
+        "latency_ms": 66.31775799905881
+      },
+      {
+        "case_id": "organizer/org_0065",
+        "latency_ms": 175.5469540003105
+      },
+      {
+        "case_id": "organizer/org_0066",
+        "latency_ms": 107.46782700152835
+      },
+      {
+        "case_id": "organizer/org_0067",
+        "latency_ms": 112.85805200168397
+      },
+      {
+        "case_id": "organizer/org_0068",
+        "latency_ms": 158.90347999811638
+      },
+      {
+        "case_id": "organizer/org_0069",
+        "latency_ms": 109.27492000337224
+      },
+      {
+        "case_id": "organizer/org_0070",
+        "latency_ms": 99.57849800412077
+      },
+      {
+        "case_id": "organizer/org_0071",
+        "latency_ms": 104.0897849961766
+      },
+      {
+        "case_id": "organizer/org_0072",
+        "latency_ms": 113.69911699875956
+      },
+      {
+        "case_id": "organizer/org_0073",
+        "latency_ms": 56.48105699947337
+      },
+      {
+        "case_id": "organizer/org_0074",
+        "latency_ms": 94.9887770038913
+      },
+      {
+        "case_id": "organizer/org_0075",
+        "latency_ms": 93.33802600303898
+      },
+      {
+        "case_id": "organizer/org_0076",
+        "latency_ms": 100.68825200141873
+      },
+      {
+        "case_id": "organizer/org_0077",
+        "latency_ms": 90.19674400042277
+      },
+      {
+        "case_id": "organizer/org_0078",
+        "latency_ms": 94.06447099900106
+      },
+      {
+        "case_id": "organizer/org_0079",
+        "latency_ms": 83.0771859982633
+      },
+      {
+        "case_id": "organizer/org_0080",
+        "latency_ms": 170.81733200029703
+      },
+      {
+        "case_id": "organizer/org_0081",
+        "latency_ms": 96.05014500266407
+      },
+      {
+        "case_id": "organizer/org_0082",
+        "latency_ms": 60.109966005256865
+      },
+      {
+        "case_id": "organizer/org_0083",
+        "latency_ms": 119.66628200025298
+      },
+      {
+        "case_id": "organizer/org_0084",
+        "latency_ms": 126.59560600150144
+      },
+      {
+        "case_id": "organizer/org_0085",
+        "latency_ms": 89.54425199772231
+      },
+      {
+        "case_id": "organizer/org_0086",
+        "latency_ms": 63.555089000146836
+      },
+      {
+        "case_id": "organizer/org_0087",
+        "latency_ms": 99.07679099706002
+      },
+      {
+        "case_id": "organizer/org_0088",
+        "latency_ms": 76.2862839983427
+      },
+      {
+        "case_id": "organizer/org_0089",
+        "latency_ms": 137.44782799767563
+      },
+      {
+        "case_id": "organizer/org_0090",
+        "latency_ms": 92.97901999525493
+      },
+      {
+        "case_id": "organizer/org_0091",
+        "latency_ms": 97.0820030051982
+      },
+      {
+        "case_id": "organizer/org_0092",
+        "latency_ms": 200.42661800107453
+      },
+      {
+        "case_id": "organizer/org_0093",
+        "latency_ms": 67.6819729997078
+      },
+      {
+        "case_id": "organizer/org_0094",
+        "latency_ms": 93.3555299998261
+      },
+      {
+        "case_id": "organizer/org_0095",
+        "latency_ms": 102.08472600061214
+      },
+      {
+        "case_id": "organizer/org_0096",
+        "latency_ms": 87.36794399737846
+      },
+      {
+        "case_id": "organizer/org_0097",
+        "latency_ms": 80.8968389974325
+      },
+      {
+        "case_id": "organizer/org_0098",
+        "latency_ms": 93.38532100082375
+      },
+      {
+        "case_id": "organizer/org_0099",
+        "latency_ms": 62.123976000293624
+      },
+      {
+        "case_id": "organizer/org_0100",
+        "latency_ms": 94.774770004733
+      },
+      {
+        "case_id": "organizer/org_0101",
+        "latency_ms": 54.592621003394015
+      },
+      {
+        "case_id": "organizer/org_0102",
+        "latency_ms": 101.94575200148392
+      },
+      {
+        "case_id": "organizer/org_0103",
+        "latency_ms": 67.49218500044663
+      },
+      {
+        "case_id": "organizer/org_0104",
+        "latency_ms": 65.12980000115931
+      },
+      {
+        "case_id": "organizer/org_0105",
+        "latency_ms": 70.4707690019859
+      },
+      {
+        "case_id": "organizer/org_0106",
+        "latency_ms": 80.80355900165159
+      },
+      {
+        "case_id": "organizer/org_0107",
+        "latency_ms": 105.90859600051772
+      },
+      {
+        "case_id": "organizer/org_0108",
+        "latency_ms": 77.98248300241539
+      },
+      {
+        "case_id": "organizer/org_0109",
+        "latency_ms": 58.82659399503609
+      },
+      {
+        "case_id": "organizer/org_0110",
+        "latency_ms": 58.9884449946112
+      },
+      {
+        "case_id": "organizer/org_0111",
+        "latency_ms": 72.13328399666352
+      },
+      {
+        "case_id": "organizer/org_0112",
+        "latency_ms": 171.71191500528948
+      },
+      {
+        "case_id": "organizer/org_0113",
+        "latency_ms": 100.04318699793657
+      },
+      {
+        "case_id": "organizer/org_0114",
+        "latency_ms": 234.44640000525396
+      },
+      {
+        "case_id": "organizer/org_0115",
+        "latency_ms": 77.0908300037263
+      },
+      {
+        "case_id": "organizer/org_0116",
+        "latency_ms": 173.8676220047637
+      },
+      {
+        "case_id": "organizer/org_0117",
+        "latency_ms": 82.25055799994152
+      },
+      {
+        "case_id": "organizer/org_0118",
+        "latency_ms": 62.080504998448305
+      },
+      {
+        "case_id": "organizer/org_0119",
+        "latency_ms": 108.40396999992663
+      },
+      {
+        "case_id": "organizer/org_0120",
+        "latency_ms": 102.01586699986365
+      },
+      {
+        "case_id": "organizer/org_0121",
+        "latency_ms": 97.79456500109518
+      },
+      {
+        "case_id": "organizer/org_0122",
+        "latency_ms": 50.63936700025806
+      },
+      {
+        "case_id": "organizer/org_0123",
+        "latency_ms": 118.62981600279454
+      },
+      {
+        "case_id": "organizer/org_0124",
+        "latency_ms": 153.7963220034726
+      },
+      {
+        "case_id": "organizer/org_0125",
+        "latency_ms": 137.01307700102916
+      },
+      {
+        "case_id": "organizer/org_0126",
+        "latency_ms": 115.26040099852253
+      },
+      {
+        "case_id": "organizer/org_0127",
+        "latency_ms": 61.31992000155151
+      },
+      {
+        "case_id": "organizer/org_0128",
+        "latency_ms": 68.9867699984461
+      },
+      {
+        "case_id": "organizer/org_0129",
+        "latency_ms": 50.74808900099015
+      },
+      {
+        "case_id": "organizer/org_0130",
+        "latency_ms": 71.04562300082762
+      },
+      {
+        "case_id": "organizer/org_0131",
+        "latency_ms": 85.73629899910884
+      },
+      {
+        "case_id": "organizer/org_0132",
+        "latency_ms": 115.87921900354559
+      },
+      {
+        "case_id": "organizer/org_0133",
+        "latency_ms": 57.65905400039628
+      },
+      {
+        "case_id": "organizer/org_0134",
+        "latency_ms": 102.842464002606
+      },
+      {
+        "case_id": "organizer/org_0135",
+        "latency_ms": 103.37029700167477
+      },
+      {
+        "case_id": "organizer/org_0136",
+        "latency_ms": 95.06651699484792
+      },
+      {
+        "case_id": "organizer/org_0137",
+        "latency_ms": 73.48164100403665
+      },
+      {
+        "case_id": "organizer/org_0138",
+        "latency_ms": 66.11056200199528
+      },
+      {
+        "case_id": "organizer/org_0139",
+        "latency_ms": 105.31934699974954
+      },
+      {
+        "case_id": "organizer/org_0140",
+        "latency_ms": 85.22576699760975
+      },
+      {
+        "case_id": "organizer/org_0141",
+        "latency_ms": 108.17995099932887
+      },
+      {
+        "case_id": "organizer/org_0142",
+        "latency_ms": 98.44747399620246
+      },
+      {
+        "case_id": "organizer/org_0143",
+        "latency_ms": 65.15061700338265
+      },
+      {
+        "case_id": "organizer/org_0144",
+        "latency_ms": 97.27224300149828
+      },
+      {
+        "case_id": "organizer/org_0145",
+        "latency_ms": 74.96972499939147
+      },
+      {
+        "case_id": "organizer/org_0146",
+        "latency_ms": 64.71152300218819
+      },
+      {
+        "case_id": "organizer/org_0147",
+        "latency_ms": 99.18520900100702
+      },
+      {
+        "case_id": "organizer/org_0148",
+        "latency_ms": 114.36444600258255
+      },
+      {
+        "case_id": "organizer/org_0149",
+        "latency_ms": 58.091493003303185
+      },
+      {
+        "case_id": "organizer/org_0150",
+        "latency_ms": 177.60284999530995
+      },
+      {
+        "case_id": "organizer/org_0151",
+        "latency_ms": 70.56496500445064
+      },
+      {
+        "case_id": "organizer/org_0152",
+        "latency_ms": 100.89040199818555
+      },
+      {
+        "case_id": "organizer/org_0153",
+        "latency_ms": 125.4801250033779
+      },
+      {
+        "case_id": "organizer/org_0154",
+        "latency_ms": 65.86158400023123
+      },
+      {
+        "case_id": "organizer/org_0155",
+        "latency_ms": 123.77887799812015
+      },
+      {
+        "case_id": "organizer/org_0156",
+        "latency_ms": 58.983895003621
+      },
+      {
+        "case_id": "organizer/org_0157",
+        "latency_ms": 112.67570700147189
+      },
+      {
+        "case_id": "organizer/org_0158",
+        "latency_ms": 145.01955099694896
+      },
+      {
+        "case_id": "organizer/org_0159",
+        "latency_ms": 63.2470700002159
+      },
+      {
+        "case_id": "organizer/org_0160",
+        "latency_ms": 58.19991599855712
+      },
+      {
+        "case_id": "organizer/org_0161",
+        "latency_ms": 70.74764600110939
+      },
+      {
+        "case_id": "organizer/org_0162",
+        "latency_ms": 115.17578700295417
+      },
+      {
+        "case_id": "organizer/org_0163",
+        "latency_ms": 109.2139020038303
+      },
+      {
+        "case_id": "organizer/org_0164",
+        "latency_ms": 132.87311100430088
+      },
+      {
+        "case_id": "organizer/org_0165",
+        "latency_ms": 120.04327100294176
+      },
+      {
+        "case_id": "organizer/org_0166",
+        "latency_ms": 196.21476999600418
+      },
+      {
+        "case_id": "organizer/org_0167",
+        "latency_ms": 72.09842899465002
+      },
+      {
+        "case_id": "organizer/org_0168",
+        "latency_ms": 98.85243399912724
+      },
+      {
+        "case_id": "organizer/org_0169",
+        "latency_ms": 112.03068699978758
+      },
+      {
+        "case_id": "organizer/org_0170",
+        "latency_ms": 82.75099599995883
+      },
+      {
+        "case_id": "organizer/org_0171",
+        "latency_ms": 67.19575700117275
+      },
+      {
+        "case_id": "organizer/org_0172",
+        "latency_ms": 115.34385900449706
+      },
+      {
+        "case_id": "organizer/org_0173",
+        "latency_ms": 100.24878699914552
+      },
+      {
+        "case_id": "organizer/org_0174",
+        "latency_ms": 109.58399399532937
+      },
+      {
+        "case_id": "organizer/org_0175",
+        "latency_ms": 96.68046000297181
+      },
+      {
+        "case_id": "organizer/org_0176",
+        "latency_ms": 82.67618699755985
+      },
+      {
+        "case_id": "organizer/org_0177",
+        "latency_ms": 65.12579599802848
+      },
+      {
+        "case_id": "organizer/org_0178",
+        "latency_ms": 138.28323499910766
+      },
+      {
+        "case_id": "organizer/org_0179",
+        "latency_ms": 63.34431799768936
+      },
+      {
+        "case_id": "organizer/org_0180",
+        "latency_ms": 126.73574400105281
+      },
+      {
+        "case_id": "organizer/org_0181",
+        "latency_ms": 116.50420599471545
+      },
+      {
+        "case_id": "organizer/org_0182",
+        "latency_ms": 61.154398004873656
+      },
+      {
+        "case_id": "organizer/org_0183",
+        "latency_ms": 125.04493400047068
+      },
+      {
+        "case_id": "organizer/org_0184",
+        "latency_ms": 97.76318299554987
+      },
+      {
+        "case_id": "organizer/org_0185",
+        "latency_ms": 97.43203299876768
+      },
+      {
+        "case_id": "organizer/org_0186",
+        "latency_ms": 72.05219299794408
+      },
+      {
+        "case_id": "organizer/org_0187",
+        "latency_ms": 80.66173000406707
+      },
+      {
+        "case_id": "organizer/org_0188",
+        "latency_ms": 89.73856299417093
+      },
+      {
+        "case_id": "organizer/org_0189",
+        "latency_ms": 90.06752400455298
+      },
+      {
+        "case_id": "organizer/org_0190",
+        "latency_ms": 108.19689200434368
+      },
+      {
+        "case_id": "organizer/org_0191",
+        "latency_ms": 145.6691640050849
+      },
+      {
+        "case_id": "organizer/org_0192",
+        "latency_ms": 109.51289399963571
+      },
+      {
+        "case_id": "organizer/org_0193",
+        "latency_ms": 108.80053900473285
+      },
+      {
+        "case_id": "organizer/org_0194",
+        "latency_ms": 96.48935300356243
+      },
+      {
+        "case_id": "organizer/org_0195",
+        "latency_ms": 62.157694999768864
+      },
+      {
+        "case_id": "organizer/org_0196",
+        "latency_ms": 81.69986599386903
+      },
+      {
+        "case_id": "organizer/org_0197",
+        "latency_ms": 91.44177800044417
+      },
+      {
+        "case_id": "organizer/org_0198",
+        "latency_ms": 61.064829998940695
+      },
+      {
+        "case_id": "organizer/org_0199",
+        "latency_ms": 79.47539000451798
+      },
+      {
+        "case_id": "organizer/org_0200",
+        "latency_ms": 123.42179899860639
+      },
+      {
+        "case_id": "organizer/org_0201",
+        "latency_ms": 103.41728999628685
+      },
+      {
+        "case_id": "organizer/org_0202",
+        "latency_ms": 60.92784199427115
+      },
+      {
+        "case_id": "organizer/org_0203",
+        "latency_ms": 104.10617099842057
+      },
+      {
+        "case_id": "organizer/org_0204",
+        "latency_ms": 89.20047099672956
+      },
+      {
+        "case_id": "organizer/org_0205",
+        "latency_ms": 58.44658100249944
+      },
+      {
+        "case_id": "organizer/org_0206",
+        "latency_ms": 68.86171399673913
+      },
+      {
+        "case_id": "organizer/org_0207",
+        "latency_ms": 71.91157899796963
+      },
+      {
+        "case_id": "organizer/org_0208",
+        "latency_ms": 189.4756609981414
+      },
+      {
+        "case_id": "organizer/org_0209",
+        "latency_ms": 95.56542399514001
+      },
+      {
+        "case_id": "organizer/org_0210",
+        "latency_ms": 123.70890099555254
+      },
+      {
+        "case_id": "organizer/org_0211",
+        "latency_ms": 116.04796900064684
+      },
+      {
+        "case_id": "organizer/org_0212",
+        "latency_ms": 100.49373699439457
+      },
+      {
+        "case_id": "organizer/org_0213",
+        "latency_ms": 58.28504900273401
+      },
+      {
+        "case_id": "organizer/org_0214",
+        "latency_ms": 67.06265499815345
+      },
+      {
+        "case_id": "organizer/org_0215",
+        "latency_ms": 124.22027799766511
+      },
+      {
+        "case_id": "organizer/org_0216",
+        "latency_ms": 74.88978499895893
+      },
+      {
+        "case_id": "organizer/org_0217",
+        "latency_ms": 82.55916699999943
+      },
+      {
+        "case_id": "organizer/org_0218",
+        "latency_ms": 84.09489399491576
+      },
+      {
+        "case_id": "organizer/org_0219",
+        "latency_ms": 101.35031800018623
+      },
+      {
+        "case_id": "organizer/org_0220",
+        "latency_ms": 112.03123700397555
+      },
+      {
+        "case_id": "organizer/org_0221",
+        "latency_ms": 157.0497080028872
+      },
+      {
+        "case_id": "organizer/org_0222",
+        "latency_ms": 118.79998500080546
+      },
+      {
+        "case_id": "organizer/org_0223",
+        "latency_ms": 71.74556000245502
+      },
+      {
+        "case_id": "organizer/org_0224",
+        "latency_ms": 124.22842300293269
+      },
+      {
+        "case_id": "organizer/org_0225",
+        "latency_ms": 97.30054000101518
+      },
+      {
+        "case_id": "organizer/org_0226",
+        "latency_ms": 139.582531999622
+      },
+      {
+        "case_id": "organizer/org_0227",
+        "latency_ms": 101.57458100002259
+      },
+      {
+        "case_id": "organizer/org_0228",
+        "latency_ms": 75.71613399341004
+      },
+      {
+        "case_id": "organizer/org_0229",
+        "latency_ms": 100.08324799855473
+      },
+      {
+        "case_id": "organizer/org_0230",
+        "latency_ms": 68.8295410000137
+      },
+      {
+        "case_id": "organizer/org_0231",
+        "latency_ms": 90.04450400243513
+      },
+      {
+        "case_id": "organizer/org_0232",
+        "latency_ms": 74.12894300068729
+      },
+      {
+        "case_id": "organizer/org_0233",
+        "latency_ms": 71.07649299723562
+      },
+      {
+        "case_id": "organizer/org_0234",
+        "latency_ms": 101.32493899436668
+      },
+      {
+        "case_id": "organizer/org_0235",
+        "latency_ms": 96.8386750028003
+      },
+      {
+        "case_id": "organizer/org_0236",
+        "latency_ms": 101.6936820014962
+      },
+      {
+        "case_id": "organizer/org_0237",
+        "latency_ms": 62.6834940048866
+      },
+      {
+        "case_id": "organizer/org_0238",
+        "latency_ms": 60.22367299738107
+      },
+      {
+        "case_id": "organizer/org_0239",
+        "latency_ms": 74.47633000265341
+      },
+      {
+        "case_id": "organizer/org_0240",
+        "latency_ms": 73.12259599711979
+      },
+      {
+        "case_id": "organizer/org_0241",
+        "latency_ms": 73.96454300032929
+      },
+      {
+        "case_id": "organizer/org_0242",
+        "latency_ms": 100.28792600496672
+      },
+      {
+        "case_id": "organizer/org_0243",
+        "latency_ms": 99.89122600381961
+      },
+      {
+        "case_id": "organizer/org_0244",
+        "latency_ms": 99.90423300041584
+      },
+      {
+        "case_id": "organizer/org_0245",
+        "latency_ms": 76.04051900125341
+      },
+      {
+        "case_id": "organizer/org_0246",
+        "latency_ms": 56.0909179985174
+      },
+      {
+        "case_id": "organizer/org_0247",
+        "latency_ms": 67.96576600027038
+      },
+      {
+        "case_id": "organizer/org_0248",
+        "latency_ms": 70.2014189955662
+      },
+      {
+        "case_id": "organizer/org_0249",
+        "latency_ms": 78.09236000321107
+      },
+      {
+        "case_id": "organizer/org_0250",
+        "latency_ms": 67.29508999706013
+      },
+      {
+        "case_id": "organizer/org_0251",
+        "latency_ms": 62.8497840007185
+      },
+      {
+        "case_id": "organizer/org_0252",
+        "latency_ms": 90.90059400477912
+      },
+      {
+        "case_id": "organizer/org_0253",
+        "latency_ms": 106.2034000060521
+      },
+      {
+        "case_id": "organizer/org_0254",
+        "latency_ms": 94.8073729960015
+      },
+      {
+        "case_id": "organizer/org_0255",
+        "latency_ms": 95.00375300558517
+      },
+      {
+        "case_id": "organizer/org_0256",
+        "latency_ms": 97.77925399976084
+      },
+      {
+        "case_id": "organizer/org_0257",
+        "latency_ms": 115.93885700131068
+      },
+      {
+        "case_id": "organizer/org_0258",
+        "latency_ms": 60.74196400004439
+      },
+      {
+        "case_id": "organizer/org_0259",
+        "latency_ms": 65.5822869957774
+      },
+      {
+        "case_id": "organizer/org_0260",
+        "latency_ms": 54.24548799783224
+      },
+      {
+        "case_id": "organizer/org_0261",
+        "latency_ms": 100.99314000399318
+      },
+      {
+        "case_id": "organizer/org_0262",
+        "latency_ms": 149.5631380021223
+      },
+      {
+        "case_id": "organizer/org_0263",
+        "latency_ms": 129.94359900039854
+      },
+      {
+        "case_id": "organizer/org_0264",
+        "latency_ms": 107.42855900025461
+      },
+      {
+        "case_id": "organizer/org_0265",
+        "latency_ms": 72.16435499867657
+      },
+      {
+        "case_id": "organizer/org_0266",
+        "latency_ms": 113.37917099444894
+      },
+      {
+        "case_id": "organizer/org_0267",
+        "latency_ms": 110.20814099902054
+      },
+      {
+        "case_id": "organizer/org_0268",
+        "latency_ms": 59.01417200220749
+      },
+      {
+        "case_id": "organizer/org_0269",
+        "latency_ms": 65.38294000347378
+      },
+      {
+        "case_id": "organizer/org_0270",
+        "latency_ms": 113.65402900264598
+      },
+      {
+        "case_id": "organizer/org_0271",
+        "latency_ms": 58.05296999460552
+      },
+      {
+        "case_id": "organizer/org_0272",
+        "latency_ms": 113.1936859965208
+      },
+      {
+        "case_id": "organizer/org_0273",
+        "latency_ms": 77.82652600144502
+      },
+      {
+        "case_id": "organizer/org_0274",
+        "latency_ms": 65.3531700008898
+      },
+      {
+        "case_id": "organizer/org_0275",
+        "latency_ms": 59.76144899614155
+      },
+      {
+        "case_id": "organizer/org_0276",
+        "latency_ms": 76.81914999557193
+      },
+      {
+        "case_id": "organizer/org_0277",
+        "latency_ms": 169.01941999822157
+      },
+      {
+        "case_id": "organizer/org_0278",
+        "latency_ms": 99.97537400340661
+      },
+      {
+        "case_id": "organizer/org_0279",
+        "latency_ms": 58.20629200024996
+      },
+      {
+        "case_id": "organizer/org_0280",
+        "latency_ms": 97.64644900133135
+      },
+      {
+        "case_id": "organizer/org_0281",
+        "latency_ms": 79.19565199699719
+      },
+      {
+        "case_id": "organizer/org_0282",
+        "latency_ms": 114.67205500230193
+      },
+      {
+        "case_id": "organizer/org_0283",
+        "latency_ms": 97.83494199655252
+      },
+      {
+        "case_id": "organizer/org_0284",
+        "latency_ms": 155.03397799329832
+      },
+      {
+        "case_id": "organizer/org_0285",
+        "latency_ms": 108.68843099888181
+      },
+      {
+        "case_id": "organizer/org_0286",
+        "latency_ms": 77.8521809988888
+      },
+      {
+        "case_id": "organizer/org_0287",
+        "latency_ms": 66.80183799471706
+      },
+      {
+        "case_id": "organizer/org_0288",
+        "latency_ms": 232.75860300054774
+      },
+      {
+        "case_id": "organizer/org_0289",
+        "latency_ms": 116.11183599598007
+      },
+      {
+        "case_id": "organizer/org_0290",
+        "latency_ms": 68.84391200583195
+      },
+      {
+        "case_id": "organizer/org_0291",
+        "latency_ms": 136.4592160025495
+      },
+      {
+        "case_id": "organizer/org_0292",
+        "latency_ms": 72.09321999835083
+      },
+      {
+        "case_id": "organizer/org_0293",
+        "latency_ms": 112.74966999917524
+      },
+      {
+        "case_id": "organizer/org_0294",
+        "latency_ms": 69.74747800268233
+      },
+      {
+        "case_id": "organizer/org_0295",
+        "latency_ms": 87.75784199679038
+      },
+      {
+        "case_id": "organizer/org_0296",
+        "latency_ms": 88.68267000070773
+      },
+      {
+        "case_id": "organizer/org_0297",
+        "latency_ms": 102.04797900223639
+      },
+      {
+        "case_id": "organizer/org_0298",
+        "latency_ms": 92.37504600605462
+      },
+      {
+        "case_id": "organizer/org_0299",
+        "latency_ms": 71.75656899926253
+      },
+      {
+        "case_id": "organizer/org_0300",
+        "latency_ms": 98.02280200528912
+      },
+      {
+        "case_id": "organizer/org_0301",
+        "latency_ms": 96.8753769993782
+      },
+      {
+        "case_id": "organizer/org_0302",
+        "latency_ms": 78.31780100241303
+      },
+      {
+        "case_id": "organizer/org_0303",
+        "latency_ms": 122.29072000627639
+      },
+      {
+        "case_id": "organizer/org_0304",
+        "latency_ms": 70.73265600047307
+      },
+      {
+        "case_id": "organizer/org_0305",
+        "latency_ms": 62.65377400268335
+      },
+      {
+        "case_id": "organizer/org_0306",
+        "latency_ms": 94.21647799899802
+      },
+      {
+        "case_id": "organizer/org_0307",
+        "latency_ms": 110.16152399679413
+      },
+      {
+        "case_id": "organizer/org_0308",
+        "latency_ms": 80.56252499955008
+      },
+      {
+        "case_id": "organizer/org_0309",
+        "latency_ms": 100.91001100227004
+      },
+      {
+        "case_id": "organizer/org_0310",
+        "latency_ms": 57.67826299415901
+      },
+      {
+        "case_id": "organizer/org_0311",
+        "latency_ms": 65.46549099584809
+      },
+      {
+        "case_id": "organizer/org_0312",
+        "latency_ms": 73.94374800060177
+      },
+      {
+        "case_id": "organizer/org_0313",
+        "latency_ms": 96.93525100010447
+      },
+      {
+        "case_id": "organizer/org_0314",
+        "latency_ms": 113.88507000083337
+      },
+      {
+        "case_id": "organizer/org_0315",
+        "latency_ms": 121.69649799761828
+      },
+      {
+        "case_id": "organizer/org_0316",
+        "latency_ms": 89.6532320039114
+      },
+      {
+        "case_id": "organizer/org_0317",
+        "latency_ms": 65.51395000133198
+      },
+      {
+        "case_id": "organizer/org_0318",
+        "latency_ms": 163.653723000607
+      },
+      {
+        "case_id": "organizer/org_0319",
+        "latency_ms": 73.71182399947429
+      },
+      {
+        "case_id": "organizer/org_0320",
+        "latency_ms": 107.66605200478807
+      },
+      {
+        "case_id": "organizer/org_0321",
+        "latency_ms": 103.88945900194813
+      },
+      {
+        "case_id": "organizer/org_0322",
+        "latency_ms": 74.63124000059906
+      },
+      {
+        "case_id": "organizer/org_0323",
+        "latency_ms": 67.4861890001921
+      },
+      {
+        "case_id": "organizer/org_0324",
+        "latency_ms": 1090.6370010052342
+      },
+      {
+        "case_id": "organizer/org_0325",
+        "latency_ms": 110.63330999604659
+      },
+      {
+        "case_id": "organizer/org_0326",
+        "latency_ms": 98.44924600474769
+      },
+      {
+        "case_id": "organizer/org_0327",
+        "latency_ms": 53.43494699627627
+      },
+      {
+        "case_id": "organizer/org_0328",
+        "latency_ms": 72.9121859985753
+      },
+      {
+        "case_id": "organizer/org_0329",
+        "latency_ms": 101.84327099705115
+      },
+      {
+        "case_id": "organizer/org_0330",
+        "latency_ms": 99.6125759993447
+      },
+      {
+        "case_id": "organizer/org_0331",
+        "latency_ms": 99.48889500083169
+      },
+      {
+        "case_id": "organizer/org_0332",
+        "latency_ms": 87.90684200357646
+      },
+      {
+        "case_id": "organizer/org_0333",
+        "latency_ms": 123.35835099656833
+      },
+      {
+        "case_id": "organizer/org_0334",
+        "latency_ms": 133.04633400548482
+      },
+      {
+        "case_id": "organizer/org_0335",
+        "latency_ms": 120.15392900502775
+      },
+      {
+        "case_id": "organizer/org_0336",
+        "latency_ms": 104.27222200087272
+      },
+      {
+        "case_id": "organizer/org_0337",
+        "latency_ms": 118.64581100235227
+      },
+      {
+        "case_id": "organizer/org_0338",
+        "latency_ms": 64.72877499618335
+      },
+      {
+        "case_id": "organizer/org_0339",
+        "latency_ms": 83.5299020036473
+      },
+      {
+        "case_id": "organizer/org_0340",
+        "latency_ms": 72.52112599962857
+      },
+      {
+        "case_id": "organizer/org_0341",
+        "latency_ms": 192.72849700064398
+      },
+      {
+        "case_id": "organizer/org_0342",
+        "latency_ms": 66.868321999209
+      },
+      {
+        "case_id": "organizer/org_0343",
+        "latency_ms": 123.38201500097057
+      },
+      {
+        "case_id": "organizer/org_0344",
+        "latency_ms": 81.60165899607819
+      },
+      {
+        "case_id": "organizer/org_0345",
+        "latency_ms": 97.14065799926175
+      },
+      {
+        "case_id": "organizer/org_0346",
+        "latency_ms": 110.35249700216809
+      },
+      {
+        "case_id": "organizer/org_0347",
+        "latency_ms": 62.484939000569284
+      },
+      {
+        "case_id": "organizer/org_0348",
+        "latency_ms": 59.7014009981649
+      },
+      {
+        "case_id": "organizer/org_0349",
+        "latency_ms": 73.74748300208012
+      },
+      {
+        "case_id": "organizer/org_0350",
+        "latency_ms": 58.42523100000108
+      },
+      {
+        "case_id": "organizer/org_0351",
+        "latency_ms": 117.91550999623723
+      },
+      {
+        "case_id": "organizer/org_0352",
+        "latency_ms": 66.61724900186528
+      },
+      {
+        "case_id": "organizer/org_0353",
+        "latency_ms": 101.38208499847678
+      },
+      {
+        "case_id": "organizer/org_0354",
+        "latency_ms": 140.45517199701862
+      },
+      {
+        "case_id": "organizer/org_0355",
+        "latency_ms": 59.476524002093356
+      },
+      {
+        "case_id": "organizer/org_0356",
+        "latency_ms": 92.30455500073731
+      },
+      {
+        "case_id": "organizer/org_0357",
+        "latency_ms": 70.29216500086477
+      },
+      {
+        "case_id": "organizer/org_0358",
+        "latency_ms": 107.22010099561885
+      },
+      {
+        "case_id": "organizer/org_0359",
+        "latency_ms": 99.50097299588379
+      },
+      {
+        "case_id": "organizer/org_0360",
+        "latency_ms": 125.32875400211196
+      },
+      {
+        "case_id": "organizer/org_0361",
+        "latency_ms": 94.42440400016494
+      },
+      {
+        "case_id": "organizer/org_0362",
+        "latency_ms": 80.61630799784325
+      },
+      {
+        "case_id": "organizer/org_0363",
+        "latency_ms": 88.56765700329561
+      },
+      {
+        "case_id": "organizer/org_0364",
+        "latency_ms": 61.26834200404119
+      },
+      {
+        "case_id": "organizer/org_0365",
+        "latency_ms": 96.84943500178633
+      },
+      {
+        "case_id": "organizer/org_0366",
+        "latency_ms": 73.6319249990629
+      },
+      {
+        "case_id": "organizer/org_0367",
+        "latency_ms": 95.80636900500394
+      },
+      {
+        "case_id": "organizer/org_0368",
+        "latency_ms": 118.19806199491723
+      },
+      {
+        "case_id": "organizer/org_0369",
+        "latency_ms": 126.73599900153931
+      },
+      {
+        "case_id": "organizer/org_0370",
+        "latency_ms": 217.97015099582495
+      },
+      {
+        "case_id": "organizer/org_0371",
+        "latency_ms": 60.89140499534551
+      },
+      {
+        "case_id": "organizer/org_0372",
+        "latency_ms": 63.748265005415305
+      },
+      {
+        "case_id": "organizer/org_0373",
+        "latency_ms": 101.36601100384723
+      },
+      {
+        "case_id": "organizer/org_0374",
+        "latency_ms": 141.06124699901557
+      },
+      {
+        "case_id": "organizer/org_0375",
+        "latency_ms": 85.82789000502089
+      },
+      {
+        "case_id": "organizer/org_0376",
+        "latency_ms": 95.34454299864592
+      },
+      {
+        "case_id": "organizer/org_0377",
+        "latency_ms": 125.780346999818
+      },
+      {
+        "case_id": "organizer/org_0378",
+        "latency_ms": 88.06304099562112
+      },
+      {
+        "case_id": "organizer/org_0379",
+        "latency_ms": 156.69188099855091
+      },
+      {
+        "case_id": "organizer/org_0380",
+        "latency_ms": 108.83224399731262
+      },
+      {
+        "case_id": "organizer/org_0381",
+        "latency_ms": 90.91248299955623
+      },
+      {
+        "case_id": "organizer/org_0382",
+        "latency_ms": 102.18742900178768
+      },
+      {
+        "case_id": "organizer/org_0383",
+        "latency_ms": 99.02215100009926
+      },
+      {
+        "case_id": "organizer/org_0384",
+        "latency_ms": 115.66000899620121
+      },
+      {
+        "case_id": "organizer/org_0385",
+        "latency_ms": 73.51223599835066
+      },
+      {
+        "case_id": "organizer/org_0386",
+        "latency_ms": 92.04287100146757
+      },
+      {
+        "case_id": "organizer/org_0387",
+        "latency_ms": 98.3104650003952
+      },
+      {
+        "case_id": "organizer/org_0388",
+        "latency_ms": 91.45843400619924
+      },
+      {
+        "case_id": "organizer/org_0389",
+        "latency_ms": 65.7904600011534
+      },
+      {
+        "case_id": "organizer/org_0390",
+        "latency_ms": 85.13278200553032
+      },
+      {
+        "case_id": "organizer/org_0391",
+        "latency_ms": 108.50185099843657
+      },
+      {
+        "case_id": "organizer/org_0392",
+        "latency_ms": 137.50587699905736
+      },
+      {
+        "case_id": "organizer/org_0393",
+        "latency_ms": 115.79458400228759
+      },
+      {
+        "case_id": "organizer/org_0394",
+        "latency_ms": 105.88856099639088
+      },
+      {
+        "case_id": "organizer/org_0395",
+        "latency_ms": 66.60917599947425
+      },
+      {
+        "case_id": "organizer/org_0396",
+        "latency_ms": 92.45546099555213
+      },
+      {
+        "case_id": "organizer/org_0397",
+        "latency_ms": 98.98060399427777
+      },
+      {
+        "case_id": "organizer/org_0398",
+        "latency_ms": 137.5625580039923
+      },
+      {
+        "case_id": "organizer/org_0399",
+        "latency_ms": 162.9638000013074
+      },
+      {
+        "case_id": "organizer/org_0400",
+        "latency_ms": 120.16630699508823
+      },
+      {
+        "case_id": "organizer/org_0401",
+        "latency_ms": 65.23029600066366
+      },
+      {
+        "case_id": "organizer/org_0402",
+        "latency_ms": 105.28214999794727
+      },
+      {
+        "case_id": "organizer/org_0403",
+        "latency_ms": 63.73038000310771
+      },
+      {
+        "case_id": "organizer/org_0404",
+        "latency_ms": 93.4391679984401
+      },
+      {
+        "case_id": "organizer/org_0405",
+        "latency_ms": 61.93287800124381
+      },
+      {
+        "case_id": "organizer/org_0406",
+        "latency_ms": 107.88777699781349
+      },
+      {
+        "case_id": "organizer/org_0407",
+        "latency_ms": 68.23889299994335
+      },
+      {
+        "case_id": "organizer/org_0408",
+        "latency_ms": 99.70166799757862
+      },
+      {
+        "case_id": "organizer/org_0409",
+        "latency_ms": 63.35433699860005
+      },
+      {
+        "case_id": "organizer/org_0410",
+        "latency_ms": 100.82618900196394
+      },
+      {
+        "case_id": "organizer/org_0411",
+        "latency_ms": 104.47918399586342
+      },
+      {
+        "case_id": "organizer/org_0412",
+        "latency_ms": 62.40921699645696
+      },
+      {
+        "case_id": "organizer/org_0413",
+        "latency_ms": 115.80176099960227
+      },
+      {
+        "case_id": "organizer/org_0414",
+        "latency_ms": 99.48148099647369
+      },
+      {
+        "case_id": "organizer/org_0415",
+        "latency_ms": 128.8419190022978
+      },
+      {
+        "case_id": "organizer/org_0416",
+        "latency_ms": 69.77928699780023
+      },
+      {
+        "case_id": "organizer/org_0417",
+        "latency_ms": 105.20226500375429
+      },
+      {
+        "case_id": "organizer/org_0418",
+        "latency_ms": 63.954803998058196
+      },
+      {
+        "case_id": "organizer/org_0419",
+        "latency_ms": 88.19661000597989
+      },
+      {
+        "case_id": "organizer/org_0420",
+        "latency_ms": 110.05899000156205
+      },
+      {
+        "case_id": "organizer/org_0421",
+        "latency_ms": 101.44367899920326
+      },
+      {
+        "case_id": "organizer/org_0422",
+        "latency_ms": 67.5872959982371
+      },
+      {
+        "case_id": "organizer/org_0423",
+        "latency_ms": 101.7710870000883
+      },
+      {
+        "case_id": "organizer/org_0424",
+        "latency_ms": 154.37271499831695
+      },
+      {
+        "case_id": "organizer/org_0425",
+        "latency_ms": 110.32199000328546
+      },
+      {
+        "case_id": "organizer/org_0426",
+        "latency_ms": 127.20765500125708
+      },
+      {
+        "case_id": "organizer/org_0427",
+        "latency_ms": 74.45216899941443
+      },
+      {
+        "case_id": "organizer/org_0428",
+        "latency_ms": 63.955060999433044
+      },
+      {
+        "case_id": "organizer/org_0429",
+        "latency_ms": 72.03336599923205
+      },
+      {
+        "case_id": "organizer/org_0430",
+        "latency_ms": 74.94506499642739
+      },
+      {
+        "case_id": "organizer/org_0431",
+        "latency_ms": 71.63964599749306
+      },
+      {
+        "case_id": "organizer/org_0432",
+        "latency_ms": 98.30461999808904
+      },
+      {
+        "case_id": "organizer/org_0433",
+        "latency_ms": 97.36487400368787
+      },
+      {
+        "case_id": "organizer/org_0434",
+        "latency_ms": 64.80413299868815
+      },
+      {
+        "case_id": "organizer/org_0435",
+        "latency_ms": 66.4256089949049
+      },
+      {
+        "case_id": "organizer/org_0436",
+        "latency_ms": 109.06571400118992
+      },
+      {
+        "case_id": "organizer/org_0437",
+        "latency_ms": 101.63653999916278
+      },
+      {
+        "case_id": "organizer/org_0438",
+        "latency_ms": 100.26594200462569
+      },
+      {
+        "case_id": "organizer/org_0439",
+        "latency_ms": 88.30085000226973
+      },
+      {
+        "case_id": "organizer/org_0440",
+        "latency_ms": 62.00088799960213
+      },
+      {
+        "case_id": "organizer/org_0441",
+        "latency_ms": 134.017161995871
+      },
+      {
+        "case_id": "organizer/org_0442",
+        "latency_ms": 74.95755899435608
+      },
+      {
+        "case_id": "organizer/org_0443",
+        "latency_ms": 99.33439599990379
+      },
+      {
+        "case_id": "organizer/org_0444",
+        "latency_ms": 66.07721800537547
+      },
+      {
+        "case_id": "organizer/org_0445",
+        "latency_ms": 62.184319001971744
+      },
+      {
+        "case_id": "organizer/org_0446",
+        "latency_ms": 87.45246099715587
+      }
+    ],
+    "scope": "Sequential warm predict_both CPU calls, including both native decoders; excludes model load, warmup and cache serialization. This is not HTTP service RPS."
+  },
+  "limitations": [
+    "One sequential pass; concurrent hardware load affects timing.",
+    "Compare native raw and hybrid spans with the GPU cache before claiming quality parity.",
+    "No HTTP, masking, Redis, batching or service throughput is measured.",
+    "Reserved empty report or incomplete cache indicates a failed run, not a valid measurement."
+  ]
+}

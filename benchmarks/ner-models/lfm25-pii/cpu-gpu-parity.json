@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-09-22T19:00:06.814453+00:00",
+  "scope": "All 446 organizer cases; exact ordered native spans/type equality per decoder, matched text SHA256 and unchanged FP32 model. No public-corpus CPU quality claim.",
+  "cpu_cache_sha256": "2bbdeeb4e6b5597ef9a06b5e41b1489bb5de2f695d29672187d475c0f10a328d",
+  "gpu_cache_sha256": "829ed947bc688dff2c566bef4e67120d6ac71d5a46092c8a9f57ef9ddb8acde3",
+  "cpu_report_sha256": "1acc596d34e1571a12abde87405d6b2d8f95bf742020a459264bfd66ee4be4cc",
+  "gpu_metadata_sha256": "f841dde52c8e4092042342ccc9d9912ec4f4033441f1dde6223ab24bbb2309c0",
+  "cases": 446,
+  "membership_and_text_sha256_match": true,
+  "same_checkpoint_dtype_versions": true,
+  "decoders": {
+    "raw": {
+      "identical_cases": 446,
+      "different_cases": 0,
+      "different_case_ids": []
+    },
+    "hybrid": {
+      "identical_cases": 446,
+      "different_cases": 0,
+      "different_case_ids": []
+    }
+  },
+  "all_predictions_identical": true
+}
