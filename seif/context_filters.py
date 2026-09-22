@@ -57,6 +57,7 @@ _COUNTRY_QUALIFIER = re.compile(r"\b(?:паспорт|гражданин|гра�
 _CORPORATE_ADDRESS = re.compile(r"\bадрес[а-яё]*[ \t]*+[:=—-]?[ \t]*+(?:г[.][ \t]*+)?$", _FLAGS)
 _NUMERIC_TAIL = re.compile(r"[.,]((?a:\d){1,13})(?!(?a:\d))")
 _NUMERIC_HEAD = re.compile(r"(?<!(?a:\d))((?a:\d){1,13})[.,]$")
+_DECIMAL_PHONE_VALUE = re.compile(r"\+?[0-9]{8,15}[.,][0-9]{1,8}")
 _RECORD_BOUNDARY = re.compile(r"[;!?]|\n[ \t]*\n|[.](?=\s|$)")
 _ABBREVIATION = re.compile(r"(?:\b|\\[nr])(?:г|гор|ул|д|кв|корп|стр|обл|р-н|им|пос|тел|ао)[.]$", _FLAGS)
 _OFFICE = re.compile(r"\b(?:[оуг]вд|[оу]{0,2}фмс|мвд|умвд|отдел\s+внутренних\s+дел)\b", _FLAGS)
@@ -107,7 +108,8 @@ def _record_prefix(text: str, start: int) -> str:
 
 
 def _corporate_inn(text: str, span) -> bool:
-    if len(text[span.start:span.end]) != 10 or span.reason == "cis-personal-id":
+    digit_count = sum(char in "0123456789" for char in text[span.start:span.end])
+    if digit_count != 10 or span.reason == "cis-personal-id":
         return False
     prefix = _record_prefix(text, span.start)
     if not _INN_FIELD_END.search(prefix):
@@ -137,13 +139,23 @@ def _geographic_scaffolding(text: str, span) -> bool:
 
 
 def _decimal_inn_fragment(text: str, span) -> bool:
-    if span.reason != "checksum":
+    if span.reason not in {"checksum", "ner-structured"}:
         return False
     after = _NUMERIC_TAIL.match(text, span.end, min(len(text), span.end + 15))
     before = _NUMERIC_HEAD.search(text[max(0, span.start - 15):span.start])
     # Two full identifiers separated by punctuation are a list, not a fractional
     # number; retain both, including lists without whitespace after a comma.
     return any(part is not None and len(part[1]) not in {10, 12} for part in (after, before))
+
+
+def _decimal_phone_fragment(text: str, span) -> bool:
+    if _DECIMAL_PHONE_VALUE.fullmatch(text[span.start:span.end]):
+        return True
+    after = _NUMERIC_TAIL.match(text, span.end, min(len(text), span.end + 15))
+    before = _NUMERIC_HEAD.search(text[max(0, span.start - 15):span.start])
+    # Sentence-ending punctuation is harmless. Adjacent complete phone numbers
+    # remain a list; a short fractional component is not a second telephone.
+    return any(part is not None and not 7 <= len(part[1]) <= 13 for part in (after, before))
 
 
 def _name_span(text: str, span):
@@ -192,6 +204,8 @@ def _place_parts(text: str, span) -> list:
 def _excluded_context(text: str, span, personal_context: bool) -> bool:
     if span.type == "INN":
         return _corporate_inn(text, span) or _decimal_inn_fragment(text, span)
+    if span.type == "PHONE":
+        return _decimal_phone_fragment(text, span)
     return span.type in {"CITY", "LOCATION"} and (
         _office_geography(text, span, personal_context) or _geographic_scaffolding(text, span)
     )

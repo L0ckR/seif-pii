@@ -13,12 +13,14 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import date
 from functools import lru_cache
+from ipaddress import ip_address
 from typing import Iterable
 
 from seif.cardholder_fields import cardholder_candidates
 from seif.context_filters import refine_candidates
 from seif.document_fields import document_kind_at_value
 from seif.location_fields import location_candidates
+from seif.ner_contract import NER_TYPES, max_entity_chars
 from seif.person_fields import person_candidates
 from seif.structured_fields import structured_candidates
 
@@ -60,6 +62,12 @@ TYPES: dict[str, str] = {
     "CARDHOLDER": "Имя держателя карты",
     "FOREIGN_DOCUMENT": "Другой документ личности",
     "LOCATION": "Географическое название (NER)",
+    "SNILS": "СНИЛС",
+    "OMS": "Полис ОМС",
+    "IP_ADDRESS": "IP-адрес",
+    "URL": "Ссылка",
+    "MILITARY_ID": "Военный билет",
+    "BIRTH_CERTIFICATE": "Свидетельство о рождении",
 }
 _FLAGS = re.IGNORECASE | re.UNICODE
 
@@ -141,6 +149,7 @@ _PUBLIC_NAME_APPOSITION = _rx(
 _PERSONAL_NAME = _rx(
     r"\b(?:клиент|пациент|за[её]мщик|сотрудник|фио|зовут|заявител|владелец|договор|паспорт|получатель)"
 )
+_NAMED_PERSON = _rx(r"\bпо[ \t]+имени[ \t]*(?:[:—–-][ \t]*)?[«\"']?[ \t]*$")
 _HISTORICAL_MENTION = _rx(r"\bпушкин[а-яё]*\b")
 _HISTORICAL = _rx(r"^(?:(?:александр\w*|а\.)\s+)?(?:(?:сергеевич\w*|с\.)\s+)?пушкин\w*$")
 _PUBLIC_ADDRESS = _rx(
@@ -506,7 +515,7 @@ def _is_public_name(text: str, start: int, end: int) -> bool:
     before = before[boundary + 1 :]
     value = text[start:end]
     # A personal record explicitly identifying even a famous namesake wins.
-    if _PERSONAL_NAME.search(before):
+    if _PERSONAL_NAME.search(before) or _NAMED_PERSON.search(before):
         return False
     if _PUBLIC_NAME_LINK.search(before) or _PUBLIC_WORK_TITLE.search(before) or _HISTORICAL.fullmatch(value):
         return True
@@ -630,7 +639,9 @@ def _select_cluster(cluster: list[Span]) -> list[Span]:
         key=lambda s: (
             # An explicitly labelled regional personal ID can coincidentally
             # pass Luhn; its field meaning takes precedence over bare CARD.
-            -max(_PRIORITY.get(s.type, 85), 96 if s.reason == "cis-personal-id" else 0),
+            -(65 if s.reason == "ner-structured" else max(
+                _PRIORITY.get(s.type, 85), 96 if s.reason == "cis-personal-id" else 0,
+            )),
             -(s.end - s.start),
             -s.confidence,
             s.start,
@@ -727,8 +738,82 @@ def _validate_ner_span(span: Span, external: bool, text: str, allowed_types: fro
         or not 0 <= span.confidence <= 1
     ):
         raise ValueError("NER merge received invalid span bounds or confidence")
-    if external and (span.type not in allowed_types or span.end - span.start > 200):
-        raise ValueError("NER candidates need a supported type and at most 200 characters")
+    if external and span.type not in allowed_types:
+        raise ValueError("NER candidates need a supported type")
+    if external and span.end - span.start > max_entity_chars(span.type):
+        raise ValueError(f"NER candidates of type {span.type} need at most {max_entity_chars(span.type)} characters")
+
+
+_NER_NUMBER_OWNER = _rx(
+    r"(?P<INN>\bинн\b)|(?P<CARD>\b(?:карт[аыуе]|card|pan)\b)|"
+    r"(?P<PHONE>\b(?:телефон[а-яё]*|тел[.]|мобильн[а-яё]*|phone)\b)|"
+    r"(?P<PASSPORT>\bпаспорт[а-яё]*\b)|"
+    r"(?P<DRIVER_LICENSE>\b(?:водительск[а-яё]*[ \t]+удостоверени[а-яё]*|в[ /]?у|права)\b)|"
+    r"(?P<SNILS>\bснилс\b)|(?P<OMS>\bомс\b)|"
+    r"(?P<MILITARY_ID>\bвоенн[а-яё]*[ \t]+билет[а-яё]*\b)|"
+    r"(?P<BIRTH_CERTIFICATE>\bсвидетельств[а-яё]*[ \t]+о[ \t]+рождении\b)"
+)
+_NER_NUMERIC_VALUE = _rx(r"\+?[0-9][0-9 \t()./-]*[0-9]|[0-9]")
+_NER_DOCUMENT_VALUE = _rx(r"[а-яёa-zivxlc0-9№ \t./–—-]+")
+_NER_URL_VALUE = _rx(
+    r"(?:https?://|ftp://|www[.])[^\s]+|"
+    r"(?:[a-zа-яё0-9-]+[.])+[a-zа-яё]{2,63}(?:[:/?#][^\s]*)?"
+)
+
+
+def _ner_number_owner(text: str, start: int) -> str | None:
+    prefix = _local_record_prefix(text, start, limit=120)
+    # A completed field or sentence cannot grant ownership to the next value.
+    prefix = re.split(r"[;\n]", prefix)[-1]
+    owners = list(_NER_NUMBER_OWNER.finditer(prefix))
+    if not owners or re.search(r"[0-9]", prefix[owners[-1].end():]):
+        return None
+    return owners[-1].lastgroup
+
+
+def _valid_ner_network_value(value: str, kind: str) -> bool:
+    # Tokenized corpora may put spaces around punctuation. Use a temporary
+    # validation view; the accepted span still points into the exact input.
+    compact = re.sub(r"[ \t]+", "", value)
+    if kind == "EMAIL":
+        return bool(_EMAIL.fullmatch(compact))
+    if kind == "URL":
+        return bool(_NER_URL_VALUE.fullmatch(compact))
+    try:
+        ip_address(compact)
+    except ValueError:
+        return False
+    return True
+
+
+def _valid_ner_number(text: str, span: Span, owner: str | None) -> bool:
+    value = text[span.start:span.end]
+    digits = _digits(value)
+    if not _NER_NUMERIC_VALUE.fullmatch(value):
+        return False
+    if span.type == "INN":
+        return len(digits) in {10, 12} and (
+            owner == "INN" or _valid_inn(digits)
+        ) and not _is_public_inn(text, span.start, digits)
+    if span.type == "CARD":
+        return 13 <= len(digits) <= 19 and (owner == "CARD" or _luhn(value))
+    if span.type == "PHONE":
+        return (7 if owner else 8) <= len(digits) <= 15
+    return len(digits) == {"SNILS": 11, "OMS": 16}.get(span.type)
+
+
+def _accept_ner_structured(text: str, span: Span) -> bool:
+    value = text[span.start:span.end]
+    if span.type in {"EMAIL", "URL", "IP_ADDRESS"}:
+        return _valid_ner_network_value(value, span.type)
+    if _is_nonpersonal_number_field(text, span.start):
+        return False
+    owner = _ner_number_owner(text, span.start)
+    if owner is not None and owner != span.type:
+        return False
+    if span.type in {"PASSPORT", "DRIVER_LICENSE", "MILITARY_ID", "BIRTH_CERTIFICATE"}:
+        return bool(_NER_DOCUMENT_VALUE.fullmatch(value)) and (2 if owner else 6) <= len(_digits(value)) <= 14
+    return _valid_ner_number(text, span, owner)
 
 
 def _normalize_ner_candidate(
@@ -746,6 +831,8 @@ def _normalize_ner_candidate(
         prefix = _local_record_prefix(text, span.start, limit=150)
         if _is_public_address(prefix, len(prefix)):
             return None
+    elif not _accept_ner_structured(text, span):
+        return None
     return span
 
 
@@ -772,9 +859,59 @@ def _accept_ner_candidates(
             # Do not propagate free-form upstream explanations into API metadata.
             accepted[identity] = Span(
                 span.start, span.end, span.type, float(span.confidence),
-                "ner-person" if span.type == "PERSON" else "ner-location",
+                {"PERSON": "ner-person", "LOCATION": "ner-location"}.get(span.type, "ner-structured"),
             )
     return accepted
+
+
+_ADDRESS_COMPONENT_TYPES = frozenset({"ADDRESS", "COUNTRY", "CITY", "STREET", "HOUSE", "APARTMENT", "POSTAL_CODE"})
+_NER_ADDRESS_MARKER = _rx(
+    r"(?<!\w)(?:ул[.]|улиц[аы]|пр[.]?[ \t]*-[ \t]*т|проспект|пер[.]|переулок|"
+    r"шоссе|ш[.]|проезд|бульвар|наб[.]|набережная|площадь|пл[.]|"
+    r"дом|д[.]|корпус|корп[.]|строение|стр[.]|квартира|кв[.]|"
+    r"город|г[.]|село|деревня|пос[.]|пос[её]лок|область|обл[.]|район|р-н|край|республика)(?!\w)"
+)
+_NER_ADDRESS_NUMBER = _rx(r"[0-9]{1,5}[а-яёa-z]?(?:[/–-][0-9]{1,5}[а-яёa-z]?)?")
+
+
+def _address_fragment(text: str, span: Span, start: int, end: int) -> Span | None:
+    while start < end and (text[start].isspace() or text[start] in ",;"):
+        start += 1
+    while end > start and (text[end - 1].isspace() or text[end - 1] in ",;"):
+        end -= 1
+    value = text[start:end]
+    # A wider model address is not evidence to mask arbitrary nearby prose.
+    # Keep only a location designator or a building-like numeric continuation.
+    if start == end or not (_NER_ADDRESS_MARKER.search(value) or _NER_ADDRESS_NUMBER.fullmatch(value)):
+        return None
+    return Span(start, end, "LOCATION", span.confidence, "ner-location")
+
+
+def _preserve_address_tails(text: str, resolved: Sequence[Span], candidates: Iterable[Span]) -> list[Span]:
+    starts = [span.start for span in resolved]
+    additions: list[Span] = []
+    for candidate in candidates:
+        if candidate.type != "LOCATION":
+            continue
+        first = max(0, bisect_right(starts, candidate.start) - 1)
+        last = bisect_left(starts, candidate.end)
+        overlaps = [span for span in resolved[first:last] if span.end > candidate.start]
+        if not overlaps or any(
+            span.type not in _ADDRESS_COMPONENT_TYPES or span.reason == "custom-rule" for span in overlaps
+        ):
+            continue
+        cursor = candidate.start
+        for span in overlaps:
+            if span.start > cursor:
+                fragment = _address_fragment(text, candidate, cursor, span.start)
+                if fragment is not None:
+                    additions.append(fragment)
+            cursor = max(cursor, span.end)
+        if cursor < candidate.end:
+            fragment = _address_fragment(text, candidate, cursor, candidate.end)
+            if fragment is not None:
+                additions.append(fragment)
+    return _resolve([*resolved, *additions]) if additions else list(resolved)
 
 
 def _merge_ner_candidates(
@@ -809,9 +946,12 @@ def _merge_ner_candidates(
         person_cover_ends.append(max(end, person_cover_ends[-1] if person_cover_ends else end))
     existing = {(span.type, span.start, span.end) for span in base_spans if span.type in allowed_types}
     accepted = _accept_ner_candidates(text, candidates, existing, person_starts, person_cover_ends)
-    # LOCATION is less specific than every structured field, including individual
-    # address components; overlaps never relabel CITY/STREET/ADDRESS as LOCATION.
-    return _resolve(refine_candidates(text, [*base_spans, *accepted.values()]))
+    # Keep rule classes on overlaps and retain independently supported address
+    # tails. A short street rule must not erase a model's street designator.
+    refined = refine_candidates(text, [*base_spans, *accepted.values()])
+    return _preserve_address_tails(text, _resolve(refined), (
+        span for span in refined if span.reason == "ner-location"
+    ))
 
 
 def merge_person_candidates(text: str, base_spans: Sequence[Span], candidates: Sequence[Span]) -> list[Span]:
@@ -823,14 +963,14 @@ def merge_person_candidates(text: str, base_spans: Sequence[Span], candidates: S
 
 
 def merge_ner_candidates(text: str, base_spans: Sequence[Span], candidates: Sequence[Span]) -> list[Span]:
-    """Merge validated PERSON/LOCATION spans with raw Unicode input offsets.
+    """Merge validated model PII candidates with raw Unicode input offsets.
 
     LOCATION means a model-recognized geographical name, not a verified city or
     a complete address. It has lower overlap priority than core field types.
     The caller owns model deadlines and availability; malformed output raises
     ValueError before any public-context filtering can hide that failure.
     """
-    return _merge_ner_candidates(text, base_spans, candidates, allowed_types=frozenset({"PERSON", "LOCATION"}))
+    return _merge_ner_candidates(text, base_spans, candidates, allowed_types=NER_TYPES)
 
 
 @lru_cache(maxsize=128)
