@@ -17,7 +17,7 @@ def protected(text, spans):
 
 
 @pytest.mark.parametrize("kind", ["PASSPORT", "DRIVER_LICENSE"])
-@pytest.mark.parametrize("separator", [" номер ", ", НОМЕР: ", "\tномер № "])
+@pytest.mark.parametrize("separator", [" номер ", ", НОМЕР: ", "\tномер № ", ", № ", " ном. ", "№"])
 def test_document_parts_preserved_without_masking_the_field_label(kind, separator):
     text = "🔐 серия 12 34" + separator + "567890"
     span = candidate(text, "12 34" + separator + "567890", kind)

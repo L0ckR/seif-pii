@@ -232,3 +232,50 @@ def test_initial_punctuation_stays_visible_without_swallowing_the_following_sent
     masked, replacements = mask(text, spans, "mask")
     assert masked == "Плательщик: ***** *. *. Подтверждение получено; номер операции 57."
     assert restore_exact({"masked": masked, "replacements": replacements}) == text
+
+
+def assert_only_personal_values_are_masked(text, values):
+    protected = positions_of(text, values)
+    masked, replacements = mask(text, detect(text), "mask")
+    expected = "".join("*" if offset in protected else char for offset, char in enumerate(text))
+    assert masked == expected
+    assert restore_exact({"masked": masked, "replacements": replacements}) == text
+
+
+@pytest.mark.parametrize("text, values", [
+    (
+        "Договор аренды завершён; паспортные данные клиента: 7328 406195.",
+        ["7328 406195"],
+    ),
+    (
+        "Сведения по договору найма сохранены. Паспортные данные: серия 73 28, номер 406195.",
+        ["73 28", "406195"],
+    ),
+])
+@pytest.mark.parametrize("change_case", [str.lower, str.upper, str.swapcase])
+def test_actual_mask_protects_passport_data_after_an_earlier_rental_contract(text, values, change_case):
+    assert_only_personal_values_are_masked(change_case(text), values)
+
+
+@pytest.mark.parametrize("presentation", ["Реквизиты", "Данные", "Вот"])
+@pytest.mark.parametrize("change_case", [str.lower, str.upper])
+def test_actual_mask_retains_personal_owner_through_one_presentation_clause(presentation, change_case):
+    text = f"Паспорт клиента предъявлен. {presentation}: 7328 406195. Проверка завершена."
+    assert_only_personal_values_are_masked(change_case(text), ["7328 406195"])
+
+
+@pytest.mark.parametrize("text", [
+    "Паспортный стол работает по записи; код очереди 7328 406195.",
+    "Паспортный контроль завершён; номер стеллажа 73 28 406195.",
+])
+@pytest.mark.parametrize("change_case", [str.lower, str.upper])
+def test_passport_office_or_control_does_not_own_an_arbitrary_number(text, change_case):
+    assert_only_personal_values_are_masked(change_case(text), [])
+
+
+@pytest.mark.parametrize("text", [
+    "Паспорт клиента проверен. Данные станка: 7328 406195.",
+    "Паспортные данные клиента уточнены. Реквизиты заказа: серия 7328 номер 406195.",
+])
+def test_new_equipment_or_order_owner_overrides_a_personal_presentation_context(text):
+    assert_only_personal_values_are_masked(text, [])

@@ -39,7 +39,8 @@ _OWNER = re.compile(
     r"водительск(?:ая|ой|ую)[ \t]+карт(?:а|ы|у|ой|е))\b|"
     rf"\b(?P<driver_card>{_DRIVER_CARD})\b|"
     r"\b(?P<license>водительск[а-яё]*[ \t]+удостоверени[а-яё]*|в[ /]?у|права)\b|"
-    r"\b(?P<passport>паспорт(?:а|ом|е)?|документ(?:а|ом|е)?)\b|"
+    r"\b(?P<passport>паспортн[а-яё]*[ \t]+(?:данн[а-яё]*|реквизит[а-яё]*)|"
+    r"удостоверени[ея][ \t]+личности|паспорт(?:а|ом|е)?|документ(?:а|ом|е)?)\b|"
     r"\b(?P<generic_license>удостоверени[ея])(?=[ \t]*[:=])|"
     r"\b(?P<business>(?:пенсионн[а-яё]*|служебн[а-яё]*|студенческ[а-яё]*)[ \t]+удостоверени[ея]|"
     r"заказ[а-яё]*|накладн[а-яё]*|товар[а-яё]*|артикул[а-яё]*|"
@@ -82,6 +83,21 @@ _FIELD_CONTINUATION = re.compile(
 _RECORD_SWITCH = re.compile(
     r"\b(?:новая|другая|следующая)[ \t]+(?:запись|анкета|заявка|операция)\b", _FLAGS,
 )
+_NUMBER_PRESENTATION = re.compile(
+    r"[ \t]*(?:(?:(?:его|е[её]|их|следующие)[ \t]+)?(?:данные|реквизиты|значение|номер)"
+    r"|вот)[ \t]*[:=—–-][ \t]*", _FLAGS,
+)
+_PURPOSE_TRAILER = re.compile(r"[ \t]+(?:для|при)[ \t]+[а-яё \t-]{1,72}", _FLAGS)
+_PURPOSE_PREFIX = re.compile(
+    r"\b(?:для|при|с[ \t]+целью|в[ \t]+целях)[ \t]+"
+    r"(?:оформления|оформлении|получения|получении|передачи|передаче|проверки|проверке|"
+    r"регистрации|выдачи|выдаче|подписания|подписании|оплаты|оплате|заключения|заключении)"
+    r"[ \t]+(?:[а-яё-]+[ \t]+){0,4}$", _FLAGS,
+)
+_REQUESTED_FIELDS = re.compile(
+    r"[ \t]+(?:нужны|необходимы|требуются|потребуются)[ \t]+"
+    r"(?:следующие[ \t]+)?(?:данные|реквизиты)[ \t]*[:=—–-][ \t(]*", _FLAGS,
+)
 
 
 def _record_boundaries(tail: str) -> Iterator[re.Match[str]]:
@@ -95,20 +111,26 @@ def _record_boundaries(tail: str) -> Iterator[re.Match[str]]:
         yield boundary
 
 
-def _owner_continues(prefix: str, owner_end: int, *, paired: bool) -> bool:
+def _owner_continues(prefix: str, owner_end: int, *, paired: bool, personal: bool = False) -> bool:
     tail = prefix[owner_end:]
     if _RECORD_SWITCH.search(tail):
         return False
     boundaries = list(_record_boundaries(tail))
     if not boundaries:
         return True
-    if not paired or any(b.group() in {"!", "?"} or b.group().count("\n") > 1 for b in boundaries):
+    if any(b.group() in {"!", "?"} or b.group().count("\n") > 1 for b in boundaries):
         return False
     # Period + line break is one transition; another substantive clause is not.
     if any(tail[first.end():second.start()].strip() for first, second in zip(boundaries, boundaries[1:], strict=False)):
         return False
-    return bool(_OWNER_CLAUSE_END.fullmatch(tail[:boundaries[0].start()])
-                and _FIELD_CONTINUATION.fullmatch(tail[boundaries[-1].end():]))
+    clause_end = tail[:boundaries[0].start()]
+    continuation = tail[boundaries[-1].end():]
+    # Bare grouped digits need an explicit presentation cue across a sentence;
+    # a series/number pair already provides that field structure itself.
+    if personal and _NUMBER_PRESENTATION.fullmatch(continuation):
+        return bool(_OWNER_CLAUSE_END.fullmatch(clause_end) or _PURPOSE_TRAILER.fullmatch(clause_end))
+    return bool(paired and _OWNER_CLAUSE_END.fullmatch(clause_end)
+                and _FIELD_CONTINUATION.fullmatch(continuation))
 
 
 def _number_kind(text: str, start: int, *, paired: bool = False) -> str | None:
@@ -116,8 +138,16 @@ def _number_kind(text: str, start: int, *, paired: bool = False) -> str | None:
     prefix = text[begin:start]
     owners = [owner for owner in _OWNER.finditer(prefix)
               if owner.start() or not begin or not (text[begin - 1].isalnum() or text[begin - 1] == "_")]
+    # An object in a purpose phrase is not the owner of subsequently requested
+    # fields. Keep the established unowned paired-number policy in that case;
+    # direct product labels and genitive "data of the product" still veto it.
+    owners = [owner for owner in owners
+              if not (owner.lastgroup == "business"
+                      and _PURPOSE_PREFIX.search(prefix[:owner.start()])
+                      and _REQUESTED_FIELDS.fullmatch(prefix[owner.end():]))]
     default = "PASSPORT" if paired else None
-    if not owners or not _owner_continues(prefix, owners[-1].end(), paired=paired):
+    if not owners or not _owner_continues(prefix, owners[-1].end(), paired=paired,
+                                        personal=owners[-1].lastgroup not in {"business", "other_card"}):
         return default
     group = owners[-1].lastgroup
     if group == "driver_card" and _CARD_PURPOSE.search(prefix, max(0, owners[-1].start() - 48), owners[-1].start()):

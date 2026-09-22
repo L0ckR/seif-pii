@@ -15,7 +15,7 @@ from seif.location_fields import issuer_value_end
 _FLAGS = re.IGNORECASE | re.UNICODE
 # Start at the literal field name. Searching from overlapping whitespace
 # quantifiers becomes cubic on a long, otherwise valid spaced document value.
-_NUMBER_FIELD = re.compile(r"\bномер\b\s*+[:№=—-]?\s*+", _FLAGS)
+_NUMBER_FIELD = re.compile(r"(?:\bномер\b|\bном[.]?(?!\w)|№)\s*+[:№=—-]?\s*+", _FLAGS)
 _DOCUMENT_PART = re.compile(r"[0-9](?:[0-9 \t]*[0-9])?")
 _NAME_PROSE = re.compile(
     r"(?<![\w-])(?:обратил(?:ся|ась|ись)|подтвердил(?:а|и)?|запросил(?:а|и)?|"

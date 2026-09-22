@@ -113,3 +113,53 @@ def test_new_product_record_rejects_personal_document_inference(device):
 def test_legacy_numeric_match_uses_the_same_field_owner(template, kind):
     text = template.format(value="34 56")
     assert document_kind_at_value(text, text.index("34 56")) == kind
+
+
+@pytest.mark.parametrize("label", [
+    "паспортные данные", "паспортных данных", "паспортными реквизитами",
+    "удостоверение личности", "удостоверения личности",
+])
+@pytest.mark.parametrize("transform", [str.lower, str.upper])
+def test_explicit_identity_fields_override_earlier_business_context(label, transform):
+    text = transform(f"Счёт согласован; {label} клиента: серия 34 56, номер 876543.")
+    assert values(text) == [("PASSPORT", "34 56"), ("PASSPORT", "876543")]
+
+
+@pytest.mark.parametrize("cue", ["Реквизиты:", "Данные:", "Вот:", "Следующие данные:", "Его реквизиты —"])
+@pytest.mark.parametrize("transform", [str.lower, str.upper])
+@pytest.mark.parametrize("bridge", [" клиента предъявлен. ", " для регистрации в системе.\n"])
+def test_explicit_number_presentation_can_continue_a_personal_owner(cue, transform, bridge):
+    text = transform(f"Паспорт{bridge}{cue} 3456 876543.")
+    assert values(text) == [("PASSPORT", "3456 876543")]
+
+
+@pytest.mark.parametrize("bridge", [
+    " клиента предъявлен. Обсуждение завершено. ", " клиента предъявлен.\n\n",
+    " клиента предъявлен! ", " клиента предъявлен. Новая запись: ",
+    " клиента предъявлен. Оборудование: ", " клиента предъявлен. Номер заказа: ",
+])
+def test_number_presentation_does_not_cross_records_or_new_owners(bridge):
+    assert values(f"Паспорт{bridge}Данные: 3456 876543.") == []
+
+
+@pytest.mark.parametrize("purpose", ["Для проверки товара", "При получении оборудования", "В целях регистрации договора"])
+@pytest.mark.parametrize("field_request", ["необходимы следующие данные", "требуются реквизиты"])
+@pytest.mark.parametrize("transform", [str.lower, str.upper])
+def test_purpose_object_does_not_own_subsequently_requested_paired_fields(purpose, field_request, transform):
+    # The two labelled parts retain the established context-free policy. This
+    # grammar does not assert that the requested document is a passport.
+    text = transform(f"{purpose} {field_request}: серия 34 56, номер 876543.")
+    assert values(text) == [("PASSPORT", "34 56"), ("PASSPORT", "876543")]
+
+
+@pytest.mark.parametrize("prefix", [
+    "Данные товара", "Реквизиты договора", "Паспорт оборудования",
+    "Для проверки товара", "Для проверки товара нужны его данные",
+    "Для проверки товара необходимы данные оборудования",
+])
+def test_direct_business_fields_keep_veto_even_with_purpose_words(prefix):
+    assert values(f"{prefix}: серия 34 56, номер 876543.") == []
+
+
+def test_purpose_context_does_not_grant_ownership_to_bare_numbers():
+    assert values("Для проверки товара необходимы следующие данные: 3456 876543.") == []
