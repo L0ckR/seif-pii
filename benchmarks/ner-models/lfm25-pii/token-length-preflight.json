@@ -1,0 +1,19 @@
+{
+  "model": "LiquidAI/LFM2.5-Encoder-350M-PII-Detector",
+  "revision": "b8c9cf3d2d6ae52501b35a27ba46f271449c9ce2",
+  "token_limit": 2048,
+  "datasets": {
+    "organizer": {
+      "cases": 446,
+      "max_tokens": 416,
+      "over_limit": 0,
+      "input_sha256": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46"
+    },
+    "public": {
+      "cases": 4649,
+      "max_tokens": 1111,
+      "over_limit": 0,
+      "input_sha256": "b8b80873a507ae3841c1c74143162f8f169c0a68d6509da8509907cf11a20405"
+    }
+  }
+}

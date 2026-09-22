@@ -1,0 +1,189 @@
+{
+  "matched_all_compared_aggregates": true,
+  "baseline_report_sha256": {
+    "organizer": "01c67188bbfbafc789d2baad47888595af218da299686d775d8f9a7626457ac4",
+    "public": "5cd0b4d6dc9441f703ffe3ac76739d0bdaf923d1c6f55e779eff58624a9ee55c"
+  },
+  "replayed": {
+    "organizer/spacy_hybrid": {
+      "cases": 446,
+      "exact_cases": 415,
+      "positive_cases": 369,
+      "negative_cases": 77,
+      "fully_protected_positive_cases": 344,
+      "false_positive_negative_cases": 6,
+      "uncertain_cases": 117,
+      "character_metrics": {
+        "precision": 0.980072,
+        "recall": 0.957893,
+        "f1": 0.968856,
+        "true_positive": 5164,
+        "false_positive": 105,
+        "false_negative": 227
+      },
+      "exact_case_rate": 0.930493,
+      "fully_protected_positive_rate": 0.932249,
+      "false_positive_negative_rate": 0.077922
+    },
+    "pii/spacy_hybrid": {
+      "precision": 0.961329,
+      "recall": 0.574942,
+      "f1": 0.719545,
+      "f2": 0.625199,
+      "true_positive": 16084,
+      "false_positive": 647,
+      "false_negative": 11891,
+      "cases": 1810,
+      "exact_cases": 1120,
+      "negative_cases": 378,
+      "negative_cases_with_fp": 16,
+      "by_type": {
+        "PII": {
+          "precision": 0.961329,
+          "recall": 0.574942,
+          "f1": 0.719545,
+          "f2": 0.625199,
+          "true_positive": 16084,
+          "false_positive": 647,
+          "false_negative": 11891
+        }
+      }
+    },
+    "redmadrobot/spacy_hybrid": {
+      "precision": 0.889176,
+      "recall": 0.447053,
+      "f1": 0.594971,
+      "f2": 0.49642,
+      "true_positive": 25081,
+      "false_positive": 3126,
+      "false_negative": 31022,
+      "cases": 2839,
+      "exact_cases": 955,
+      "negative_cases": 371,
+      "negative_cases_with_fp": 75,
+      "by_type": {
+        "PII": {
+          "precision": 0.889176,
+          "recall": 0.447053,
+          "f1": 0.594971,
+          "f2": 0.49642,
+          "true_positive": 25081,
+          "false_positive": 3126,
+          "false_negative": 31022
+        }
+      }
+    },
+    "organizer/gliner_hybrid": {
+      "cases": 446,
+      "exact_cases": 423,
+      "positive_cases": 369,
+      "negative_cases": 77,
+      "fully_protected_positive_cases": 353,
+      "false_positive_negative_cases": 7,
+      "uncertain_cases": 117,
+      "character_metrics": {
+        "precision": 0.977782,
+        "recall": 0.971434,
+        "f1": 0.974598,
+        "true_positive": 5237,
+        "false_positive": 119,
+        "false_negative": 154
+      },
+      "exact_case_rate": 0.94843,
+      "fully_protected_positive_rate": 0.95664,
+      "false_positive_negative_rate": 0.090909
+    },
+    "pii/gliner_hybrid": {
+      "precision": 0.959878,
+      "recall": 0.572976,
+      "f1": 0.717599,
+      "f2": 0.623216,
+      "true_positive": 16029,
+      "false_positive": 670,
+      "false_negative": 11946,
+      "cases": 1810,
+      "exact_cases": 1143,
+      "negative_cases": 378,
+      "negative_cases_with_fp": 16,
+      "by_type": {
+        "PII": {
+          "precision": 0.959878,
+          "recall": 0.572976,
+          "f1": 0.717599,
+          "f2": 0.623216,
+          "true_positive": 16029,
+          "false_positive": 670,
+          "false_negative": 11946
+        }
+      }
+    },
+    "redmadrobot/gliner_hybrid": {
+      "precision": 0.851638,
+      "recall": 0.534196,
+      "f1": 0.65656,
+      "f2": 0.577228,
+      "true_positive": 29970,
+      "false_positive": 5221,
+      "false_negative": 26133,
+      "cases": 2839,
+      "exact_cases": 1094,
+      "negative_cases": 371,
+      "negative_cases_with_fp": 120,
+      "by_type": {
+        "PII": {
+          "precision": 0.851638,
+          "recall": 0.534196,
+          "f1": 0.65656,
+          "f2": 0.577228,
+          "true_positive": 29970,
+          "false_positive": 5221,
+          "false_negative": 26133
+        }
+      }
+    }
+  },
+  "scope": "Baseline-only harness replay with empty native LFM placeholders; no LFM inference or results.",
+  "source_sha256": {
+    "seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+    "seif/app.py": "e958559569fae134ace1e54ef02af655dc65a4fc481a93545c315721bc1f8951",
+    "seif/async_callbacks.py": "b5ce7aae9979e6251c827d3e2099a4377266bcb8076606d67dbe86c38fa21ebe",
+    "seif/cardholder_fields.py": "3d80d59636e4b2e1a668325fbb945027b48a37e60aad5297c39b727a51806462",
+    "seif/config.py": "ca9c4e4bc80fcb6847f53f08593b25e5a3b41d6ae5a44ce7c416075ffd7b4b45",
+    "seif/context_filters.py": "c3fbd2c356784e87c481d3ac7d58a8cbf5863d04db96e47d4ef062e348bfd7fb",
+    "seif/detector.py": "e0b09cda385168f401ed1d1aa81ae4b1457d701be977f8f9aee789e444534025",
+    "seif/document_fields.py": "2200ed9f9751ee4894f164a4b43654de6f204c9661da83cdbf7a2a455d46ba51",
+    "seif/gliner_ner.py": "8012d0c3fc83b6c0a0defd4a07735d6e9cd4aa0c5debb1f7c395ddafb7431311",
+    "seif/lfm_pii.py": "acab90003298090c8f637cf6db586320022324d01fe8cd7b9fd4b51a8f1f99a0",
+    "seif/location_fields.py": "2d806e7a35bb7669001e796deba5cbac020dddb2887284390d27becebc43009e",
+    "seif/ner.py": "66c64453390bd851f2283c01bd995145e3a21e4cd23ad9af1f8330a665816068",
+    "seif/person_fields.py": "ca843e9b6f8ef9d4739703e83b1438a96d114dc95782626fa2e89366bf29f08d",
+    "seif/request_capture.py": "ce9d53ed7827992cd5c0c4b10914e3f9becc978cc192263116112c642e506855",
+    "seif/structured_fields.py": "26462106b1a29140a3bbf2b2370feab631145932ee44fbb78ca007b6d1d1218c",
+    "seif/transform.py": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+    "seif/vault.py": "b6b4f59bc911bb0a0c745b6801bcd9a034200e016f321e38c2984206c2946554",
+    "scripts/compare_lfm.py": "9758b875968dc7c9176de20a797bced74291bf3343f11a0403035f7cb4209691",
+    "scripts/compare_ner_public.py": "a781a7fc73b3ac947f27c14459f1e40aafd7bb8fcc6bdf064bcba14c7ded6286",
+    "scripts/compare_ner_models.py": "f520284721d8a85096627c32230eb256ba1375072df4e5d73e6f4da1bdb19652",
+    "scripts/evaluate_golden.py": "02e1160fbfbb2933e4e90d65573e559962e6b474ab69ddaa1c2c0f66e68226ff",
+    "scripts/evaluate_annotations.py": "b429e3605b90a9090a8eae0185ee9286708836494235617901fbd6ae4e0d5463",
+    "scripts/evaluate_external.py": "7281551dc7c62ce22b10676f7029de5580b9558f3c1d427a79e2a89497a22e85",
+    "scripts/evaluate_redmadrobot.py": "2e94c14034db198cb8718ed8161abe76354c27980f63346e3d34fad439aaa5c4",
+    "scripts/ner_service.py": "9d2291f08dc6013ba23552f34abe206f93a46fd6afc3da6abfc48e34b0958069"
+  },
+  "asset_sha256": {
+    "organizer_cases": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46",
+    "organizer_manifest": "74f6b661ff33cbc88b53fde91cb1103acaa1f6002a4008463d3100b7c9b2305a",
+    "organizer_spacy": "c0152894401d87c1848aab145aa5b734b30754c678d66e733545308d596f054f",
+    "organizer_spacy_metadata": "1be2cca0357cd1ff495c932eb5d94037079d7b7bbb2974f6aa55361ea67aac40",
+    "organizer_gliner": "e7995a07d8ca526ef8691acfc846fce6175e43780902bfcde3b795a139b38074",
+    "organizer_gliner_metadata": "533cbac4d6b24eb30c94bce6bd3359baa284fcf378ff640c6fb5958410ba279e",
+    "public/protocol.json": "6058374163fc3978ec4a882d19328e96fad1032d61bbac168ad8a3c78df68a27",
+    "public/prepared-inputs.jsonl": "b8b80873a507ae3841c1c74143162f8f169c0a68d6509da8509907cf11a20405",
+    "public/spacy.jsonl": "27300f63d2818f9d97dc933d59593018a61a83ce77aa2b388605abb33de22496",
+    "public/spacy.meta.json": "261c2f20e95b3740477b5b352a20166fd194d7b7d2863c803e0bf4dcfab26ca3",
+    "public/gliner.jsonl": "d03ec666d738c12e02d885fb02a89d9c66e5ac7d94210edb70b08f619ba5c655",
+    "public/gliner.meta.json": "586d85d66a418436de9961b683685c971e2973a18b9e83ac0b07eebc26e704c0",
+    "baseline_report/organizer": "01c67188bbfbafc789d2baad47888595af218da299686d775d8f9a7626457ac4",
+    "baseline_report/public": "5cd0b4d6dc9441f703ffe3ac76739d0bdaf923d1c6f55e779eff58624a9ee55c"
+  }
+}

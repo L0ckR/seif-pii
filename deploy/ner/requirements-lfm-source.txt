@@ -1,0 +1,7 @@
+# Separate experimental environment; ordinary CPython 3.13 on Linux/CUDA.
+# The custom checkpoint targets Transformers 5.11; GLiNER's environment stays separate.
+-r ../../requirements.lock
+torch==2.14.0
+transformers==5.11.0
+protobuf==7.36.2
+sentencepiece==0.2.2

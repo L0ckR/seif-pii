@@ -1,0 +1,96 @@
+{
+  "status": "PASS",
+  "measured_at_utc": "2026-09-22T18:45:03.540810+00:00",
+  "scope": "Synthetic offline native wrapper vs unchanged official helper; not HTTP or service RPS.",
+  "fixtures": [
+    {
+      "characters": 0,
+      "tokens": 1,
+      "raw_spans": 0,
+      "hybrid_spans": 0,
+      "official_parity": true
+    },
+    {
+      "characters": 51,
+      "tokens": 18,
+      "raw_spans": 3,
+      "hybrid_spans": 2,
+      "official_parity": true
+    },
+    {
+      "characters": 48,
+      "tokens": 28,
+      "raw_spans": 4,
+      "hybrid_spans": 2,
+      "official_parity": true
+    }
+  ],
+  "model": {
+    "model": "LiquidAI/LFM2.5-Encoder-350M-PII-Detector",
+    "revision": "b8c9cf3d2d6ae52501b35a27ba46f271449c9ce2",
+    "file_sha256": {
+      "config.json": "ced1b2917ec78c766b309233a38dd3351b6bd1cb4ba22c18363ce47c190679ac",
+      "tokenizer.json": "1efc3a6609abf6b63b1f47188d139f3b59973a6a434dffe970a7261a51ed2711",
+      "tokenizer_config.json": "2892f908f7cc397e412a92be1526234079542d139b3c2bc7e1b06921b6f55cd0",
+      "modeling_phase2_tc.py": "e48f084a44f25a43389a153dba6c94d53cb8f8fa4afd9f95b36ea697bf24d863",
+      "pii_hybrid_decode.py": "798ee81182e1a5a68307d01e8bb350bcd36fa68ebe68e58bb5bacdc2a6c95ed5",
+      "context_cued.py": "2a65a71e7625267b6dae4afd9a3256faa02ec3a724a754622f5c295d6252c33c",
+      "model.safetensors": "fbfec8b59db250a1d35b4ddc0d73571777f7088946ee22a5d7962e37c02ea6a8"
+    },
+    "device": "cuda:0",
+    "dtype": "torch.float32",
+    "versions": {
+      "torch": "2.14.0",
+      "transformers": "5.11.0",
+      "tokenizers": "0.22.2",
+      "safetensors": "0.8.0"
+    },
+    "decoder": "Official model_spans once, followed by unchanged hybrid_spans.",
+    "max_tokens_including_special": 2048,
+    "label_count": 161,
+    "native_types": [
+      "contact.address",
+      "contact.email",
+      "contact.ip_address",
+      "contact.phone",
+      "contact.postal_code",
+      "credential.api_key",
+      "credential.connection_string",
+      "credential.jwt",
+      "credential.password",
+      "credential.private_key",
+      "developer.device_id",
+      "developer.login_credentials",
+      "device.imei",
+      "device.mac_address",
+      "financial.amount",
+      "financial.bank_account",
+      "financial.credit_card",
+      "financial.crypto_wallet",
+      "financial.iban",
+      "financial.swift_bic",
+      "healthcare.condition",
+      "healthcare.health_plan_id",
+      "healthcare.medical_record",
+      "healthcare.medication",
+      "identity.date_of_birth",
+      "identity.drivers_license",
+      "identity.national_id",
+      "identity.passport",
+      "identity.person_name",
+      "identity.ssn",
+      "identity.tax_id",
+      "legal.case_number",
+      "location.gps_coordinates",
+      "online.url",
+      "online.username",
+      "org.company_name",
+      "special.health_status",
+      "special.orientation",
+      "special.political",
+      "special.religion"
+    ],
+    "scores": "No confidence scores produced."
+  },
+  "source_sha256": "acab90003298090c8f637cf6db586320022324d01fe8cd7b9fd4b51a8f1f99a0"
+}
