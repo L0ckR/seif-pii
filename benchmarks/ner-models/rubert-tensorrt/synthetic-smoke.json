@@ -1,0 +1,121 @@
+{
+  "load_and_smoke_seconds": 6.9318204230003175,
+  "cases": [
+    {
+      "characters": 0,
+      "elapsed_ms": 1.1982239957433194,
+      "native_entities": 0,
+      "gateway_entities": 0,
+      "error": null,
+      "tail_name_found": null
+    },
+    {
+      "characters": 1,
+      "elapsed_ms": 0.9410580023541115,
+      "native_entities": 0,
+      "gateway_entities": 0,
+      "error": null,
+      "tail_name_found": null
+    },
+    {
+      "characters": 25,
+      "elapsed_ms": 1.0858659952646121,
+      "native_entities": 0,
+      "gateway_entities": 0,
+      "error": null,
+      "tail_name_found": null
+    },
+    {
+      "characters": 66,
+      "elapsed_ms": 1.0548259961069562,
+      "native_entities": 5,
+      "gateway_entities": 1,
+      "error": null,
+      "tail_name_found": null
+    },
+    {
+      "characters": 12027,
+      "elapsed_ms": 21.00537899968913,
+      "native_entities": 3,
+      "gateway_entities": 1,
+      "error": null,
+      "tail_name_found": true
+    }
+  ],
+  "adapter": {
+    "model": "lockR/rubert-base-pii-ner-tensorrt",
+    "revision": "73be581047bf123dac6505e7b3900ec292942296",
+    "files_sha256": {
+      "pii_ner.py": "4591fc8c5580c39dc5121ca649f4a2a4936276ea4c9e82ae144e5c467eb5a5ca",
+      "trt_backend.py": "eafc144a9b698e94dfe155074c7a3ab1063ee7817ab1a285b69639db1c07b424",
+      "model.fp16.engine": "f4d3f4eaa72ed8543b81ef4f6acf216f95be93fe4da8c3be27c8513cb9e80b35",
+      "config.json": "f4eeba88d1503a56d629195c9307d42c1acf4ce53ab88fdaecfc754fd0745cf9",
+      "runtime_config.json": "841420d76f5e7ec4ec7dd781b79987fe0f3facb25cc68896e7c88012f7af1b5d",
+      "tokenizer.json": "f61eee9d0dc18f14c195321a37eadf9e5aeb3a323bc278dec689adeb89dec1b9",
+      "tokenizer_config.json": "ffe381e31042ba94cb077bf7d5b9cee944dbd0c2a85079b095bea7e5a5a6058b"
+    },
+    "backend": "trt-graph",
+    "device": "cuda",
+    "min_confidence": 0.3,
+    "batch_size": 1,
+    "max_tokens": 512,
+    "overlap_tokens": 128,
+    "native_types": [
+      "BIRTH_CERTIFICATE",
+      "CITY",
+      "COUNTRY",
+      "CREDIT_CARD",
+      "DISTRICT",
+      "DRIVER_LICENSE",
+      "EMAIL",
+      "FIRST_NAME",
+      "HOUSE",
+      "INN",
+      "IP_ADDRESS",
+      "LAST_NAME",
+      "MIDDLE_NAME",
+      "MILITARY_ID",
+      "OMS",
+      "PASSPORT",
+      "PHONE",
+      "REGION",
+      "SNILS",
+      "STREET",
+      "URL"
+    ],
+    "person_labels": [
+      "FIRST_NAME",
+      "LAST_NAME",
+      "MIDDLE_NAME"
+    ],
+    "location_labels": [
+      "CITY",
+      "COUNTRY",
+      "DISTRICT",
+      "HOUSE",
+      "REGION",
+      "STREET"
+    ],
+    "gateway_merge": "same mapped type, empty/whitespace gap, maximum constituent score; no punctuation expansion",
+    "location_scope": "six address-component types, broader than geographic proper names",
+    "native_predictions": "all21 labels retained before coarse gateway mapping",
+    "precision": "published TensorRT FP16 engine with FP32 normalization accumulation; TF32 disabled at build",
+    "packages": {
+      "torch": "2.8.0+cu128",
+      "numpy": "2.5.3",
+      "transformers": "4.57.1",
+      "tokenizers": "0.22.2",
+      "tensorrt-cu12": "10.13.3.9",
+      "tensorrt-cu12-bindings": "10.13.3.9"
+    },
+    "logits_shape_validation": "exact [batch, padded_tokens,43]",
+    "warmup_complete": true,
+    "graph_buckets_captured": [
+      32,
+      64,
+      128,
+      256,
+      512
+    ]
+  }
+}

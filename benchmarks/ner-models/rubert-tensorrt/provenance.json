@@ -1,0 +1,22 @@
+{
+  "repo": "lockR/rubert-base-pii-ner-tensorrt",
+  "revision": "73be581047bf123dac6505e7b3900ec292942296",
+  "local_files_verified_against_published_git_or_lfs_hashes": true,
+  "sha256": {
+    "pii_ner.py": "4591fc8c5580c39dc5121ca649f4a2a4936276ea4c9e82ae144e5c467eb5a5ca",
+    "trt_backend.py": "eafc144a9b698e94dfe155074c7a3ab1063ee7817ab1a285b69639db1c07b424",
+    "config.json": "f4eeba88d1503a56d629195c9307d42c1acf4ce53ab88fdaecfc754fd0745cf9",
+    "tokenizer.json": "f61eee9d0dc18f14c195321a37eadf9e5aeb3a323bc278dec689adeb89dec1b9",
+    "tokenizer_config.json": "ffe381e31042ba94cb077bf7d5b9cee944dbd0c2a85079b095bea7e5a5a6058b",
+    "runtime_config.json": "841420d76f5e7ec4ec7dd781b79987fe0f3facb25cc68896e7c88012f7af1b5d",
+    "model.fp16.engine": "f4d3f4eaa72ed8543b81ef4f6acf216f95be93fe4da8c3be27c8513cb9e80b35",
+    "model.onnx": "fa8775d59ef345d7934fb7a01671fbe24c5c098c0e44dcc397a67af6c5a4805b",
+    "build_metadata.json": "a84325ccde5f9c2ecb515446719b98f3728a086bcfd244638566a38c10eb3c49",
+    "export_metadata.json": "cc2fc56ad321bd9562c2bf24d7d8c776b86b7372f0948f6b0a7c151c889468b9",
+    "requirements.txt": "5148a28f3c48285080f71620b81145384e0b27ce192d7d78b57b5b8d006a0c82",
+    "README.md": "72eec0e7b6d1eedce2387ce86cbfbeeacf976a6a9ae4cd4b6c97ce1e24fb635b",
+    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "NOTICE": "7c0ca76f11da2af8492b2c5480e07873f353904b2c7015de47794343d9012207",
+    "release_manifest.json": "8594cb7ef67e5cca80a0e6b3edd356ae5e0620327136e4eec318d62a9a0170c5"
+  }
+}

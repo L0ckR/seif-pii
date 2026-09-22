@@ -1,0 +1,861 @@
+{
+  "schema_version": 1,
+  "scope": "Organizer 446 frozen cached comparison; no new inference, model tuning or source modifications. Counts use alphanumeric masking positions, preserving every gold type.",
+  "reference_names": {
+    "gliner": "selected described-names threshold 0.8 native GLiNER2.5; report key native_hybrid",
+    "rubert": "published TensorRT graph threshold 0.3 plus predeclared coarse mapping; report key rubert_hybrid"
+  },
+  "input_sha256": {
+    "datasets/golden/organizer-v1/cases.jsonl": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46",
+    "benchmarks/ner-models/gliner25-multi-v1/selected-service.jsonl": "e7995a07d8ca526ef8691acfc846fce6175e43780902bfcde3b795a139b38074",
+    "benchmarks/ner-models/gliner25-multi-v1/spacy-fresh.jsonl": "1a439aab58c675036f3b05e497f0038904ddcbcb39620991b9bc96ef5ad883dc",
+    "local-data/rubert-tensorrt/run-v1/rubert-organizer.jsonl": "da6b08a2b51a18b0b6e300142c7f01d050f275736e584214b939aab428d29793",
+    "local-data/rubert-tensorrt/run-v1/rubert.jsonl": "45ea40a6d6a8df56b54b5e4bbfa1f0b7fa7b814b624edd50b2c19a7d0f37f465",
+    "benchmarks/ner-models/rubert-tensorrt/comparison.json": "1024f810093ea0f63bc93dff9554be9fcbe9d736506067e5f9f954d5b38aeea8",
+    "seif/rubert_ner.py": "44a7c3522acb4a95924ea85689058740d2e33f2ec1c94512a9c7f406e6c79e12",
+    "seif/detector.py": "e0b09cda385168f401ed1d1aa81ae4b1457d701be977f8f9aee789e444534025"
+  },
+  "metrics": {
+    "rubert": {
+      "unique_case_primary": {
+        "cases": 446,
+        "exact_cases": 412,
+        "positive_cases": 369,
+        "negative_cases": 77,
+        "fully_protected_positive_cases": 350,
+        "false_positive_negative_cases": 9,
+        "uncertain_cases": 117,
+        "character_metrics": {
+          "precision": 0.970233,
+          "recall": 0.967353,
+          "f1": 0.968791,
+          "true_positive": 5215,
+          "false_positive": 160,
+          "false_negative": 176
+        },
+        "exact_case_rate": 0.923767,
+        "fully_protected_positive_rate": 0.948509,
+        "false_positive_negative_rate": 0.116883
+      },
+      "certain_cases_sensitivity": {
+        "cases": 329,
+        "exact_cases": 320,
+        "positive_cases": 293,
+        "negative_cases": 36,
+        "fully_protected_positive_cases": 292,
+        "false_positive_negative_cases": 3,
+        "uncertain_cases": 0,
+        "character_metrics": {
+          "precision": 0.982588,
+          "recall": 0.999754,
+          "f1": 0.991096,
+          "true_positive": 4063,
+          "false_positive": 72,
+          "false_negative": 1
+        },
+        "exact_case_rate": 0.972644,
+        "fully_protected_positive_rate": 0.996587,
+        "false_positive_negative_rate": 0.083333
+      }
+    },
+    "gliner": {
+      "unique_case_primary": {
+        "cases": 446,
+        "exact_cases": 423,
+        "positive_cases": 369,
+        "negative_cases": 77,
+        "fully_protected_positive_cases": 353,
+        "false_positive_negative_cases": 7,
+        "uncertain_cases": 117,
+        "character_metrics": {
+          "precision": 0.977782,
+          "recall": 0.971434,
+          "f1": 0.974598,
+          "true_positive": 5237,
+          "false_positive": 119,
+          "false_negative": 154
+        },
+        "exact_case_rate": 0.94843,
+        "fully_protected_positive_rate": 0.95664,
+        "false_positive_negative_rate": 0.090909
+      },
+      "certain_cases_sensitivity": {
+        "cases": 329,
+        "exact_cases": 328,
+        "positive_cases": 293,
+        "negative_cases": 36,
+        "fully_protected_positive_cases": 293,
+        "false_positive_negative_cases": 1,
+        "uncertain_cases": 0,
+        "character_metrics": {
+          "precision": 0.989771,
+          "recall": 1.0,
+          "f1": 0.994859,
+          "true_positive": 4064,
+          "false_positive": 42,
+          "false_negative": 0
+        },
+        "exact_case_rate": 0.99696,
+        "fully_protected_positive_rate": 1.0,
+        "false_positive_negative_rate": 0.027778
+      }
+    },
+    "spacy": {
+      "unique_case_primary": {
+        "cases": 446,
+        "exact_cases": 415,
+        "positive_cases": 369,
+        "negative_cases": 77,
+        "fully_protected_positive_cases": 344,
+        "false_positive_negative_cases": 6,
+        "uncertain_cases": 117,
+        "character_metrics": {
+          "precision": 0.980072,
+          "recall": 0.957893,
+          "f1": 0.968856,
+          "true_positive": 5164,
+          "false_positive": 105,
+          "false_negative": 227
+        },
+        "exact_case_rate": 0.930493,
+        "fully_protected_positive_rate": 0.932249,
+        "false_positive_negative_rate": 0.077922
+      },
+      "certain_cases_sensitivity": {
+        "cases": 329,
+        "exact_cases": 328,
+        "positive_cases": 293,
+        "negative_cases": 36,
+        "fully_protected_positive_cases": 293,
+        "false_positive_negative_cases": 1,
+        "uncertain_cases": 0,
+        "character_metrics": {
+          "precision": 0.989771,
+          "recall": 1.0,
+          "f1": 0.994859,
+          "true_positive": 4064,
+          "false_positive": 42,
+          "false_negative": 0
+        },
+        "exact_case_rate": 0.99696,
+        "fully_protected_positive_rate": 1.0,
+        "false_positive_negative_rate": 0.027778
+      }
+    }
+  },
+  "versus_baselines": {
+    "gliner": {
+      "all": {
+        "cases": 446,
+        "error_count_dominated_regressions": 11,
+        "error_count_dominated_improvements": 1,
+        "mixed_error_tradeoffs": 0,
+        "unchanged_error_counts": 434,
+        "exact_case_losses": 11,
+        "exact_case_gains": 0,
+        "regressed_case_ids": [
+          "org_0089",
+          "org_0166",
+          "org_0183",
+          "org_0202",
+          "org_0212",
+          "org_0228",
+          "org_0324",
+          "org_0373",
+          "org_0381",
+          "org_0424",
+          "org_0426"
+        ],
+        "improved_case_ids": [
+          "org_0249"
+        ],
+        "mixed_case_ids": [],
+        "exact_lost_case_ids": [
+          "org_0089",
+          "org_0166",
+          "org_0183",
+          "org_0202",
+          "org_0212",
+          "org_0228",
+          "org_0324",
+          "org_0373",
+          "org_0381",
+          "org_0424",
+          "org_0426"
+        ],
+        "exact_gained_case_ids": [],
+        "delta_fp": 41,
+        "delta_fn": 22
+      },
+      "certain": {
+        "cases": 329,
+        "error_count_dominated_regressions": 8,
+        "error_count_dominated_improvements": 0,
+        "mixed_error_tradeoffs": 0,
+        "unchanged_error_counts": 321,
+        "exact_case_losses": 8,
+        "exact_case_gains": 0,
+        "regressed_case_ids": [
+          "org_0089",
+          "org_0166",
+          "org_0183",
+          "org_0212",
+          "org_0228",
+          "org_0373",
+          "org_0424",
+          "org_0426"
+        ],
+        "improved_case_ids": [],
+        "mixed_case_ids": [],
+        "exact_lost_case_ids": [
+          "org_0089",
+          "org_0166",
+          "org_0183",
+          "org_0212",
+          "org_0228",
+          "org_0373",
+          "org_0424",
+          "org_0426"
+        ],
+        "exact_gained_case_ids": [],
+        "delta_fp": 30,
+        "delta_fn": 1
+      }
+    },
+    "spacy": {
+      "all": {
+        "cases": 446,
+        "error_count_dominated_regressions": 11,
+        "error_count_dominated_improvements": 9,
+        "mixed_error_tradeoffs": 0,
+        "unchanged_error_counts": 426,
+        "exact_case_losses": 11,
+        "exact_case_gains": 8,
+        "regressed_case_ids": [
+          "org_0089",
+          "org_0166",
+          "org_0183",
+          "org_0207",
+          "org_0212",
+          "org_0228",
+          "org_0249",
+          "org_0324",
+          "org_0373",
+          "org_0424",
+          "org_0426"
+        ],
+        "improved_case_ids": [
+          "org_0101",
+          "org_0122",
+          "org_0202",
+          "org_0246",
+          "org_0260",
+          "org_0340",
+          "org_0355",
+          "org_0389",
+          "org_0409"
+        ],
+        "mixed_case_ids": [],
+        "exact_lost_case_ids": [
+          "org_0089",
+          "org_0166",
+          "org_0183",
+          "org_0207",
+          "org_0212",
+          "org_0228",
+          "org_0249",
+          "org_0324",
+          "org_0373",
+          "org_0424",
+          "org_0426"
+        ],
+        "exact_gained_case_ids": [
+          "org_0101",
+          "org_0122",
+          "org_0246",
+          "org_0260",
+          "org_0340",
+          "org_0355",
+          "org_0389",
+          "org_0409"
+        ],
+        "delta_fp": 55,
+        "delta_fn": -51
+      },
+      "certain": {
+        "cases": 329,
+        "error_count_dominated_regressions": 8,
+        "error_count_dominated_improvements": 0,
+        "mixed_error_tradeoffs": 0,
+        "unchanged_error_counts": 321,
+        "exact_case_losses": 8,
+        "exact_case_gains": 0,
+        "regressed_case_ids": [
+          "org_0089",
+          "org_0166",
+          "org_0183",
+          "org_0212",
+          "org_0228",
+          "org_0373",
+          "org_0424",
+          "org_0426"
+        ],
+        "improved_case_ids": [],
+        "mixed_case_ids": [],
+        "exact_lost_case_ids": [
+          "org_0089",
+          "org_0166",
+          "org_0183",
+          "org_0212",
+          "org_0228",
+          "org_0373",
+          "org_0424",
+          "org_0426"
+        ],
+        "exact_gained_case_ids": [],
+        "delta_fp": 30,
+        "delta_fn": 1
+      }
+    }
+  },
+  "raw_gateway_span_set_different_case_counts": {
+    "gliner": 112,
+    "spacy": 139
+  },
+  "versus_gliner_character_changes": {
+    "new_false_positive_characters": 45,
+    "removed_false_positive_characters": 4,
+    "new_false_negative_characters": 22,
+    "fixed_false_negative_characters": 0,
+    "new_fp_by_native_label": {
+      "REGION": 14,
+      "COUNTRY": 8,
+      "DISTRICT": 2,
+      "LAST_NAME": 2,
+      "HOUSE": 15,
+      "STREET": 4
+    },
+    "new_fp_native_span_count_by_label": {
+      "REGION": 4,
+      "COUNTRY": 2,
+      "DISTRICT": 1,
+      "LAST_NAME": 1,
+      "HOUSE": 3,
+      "STREET": 1
+    },
+    "new_fp_inside_word_characters": 17,
+    "new_fp_inside_word_case_ids": [
+      "org_0089",
+      "org_0183",
+      "org_0212",
+      "org_0424"
+    ]
+  },
+  "attribution_checks": {
+    "coarse_mapping_and_whitespace_join_preserve_native_mapped_alnum_union_all446": true,
+    "all_new_fp_positions_already_present_in_native_mapped_spans": true,
+    "meaning": "Joining spans over whitespace adds no alphanumeric coverage; new false positives originate in native label/boundary predictions accepted through the declared coarse profile. Existing rules and context filtering are unchanged."
+  },
+  "causes": [
+    {
+      "kind": "nonpersonal_text_labeled_as_address_component",
+      "case_ids": [
+        "org_0089",
+        "org_0166",
+        "org_0183",
+        "org_0228",
+        "org_0324",
+        "org_0424",
+        "org_0426"
+      ],
+      "new_fp_characters": 43,
+      "explanation": "Address labels spuriously cover generic banking words, subword fragments, a payment-brand mention, and a business-office reference. Mapping these six address labels to LOCATION exposes the broader address taxonomy through the geographic-name gateway."
+    },
+    {
+      "kind": "nonpersonal_mixed_case_word_fragment_labeled_as_surname",
+      "case_ids": [
+        "org_0212"
+      ],
+      "new_fp_characters": 2,
+      "explanation": "A fragment inside a generic institutional word is labeled LAST_NAME and survives unchanged service filtering."
+    },
+    {
+      "kind": "missing_name_boundary_characters",
+      "case_ids": [
+        "org_0202",
+        "org_0373"
+      ],
+      "new_fn_characters": 2,
+      "certain_case_ids": [
+        "org_0373"
+      ],
+      "explanation": "One standalone lowercase name loses its final letter; a punctuated initial before a name is omitted. Coarse whitespace joining cannot restore characters not predicted by the native model."
+    },
+    {
+      "kind": "untyped_metric_credit_from_reference_wrong_entity_type",
+      "case_ids": [
+        "org_0381"
+      ],
+      "new_fn_characters": 20,
+      "uncertain": true,
+      "explanation": "GLiNER calls two unlabelled number groups PERSON; silver gold treats them as passports, so untyped masking rewards the incorrect semantic type. RuBERT gateway omits native PASSPORT/PHONE predictions by its predeclared PERSON/LOCATION scope; native outputs are themselves fragmented. This is not evidence that name recognition lost 20 characters."
+    },
+    {
+      "kind": "apparent_improvement_from_partial_name_detection_on_uncertain_negative",
+      "case_ids": [
+        "org_0249"
+      ],
+      "removed_fp_characters": 4,
+      "uncertain": true,
+      "explanation": "Silver gold excludes a context-free literary surname. Both models still mask it; RuBERT truncates one part and is rewarded for masking 4 fewer letters. No exact-case success is gained."
+    }
+  ],
+  "synthetic_illustrations": [
+    {
+      "text": "КЛИЕНТ ПЁТР ОФОРМИЛ ПЕРЕВЫПУСК ПЛАТЁЖНОЙ КАРТЫ.",
+      "pattern": "A generic banking word or one of its subword fragments is erroneously tagged as an address component."
+    },
+    {
+      "text": "Обслуживание проводится в офисе №812, секция В.",
+      "pattern": "A business-office locator can receive HOUSE even when it is outside personal-address gold scope."
+    },
+    {
+      "text": "Заявитель Н.Никита Семёнович направил обращение.",
+      "pattern": "The main name is recognized but an initial separated by a dot remains outside model bounds."
+    },
+    {
+      "text": "В перечне записаны 1234 567890 и 9876 543210.",
+      "pattern": "A model may mislabel numeric groups PERSON yet gain untyped masking credit if silver gold interprets them as passports."
+    }
+  ],
+  "synthetic_illustration_notice": "All four sentences are newly constructed schematic illustrations, not organizer text and not additional model-inference results. They illustrate observed error mechanisms only.",
+  "limitations": [
+    "Organizer labels are AI silver, including 117 uncertain cases; these are not organizer-authoritative grades.",
+    "Descriptions of token/BIO boundary mechanisms are inferences from cached native spans; no token-logit attribution was rerun.",
+    "Thresholds, descriptions, rules, inputs and labels were not changed.",
+    "The model family and broader address mapping differ from GLiNER; the standalone native 21 profile is a separate product scope, not a drop-in gateway replacement."
+  ],
+  "changed_mask_cases_vs_gliner": [
+    {
+      "case_id": "org_0089",
+      "uncertain": false,
+      "gold_types": [
+        "PERSON"
+      ],
+      "metrics": {
+        "rules": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "gliner_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "spacy_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "rubert_hybrid": {
+          "fp": 9,
+          "fn": 0,
+          "exact": false
+        }
+      },
+      "rubert_extra_fp_vs_gliner": 9,
+      "rubert_removed_fp_vs_gliner": 0,
+      "rubert_new_fn_vs_gliner": 0,
+      "rubert_fixed_fn_vs_gliner": 0,
+      "raw_gateway_equal_gliner": false
+    },
+    {
+      "case_id": "org_0166",
+      "uncertain": false,
+      "gold_types": [
+        "BIRTH_PLACE"
+      ],
+      "metrics": {
+        "rules": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "gliner_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "spacy_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "rubert_hybrid": {
+          "fp": 5,
+          "fn": 0,
+          "exact": false
+        }
+      },
+      "rubert_extra_fp_vs_gliner": 5,
+      "rubert_removed_fp_vs_gliner": 0,
+      "rubert_new_fn_vs_gliner": 0,
+      "rubert_fixed_fn_vs_gliner": 0,
+      "raw_gateway_equal_gliner": false
+    },
+    {
+      "case_id": "org_0183",
+      "uncertain": false,
+      "gold_types": [
+        "PERSON"
+      ],
+      "metrics": {
+        "rules": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "gliner_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "spacy_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "rubert_hybrid": {
+          "fp": 2,
+          "fn": 0,
+          "exact": false
+        }
+      },
+      "rubert_extra_fp_vs_gliner": 2,
+      "rubert_removed_fp_vs_gliner": 0,
+      "rubert_new_fn_vs_gliner": 0,
+      "rubert_fixed_fn_vs_gliner": 0,
+      "raw_gateway_equal_gliner": false
+    },
+    {
+      "case_id": "org_0202",
+      "uncertain": true,
+      "gold_types": [
+        "PERSON"
+      ],
+      "metrics": {
+        "rules": {
+          "fp": 0,
+          "fn": 4,
+          "exact": false
+        },
+        "gliner_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "spacy_hybrid": {
+          "fp": 0,
+          "fn": 4,
+          "exact": false
+        },
+        "rubert_hybrid": {
+          "fp": 0,
+          "fn": 1,
+          "exact": false
+        }
+      },
+      "rubert_extra_fp_vs_gliner": 0,
+      "rubert_removed_fp_vs_gliner": 0,
+      "rubert_new_fn_vs_gliner": 1,
+      "rubert_fixed_fn_vs_gliner": 0,
+      "raw_gateway_equal_gliner": false
+    },
+    {
+      "case_id": "org_0212",
+      "uncertain": false,
+      "gold_types": [],
+      "metrics": {
+        "rules": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "gliner_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "spacy_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "rubert_hybrid": {
+          "fp": 2,
+          "fn": 0,
+          "exact": false
+        }
+      },
+      "rubert_extra_fp_vs_gliner": 2,
+      "rubert_removed_fp_vs_gliner": 0,
+      "rubert_new_fn_vs_gliner": 0,
+      "rubert_fixed_fn_vs_gliner": 0,
+      "raw_gateway_equal_gliner": false
+    },
+    {
+      "case_id": "org_0228",
+      "uncertain": false,
+      "gold_types": [],
+      "metrics": {
+        "rules": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "gliner_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "spacy_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "rubert_hybrid": {
+          "fp": 3,
+          "fn": 0,
+          "exact": false
+        }
+      },
+      "rubert_extra_fp_vs_gliner": 3,
+      "rubert_removed_fp_vs_gliner": 0,
+      "rubert_new_fn_vs_gliner": 0,
+      "rubert_fixed_fn_vs_gliner": 0,
+      "raw_gateway_equal_gliner": false
+    },
+    {
+      "case_id": "org_0249",
+      "uncertain": true,
+      "gold_types": [],
+      "metrics": {
+        "rules": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "gliner_hybrid": {
+          "fp": 14,
+          "fn": 0,
+          "exact": false
+        },
+        "spacy_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "rubert_hybrid": {
+          "fp": 10,
+          "fn": 0,
+          "exact": false
+        }
+      },
+      "rubert_extra_fp_vs_gliner": 0,
+      "rubert_removed_fp_vs_gliner": 4,
+      "rubert_new_fn_vs_gliner": 0,
+      "rubert_fixed_fn_vs_gliner": 0,
+      "raw_gateway_equal_gliner": false
+    },
+    {
+      "case_id": "org_0324",
+      "uncertain": true,
+      "gold_types": [
+        "ADDRESS",
+        "BIRTH_DATE",
+        "BIRTH_PLACE",
+        "CARD",
+        "CARDHOLDER",
+        "CITIZENSHIP",
+        "CITY",
+        "CVV",
+        "DEPARTMENT_CODE",
+        "DRIVER_LICENSE",
+        "EMAIL",
+        "INN",
+        "PASSPORT",
+        "PASSPORT_DATE",
+        "PASSPORT_ISSUER",
+        "PERSON",
+        "PHONE",
+        "PIN",
+        "POSTAL_CODE"
+      ],
+      "metrics": {
+        "rules": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "gliner_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "spacy_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "rubert_hybrid": {
+          "fp": 15,
+          "fn": 0,
+          "exact": false
+        }
+      },
+      "rubert_extra_fp_vs_gliner": 15,
+      "rubert_removed_fp_vs_gliner": 0,
+      "rubert_new_fn_vs_gliner": 0,
+      "rubert_fixed_fn_vs_gliner": 0,
+      "raw_gateway_equal_gliner": false
+    },
+    {
+      "case_id": "org_0373",
+      "uncertain": false,
+      "gold_types": [
+        "PERSON"
+      ],
+      "metrics": {
+        "rules": {
+          "fp": 0,
+          "fn": 1,
+          "exact": false
+        },
+        "gliner_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "spacy_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "rubert_hybrid": {
+          "fp": 0,
+          "fn": 1,
+          "exact": false
+        }
+      },
+      "rubert_extra_fp_vs_gliner": 0,
+      "rubert_removed_fp_vs_gliner": 0,
+      "rubert_new_fn_vs_gliner": 1,
+      "rubert_fixed_fn_vs_gliner": 0,
+      "raw_gateway_equal_gliner": false
+    },
+    {
+      "case_id": "org_0381",
+      "uncertain": true,
+      "gold_types": [
+        "PASSPORT"
+      ],
+      "metrics": {
+        "rules": {
+          "fp": 0,
+          "fn": 20,
+          "exact": false
+        },
+        "gliner_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "spacy_hybrid": {
+          "fp": 0,
+          "fn": 20,
+          "exact": false
+        },
+        "rubert_hybrid": {
+          "fp": 0,
+          "fn": 20,
+          "exact": false
+        }
+      },
+      "rubert_extra_fp_vs_gliner": 0,
+      "rubert_removed_fp_vs_gliner": 0,
+      "rubert_new_fn_vs_gliner": 20,
+      "rubert_fixed_fn_vs_gliner": 0,
+      "raw_gateway_equal_gliner": false
+    },
+    {
+      "case_id": "org_0424",
+      "uncertain": false,
+      "gold_types": [
+        "INN"
+      ],
+      "metrics": {
+        "rules": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "gliner_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "spacy_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "rubert_hybrid": {
+          "fp": 4,
+          "fn": 0,
+          "exact": false
+        }
+      },
+      "rubert_extra_fp_vs_gliner": 4,
+      "rubert_removed_fp_vs_gliner": 0,
+      "rubert_new_fn_vs_gliner": 0,
+      "rubert_fixed_fn_vs_gliner": 0,
+      "raw_gateway_equal_gliner": false
+    },
+    {
+      "case_id": "org_0426",
+      "uncertain": false,
+      "gold_types": [
+        "PERSON"
+      ],
+      "metrics": {
+        "rules": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "gliner_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "spacy_hybrid": {
+          "fp": 0,
+          "fn": 0,
+          "exact": true
+        },
+        "rubert_hybrid": {
+          "fp": 5,
+          "fn": 0,
+          "exact": false
+        }
+      },
+      "rubert_extra_fp_vs_gliner": 5,
+      "rubert_removed_fp_vs_gliner": 0,
+      "rubert_new_fn_vs_gliner": 0,
+      "rubert_fixed_fn_vs_gliner": 0,
+      "raw_gateway_equal_gliner": false
+    }
+  ],
+  "aggregate_replay_matches_comparison_json": true
+}
