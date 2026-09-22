@@ -1,0 +1,7 @@
+# Experimental GLiNER backend; ordinary CPython 3.13 on Linux.
+-r ../../requirements.lock
+gliner2[local]==2.0.0
+# Required so Transformers exposes the tokenizer metadata compatibility error
+# to GLiNER's built-in fallback instead of masking it with an ImportError.
+protobuf==7.36.2
+sentencepiece==0.2.2

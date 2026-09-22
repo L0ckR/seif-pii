@@ -160,6 +160,13 @@ def build_analyzer():
     # Set before importing NumPy, avoiding hidden per-worker BLAS thread pools.
     for name in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
         os.environ[name] = "1"
+    backend = os.getenv("SEIF_NER_BACKEND", "presidio")
+    if backend == "gliner":
+        from seif.gliner_ner import GlinerAnalyzer
+
+        return GlinerAnalyzer.from_env()
+    if backend != "presidio":
+        raise RuntimeError("SEIF_NER_BACKEND must be presidio or gliner.")
     import spacy.util
     from presidio_analyzer import AnalyzerEngine, RecognizerRegistry
     from presidio_analyzer.nlp_engine import NlpEngineProvider
@@ -300,7 +307,8 @@ def create_app(settings=None, analyzer_factory=None):
     async def health():
         if not app.state.ready:
             return error(503, "not_ready", "NER not ready.")
-        return JSONResponse({"status": "ok", "model": "ru_core_news_sm", "entities": ["PERSON", "LOCATION"]},
+        model_name = getattr(app.state.analyzer, "model_name", "ru_core_news_sm")
+        return JSONResponse({"status": "ok", "model": model_name, "entities": ["PERSON", "LOCATION"]},
                             headers={"Cache-Control": "no-store"})
 
     @app.post("/analyze")

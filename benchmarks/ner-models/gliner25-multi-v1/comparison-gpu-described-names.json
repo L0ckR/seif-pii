@@ -1,0 +1,1317 @@
+{
+  "schema_version": 1,
+  "measured_at_utc": "2026-09-22T18:11:37.573361+00:00",
+  "method": "Frozen model caches compared through the same detector, NER merge, mask, and character evaluator.",
+  "evaluation_runtime": {
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "implementation": "cpython"
+  },
+  "dataset_sha256": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46",
+  "dataset_manifest_sha256": "74f6b661ff33cbc88b53fde91cb1103acaa1f6002a4008463d3100b7c9b2305a",
+  "source_sha256": {
+    "seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+    "seif/app.py": "e958559569fae134ace1e54ef02af655dc65a4fc481a93545c315721bc1f8951",
+    "seif/async_callbacks.py": "b5ce7aae9979e6251c827d3e2099a4377266bcb8076606d67dbe86c38fa21ebe",
+    "seif/cardholder_fields.py": "3d80d59636e4b2e1a668325fbb945027b48a37e60aad5297c39b727a51806462",
+    "seif/config.py": "ca9c4e4bc80fcb6847f53f08593b25e5a3b41d6ae5a44ce7c416075ffd7b4b45",
+    "seif/context_filters.py": "c3fbd2c356784e87c481d3ac7d58a8cbf5863d04db96e47d4ef062e348bfd7fb",
+    "seif/detector.py": "e0b09cda385168f401ed1d1aa81ae4b1457d701be977f8f9aee789e444534025",
+    "seif/document_fields.py": "2200ed9f9751ee4894f164a4b43654de6f204c9661da83cdbf7a2a455d46ba51",
+    "seif/gliner_ner.py": "039c5a5ebdd4211a8e5c0a1d5abeeab11918d2968ecd78fce28d6f210b4e4324",
+    "seif/location_fields.py": "2d806e7a35bb7669001e796deba5cbac020dddb2887284390d27becebc43009e",
+    "seif/ner.py": "66c64453390bd851f2283c01bd995145e3a21e4cd23ad9af1f8330a665816068",
+    "seif/person_fields.py": "ca843e9b6f8ef9d4739703e83b1438a96d114dc95782626fa2e89366bf29f08d",
+    "seif/request_capture.py": "ce9d53ed7827992cd5c0c4b10914e3f9becc978cc192263116112c642e506855",
+    "seif/structured_fields.py": "26462106b1a29140a3bbf2b2370feab631145932ee44fbb78ca007b6d1d1218c",
+    "seif/transform.py": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+    "seif/vault.py": "b6b4f59bc911bb0a0c745b6801bcd9a034200e016f321e38c2984206c2946554",
+    "scripts/evaluate_golden.py": "02e1160fbfbb2933e4e90d65573e559962e6b474ab69ddaa1c2c0f66e68226ff",
+    "scripts/evaluate_annotations.py": "b429e3605b90a9090a8eae0185ee9286708836494235617901fbd6ae4e0d5463",
+    "scripts/compare_ner_models.py": "f520284721d8a85096627c32230eb256ba1375072df4e5d73e6f4da1bdb19652"
+  },
+  "reference": {
+    "cache_sha256": "c0152894401d87c1848aab145aa5b734b30754c678d66e733545308d596f054f",
+    "metadata_sha256": "1be2cca0357cd1ff495c932eb5d94037079d7b7bbb2974f6aa55361ea67aac40",
+    "metadata": {
+      "model": "ru_core_news_sm",
+      "versions": {
+        "spacy": "3.8.16",
+        "ru-core-news-sm": "3.8.0",
+        "presidio-analyzer": "2.2.364"
+      },
+      "purpose": "Frozen model outputs for reproducible offline rules/merge regression; never gold labels; not HTTP/latency measurement"
+    }
+  },
+  "candidate": {
+    "cache_sha256": "5fc9728ee39cec9e237edf1c3ba0aee8e2969b84df4ede26d41a744f35a27d9c",
+    "metadata_sha256": "20bd64dcf7c89adc510266e4d86ce0c1049dcd8b0650c3f9dc2ea076f0bef8fd",
+    "metadata": {
+      "model": "fastino/gliner2.5-multi-v1",
+      "model_revision": "a221b77a8baf4a613b8f8652661d41fa10a5641e",
+      "versions": {
+        "gliner2": "2.0.0",
+        "torch": "2.14.0",
+        "transformers": "4.57.6",
+        "tokenizers": "0.22.2",
+        "protobuf": "7.36.2",
+        "sentencepiece": "0.2.2"
+      },
+      "configuration": {
+        "schema": "described-names",
+        "labels": {
+          "person": "Proper names of individual people: given names, surnames, patronymics or initials. Exclude generic roles, job titles, kinship terms, pronouns and numeric identifiers.",
+          "location": "Geographic proper names of cities, settlements, regions and countries. Exclude organizations, institution names, generic facility types and field labels.",
+          "organization": "Names or references to companies, banks, government agencies and other institutions."
+        },
+        "threshold": 0.5,
+        "overlap_policy": "flat",
+        "max_len": null,
+        "batch_size": 1,
+        "warmup": 5,
+        "device": "cuda",
+        "dtype": "torch.float32",
+        "compile": false,
+        "cpu_threads": 4,
+        "seed": 20260922,
+        "offline": true
+      },
+      "purpose": "Frozen predictions for a separate model comparison; never annotations; local inference only."
+    }
+  },
+  "hybrid": {
+    "reference": {
+      "unique_case_primary": {
+        "cases": 446,
+        "exact_cases": 415,
+        "positive_cases": 369,
+        "negative_cases": 77,
+        "fully_protected_positive_cases": 344,
+        "false_positive_negative_cases": 6,
+        "uncertain_cases": 117,
+        "character_metrics": {
+          "precision": 0.980072,
+          "recall": 0.957893,
+          "f1": 0.968856,
+          "true_positive": 5164,
+          "false_positive": 105,
+          "false_negative": 227
+        },
+        "exact_case_rate": 0.930493,
+        "fully_protected_positive_rate": 0.932249,
+        "false_positive_negative_rate": 0.077922
+      },
+      "traffic_weighted_secondary": {
+        "cases": 35845,
+        "exact_cases": 33285,
+        "positive_cases": 29605,
+        "negative_cases": 6240,
+        "fully_protected_positive_cases": 27525,
+        "false_positive_negative_cases": 480,
+        "uncertain_cases": 9520,
+        "character_metrics": {
+          "precision": 0.980083,
+          "recall": 0.956143,
+          "f1": 0.967965,
+          "true_positive": 413350,
+          "false_positive": 8400,
+          "false_negative": 18960
+        },
+        "exact_case_rate": 0.928581,
+        "fully_protected_positive_rate": 0.929742,
+        "false_positive_negative_rate": 0.076923
+      },
+      "certain_cases_sensitivity": {
+        "cases": 329,
+        "exact_cases": 328,
+        "positive_cases": 293,
+        "negative_cases": 36,
+        "fully_protected_positive_cases": 293,
+        "false_positive_negative_cases": 1,
+        "uncertain_cases": 0,
+        "character_metrics": {
+          "precision": 0.989771,
+          "recall": 1.0,
+          "f1": 0.994859,
+          "true_positive": 4064,
+          "false_positive": 42,
+          "false_negative": 0
+        },
+        "exact_case_rate": 0.99696,
+        "fully_protected_positive_rate": 1.0,
+        "false_positive_negative_rate": 0.027778
+      },
+      "typed_character_secondary": {
+        "precision": 0.942684,
+        "recall": 0.92135,
+        "f1": 0.931895,
+        "true_positive": 4967,
+        "false_positive": 302,
+        "false_negative": 424
+      },
+      "exact_typed_span_secondary": {
+        "precision": 0.929978,
+        "recall": 0.906183,
+        "f1": 0.917927,
+        "true_positive": 425,
+        "false_positive": 32,
+        "false_negative": 44
+      },
+      "gold_type_coverage": {
+        "ADDRESS": {
+          "gold_characters": 903,
+          "protected_characters": 903,
+          "cases": 28,
+          "fully_protected_cases": 28,
+          "character_recall": 1.0
+        },
+        "BIRTH_DATE": {
+          "gold_characters": 350,
+          "protected_characters": 336,
+          "cases": 40,
+          "fully_protected_cases": 38,
+          "character_recall": 0.96
+        },
+        "BIRTH_PLACE": {
+          "gold_characters": 156,
+          "protected_characters": 156,
+          "cases": 11,
+          "fully_protected_cases": 11,
+          "character_recall": 1.0
+        },
+        "CARD": {
+          "gold_characters": 84,
+          "protected_characters": 52,
+          "cases": 6,
+          "fully_protected_cases": 4,
+          "character_recall": 0.619048
+        },
+        "CARDHOLDER": {
+          "gold_characters": 148,
+          "protected_characters": 148,
+          "cases": 12,
+          "fully_protected_cases": 12,
+          "character_recall": 1.0
+        },
+        "CITIZENSHIP": {
+          "gold_characters": 175,
+          "protected_characters": 175,
+          "cases": 10,
+          "fully_protected_cases": 10,
+          "character_recall": 1.0
+        },
+        "CITY": {
+          "gold_characters": 12,
+          "protected_characters": 12,
+          "cases": 2,
+          "fully_protected_cases": 2,
+          "character_recall": 1.0
+        },
+        "CVV": {
+          "gold_characters": 39,
+          "protected_characters": 39,
+          "cases": 13,
+          "fully_protected_cases": 13,
+          "character_recall": 1.0
+        },
+        "DEPARTMENT_CODE": {
+          "gold_characters": 72,
+          "protected_characters": 72,
+          "cases": 12,
+          "fully_protected_cases": 12,
+          "character_recall": 1.0
+        },
+        "DRIVER_LICENSE": {
+          "gold_characters": 150,
+          "protected_characters": 150,
+          "cases": 14,
+          "fully_protected_cases": 14,
+          "character_recall": 1.0
+        },
+        "EMAIL": {
+          "gold_characters": 322,
+          "protected_characters": 322,
+          "cases": 19,
+          "fully_protected_cases": 19,
+          "character_recall": 1.0
+        },
+        "INN": {
+          "gold_characters": 180,
+          "protected_characters": 180,
+          "cases": 12,
+          "fully_protected_cases": 12,
+          "character_recall": 1.0
+        },
+        "PASSPORT": {
+          "gold_characters": 404,
+          "protected_characters": 284,
+          "cases": 38,
+          "fully_protected_cases": 27,
+          "character_recall": 0.70297
+        },
+        "PASSPORT_DATE": {
+          "gold_characters": 215,
+          "protected_characters": 208,
+          "cases": 27,
+          "fully_protected_cases": 26,
+          "character_recall": 0.967442
+        },
+        "PASSPORT_ISSUER": {
+          "gold_characters": 401,
+          "protected_characters": 401,
+          "cases": 14,
+          "fully_protected_cases": 14,
+          "character_recall": 1.0
+        },
+        "PERSON": {
+          "gold_characters": 1450,
+          "protected_characters": 1396,
+          "cases": 120,
+          "fully_protected_cases": 111,
+          "character_recall": 0.962759
+        },
+        "PHONE": {
+          "gold_characters": 220,
+          "protected_characters": 220,
+          "cases": 19,
+          "fully_protected_cases": 19,
+          "character_recall": 1.0
+        },
+        "PIN": {
+          "gold_characters": 104,
+          "protected_characters": 104,
+          "cases": 25,
+          "fully_protected_cases": 25,
+          "character_recall": 1.0
+        },
+        "POSTAL_CODE": {
+          "gold_characters": 6,
+          "protected_characters": 6,
+          "cases": 1,
+          "fully_protected_cases": 1,
+          "character_recall": 1.0
+        }
+      }
+    },
+    "candidate": {
+      "unique_case_primary": {
+        "cases": 446,
+        "exact_cases": 421,
+        "positive_cases": 369,
+        "negative_cases": 77,
+        "fully_protected_positive_cases": 353,
+        "false_positive_negative_cases": 9,
+        "uncertain_cases": 117,
+        "character_metrics": {
+          "precision": 0.971975,
+          "recall": 0.971434,
+          "f1": 0.971704,
+          "true_positive": 5237,
+          "false_positive": 151,
+          "false_negative": 154
+        },
+        "exact_case_rate": 0.943946,
+        "fully_protected_positive_rate": 0.95664,
+        "false_positive_negative_rate": 0.116883
+      },
+      "traffic_weighted_secondary": {
+        "cases": 35845,
+        "exact_cases": 33765,
+        "positive_cases": 29605,
+        "negative_cases": 6240,
+        "fully_protected_positive_cases": 28245,
+        "false_positive_negative_cases": 720,
+        "uncertain_cases": 9520,
+        "character_metrics": {
+          "precision": 0.97199,
+          "recall": 0.969651,
+          "f1": 0.970819,
+          "true_positive": 419190,
+          "false_positive": 12080,
+          "false_negative": 13120
+        },
+        "exact_case_rate": 0.941972,
+        "fully_protected_positive_rate": 0.954062,
+        "false_positive_negative_rate": 0.115385
+      },
+      "certain_cases_sensitivity": {
+        "cases": 329,
+        "exact_cases": 326,
+        "positive_cases": 293,
+        "negative_cases": 36,
+        "fully_protected_positive_cases": 293,
+        "false_positive_negative_cases": 3,
+        "uncertain_cases": 0,
+        "character_metrics": {
+          "precision": 0.982117,
+          "recall": 1.0,
+          "f1": 0.990978,
+          "true_positive": 4064,
+          "false_positive": 74,
+          "false_negative": 0
+        },
+        "exact_case_rate": 0.990881,
+        "fully_protected_positive_rate": 1.0,
+        "false_positive_negative_rate": 0.083333
+      },
+      "typed_character_secondary": {
+        "precision": 0.9317,
+        "recall": 0.931182,
+        "f1": 0.931441,
+        "true_positive": 5020,
+        "false_positive": 368,
+        "false_negative": 371
+      },
+      "exact_typed_span_secondary": {
+        "precision": 0.903158,
+        "recall": 0.914712,
+        "f1": 0.908898,
+        "true_positive": 429,
+        "false_positive": 46,
+        "false_negative": 40
+      },
+      "gold_type_coverage": {
+        "ADDRESS": {
+          "gold_characters": 903,
+          "protected_characters": 903,
+          "cases": 28,
+          "fully_protected_cases": 28,
+          "character_recall": 1.0
+        },
+        "BIRTH_DATE": {
+          "gold_characters": 350,
+          "protected_characters": 336,
+          "cases": 40,
+          "fully_protected_cases": 38,
+          "character_recall": 0.96
+        },
+        "BIRTH_PLACE": {
+          "gold_characters": 156,
+          "protected_characters": 156,
+          "cases": 11,
+          "fully_protected_cases": 11,
+          "character_recall": 1.0
+        },
+        "CARD": {
+          "gold_characters": 84,
+          "protected_characters": 52,
+          "cases": 6,
+          "fully_protected_cases": 4,
+          "character_recall": 0.619048
+        },
+        "CARDHOLDER": {
+          "gold_characters": 148,
+          "protected_characters": 148,
+          "cases": 12,
+          "fully_protected_cases": 12,
+          "character_recall": 1.0
+        },
+        "CITIZENSHIP": {
+          "gold_characters": 175,
+          "protected_characters": 175,
+          "cases": 10,
+          "fully_protected_cases": 10,
+          "character_recall": 1.0
+        },
+        "CITY": {
+          "gold_characters": 12,
+          "protected_characters": 12,
+          "cases": 2,
+          "fully_protected_cases": 2,
+          "character_recall": 1.0
+        },
+        "CVV": {
+          "gold_characters": 39,
+          "protected_characters": 39,
+          "cases": 13,
+          "fully_protected_cases": 13,
+          "character_recall": 1.0
+        },
+        "DEPARTMENT_CODE": {
+          "gold_characters": 72,
+          "protected_characters": 72,
+          "cases": 12,
+          "fully_protected_cases": 12,
+          "character_recall": 1.0
+        },
+        "DRIVER_LICENSE": {
+          "gold_characters": 150,
+          "protected_characters": 150,
+          "cases": 14,
+          "fully_protected_cases": 14,
+          "character_recall": 1.0
+        },
+        "EMAIL": {
+          "gold_characters": 322,
+          "protected_characters": 322,
+          "cases": 19,
+          "fully_protected_cases": 19,
+          "character_recall": 1.0
+        },
+        "INN": {
+          "gold_characters": 180,
+          "protected_characters": 180,
+          "cases": 12,
+          "fully_protected_cases": 12,
+          "character_recall": 1.0
+        },
+        "PASSPORT": {
+          "gold_characters": 404,
+          "protected_characters": 304,
+          "cases": 38,
+          "fully_protected_cases": 28,
+          "character_recall": 0.752475
+        },
+        "PASSPORT_DATE": {
+          "gold_characters": 215,
+          "protected_characters": 208,
+          "cases": 27,
+          "fully_protected_cases": 26,
+          "character_recall": 0.967442
+        },
+        "PASSPORT_ISSUER": {
+          "gold_characters": 401,
+          "protected_characters": 401,
+          "cases": 14,
+          "fully_protected_cases": 14,
+          "character_recall": 1.0
+        },
+        "PERSON": {
+          "gold_characters": 1450,
+          "protected_characters": 1449,
+          "cases": 120,
+          "fully_protected_cases": 119,
+          "character_recall": 0.99931
+        },
+        "PHONE": {
+          "gold_characters": 220,
+          "protected_characters": 220,
+          "cases": 19,
+          "fully_protected_cases": 19,
+          "character_recall": 1.0
+        },
+        "PIN": {
+          "gold_characters": 104,
+          "protected_characters": 104,
+          "cases": 25,
+          "fully_protected_cases": 25,
+          "character_recall": 1.0
+        },
+        "POSTAL_CODE": {
+          "gold_characters": 6,
+          "protected_characters": 6,
+          "cases": 1,
+          "fully_protected_cases": 1,
+          "character_recall": 1.0
+        }
+      }
+    }
+  },
+  "rules_control": {
+    "unique_case_primary": {
+      "cases": 446,
+      "exact_cases": 386,
+      "positive_cases": 369,
+      "negative_cases": 77,
+      "fully_protected_positive_cases": 315,
+      "false_positive_negative_cases": 6,
+      "uncertain_cases": 117,
+      "character_metrics": {
+        "precision": 0.978492,
+        "recall": 0.886106,
+        "f1": 0.930011,
+        "true_positive": 4777,
+        "false_positive": 105,
+        "false_negative": 614
+      },
+      "exact_case_rate": 0.865471,
+      "fully_protected_positive_rate": 0.853659,
+      "false_positive_negative_rate": 0.077922
+    },
+    "traffic_weighted_secondary": {
+      "cases": 35845,
+      "exact_cases": 30965,
+      "positive_cases": 29605,
+      "negative_cases": 6240,
+      "fully_protected_positive_cases": 25205,
+      "false_positive_negative_cases": 480,
+      "uncertain_cases": 9520,
+      "character_metrics": {
+        "precision": 0.978505,
+        "recall": 0.884527,
+        "f1": 0.929146,
+        "true_positive": 382390,
+        "false_positive": 8400,
+        "false_negative": 49920
+      },
+      "exact_case_rate": 0.863858,
+      "fully_protected_positive_rate": 0.851376,
+      "false_positive_negative_rate": 0.076923
+    },
+    "certain_cases_sensitivity": {
+      "cases": 329,
+      "exact_cases": 308,
+      "positive_cases": 293,
+      "negative_cases": 36,
+      "fully_protected_positive_cases": 273,
+      "false_positive_negative_cases": 1,
+      "uncertain_cases": 0,
+      "character_metrics": {
+        "precision": 0.989028,
+        "recall": 0.931594,
+        "f1": 0.959453,
+        "true_positive": 3786,
+        "false_positive": 42,
+        "false_negative": 278
+      },
+      "exact_case_rate": 0.93617,
+      "fully_protected_positive_rate": 0.931741,
+      "false_positive_negative_rate": 0.027778
+    },
+    "typed_character_secondary": {
+      "precision": 0.970299,
+      "recall": 0.878687,
+      "f1": 0.922223,
+      "true_positive": 4737,
+      "false_positive": 145,
+      "false_negative": 654
+    },
+    "exact_typed_span_secondary": {
+      "precision": 0.948718,
+      "recall": 0.867804,
+      "f1": 0.906459,
+      "true_positive": 407,
+      "false_positive": 22,
+      "false_negative": 62
+    },
+    "gold_type_coverage": {
+      "ADDRESS": {
+        "gold_characters": 903,
+        "protected_characters": 888,
+        "cases": 28,
+        "fully_protected_cases": 27,
+        "character_recall": 0.983389
+      },
+      "BIRTH_DATE": {
+        "gold_characters": 350,
+        "protected_characters": 336,
+        "cases": 40,
+        "fully_protected_cases": 38,
+        "character_recall": 0.96
+      },
+      "BIRTH_PLACE": {
+        "gold_characters": 156,
+        "protected_characters": 97,
+        "cases": 11,
+        "fully_protected_cases": 7,
+        "character_recall": 0.621795
+      },
+      "CARD": {
+        "gold_characters": 84,
+        "protected_characters": 52,
+        "cases": 6,
+        "fully_protected_cases": 4,
+        "character_recall": 0.619048
+      },
+      "CARDHOLDER": {
+        "gold_characters": 148,
+        "protected_characters": 139,
+        "cases": 12,
+        "fully_protected_cases": 11,
+        "character_recall": 0.939189
+      },
+      "CITIZENSHIP": {
+        "gold_characters": 175,
+        "protected_characters": 107,
+        "cases": 10,
+        "fully_protected_cases": 7,
+        "character_recall": 0.611429
+      },
+      "CITY": {
+        "gold_characters": 12,
+        "protected_characters": 6,
+        "cases": 2,
+        "fully_protected_cases": 1,
+        "character_recall": 0.5
+      },
+      "CVV": {
+        "gold_characters": 39,
+        "protected_characters": 39,
+        "cases": 13,
+        "fully_protected_cases": 13,
+        "character_recall": 1.0
+      },
+      "DEPARTMENT_CODE": {
+        "gold_characters": 72,
+        "protected_characters": 72,
+        "cases": 12,
+        "fully_protected_cases": 12,
+        "character_recall": 1.0
+      },
+      "DRIVER_LICENSE": {
+        "gold_characters": 150,
+        "protected_characters": 150,
+        "cases": 14,
+        "fully_protected_cases": 14,
+        "character_recall": 1.0
+      },
+      "EMAIL": {
+        "gold_characters": 322,
+        "protected_characters": 322,
+        "cases": 19,
+        "fully_protected_cases": 19,
+        "character_recall": 1.0
+      },
+      "INN": {
+        "gold_characters": 180,
+        "protected_characters": 180,
+        "cases": 12,
+        "fully_protected_cases": 12,
+        "character_recall": 1.0
+      },
+      "PASSPORT": {
+        "gold_characters": 404,
+        "protected_characters": 284,
+        "cases": 38,
+        "fully_protected_cases": 27,
+        "character_recall": 0.70297
+      },
+      "PASSPORT_DATE": {
+        "gold_characters": 215,
+        "protected_characters": 208,
+        "cases": 27,
+        "fully_protected_cases": 26,
+        "character_recall": 0.967442
+      },
+      "PASSPORT_ISSUER": {
+        "gold_characters": 401,
+        "protected_characters": 401,
+        "cases": 14,
+        "fully_protected_cases": 14,
+        "character_recall": 1.0
+      },
+      "PERSON": {
+        "gold_characters": 1450,
+        "protected_characters": 1166,
+        "cases": 120,
+        "fully_protected_cases": 91,
+        "character_recall": 0.804138
+      },
+      "PHONE": {
+        "gold_characters": 220,
+        "protected_characters": 220,
+        "cases": 19,
+        "fully_protected_cases": 19,
+        "character_recall": 1.0
+      },
+      "PIN": {
+        "gold_characters": 104,
+        "protected_characters": 104,
+        "cases": 25,
+        "fully_protected_cases": 25,
+        "character_recall": 1.0
+      },
+      "POSTAL_CODE": {
+        "gold_characters": 6,
+        "protected_characters": 6,
+        "cases": 1,
+        "fully_protected_cases": 1,
+        "character_recall": 1.0
+      }
+    }
+  },
+  "candidate_minus_reference": {
+    "unique_case_primary": {
+      "precision": -0.008097,
+      "recall": 0.013541,
+      "f1": 0.002848,
+      "exact_cases": 6,
+      "false_positive_negative_cases": 3
+    },
+    "certain_cases_sensitivity": {
+      "precision": -0.007654,
+      "recall": 0.0,
+      "f1": -0.003881,
+      "exact_cases": -2,
+      "false_positive_negative_cases": 2
+    }
+  },
+  "hybrid_changes": {
+    "definition": "Improved/regressed means nonincreasing/nondecreasing FP and FN with at least one strict change.",
+    "counts": {
+      "prediction_changed": 22,
+      "mask_changed": 14,
+      "entity_only_changed": 8,
+      "improved": 10,
+      "regressed": 4,
+      "mixed_tradeoff": 0,
+      "equal_error_counts": 8,
+      "became_exact": 10,
+      "lost_exact": 4
+    },
+    "prediction_changed_case_ids": [
+      "org_0031",
+      "org_0046",
+      "org_0058",
+      "org_0073",
+      "org_0096",
+      "org_0101",
+      "org_0122",
+      "org_0202",
+      "org_0207",
+      "org_0225",
+      "org_0246",
+      "org_0249",
+      "org_0260",
+      "org_0265",
+      "org_0340",
+      "org_0355",
+      "org_0363",
+      "org_0365",
+      "org_0381",
+      "org_0389",
+      "org_0401",
+      "org_0409"
+    ],
+    "mask_changed_case_ids": [
+      "org_0031",
+      "org_0096",
+      "org_0101",
+      "org_0122",
+      "org_0202",
+      "org_0207",
+      "org_0246",
+      "org_0249",
+      "org_0260",
+      "org_0340",
+      "org_0355",
+      "org_0381",
+      "org_0389",
+      "org_0409"
+    ],
+    "entity_only_changed_case_ids": [
+      "org_0046",
+      "org_0058",
+      "org_0073",
+      "org_0225",
+      "org_0265",
+      "org_0363",
+      "org_0365",
+      "org_0401"
+    ],
+    "improved_case_ids": [
+      "org_0101",
+      "org_0122",
+      "org_0202",
+      "org_0246",
+      "org_0260",
+      "org_0340",
+      "org_0355",
+      "org_0381",
+      "org_0389",
+      "org_0409"
+    ],
+    "regressed_case_ids": [
+      "org_0031",
+      "org_0096",
+      "org_0207",
+      "org_0249"
+    ],
+    "mixed_tradeoff_case_ids": [],
+    "equal_error_counts_case_ids": [
+      "org_0046",
+      "org_0058",
+      "org_0073",
+      "org_0225",
+      "org_0265",
+      "org_0363",
+      "org_0365",
+      "org_0401"
+    ],
+    "became_exact_case_ids": [
+      "org_0101",
+      "org_0122",
+      "org_0202",
+      "org_0246",
+      "org_0260",
+      "org_0340",
+      "org_0355",
+      "org_0381",
+      "org_0389",
+      "org_0409"
+    ],
+    "lost_exact_case_ids": [
+      "org_0031",
+      "org_0096",
+      "org_0207",
+      "org_0249"
+    ],
+    "changed_cases": [
+      {
+        "case_id": "org_0031",
+        "classification": "regressed",
+        "mask_changed": true,
+        "reference": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        },
+        "candidate": {
+          "tp": 0,
+          "fp": 18,
+          "fn": 0,
+          "exact_cases": 0
+        }
+      },
+      {
+        "case_id": "org_0046",
+        "classification": "equal_error_counts",
+        "mask_changed": false,
+        "reference": {
+          "tp": 14,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        },
+        "candidate": {
+          "tp": 14,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        }
+      },
+      {
+        "case_id": "org_0058",
+        "classification": "equal_error_counts",
+        "mask_changed": false,
+        "reference": {
+          "tp": 29,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        },
+        "candidate": {
+          "tp": 29,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        }
+      },
+      {
+        "case_id": "org_0073",
+        "classification": "equal_error_counts",
+        "mask_changed": false,
+        "reference": {
+          "tp": 16,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        },
+        "candidate": {
+          "tp": 16,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        }
+      },
+      {
+        "case_id": "org_0096",
+        "classification": "regressed",
+        "mask_changed": true,
+        "reference": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        },
+        "candidate": {
+          "tp": 0,
+          "fp": 14,
+          "fn": 0,
+          "exact_cases": 0
+        }
+      },
+      {
+        "case_id": "org_0101",
+        "classification": "improved",
+        "mask_changed": true,
+        "reference": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 6,
+          "exact_cases": 0
+        },
+        "candidate": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        }
+      },
+      {
+        "case_id": "org_0122",
+        "classification": "improved",
+        "mask_changed": true,
+        "reference": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 8,
+          "exact_cases": 0
+        },
+        "candidate": {
+          "tp": 8,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        }
+      },
+      {
+        "case_id": "org_0202",
+        "classification": "improved",
+        "mask_changed": true,
+        "reference": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 4,
+          "exact_cases": 0
+        },
+        "candidate": {
+          "tp": 4,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        }
+      },
+      {
+        "case_id": "org_0207",
+        "classification": "regressed",
+        "mask_changed": true,
+        "reference": {
+          "tp": 13,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        },
+        "candidate": {
+          "tp": 12,
+          "fp": 0,
+          "fn": 1,
+          "exact_cases": 0
+        }
+      },
+      {
+        "case_id": "org_0225",
+        "classification": "equal_error_counts",
+        "mask_changed": false,
+        "reference": {
+          "tp": 16,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        },
+        "candidate": {
+          "tp": 16,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        }
+      },
+      {
+        "case_id": "org_0246",
+        "classification": "improved",
+        "mask_changed": true,
+        "reference": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 4,
+          "exact_cases": 0
+        },
+        "candidate": {
+          "tp": 4,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        }
+      },
+      {
+        "case_id": "org_0249",
+        "classification": "regressed",
+        "mask_changed": true,
+        "reference": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        },
+        "candidate": {
+          "tp": 0,
+          "fp": 14,
+          "fn": 0,
+          "exact_cases": 0
+        }
+      },
+      {
+        "case_id": "org_0260",
+        "classification": "improved",
+        "mask_changed": true,
+        "reference": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 6,
+          "exact_cases": 0
+        },
+        "candidate": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        }
+      },
+      {
+        "case_id": "org_0265",
+        "classification": "equal_error_counts",
+        "mask_changed": false,
+        "reference": {
+          "tp": 9,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        },
+        "candidate": {
+          "tp": 9,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        }
+      },
+      {
+        "case_id": "org_0340",
+        "classification": "improved",
+        "mask_changed": true,
+        "reference": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 8,
+          "exact_cases": 0
+        },
+        "candidate": {
+          "tp": 8,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        }
+      },
+      {
+        "case_id": "org_0355",
+        "classification": "improved",
+        "mask_changed": true,
+        "reference": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 4,
+          "exact_cases": 0
+        },
+        "candidate": {
+          "tp": 4,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        }
+      },
+      {
+        "case_id": "org_0363",
+        "classification": "equal_error_counts",
+        "mask_changed": false,
+        "reference": {
+          "tp": 9,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        },
+        "candidate": {
+          "tp": 9,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        }
+      },
+      {
+        "case_id": "org_0365",
+        "classification": "equal_error_counts",
+        "mask_changed": false,
+        "reference": {
+          "tp": 29,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        },
+        "candidate": {
+          "tp": 29,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        }
+      },
+      {
+        "case_id": "org_0381",
+        "classification": "improved",
+        "mask_changed": true,
+        "reference": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 20,
+          "exact_cases": 0
+        },
+        "candidate": {
+          "tp": 20,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        }
+      },
+      {
+        "case_id": "org_0389",
+        "classification": "improved",
+        "mask_changed": true,
+        "reference": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 8,
+          "exact_cases": 0
+        },
+        "candidate": {
+          "tp": 8,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        }
+      },
+      {
+        "case_id": "org_0401",
+        "classification": "equal_error_counts",
+        "mask_changed": false,
+        "reference": {
+          "tp": 14,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        },
+        "candidate": {
+          "tp": 14,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        }
+      },
+      {
+        "case_id": "org_0409",
+        "classification": "improved",
+        "mask_changed": true,
+        "reference": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 6,
+          "exact_cases": 0
+        },
+        "candidate": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0,
+          "exact_cases": 1
+        }
+      }
+    ]
+  },
+  "model_only_person_secondary": {
+    "reference": {
+      "gold_types_mapped_to_PERSON": [
+        "CARDHOLDER",
+        "PERSON"
+      ],
+      "candidate_entities_by_type": {
+        "LOCATION": 121,
+        "PERSON": 100
+      },
+      "unique_case_primary": {
+        "cases": 446,
+        "exact_cases": 379,
+        "negative_cases": 315,
+        "false_positive_negative_cases": 3,
+        "character_metrics": {
+          "precision": 0.916071,
+          "recall": 0.642053,
+          "f1": 0.754967,
+          "true_positive": 1026,
+          "false_positive": 94,
+          "false_negative": 572
+        }
+      },
+      "certain_cases_sensitivity": {
+        "cases": 329,
+        "exact_cases": 276,
+        "negative_cases": 220,
+        "false_positive_negative_cases": 3,
+        "character_metrics": {
+          "precision": 0.907368,
+          "recall": 0.644245,
+          "f1": 0.753497,
+          "true_positive": 862,
+          "false_positive": 88,
+          "false_negative": 476
+        }
+      },
+      "location_metrics": null,
+      "interpretation": "Raw model PERSON candidates before rules and public-entity filtering; PERSON and CARDHOLDER labels are scored together. LOCATION is unscored because the corpus has no matching LOCATION annotation class; structured ADDRESS, BIRTH_PLACE, CITY, and CITIZENSHIP spans are not interchangeable with it."
+    },
+    "candidate": {
+      "gold_types_mapped_to_PERSON": [
+        "CARDHOLDER",
+        "PERSON"
+      ],
+      "candidate_entities_by_type": {
+        "LOCATION": 109,
+        "PERSON": 151
+      },
+      "unique_case_primary": {
+        "cases": 446,
+        "exact_cases": 432,
+        "negative_cases": 315,
+        "false_positive_negative_cases": 5,
+        "character_metrics": {
+          "precision": 0.939394,
+          "recall": 0.989362,
+          "f1": 0.963731,
+          "true_positive": 1581,
+          "false_positive": 102,
+          "false_negative": 17
+        }
+      },
+      "certain_cases_sensitivity": {
+        "cases": 329,
+        "exact_cases": 321,
+        "negative_cases": 220,
+        "false_positive_negative_cases": 2,
+        "character_metrics": {
+          "precision": 0.965091,
+          "recall": 0.991779,
+          "f1": 0.978253,
+          "true_positive": 1327,
+          "false_positive": 48,
+          "false_negative": 11
+        }
+      },
+      "location_metrics": null,
+      "interpretation": "Raw model PERSON candidates before rules and public-entity filtering; PERSON and CARDHOLDER labels are scored together. LOCATION is unscored because the corpus has no matching LOCATION annotation class; structured ADDRESS, BIRTH_PLACE, CITY, and CITIZENSHIP spans are not interchangeable with it."
+    }
+  },
+  "limitations": [
+    "Golden labels are provisional independent AI annotations, not organizer ground truth.",
+    "After tuning, improvements on this corpus are in-sample development evidence, not independent validation.",
+    "Character P/R/F1 is not the organizer's private span-Levenshtein or code-review score.",
+    "Cached NER isolates rule/merge behavior; this does not measure HTTP availability or RPS.",
+    "The organizer texts have provisional AI silver labels, not organizer-provided ground truth.",
+    "This offline model comparison does not certify latency, throughput, model availability, or memory usage.",
+    "Threshold/model choices evaluated on this already inspected corpus require a separate held-out set.",
+    "Per-type coverage measures protection regardless of predicted class; typed metrics use exact taxonomy."
+  ]
+}

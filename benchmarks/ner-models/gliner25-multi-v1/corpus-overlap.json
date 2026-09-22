@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "dataset_file_sha256": {
+    "organizer/cases.jsonl": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46",
+    "organizer/manifest.json": "74f6b661ff33cbc88b53fde91cb1103acaa1f6002a4008463d3100b7c9b2305a",
+    "hivetrace/domain-00000-of-00001.parquet": "7ef3574273c0fe3a987981e38e32cd2764031a82766ca5b235bfccd1f27058eb",
+    "hivetrace/entity-00000-of-00001.parquet": "6e0c77d566c2f04e7213917b26f1038336e28fc006551fac7a7f44f7627d5f96",
+    "redmadrobot/redmadrobot-test.csv": "6bf544a380a3ee5bec94b946124bea3afaecce49e734679ad0f0c0e7c12977bb"
+  },
+  "source_sha256": {
+    "benchmarks/ner-models/gliner25-multi-v1/corpus_overlap.py": "6da334bf4c454e6f7cada3da688aa64feeb9e29d96499e030e32ff12449698d7",
+    "scripts/evaluate_golden.py": "02e1160fbfbb2933e4e90d65573e559962e6b474ab69ddaa1c2c0f66e68226ff",
+    "scripts/evaluate_redmadrobot.py": "2e94c14034db198cb8718ed8161abe76354c27980f63346e3d34fad439aaa5c4",
+    "scripts/evaluate_external.py": "7281551dc7c62ce22b10676f7029de5580b9558f3c1d427a79e2a89497a22e85"
+  },
+  "runtime": {
+    "python": "3.13.7 (main, Aug 18 2025, 19:20:03) [Clang 20.1.4 ]",
+    "pyarrow": "25.0.1"
+  },
+  "normalization": "Unicode casefold after joining str.split() tokens with one ASCII space; no other rewriting.",
+  "redmadrobot_selection": {
+    "source_rows": 2841,
+    "aligned_rows": 2839,
+    "excluded_rows": 2
+  },
+  "comparisons": {
+    "exact_raw": {
+      "within": {
+        "organizer446": {
+          "rows": 446,
+          "unique_texts": 446,
+          "duplicate_groups": 0,
+          "extra_rows_beyond_first": 0,
+          "rows_in_duplicate_groups": 0,
+          "duplicate_row_pairs": 0,
+          "maximum_multiplicity": 1,
+          "text_hash_multiset_sha256": "eda930e36a51e0f7598307a88db02fdb69c4a4c5f45e4edeaaa8956c46436692"
+        },
+        "hivetrace1810": {
+          "rows": 1810,
+          "unique_texts": 1810,
+          "duplicate_groups": 0,
+          "extra_rows_beyond_first": 0,
+          "rows_in_duplicate_groups": 0,
+          "duplicate_row_pairs": 0,
+          "maximum_multiplicity": 1,
+          "text_hash_multiset_sha256": "7c9d22f43a496fd752362dbac5f975e6b6c94bf4d2dc7cdb198f8d499adca7d2"
+        },
+        "redmadrobot2839": {
+          "rows": 2839,
+          "unique_texts": 2839,
+          "duplicate_groups": 0,
+          "extra_rows_beyond_first": 0,
+          "rows_in_duplicate_groups": 0,
+          "duplicate_row_pairs": 0,
+          "maximum_multiplicity": 1,
+          "text_hash_multiset_sha256": "37fc335f63d17cf01128ab6880b8712485e9834caf9dec887163f420589c9ede"
+        }
+      },
+      "cross": [
+        {
+          "first": "organizer446",
+          "second": "hivetrace1810",
+          "shared_unique_texts": 0,
+          "matching_rows_first": 0,
+          "matching_rows_second": 0,
+          "matching_row_pairs": 0,
+          "shared_text_hash_set_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "first": "organizer446",
+          "second": "redmadrobot2839",
+          "shared_unique_texts": 0,
+          "matching_rows_first": 0,
+          "matching_rows_second": 0,
+          "matching_row_pairs": 0,
+          "shared_text_hash_set_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "first": "hivetrace1810",
+          "second": "redmadrobot2839",
+          "shared_unique_texts": 0,
+          "matching_rows_first": 0,
+          "matching_rows_second": 0,
+          "matching_row_pairs": 0,
+          "shared_text_hash_set_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      ]
+    },
+    "casefold_whitespace": {
+      "within": {
+        "organizer446": {
+          "rows": 446,
+          "unique_texts": 411,
+          "duplicate_groups": 20,
+          "extra_rows_beyond_first": 35,
+          "rows_in_duplicate_groups": 55,
+          "duplicate_row_pairs": 50,
+          "maximum_multiplicity": 3,
+          "text_hash_multiset_sha256": "eed187a9e5e8993593226116355a49de8e6b2ff71d4350c1bb6ad6e73243754a"
+        },
+        "hivetrace1810": {
+          "rows": 1810,
+          "unique_texts": 1810,
+          "duplicate_groups": 0,
+          "extra_rows_beyond_first": 0,
+          "rows_in_duplicate_groups": 0,
+          "duplicate_row_pairs": 0,
+          "maximum_multiplicity": 1,
+          "text_hash_multiset_sha256": "9ba859522bf76e6be0bdc52db4a0d38237bab6cf7a8692ca5934f97262298973"
+        },
+        "redmadrobot2839": {
+          "rows": 2839,
+          "unique_texts": 2839,
+          "duplicate_groups": 0,
+          "extra_rows_beyond_first": 0,
+          "rows_in_duplicate_groups": 0,
+          "duplicate_row_pairs": 0,
+          "maximum_multiplicity": 1,
+          "text_hash_multiset_sha256": "2bf5acfdabd0787e167f48ae64c450173c91516210a5010d6475ccf3c0919dbd"
+        }
+      },
+      "cross": [
+        {
+          "first": "organizer446",
+          "second": "hivetrace1810",
+          "shared_unique_texts": 0,
+          "matching_rows_first": 0,
+          "matching_rows_second": 0,
+          "matching_row_pairs": 0,
+          "shared_text_hash_set_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "first": "organizer446",
+          "second": "redmadrobot2839",
+          "shared_unique_texts": 0,
+          "matching_rows_first": 0,
+          "matching_rows_second": 0,
+          "matching_row_pairs": 0,
+          "shared_text_hash_set_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "first": "hivetrace1810",
+          "second": "redmadrobot2839",
+          "shared_unique_texts": 0,
+          "matching_rows_first": 0,
+          "matching_rows_second": 0,
+          "matching_row_pairs": 0,
+          "shared_text_hash_set_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "No exact overlap does not rule out near-duplicate templates, paraphrases, or shared generated entities.",
+    "External corpora were used previously in rule development; they are not a fully untouched system holdout.",
+    "This text audit cannot establish which corpora the pretrained NER models saw during training.",
+    "Organizer labels and repeated-case traffic weights are not used to compute text overlap."
+  ]
+}
