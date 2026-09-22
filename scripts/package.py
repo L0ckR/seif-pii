@@ -5,7 +5,7 @@ from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 ROOT = Path(__file__).resolve().parents[1]
 ALLOWED_DIRS = {"seif", "tests", "scripts", "config", "deploy", "web", ".github"}
 ROOT_FILES = {"README.md", "pyproject.toml", "requirements.lock", "Dockerfile", "Dockerfile.ner", ".dockerignore", ".gitignore", ".env.example", ".python-version", "Makefile", "process_api.yaml", "compose.yaml", "compose.ner.yaml"}
-EXCLUDED = {"__pycache__", ".venv", "node_modules", ".pytest_cache", "output"}
+EXCLUDED = {"__pycache__", ".venv", "node_modules", ".pytest_cache", "output", "local-data"}
 target = ROOT / "output" / "seif-pii-source.zip"
 target.parent.mkdir(exist_ok=True)
 with ZipFile(target, "w", ZIP_DEFLATED, compresslevel=9) as archive:
