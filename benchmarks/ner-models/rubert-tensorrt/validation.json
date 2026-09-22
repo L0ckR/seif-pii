@@ -1,0 +1,48 @@
+{
+  "quality_corpus_cases": 5095,
+  "quality_cache_complete_and_failure_free": true,
+  "frozen_source_data_model_identity_verified": true,
+  "http_checks": {
+    "http-trt-graph.json": {
+      "mask_requests": 1784,
+      "recomputed_rps_and_percentiles": true,
+      "all_real_ner_calls_and_reference_parity": true,
+      "restore_and_fail_closed": true
+    },
+    "http-trt-graph-v2.json": {
+      "mask_requests": 1784,
+      "recomputed_rps_and_percentiles": true,
+      "all_real_ner_calls_and_reference_parity": true,
+      "restore_and_fail_closed": true
+    },
+    "http-trt-graph-repeat20.json": {
+      "mask_requests": 8920,
+      "recomputed_rps_and_percentiles": true,
+      "all_real_ner_calls_and_reference_parity": true,
+      "restore_and_fail_closed": true
+    },
+    "http-trt-graph-repeat50.json": {
+      "mask_requests": 22300,
+      "recomputed_rps_and_percentiles": true,
+      "all_real_ner_calls_and_reference_parity": true,
+      "restore_and_fail_closed": true
+    }
+  },
+  "tests": {
+    "service_python": "3.14.7t",
+    "full_suite_passed": 2949,
+    "full_suite_skipped": 34,
+    "model_environment_new_tests_passed": 80
+  },
+  "ruff_ci_scope_and_new_benchmark_helpers": "PASS",
+  "historical_all_tree_ruff_findings_outside_ci_scope": 210,
+  "measured_artifact_sha256": {
+    "comparison.json": "1024f810093ea0f63bc93dff9554be9fcbe9d736506067e5f9f954d5b38aeea8",
+    "protocol.json": "7c61be943b1d3f83b37842da3ba55d919dcea44dc57be4682bb80ace63790856",
+    "provenance.json": "e8b28200850d21ca107f3d9826feb8ef7bfd50d8944cd716e04c2600ee3134cc",
+    "http-trt-graph.json": "5bcf65b9806386c6d17eaeede6edc647361dce2c8ce71c1906db715f8c294a76",
+    "http-trt-graph-v2.json": "c999a84c942ded254812052d978ba36ea2651698961d4652df8dea20af763ef9",
+    "http-trt-graph-repeat20.json": "1a17e6c5594d17128a422003555dca9538d8532d408b64e5f796cc3f1f86926b",
+    "http-trt-graph-repeat50.json": "70f0a349d61360495990cc1efb6f51cb5d17396c58231cf4bbee6edf803108ca"
+  }
+}
