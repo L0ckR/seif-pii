@@ -1,0 +1,463 @@
+{
+  "schema_version": 1,
+  "upstream_repository": "https://github.com/redmadrobot-rnd/pii-guard",
+  "upstream_commit": "24230abb72949a9f85499244dd4f15a0ad0cdd9e",
+  "scope": "Read-only source review; no production edits, inference, dataset text disclosure, or measured RPS claims.",
+  "ner": {
+    "checkpoint": "redmadrobot-rnd/rubert-base-pii-ner",
+    "upstream_default_revision": null,
+    "inference": "Torch FP32 default; auto CUDA if available else CPU; word-aligned windows512/stride128; first-subword argmax, no probability threshold.",
+    "span_score": 0.7,
+    "score_is_confidence_threshold": false,
+    "decoder": "Whitespace words retokenized on brackets/quotes/comma/colon/semicolon/!? and boundary dots; offsets retained. Consecutive same native type is merged even across B-tags. Punctuation bridge only for non-name/non-address native labels.",
+    "window_caveat": "A single oversized word over510 subwords becomes O rather than being chunked; center ownership avoids duplicate overlapping windows.",
+    "mapping": {
+      "FIRST_NAME": "PERSON",
+      "LAST_NAME": "PERSON",
+      "MIDDLE_NAME": "PERSON",
+      "COUNTRY": "LOCATION",
+      "REGION": "LOCATION",
+      "DISTRICT": "LOCATION",
+      "CITY": "LOCATION",
+      "STREET": "LOCATION",
+      "HOUSE": "LOCATION",
+      "EMAIL": "EMAIL_ADDRESS",
+      "PHONE": "PHONE_NUMBER",
+      "URL": "URL",
+      "IP_ADDRESS": "IP_ADDRESS",
+      "PASSPORT": "PASSPORT",
+      "INN": "INN",
+      "SNILS": "SNILS",
+      "OMS": "OMS",
+      "CREDIT_CARD": "CREDIT_CARD",
+      "DRIVER_LICENSE": "DRIVER_LICENSE",
+      "MILITARY_ID": "MILITARY_ID",
+      "BIRTH_CERTIFICATE": "BIRTH_CERTIFICATE"
+    },
+    "all_native_labels_kept": "All21 mapped labels are requested, not merely the four NER_ONLY_ENTITIES; those four indicate capabilities unavailable without model.",
+    "references": [
+      {
+        "file": "src/pii_guard/engine.py",
+        "lines": [
+          57,
+          81
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/engine.py#L57"
+      },
+      {
+        "file": "src/pii_guard/ner/recognizer.py",
+        "lines": [
+          54,
+          138
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/ner/recognizer.py#L54"
+      },
+      {
+        "file": "src/pii_guard/ner/recognizer.py",
+        "lines": [
+          246,
+          390
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/ner/recognizer.py#L246"
+      },
+      {
+        "file": "src/pii_guard/ner/recognizer.py",
+        "lines": [
+          392,
+          471
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/ner/recognizer.py#L392"
+      },
+      {
+        "file": "src/pii_guard/config.py",
+        "lines": [
+          39,
+          85
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/config.py#L39"
+      },
+      {
+        "file": "src/pii_guard/models.py",
+        "lines": [
+          10,
+          22
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/models.py#L10"
+      }
+    ]
+  },
+  "rules_and_merging": {
+    "architecture": "Presidio with built-in recognizers cleared; spaCy NER disabled but other NLP pipeline components remain. Custom numeric classifiers and regex recognizers provide16 types.",
+    "numeric_classification": "Candidate patterns run in priority order with span deduplication. All classifiers run; highest score wins and later classifier wins an exact score tie. Same-digit overlapping candidates are deduplicated.",
+    "rules": "INN10/12 and SNILS use control digits; card Luhn plus context (16-digit competes with OMS), OMS requires Luhn+context; passport/driver licence use length+nearby cue disambiguation, not checksum. Account combines20digits+BIK, context fallback; invalid-checksum account can still emit at0.60.",
+    "boundary_policy": "data_spans strips service words and some punctuation after classifying whole candidate; it can split series and number into separate entities. This differs from gold that includes contextual words.",
+    "model_gate": "NER email must satisfy local@domain shape with tight @, TLD, or40-character preceding email cue.",
+    "resolution": "First keep every rule and remove any NER span overlapping any rule. Then classifier type priorities, registered pair priorities, custom handlers, longer same-type overlap, and greedy score/length/start overlap resolution. No clipping/union preserves a discarded NER tail.",
+    "allowlist": "The engine filters allowed types after conflict resolution. A disallowed rule may already have removed an overlapping allowed NER span.",
+    "references": [
+      {
+        "file": "src/pii_guard/engine.py",
+        "lines": [
+          142,
+          203
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/engine.py#L142"
+      },
+      {
+        "file": "src/pii_guard/framework/base.py",
+        "lines": [
+          273,
+          296
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/framework/base.py#L273"
+      },
+      {
+        "file": "src/pii_guard/framework/recognizer.py",
+        "lines": [
+          102,
+          154
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/framework/recognizer.py#L102"
+      },
+      {
+        "file": "src/pii_guard/framework/spans.py",
+        "lines": [
+          22,
+          70
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/framework/spans.py#L22"
+      },
+      {
+        "file": "src/pii_guard/framework/resolvers.py",
+        "lines": [
+          42,
+          128
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/framework/resolvers.py#L42"
+      },
+      {
+        "file": "src/pii_guard/entities/credit_card.py",
+        "lines": [
+          55,
+          121
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/entities/credit_card.py#L55"
+      },
+      {
+        "file": "src/pii_guard/entities/oms.py",
+        "lines": [
+          29,
+          66
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/entities/oms.py#L29"
+      },
+      {
+        "file": "src/pii_guard/entities/_email_shape.py",
+        "lines": [
+          45,
+          83
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/entities/_email_shape.py#L45"
+      },
+      {
+        "file": "src/pii_guard/framework/conflict_resolver.py",
+        "lines": [
+          18,
+          195
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/framework/conflict_resolver.py#L18"
+      },
+      {
+        "file": "src/pii_guard/engine.py",
+        "lines": [
+          345,
+          359
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/engine.py#L345"
+      }
+    ]
+  },
+  "lossless_hackathon_compatibility": {
+    "direct_pipeline_compatible": false,
+    "normalization": "normalize_text always replaces Unicode spaces/dashes, removes invisible characters, collapses spaces and converts Russian number words; optional English-number rewrite follows. Offsets and returned normalized_text refer to this changed string. No complete original-input offset map exists for these steps.",
+    "transliteration": "Adds a mapped Cyrillic pass plus original pass; its SpanMap maps changed words as whole source words, but source is already normalized. Keep only a candidate shadow view mapped back to original for SEIF.",
+    "base64": "Each detected encoded blob incurs another rules+NER pass; any decoded PII maps to full original blob. Budgets32blobs/20000decodedchars reject overflow instead of silently skipping. This is broader masking with extra inference cost.",
+    "pseudonymization": "Stores nominative/fuzzy-merged person identity and grammatically inflects restoration. Stateless HTTP returns mapping to caller; no TTL or correlation-id vault. That is useful for an LLM proxy but is not exact original-byte restoration or SEIF API compatibility.",
+    "references": [
+      {
+        "file": "src/pii_guard/framework/normalize.py",
+        "lines": [
+          158,
+          235
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/framework/normalize.py#L158"
+      },
+      {
+        "file": "src/pii_guard/engine.py",
+        "lines": [
+          275,
+          392
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/engine.py#L275"
+      },
+      {
+        "file": "src/pii_guard/preprocess/translit.py",
+        "lines": [
+          113,
+          158
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/preprocess/translit.py#L113"
+      },
+      {
+        "file": "src/pii_guard/pseudonymize.py",
+        "lines": [
+          237,
+          248
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/pseudonymize.py#L237"
+      },
+      {
+        "file": "src/pii_guard/pseudonymize.py",
+        "lines": [
+          295,
+          395
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/pseudonymize.py#L295"
+      },
+      {
+        "file": "src/pii_guard/anonymizer.py",
+        "lines": [
+          164,
+          180
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/anonymizer.py#L164"
+      },
+      {
+        "file": "src/pii_guard_server/main.py",
+        "lines": [
+          1,
+          16
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard_server/main.py#L1"
+      }
+    ]
+  },
+  "published_metric_protocol": {
+    "paper_scorer": "tests/quality/paper_score.py; JSON prediction dumps and experiment manifest are not tracked.",
+    "fourteen_families": [
+      "PERSON",
+      "ADDRESS",
+      "EMAIL",
+      "PHONE",
+      "URL",
+      "IP_ADDRESS",
+      "PASSPORT",
+      "INN",
+      "SNILS",
+      "OMS",
+      "CREDIT_CARD",
+      "DRIVER_LICENSE",
+      "MILITARY_ID",
+      "BIRTH_CERTIFICATE"
+    ],
+    "mapping": "Native21 name components fold into PERSON, six address components into ADDRESS. EMAIL_ADDRESS/PHONE_NUMBER become EMAIL/PHONE; remaining12 model families retain identity.",
+    "strict": "One-to-one greedy matching by exact type/start/end; gold spans never trim or merge.",
+    "soft": "One-to-one same type and any character overlap; different from old quality gate many-gold-to-one-prediction overlap.",
+    "pipeline_mode": "Predictions only: merge PERSON/ADDRESS neighbors with gap<=12 matching punctuation/whitespace or address connectives. Gold remains unmerged.",
+    "scopes": "Shared scopes filter both gold and predictions; remaining predictions overlapping excluded gold are also ignored. Thus scoped precision is not full-output precision.",
+    "published_pinned_docs": "docs/quality.md currently reports87.1 strict/92.9 typed-soft for own2841-row benchmark/14families; common6 table90.3/95.0. User-cited83.6/88.9 must be reconciled separately, not asserted reproduced.",
+    "references": [
+      {
+        "file": "tests/quality/paper_score.py",
+        "lines": [
+          99,
+          111
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/tests/quality/paper_score.py#L99"
+      },
+      {
+        "file": "tests/quality/paper_score.py",
+        "lines": [
+          193,
+          233
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/tests/quality/paper_score.py#L193"
+      },
+      {
+        "file": "tests/quality/paper_score.py",
+        "lines": [
+          297,
+          353
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/tests/quality/paper_score.py#L297"
+      },
+      {
+        "file": "tests/quality/paper_score.py",
+        "lines": [
+          358,
+          439
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/tests/quality/paper_score.py#L358"
+      },
+      {
+        "file": "tests/quality/utils/metrics.py",
+        "lines": [
+          147,
+          176
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/tests/quality/utils/metrics.py#L147"
+      },
+      {
+        "file": "tests/quality/README.md",
+        "lines": [
+          53,
+          58
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/tests/quality/README.md#L53"
+      },
+      {
+        "file": "docs/quality.md",
+        "lines": [
+          14,
+          45
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/docs/quality.md#L14"
+      }
+    ]
+  },
+  "deployment_and_licensing": {
+    "runtime": "Python3.11 CPU Docker default; single Uvicorn process, serialized inference semaphore1,30s queue wait→503;64texts×100000chars per request. No queue/state-store service and no TensorRT runtime.",
+    "reproducibility": "Code supports revision pin, but default is None and Docker NER_REVISION empty. Most dependencies have lower bounds without exact lock. Image bakes weights and forces HF_HUB_OFFLINE=1; library loader can download if unprepared.",
+    "access": "Container user10001, compose binds127.0.0.1; bearer API keys optional, unset means no authentication; validation handler omits input values. SEIF authentication/vault contracts should stay intact.",
+    "license_observation": "Repository LICENSE/NOTICE declare Apache-2.0 and separate weights Apache-2.0. Preserve attribution, LICENSE/NOTICE and modification notices if code is copied. Optional latin-gender declares GPLv3 and is excluded from default dependency/image; no need to borrow it.",
+    "references": [
+      {
+        "file": "Dockerfile",
+        "lines": [
+          21,
+          104
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/Dockerfile#L21"
+      },
+      {
+        "file": "docker-compose.yml",
+        "lines": [
+          6,
+          35
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/docker-compose.yml#L6"
+      },
+      {
+        "file": "pyproject.toml",
+        "lines": [
+          25,
+          46
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/pyproject.toml#L25"
+      },
+      {
+        "file": "NOTICE",
+        "lines": [
+          54,
+          81
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/NOTICE#L54"
+      },
+      {
+        "file": "src/pii_guard_server/main.py",
+        "lines": [
+          61,
+          85
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard_server/main.py#L61"
+      },
+      {
+        "file": "src/pii_guard_server/main.py",
+        "lines": [
+          169,
+          190
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard_server/main.py#L169"
+      },
+      {
+        "file": "src/pii_guard_server/auth.py",
+        "lines": [
+          23,
+          41
+        ],
+        "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard_server/auth.py#L23"
+      }
+    ]
+  },
+  "confirmed_validator_caution": {
+    "finding": "Correspondent-account validator prefixes0+first2BIKdigits and rejects a real public Alfa bank requisites pair.",
+    "verification": "Executed only AST-extracted valid_account and WEIGHTS, no imports/model. Published official bank fixture returnsFalse; current prefix remainder5, alternative0+BIK[4:6] remainder0. A source-level counterexample, not a complete independent financial-standard audit.",
+    "fixture_source": "https://alfabank.ru/essential/",
+    "upstream_result": false,
+    "upstream_remainder": 5,
+    "fifth_sixth_digit_remainder": 0,
+    "reference": {
+      "file": "src/pii_guard/entities/bank_account.py",
+      "lines": [
+        27,
+        41
+      ],
+      "url": "https://github.com/redmadrobot-rnd/pii-guard/blob/24230abb72949a9f85499244dd4f15a0ad0cdd9e/src/pii_guard/entities/bank_account.py#L27"
+    }
+  },
+  "borrowing_priorities": [
+    {
+      "priority": 1,
+      "idea": "Native structured21 candidates plus independent checksum/context evidence; nearest document cue and NER email shape checks.",
+      "conditions": "Frozen taxonomy and offset-preserving spans; retain uncertain malformed values under explicit context rather than universal checksum rejection; evaluate across all3corpora.",
+      "rps_expectation": "Light local predicates over existing candidates; no new NER pass. Measure real HTTP afterward; no guaranteed free speed."
+    },
+    {
+      "priority": 2,
+      "idea": "Entity-specific boundary policy and explicit conflict diagnostics.",
+      "conditions": "Compare full protected-character coverage and per-type exact spans. Do not copy unconditional rule-wins whole-span deletion, global prediction address/name merging or late allowlist filtering.",
+      "rps_expectation": "Bounded span operations are cheap at current candidate counts; upstream nested conflict passes are O(n²), so retain SEIF candidate caps."
+    },
+    {
+      "priority": 3,
+      "idea": "Optional transliteration/base64 shadow analysis with original-offset map and strict budgets.",
+      "conditions": "Separate capability, never overwrite source. No model invocation for cheap negatives; native root text must remain exactly restorable.",
+      "rps_expectation": "Potential2passes with transliteration and1extra per base64blob, plus language detection; cannot promise existing RPS."
+    },
+    {
+      "priority": 4,
+      "idea": "Port useful standalone rules with source attribution and independent validation vectors.",
+      "conditions": "Do not import the whole Presidio/spaCy/morphology stack solely for numeric checking; correct/test the observed correspondent-account defect before borrowing.",
+      "rps_expectation": "Avoid additional NLP pipeline and serialized service layer; benchmark isolated rules + integrated HTTP."
+    }
+  ],
+  "reviewed_source_sha256": {
+    "Dockerfile": "3717b2fda0d8409d28d0236ef8ec16b821985b42974d3102b13dfe73c1536980",
+    "NOTICE": "bf9e0199ba14a9d5f7536b5dffef20da06def6c9d18e9f1154acae09b0345576",
+    "docker-compose.yml": "6b5fd3a9d4c149a380cc95f38df3d8ddfbf62ac1c9e6fa5613fcc8a3f69fa667",
+    "docs/quality.md": "c9b3bf5c2dac343aead87be9f70fccdfadaaa199a7e9458146ec1de27bb86185",
+    "pyproject.toml": "429d4a6b894e0485372430b9083e4c8dd68e6f3133a190b3da6c02ce83604837",
+    "src/pii_guard/anonymizer.py": "cddb14d69e6daa44531a6e4a31d4edae36c29c0c7e11e280c6c40e392133cf11",
+    "src/pii_guard/config.py": "1a5afd56f1074cf35d4d6754a5bca3007363d5c3648feeb08bfa12308b8663c4",
+    "src/pii_guard/engine.py": "ca1719ce2c25a0035e9f0d903a947619e7b0f4a30fe34b6b0c317c4485294699",
+    "src/pii_guard/entities/_email_shape.py": "36edb2b2c98a748aa6f9688d36a92de717a9f5ae370c17ab7518d8b01c2d3864",
+    "src/pii_guard/entities/bank_account.py": "3b5aaf6bcad87a76cef4e1d271f8b432386f2b562cce367a6c6ea529866458fc",
+    "src/pii_guard/entities/credit_card.py": "9f657adc529b4ae17aa930c09b17a872a57410601e53cfe4474e8a520d48e462",
+    "src/pii_guard/entities/oms.py": "14c2d8e4591b842b319a60266788c38fc4e2ffebd3e945c921d609041c730bc8",
+    "src/pii_guard/framework/base.py": "09d369fa78a4165463089e808eff8e399c1908047f5dcc3b8b0fa2976f0f3d9d",
+    "src/pii_guard/framework/conflict_resolver.py": "5c00ca611b750cc1a7132655bb66abee2a26e1952e41c3b0023f03c90b17e024",
+    "src/pii_guard/framework/normalize.py": "fe306e79372f6448e1dfac0cc1380958234d748adcf8de272778c2ebf591c25d",
+    "src/pii_guard/framework/recognizer.py": "f9bcb72d383e0592c279bc802852d2e455e027686247a6f0bd1287c86ace3032",
+    "src/pii_guard/framework/resolvers.py": "423d3452b7bfc0e9be84616f021d739d30449e60658a3d087bd59c88ef256bc4",
+    "src/pii_guard/framework/spans.py": "812ba0a67c1f255b0ad53261b757d62e34edee6392e49ac6a7f57e619eaaf884",
+    "src/pii_guard/models.py": "787dc9c5e4a6d2053ebe393216e4635b0f9289d83d78516966f12882a2bde02d",
+    "src/pii_guard/ner/recognizer.py": "44358e8f1c9ec12703afeceb78119545b66f33b45148bd7e2659ba962983c206",
+    "src/pii_guard/preprocess/translit.py": "f56c1ac34e544e6f45c2e2233d8a4527f85559561371fdbe142bd5db1ef26d61",
+    "src/pii_guard/pseudonymize.py": "d09c1c948cb2dc9293a0e687846874056760a4159c7e91a9a08703e56cf43c19",
+    "src/pii_guard_server/auth.py": "0974fd7a164d5c32d0b5bce261d773dff69a19e26c37c239979889018282fcb4",
+    "src/pii_guard_server/main.py": "1d63d2b0c1a93bd419e3d03e6d94c70dcac0a3d9796ceb91304c1191d58fa4c2",
+    "tests/quality/README.md": "a543ad0db345b3775ab138eb7e76e9bb4142bfd6ca907ebc68388fd1dc78d84a",
+    "tests/quality/paper_score.py": "4318b536c75986ffbed13d9f3f6a843b4931bf65114d35110a3c915736fac11a",
+    "tests/quality/utils/metrics.py": "320d273d5768d97b48494137f571194cba36f78d7839344937401979cd1625d6"
+  }
+}
