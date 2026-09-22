@@ -10,6 +10,8 @@ from __future__ import annotations
 import re
 from collections.abc import Sequence
 
+from seif.location_fields import issuer_value_end
+
 _FLAGS = re.IGNORECASE | re.UNICODE
 # Start at the literal field name. Searching from overlapping whitespace
 # quantifiers becomes cubic on a long, otherwise valid spaced document value.
@@ -51,6 +53,10 @@ _PRIVATE_OWNER = re.compile(
     _FLAGS,
 )
 _INN_FIELD_END = re.compile(r"\bинн(?:\s*/\s*кпп)?\s*[:=—-]?\s*$", _FLAGS)
+_COUNTRY_QUALIFIER = re.compile(r"\b(?:паспорт|гражданин|гражданка)[ \t]+$", _FLAGS)
+_CORPORATE_ADDRESS = re.compile(r"\bадрес[а-яё]*[ \t]*[:=—-]?[ \t]*(?:г[.][ \t]*)?$", _FLAGS)
+_NUMERIC_TAIL = re.compile(r"[.,]([0-9]{1,13})(?![0-9])")
+_NUMERIC_HEAD = re.compile(r"(?<![0-9])([0-9]{1,13})[.,]$")
 _RECORD_BOUNDARY = re.compile(r"[;!?]|\n[ \t]*\n|[.](?=\s|$)")
 _ABBREVIATION = re.compile(r"(?:\b|\\[nr])(?:г|гор|ул|д|кв|корп|стр|обл|р-н|им|пос|тел|ао)[.]$", _FLAGS)
 _OFFICE = re.compile(r"\b(?:[оуг]вд|[оу]{0,2}фмс|мвд|умвд|отдел\s+внутренних\s+дел)\b", _FLAGS)
@@ -118,6 +124,28 @@ def _office_geography(text: str, span, personal_context: bool) -> bool:
     return bool(_OFFICE.search(prefix) and not personal_context)
 
 
+def _geographic_scaffolding(text: str, span) -> bool:
+    prefix = _record_prefix(text, span.start)
+    value = text[span.start:span.end].lower()
+    if value in {"рф", "россии"} and _COUNTRY_QUALIFIER.search(prefix):
+        return True
+    if not _CORPORATE_ADDRESS.search(prefix):
+        return False
+    corporate = list(_CORPORATE_OWNER.finditer(prefix))
+    private = list(_PRIVATE_OWNER.finditer(prefix))
+    return bool(corporate and (not private or corporate[-1].start() > private[-1].start()))
+
+
+def _decimal_inn_fragment(text: str, span) -> bool:
+    if span.reason != "checksum":
+        return False
+    after = _NUMERIC_TAIL.match(text, span.end, min(len(text), span.end + 15))
+    before = _NUMERIC_HEAD.search(text[max(0, span.start - 15):span.start])
+    # Two full identifiers separated by punctuation are a list, not a fractional
+    # number; retain both, including lists without whitespace after a comma.
+    return any(part is not None and len(part[1]) not in {10, 12} for part in (after, before))
+
+
 def _name_span(text: str, span):
     value = text[span.start:span.end]
     if span.type == "CARDHOLDER" and _MISSING_NAME.match(value):
@@ -180,9 +208,15 @@ def refine_candidates(text: str, candidates: Sequence) -> list:
                 result.append(refined)
         elif span.type in {"ADDRESS", "BIRTH_PLACE"}:
             result.extend(_place_parts(text, span))
-        elif span.type == "INN" and _corporate_inn(text, span):
+        elif span.type == "PASSPORT_ISSUER":
+            refined = _segment(text, span, span.start, issuer_value_end(text, span.start, span.end))
+            if refined is not None:
+                result.append(refined)
+        elif span.type == "INN" and (_corporate_inn(text, span) or _decimal_inn_fragment(text, span)):
             continue
-        elif span.type in {"CITY", "LOCATION"} and _office_geography(text, span, personal_context):
+        elif span.type in {"CITY", "LOCATION"} and (
+            _office_geography(text, span, personal_context) or _geographic_scaffolding(text, span)
+        ):
             continue
         else:
             result.append(span)

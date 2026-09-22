@@ -11,6 +11,8 @@ import re
 from collections.abc import Iterator
 from datetime import date
 
+from seif.document_fields import document_candidates
+
 Candidate = tuple[int, int, str, float, str]
 _FLAGS = re.IGNORECASE
 _SPACE = r"[ \t]*"
@@ -275,8 +277,15 @@ def structured_candidates(text: str) -> Iterator[Candidate]:
         yield from _date_candidates(text)
     if not any(char.isdigit() for char in text):
         return
+    document_values = set()
     if any(hint in lower for hint in ("паспорт", "удостоверен", "ву", "в/у", "в у")):
-        yield from _document_candidates(text)
+        for candidate in _document_candidates(text):
+            document_values.add(candidate[:3])
+            yield candidate
+    for candidate in document_candidates(text):
+        if candidate[:3] not in document_values:
+            document_values.add(candidate[:3])
+            yield candidate
     for pattern, kind, hints in (
         (_PIN_VALUE, "PIN", ("pin", "пин")),
         (_CVV_VALUE, "CVV", ("cvv", "cvc", "цвв", "сvv", "сvc")),

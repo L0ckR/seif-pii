@@ -9,10 +9,55 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable, Collection, Iterator
+from functools import lru_cache
 from itertools import permutations
 
 Candidate = tuple[int, int, str, float, str]
 _FLAGS = re.IGNORECASE
+_LATIN_WORD = r"[a-z](?:[a-z]|['’ʼ-](?=[a-z])){1,39}"
+_LATIN_WORDS = re.compile(rf"(?<![\w'’ʼ-]){_LATIN_WORD}(?![\w'’ʼ-])", re.IGNORECASE)
+_LATIN_SURNAME = re.compile(
+    r"(?:[a-z'-]{2,35}(?:ov|ev|in|yn|sky|ski|skiy|skii|skyi|skaya|tsky|tski|enko|ko|ich|yan|dze|shvili)(?:a)?"
+    r"|o['’ʼ][a-z]{2,35}|m(?:c|ac)[a-z]{2,35})\Z", re.IGNORECASE,
+)
+# Conventional English equivalents supplement transliteration of the caller's
+# Russian given-name dictionary. Surnames and evaluation examples are never stored.
+_ENGLISH_GIVEN = frozenset("john peter alexander alex alexis andrew anthony arthur boris "
+                           "george gregory daniel eugene nicholas paul philip michael "
+                           "mary helen elizabeth julia katherine sophia victoria".split())
+_LATIN_NON_NAMES = frozenset("login signin admin plugin origin domain skin checkin begin "
+                             "token version confirm confirmation media company corporate "
+                             "client holder unknown none null unavailable name card".split())
+_TRANSLITERATION = dict(zip(
+    "абвгдеёжзийклмнопрстуфхцчшщъыьэюя",
+    ("a", "b", "v", "g", "d", "e", "e", "zh", "z", "i", "i", "k", "l", "m", "n", "o", "p",
+     "r", "s", "t", "u", "f", "kh", "ts", "ch", "sh", "shch", "ie", "y", "", "e", "iu", "ia"),
+    strict=True,
+))
+_COMMON_TRANSLITERATION = _TRANSLITERATION | {"ё": "yo", "й": "y", "ъ": "", "ю": "yu", "я": "ya"}
+
+
+@lru_cache(maxsize=8)
+def _latin_given_names(given_names: frozenset[str]) -> frozenset[str]:
+    variants = set(_ENGLISH_GIVEN)
+    for source in given_names:
+        for table in (_TRANSLITERATION, _COMMON_TRANSLITERATION):
+            value = "".join(table.get(letter, letter) for letter in source)
+            variants.update((value, value.replace("ks", "x")))
+    return frozenset(variants)
+
+
+def _latin_name_pair(words: list[str], given_names: Collection[str]) -> bool:
+    if len(words) != 2 or not all(_LATIN_WORDS.fullmatch(word) for word in words):
+        return False
+    lower = [word.lower() for word in words]
+    if any(word in _LATIN_NON_NAMES for word in lower):
+        return False
+    names = _latin_given_names(frozenset(given_names))
+    return any(first in names and second not in names and _LATIN_SURNAME.fullmatch(second)
+               for first, second in (lower, lower[::-1]))
+
+
 _WORD = r"[^\W\d_](?:[^\W\d_]|['’ʼ-](?=[^\W\d_])){0,39}"
 _INITIAL = r"[^\W\d_][.]"
 _ATOM = rf"(?:{_INITIAL}|{_WORD})"
@@ -75,6 +120,8 @@ def _name_sequence(words: list[str], given_names: Collection[str], *, field: boo
         word = full[0]
         return bool((field or initials) and (word.lower() in given_names or _surname(word) or _patronymic(word)))
     if len(full) == 2:
+        if _latin_name_pair(full, given_names):
+            return True
         first, second = full
         return bool(
             (first.lower() in given_names and (_surname(second) or _patronymic(second)))
@@ -186,11 +233,28 @@ def _initial_candidates(text: str, given_names: Collection[str]) -> Iterator[Can
                 yield start, end, "PERSON", 0.96, "personal-name-with-initials"
 
 
+def _latin_candidates(text: str, given_names: Collection[str]) -> Iterator[Candidate]:
+    words = list(_LATIN_WORDS.finditer(text))
+    for first, second in zip(words, words[1:], strict=False):
+        gap = text[first.end():second.start()]
+        if not gap or not gap.isspace() or "\n" in gap or "\r" in gap:
+            continue
+        values = [first.group(), second.group()]
+        # Grammar, never letter casing, determines whether this is a name.
+        # Do not reinterpret an email local part or domain as a name token.
+        email_boundary = (text[max(0, first.start() - 1):first.start()] == "@"
+                          or text[second.end():second.end() + 1] == "@")
+        if (_latin_name_pair(values, given_names) and not email_boundary
+                and not _is_street_value(text, first.start())):
+            yield first.start(), second.end(), "PERSON", 0.94, "transliterated-person-name"
+
+
 def _all_candidates(text: str, given_names: Collection[str]) -> Iterator[Candidate]:
     if not text:
         return
     max_given_length = min(40, max(map(len, given_names), default=0))
     yield from _field_candidates(text, given_names, max_given_length)
+    yield from _latin_candidates(text, given_names)
     if "." in text:
         yield from _initial_candidates(text, given_names)
     for word in _JOINED_WORDS.finditer(text):

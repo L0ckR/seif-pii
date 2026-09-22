@@ -115,7 +115,7 @@ def test_separate_document_parts_do_not_include_intervening_labels():
     "Паспорт нужен; заказ, серия 6543, номер 987654.",
     "Паспорт нужен. Серия товара 6543, номер 987654.",
     "Паспорт нужен, накладная: серия 6543, номер 987654.",
-    "6543 987654", "серия 6543 / номер 987654", "Номер 987654",
+    "6543 987654", "Номер 987654",
     "ПИН-код неизвестен. Заказ 2468.", "ПИН-код 246", "ПИН-код 2468975",
     "Система вернула код ошибки 246.", "Код на карте товара 246.",
     "CVV указан в заявке номер 246.", "CVV 24689", "CVV 246a",
@@ -124,3 +124,7 @@ def test_separate_document_parts_do_not_include_intervening_labels():
 ])
 def test_unowned_numbers_and_prose_are_not_values(text):
     assert values(text) == []
+
+
+def test_adjacent_series_and_number_supply_document_structure():
+    assert values("серия 6543 / номер 987654") == [("PASSPORT", "6543"), ("PASSPORT", "987654")]

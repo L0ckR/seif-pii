@@ -12,10 +12,10 @@ Candidate = tuple[int, int, str, float, str]
 _FLAGS = re.IGNORECASE
 _AUTHORITY_HEAD = (
     r"(?:паспортно-визов[а-яё]*[ \t]+(?:отдел[а-яё]*|служб[а-яё]*)|"
-    r"отдел(?:ение|ением|ом)?|управлени[ея]м?|[гу]+[ \t]+мвд|[оугм]вд|[оу]{0,2}фмс|мвд)"
+    r"отдел(?:ение|ением|ом)?|управлени[ея]м?|(?:[гу]+|мо)[ \t]+мвд|умвд|[оугм]вд|[оу]{0,2}фмс|мвд)"
 )
 _AUTHORITY = re.compile(
-    r"\b(?:[гу]+[ \t]+мвд|[оугм]вд|[оу]{0,2}фмс|мвд|"
+    r"\b(?:(?:[гу]+|мо)[ \t]+мвд|умвд|[оугм]вд|[оу]{0,2}фмс|мвд|"
     r"паспортно-визов[а-яё]*[ \t]+(?:отдел[а-яё]*|служб[а-яё]*)|"
     r"отдел[а-яё]*[ \t]+внутренних[ \t]+дел)\b", _FLAGS,
 )
@@ -37,6 +37,27 @@ _ISSUER_NEXT_FIELD = re.compile(
     r"[, \t]+(?=\b(?:код[ \t]+подразделения|дата[ \t]+выдачи|дата[ \t]+рождения|"
     r"повторный|телефон|адрес|фио|паспорт)[ \t:—–-])", _FLAGS,
 )
+_ISSUER_PROSE = re.compile(
+    r"\b(?:совпадает|подтвержд[её]н[аоы]?|указан[аоы]?|выдал[ао]?|"
+    r"в[ \t]+(?:прошлом|текущем|этом|позапрошлом)[ \t]+году)\b|"
+    r"[ \t]*\([ \t]*(?:ранее|бывш[а-яё]*)\b|"
+    r"[ \t]+[0-9]{1,2}[./-][0-9]{1,2}[./-][0-9]{2,4}(?!\d)", _FLAGS,
+)
+_ISSUER_CONTEXT = re.compile(
+    r"\b(?:выда(?:н(?:ный|ная|ное|ные|ного|а|о)?|л[ао]?)|орган[ \t]+выдачи)\b", _FLAGS,
+)
+_AUTHORITY_START = re.compile(rf"\b{_AUTHORITY_HEAD}\b", _FLAGS)
+_AFTER_BIRTH_DATE_PLACE = re.compile(
+    r"\bродил(?:ся|ась)[ \t]+[0-9]{1,2}[./-][0-9]{1,2}[./-][0-9]{4}"
+    r"[ \t]+в[ \t]+(?P<value>(?:г[.]|городе?)[ \t]+"
+    r"[а-яё]{2,35}(?:-[а-яё]{2,35}){0,3}(?:[ \t]+[а-яё]{2,35})?)"
+    r"(?=[ \t]*(?:[,;.!?\n]|$))", _FLAGS,
+)
+_RELATIVE_ISSUE_YEAR = re.compile(r"\bв[ \t]+(?P<value>(?:прошлом|позапрошлом|этом|текущем)[ \t]+году)\b", _FLAGS)
+_PERSONAL_ISSUE = re.compile(r"\bпаспорт(?:а)?\b[^;!?\n]{0,80}\bвыдан[а-яё]*\b", _FLAGS)
+_NONPERSONAL_PASSPORT = re.compile(r"\b(?:оборудовани[а-яё]*|издели[а-яё]*|станк[а-яё]*|техническ[а-яё]*)\b", _FLAGS)
+_ISSUED_OWNER = re.compile(r"\b(?:(?P<personal>паспорт)|(?P<business>чек|талон|сертификат|заказ|билет))\b", _FLAGS)
+_PUBLIC_BIRTH_OWNER = re.compile(r"\b(?:поэт[а-яё]*|писател[а-яё]*|композитор[а-яё]*)\b", _FLAGS)
 _MISSING_AUTHORITY = re.compile(
     r"\b(?:не[ \t]+(?:указан[а-яё]*|извест[а-яё]*|определ[её]н[а-яё]*)|"
     r"неизвест[а-яё]*|отсутств[а-яё]*|нет[ \t]+данных|"
@@ -63,7 +84,7 @@ _PRIVATE_OWNER = re.compile(
 _WORD = r"[а-яё]{1,35}(?:-[а-яё]{1,35}){0,3}"
 _NAME = rf"{_WORD}(?:[ \t]+{_WORD}){{0,3}}"
 _NUMBER = r"[0-9]{1,4}[а-яё]?(?:/[0-9а-яё]{1,5})?"
-_STREET_TYPE = r"(?:улица|ул[.]|проспект|просп[.]|пр[.]|бульвар|бул[.]|переулок|пер[.])"
+_STREET_TYPE = r"(?:улица|ул[.]|проспект|просп[.]|пр[.]|пр-кт|пр-т|бульвар|бул[.]|переулок|пер[.])"
 _RESIDENTIAL_LINE = re.compile(
     rf"^[ \t]*(?P<value>(?:[0-9]{{6}},[ \t]*)?(?:город|г[.])[ \t]*{_NAME},[ \t]*"
     rf"(?:{_STREET_TYPE}[ \t]+{_NAME}|{_NAME}[ \t]+{_STREET_TYPE}),[ \t]*"
@@ -97,6 +118,7 @@ def _issuer_value(text: str, start: int) -> Candidate | None:
     next_field = _ISSUER_NEXT_FIELD.search(text, start, end)
     if next_field is not None:
         end = next_field.start()
+    end = issuer_value_end(text, start, end)
     if end == start + 220 and end < len(text):
         return None
     start, end = _trim(text, start, end)
@@ -104,6 +126,18 @@ def _issuer_value(text: str, start: int) -> Candidate | None:
     if authority is not None and not _MISSING_AUTHORITY.search(text, start, authority.start()):
         return start, end, "PASSPORT_ISSUER", 0.99, "explicit-passport-authority-field"
     return None
+
+
+def issuer_value_end(text: str, start: int, end: int) -> int:
+    """End a recognized authority before a later field or narrative clause."""
+    end = _field_end(text, start, end - start)
+    prose = _ISSUER_PROSE.search(text, start, end)
+    return prose.start() if prose else end
+
+
+def _business_issue_context(prefix: str) -> bool:
+    owners = list(_ISSUED_OWNER.finditer(prefix))
+    return bool(owners and owners[-1].lastgroup == "business")
 
 
 def _public_address_context(text: str, start: int) -> bool:
@@ -116,7 +150,7 @@ def _public_address_context(text: str, start: int) -> bool:
     return bool(public and (not private or public[-1].start() > private[-1].start()))
 
 
-def _issuer_candidates(text: str) -> Iterator[Candidate]:
+def _labelled_issuer_candidates(text: str) -> Iterator[Candidate]:
     for label in _ISSUER_LABEL.finditer(text):
         candidate = _issuer_value(text, label.end())
         if candidate is not None:
@@ -130,6 +164,30 @@ def _issuer_candidates(text: str) -> Iterator[Candidate]:
     for match in _ISSUER_POST.finditer(text):
         start, end = _trim(text, *match.span("value"))
         yield start, end, "PASSPORT_ISSUER", 0.99, "personal-passport-issuing-authority"
+
+
+def _issuer_candidates(text: str) -> Iterator[Candidate]:
+    labelled = list(_labelled_issuer_candidates(text))
+    yield from labelled
+    covered = iter(sorted((candidate[0], candidate[1]) for candidate in labelled))
+    next_interval = next(covered, None)
+    covered_end = -1
+    for authority in _AUTHORITY_START.finditer(text):
+        while next_interval is not None and next_interval[0] <= authority.start():
+            covered_end = max(covered_end, next_interval[1])
+            next_interval = next(covered, None)
+        if authority.start() < covered_end:
+            continue
+        prefix = re.split(r"[;!?\n]", text[max(0, authority.start() - 220):authority.start()])[-1]
+        contexts = list(_ISSUER_CONTEXT.finditer(prefix))
+        if (contexts and not _MISSING_AUTHORITY.search(prefix, contexts[-1].end())
+                and not _NONPERSONAL_PASSPORT.search(prefix)
+                and not _business_issue_context(prefix)
+                and _field_end(prefix, contexts[-1].end()) == len(prefix)):
+            candidate = _issuer_value(text, authority.start())
+            if candidate is not None:
+                covered_end = candidate[1]
+                yield candidate
 
 
 def _registration_candidates(text: str) -> Iterator[Candidate]:
@@ -149,6 +207,17 @@ def location_candidates(text: str) -> Iterator[Candidate]:
     lower = text.lower()
     if "выда" in lower:
         yield from _issuer_candidates(text)
+        for match in _RELATIVE_ISSUE_YEAR.finditer(text):
+            prefix = text[max(0, match.start() - 180):match.start()]
+            issue = _PERSONAL_ISSUE.search(prefix)
+            if (issue and not _NONPERSONAL_PASSPORT.search(prefix)
+                    and _field_end(prefix, issue.end()) == len(prefix)):
+                yield *match.span("value"), "PASSPORT_DATE", 0.97, "relative-personal-document-date"
+    if "родил" in lower:
+        for match in _AFTER_BIRTH_DATE_PLACE.finditer(text):
+            prefix = re.split(r"[;!?\n]", text[max(0, match.start() - 100):match.start()])[-1]
+            if not _PUBLIC_BIRTH_OWNER.search(prefix) or _PRIVATE_OWNER.search(prefix):
+                yield *match.span("value"), "BIRTH_PLACE", 0.99, "birth-date-locality-field"
     if "регистрации" in lower:
         yield from _registration_candidates(text)
     if "квартира" in lower or "кв." in lower:
