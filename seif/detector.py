@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import math
 import re
-from bisect import bisect_left
+from bisect import bisect_left, bisect_right
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import date
@@ -111,6 +111,16 @@ _STRONG_NAME_FIELD = _rx(
     rf"(?<!\w)(?:фио|фамилия[ \t]+и[ \t]+имя|имя[ \t]+и[ \t]+фамилия|аты[ -]жөні)"
     rf"[ \t]*[:=][ \t]*(?P<value>{_UNICODE_NAME_WORD}(?:[ \t]+{_UNICODE_NAME_WORD}){{1,3}})"
     r"(?=[ \t]*(?:[,;\n.!?]|$))"
+)
+# These are role prefixes, not a global blacklist of possible personal names.
+_NER_CLIENT_ROLE = _rx(r"(?<![\w'’ʼ-])клиент(?:ка|ки|ку|ке|кой|а|у|ом|е|ы|ов|ам|ами|ах)?(?![\w'’ʼ-])")
+_NER_ROLE_SEPARATOR = _rx(r"[ \t]*(?P<label>[:=])[ \t]*|[ \t]+")
+_NER_FIELD_SPACE = r"[^\S\r\n\u2028\u2029]"
+_NER_NAME_VALUE_FIELD = _rx(
+    rf"\b(?:фио|ф[.]\s*и[.]\s*о[.]|фамилия|имя|отчество|фамилия и имя|имя и фамилия|аты[ -]жөні)"
+    rf"{_NER_FIELD_SPACE}*[:=—–-]{_NER_FIELD_SPACE}*"
+    rf"(?:(?:\r\n|[\n\r\u2028\u2029]){_NER_FIELD_SPACE}*)?"
+    rf"(?:[«‹“„\"'‘‚]{_NER_FIELD_SPACE}*)?(?:{_UNICODE_NAME_WORD}{_NER_FIELD_SPACE}+){{0,4}}\Z"
 )
 _PUBLIC_NAME = _rx(
     r"\b(?:поэт(?:а|у|ом)?|писател[ьяю]|стихотворени[еяю]|роман|цитат[аыу]|творчеств[ао]|памятник|имени)\b"
@@ -616,6 +626,47 @@ def _resolve(candidates: Iterable[Span]) -> list[Span]:
     return result
 
 
+def _trim_ner_person_role(
+    text: str, span: Span, person_starts: Sequence[int], person_cover_ends: Sequence[int]
+) -> Span | None:
+    """Remove a leading client role while preserving explicit/core name values.
+
+    Only NER PERSON boundaries change. A standalone role needs a visible field
+    delimiter; an undelimited role needs a remaining model-recognized name.
+    No given-name dictionary or capitalization requirement limits that name.
+    """
+    role = _NER_CLIENT_ROLE.match(text, span.start)
+    if role is None or role.end() > span.end:
+        return span
+    covering = bisect_right(person_starts, span.start) - 1
+    if covering >= 0 and person_cover_ends[covering] > span.start:
+        return span
+    # Preserve dotted/quoted fields and a value on the immediately next line.
+    # Only name words can follow the opening quote; a completed value, later
+    # sentence, another record or a blank line cannot exempt an unrelated role.
+    before = text[max(0, span.start - 200) : span.start]
+    if _NER_NAME_VALUE_FIELD.search(before):
+        return span
+    separator = _NER_ROLE_SEPARATOR.match(text, role.end(), min(len(text), span.end + 32))
+    if separator is None:
+        return span
+    if separator.end() >= span.end:
+        return None if separator.group("label") else span
+    start = separator.end()
+    # Repeated explicit labels are still labels. Do not repeatedly remove bare
+    # words: after "Клиент: Клиент Иванович", the second word may be a surname.
+    while role := _NER_CLIENT_ROLE.match(text, start):
+        if role.end() > span.end:
+            break
+        separator = _NER_ROLE_SEPARATOR.match(text, role.end(), min(len(text), span.end + 32))
+        if separator is None or not separator.group("label"):
+            break
+        if separator.end() >= span.end:
+            return None
+        start = separator.end()
+    return Span(start, span.end, span.type, span.confidence, span.reason)
+
+
 def _merge_ner_candidates(
     text: str, base_spans: Sequence[Span], candidates: Sequence[Span], *, allowed_types: frozenset[str]
 ) -> list[Span]:
@@ -656,6 +707,14 @@ def _merge_ner_candidates(
     for span in candidates:
         validate(span, external=True)
 
+    # Prefix maxima support overlapping caller-supplied base spans without a
+    # quadratic scan for each NER candidate. Any core name value stays intact.
+    core_people = sorted((span.start, span.end) for span in base_spans if span.type == "PERSON")
+    person_starts: list[int] = []
+    person_cover_ends: list[int] = []
+    for start, end in core_people:
+        person_starts.append(start)
+        person_cover_ends.append(max(end, person_cover_ends[-1] if person_cover_ends else end))
     existing = {(span.type, span.start, span.end) for span in base_spans if span.type in allowed_types}
     accepted: dict[tuple[str, int, int], Span] = {}
     for span in candidates:
@@ -664,6 +723,13 @@ def _merge_ner_candidates(
             continue
         if span.type == "PERSON" and _is_public_name(text, span.start, span.end):
             continue
+        if span.type == "PERSON":
+            span = _trim_ner_person_role(text, span, person_starts, person_cover_ends)
+            if span is None:
+                continue
+            identity = (span.type, span.start, span.end)
+            if identity in existing:
+                continue
         if span.type == "LOCATION":
             # Reuse the same public/private bank policy in this sentence only;
             # a bank in an earlier sentence cannot exempt an unrelated place.
