@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Provisional AI annotation, not official organizer ground truth. Offsets are Unicode code points.",
+  "properties": {
+    "adjudication_reason": {
+      "type": "string"
+    },
+    "case_id": {
+      "pattern": "^org_[0-9]{4}$",
+      "type": "string"
+    },
+    "confidence": {
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "decision": {
+      "enum": [
+        "positive",
+        "negative"
+      ]
+    },
+    "entities": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "end": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "start": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "text": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "start",
+          "end",
+          "text"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "expected_masked": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string"
+    },
+    "traffic_weight": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "uncertain": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "case_id",
+    "text",
+    "decision",
+    "entities",
+    "uncertain",
+    "confidence",
+    "notes",
+    "traffic_weight",
+    "expected_masked"
+  ],
+  "title": "Organizer v1 golden regression case",
+  "type": "object"
+}

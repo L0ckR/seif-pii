@@ -1,0 +1,93 @@
+{
+  "authorization": {
+    "basis": "User explicitly requested committing and pushing the annotated organizer dataset to their private repo",
+    "date": "2026-09-22",
+    "excluded": [
+      "source IP metadata",
+      "API keys",
+      "live request identifiers",
+      "raw request logs",
+      "observed service outputs",
+      "model predictions"
+    ],
+    "private_repository": "L0ckR/seif-pii",
+    "public_distribution_authorized": false,
+    "supersedes": "Earlier local-only/no-Git instruction for these selected texts and frozen annotations"
+  },
+  "case_count": 446,
+  "cases_file": "cases.jsonl",
+  "cases_sha256": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46",
+  "counts": {
+    "cases": 446,
+    "confidence": {
+      "high": 329,
+      "low": 38,
+      "medium": 79
+    },
+    "entities": 469,
+    "entity_types": {
+      "ADDRESS": 32,
+      "BIRTH_DATE": 40,
+      "BIRTH_PLACE": 11,
+      "CARD": 6,
+      "CARDHOLDER": 14,
+      "CITIZENSHIP": 10,
+      "CITY": 2,
+      "CVV": 13,
+      "DEPARTMENT_CODE": 12,
+      "DRIVER_LICENSE": 21,
+      "EMAIL": 21,
+      "INN": 15,
+      "PASSPORT": 59,
+      "PASSPORT_DATE": 27,
+      "PASSPORT_ISSUER": 17,
+      "PERSON": 122,
+      "PHONE": 20,
+      "PIN": 26,
+      "POSTAL_CODE": 1
+    },
+    "negative": 77,
+    "positive": 369,
+    "traffic_weight_total": 35845,
+    "uncertain": 117
+  },
+  "dataset_id": "organizer-v1",
+  "evaluation_limits": [
+    "Golden means frozen regression expectations, not official organizer ground truth or human-validated labels.",
+    "117 cases are uncertain; report both all-case and certain-case metrics, retaining every case.",
+    "There is no held-out split; scores after tuning on this corpus are in-sample development metrics.",
+    "Do not reinterpret character F1 as the organizer's span-based Levenshtein score or overall hackathon score.",
+    "Traffic weights repeat correlated texts and are secondary to equally weighted unique-case metrics.",
+    "Do not revise v1 labels to match predictions; document corrections in a separately versioned dataset."
+  ],
+  "frozen_on": "2026-09-22",
+  "masking_rule": "Replace each alphanumeric code point inside a gold span with *; preserve all other code points",
+  "offset_unit": "Unicode code points; zero-based start inclusive, end exclusive",
+  "provenance": {
+    "adjudicated_cases": 8,
+    "annotation_quality": "Provisional AI annotations (silver quality), frozen as golden regression expectations",
+    "blind_annotation": "Annotators saw source text and protocol; outputs were locked before scoring",
+    "independent_review_sample_cases": 80,
+    "independent_review_sample_seed": 20260922,
+    "label_source": "Previously locked annotations-adjudicated.jsonl; all labels copied without revision",
+    "official_organizer_ground_truth": false,
+    "primary_ai_annotator_cases": 446,
+    "reviewer_limitation": "Secondary reviewer had prior familiarity with detector code from earlier work",
+    "source": "446 unique original texts captured from an organizer evaluation run",
+    "source_date": "2026-09-22",
+    "source_sha256": {
+      "adjudication-decisions.jsonl": "9049316fbd23f58e5559a33ea41d766539f1a0b1add6778c5b13fcec73d37fa5",
+      "annotation-protocol.md": "ca257fa2f77ac868813ab180ea623ed77de0144aee341917d88003bbb9d9496b",
+      "annotations-adjudicated.jsonl": "1c5bba96f00a970c074221aa6be0ae18efa345b55608a6b3cf7e2dcbd6b510b9",
+      "annotations.jsonl": "056a4d3744c8428854c07df95d221d1fa99479e3ffb6156ef0e9d145d5e9972c",
+      "input-only.jsonl": "893f5660d0c7170fab8640b467acba8fa49ef4a9b2fc9a6ac934b0854e38a53c",
+      "load-corpus.jsonl": "407f1090c19a1c7a7b763ba897fad6d5fd49da009502a9300d35ac715ec18b46",
+      "review-annotations.jsonl": "1239a03d3eee519a070c15033320ec3ae0213ef02c532981ba87372e9b5f8872",
+      "review-sample-ids.json": "2b845e50725110906239993bd398b249f7a3cfbb4418c1756f076da6666bfd9f"
+    }
+  },
+  "release_version": "1.0.0",
+  "schema_version": 1,
+  "serialization": "UTF-8 JSON Lines; sorted object keys; compact separators; trailing LF",
+  "version": "organizer-v1"
+}

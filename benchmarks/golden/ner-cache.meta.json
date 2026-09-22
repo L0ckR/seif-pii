@@ -1,0 +1,14 @@
+{
+  "model": "ru_core_news_sm",
+  "versions": {
+    "spacy": "3.8.16",
+    "ru-core-news-sm": "3.8.0",
+    "presidio-analyzer": "2.2.364"
+  },
+  "inference_service_sha256": "c5fc9fe8e03104165a5ad01e8116b43cc0b93e1c86f9efb77629101c4c72d903",
+  "source_input_sha256": "893f5660d0c7170fab8640b467acba8fa49ef4a9b2fc9a6ac934b0854e38a53c",
+  "cases": 446,
+  "candidates": 221,
+  "cache_sha256": "c0152894401d87c1848aab145aa5b734b30754c678d66e733545308d596f054f",
+  "purpose": "Frozen model outputs for reproducible offline rules/merge regression; never gold labels; not HTTP/latency measurement"
+}

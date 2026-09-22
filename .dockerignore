@@ -12,3 +12,5 @@ __pycache__
 docs
 tests
 local-data
+datasets
+benchmarks
