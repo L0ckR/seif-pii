@@ -163,3 +163,23 @@ def test_direct_business_fields_keep_veto_even_with_purpose_words(prefix):
 
 def test_purpose_context_does_not_grant_ownership_to_bare_numbers():
     assert values("Для проверки товара необходимы следующие данные: 3456 876543.") == []
+
+
+@pytest.mark.parametrize("transform", [str.lower, str.upper])
+@pytest.mark.parametrize("prefix", [
+    "", "Проверка договора завершена. ", "Регистрация автомобиля завершена. ",
+    "Паспорт оборудования проверен. ",
+])
+def test_generic_identity_document_does_not_assign_bare_number_category(transform, prefix):
+    assert values(transform(prefix + "Удостоверение личности: 34 56 876543.")) == []
+
+
+@pytest.mark.parametrize("prefix", ["Регистрация автомобиля завершена. ", "Паспорт оборудования проверен. "])
+def test_generic_identity_document_preserves_explicit_paired_field_policy(prefix):
+    text = prefix + "Удостоверение личности: серия 34 56, номер 876543."
+    assert values(text) == [("PASSPORT", "34 56"), ("PASSPORT", "876543")]
+
+
+def test_specific_owner_can_follow_generic_identity_document():
+    text = "Удостоверение личности: водительское удостоверение 34 56 876543."
+    assert values(text) == [("DRIVER_LICENSE", "34 56 876543")]

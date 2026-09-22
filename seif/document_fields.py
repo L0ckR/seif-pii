@@ -39,8 +39,9 @@ _OWNER = re.compile(
     r"водительск(?:ая|ой|ую)[ \t]+карт(?:а|ы|у|ой|е))\b|"
     rf"\b(?P<driver_card>{_DRIVER_CARD})\b|"
     r"\b(?P<license>водительск[а-яё]*[ \t]+удостоверени[а-яё]*|в[ /]?у|права)\b|"
+    r"\b(?P<identity>удостоверени[ея][ \t]+личности)\b|"
     r"\b(?P<passport>паспортн[а-яё]*[ \t]+(?:данн[а-яё]*|реквизит[а-яё]*)|"
-    r"удостоверени[ея][ \t]+личности|паспорт(?:а|ом|е)?|документ(?:а|ом|е)?)\b|"
+    r"паспорт(?:а|ом|е)?|документ(?:а|ом|е)?)\b|"
     r"\b(?P<generic_license>удостоверени[ея])(?=[ \t]*[:=])|"
     r"\b(?P<business>(?:пенсионн[а-яё]*|служебн[а-яё]*|студенческ[а-яё]*)[ \t]+удостоверени[ея]|"
     r"заказ[а-яё]*|накладн[а-яё]*|товар[а-яё]*|артикул[а-яё]*|"
@@ -154,6 +155,10 @@ def _number_kind(text: str, start: int, *, paired: bool = False) -> str | None:
         return None
     if group in {"business", "other_card"}:
         return None
+    if group == "identity":
+        # An identity document is personal, but its specific category is not
+        # established. Only preserve the existing explicit paired-field policy.
+        return default
     return "DRIVER_LICENSE" if group in {"license", "generic_license", "driver_card"} else "PASSPORT"
 
 
