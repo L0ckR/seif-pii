@@ -50,8 +50,9 @@ def test_rejects_archive_path_traversal(tmp_path, name):
     {"location": {"path": "seif/app.py", "lines": {"begin": True}}},
 ])
 def test_rejects_invalid_gitlab_findings(override):
+    report = [issue(**override)]
     with pytest.raises(ValueError):
-        validate_report([issue(**override)], {"seif/app.py"})
+        validate_report(report, {"seif/app.py"})
 
 
 def test_accepts_native_ruff_positions_and_preserves_scope():
@@ -65,8 +66,9 @@ def test_accepts_native_ruff_positions_and_preserves_scope():
 
 
 def test_rejects_duplicate_fingerprints_instead_of_hiding_findings():
+    report = [issue(), issue(check_name="F821")]
     with pytest.raises(ValueError, match="Duplicate fingerprint"):
-        validate_report([issue(), issue(check_name="F821")], {"seif/app.py"})
+        validate_report(report, {"seif/app.py"})
 
 
 def test_rejects_symlink_source_member(tmp_path):

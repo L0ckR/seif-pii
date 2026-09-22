@@ -81,6 +81,20 @@ def _update_type_coverage(text, gold, actual, type_counts):
     return missing
 
 
+def _validate_case(text, label, prediction):
+    gold, guessed = label["entities"], prediction["entities"]
+    validate(text, gold, annotation=True)
+    validate(text, guessed)
+    if type(label.get("uncertain")) is not bool:
+        raise ValueError("Every annotation needs an explicit uncertainty flag")
+    if label.get("decision") != ("positive" if gold else "negative"):
+        raise ValueError("Annotation decision conflicts with its entities")
+    expected, actual = positions(text, gold), positions(text, guessed)
+    if prediction["masked"] != shape_mask(text, actual):
+        raise ValueError("Frozen spans do not reproduce the actually observed mask")
+    return gold, guessed, expected, actual
+
+
 def evaluate(inputs, annotations, predictions, weights=None):
     if set(inputs) != set(annotations) or set(inputs) != set(predictions):
         raise ValueError("Inputs, annotations and predictions must cover the same complete case set")
@@ -97,16 +111,7 @@ def evaluate(inputs, annotations, predictions, weights=None):
     for case_id, source in inputs.items():
         text = source["text"]
         label, prediction = annotations[case_id], predictions[case_id]
-        gold, guessed = label["entities"], prediction["entities"]
-        validate(text, gold, annotation=True)
-        validate(text, guessed)
-        if type(label.get("uncertain")) is not bool:
-            raise ValueError("Every annotation needs an explicit uncertainty flag")
-        if label.get("decision") != ("positive" if gold else "negative"):
-            raise ValueError("Annotation decision conflicts with its entities")
-        expected, actual = positions(text, gold), positions(text, guessed)
-        if prediction["masked"] != shape_mask(text, actual):
-            raise ValueError("Frozen spans do not reproduce the actually observed mask")
+        gold, guessed, expected, actual = _validate_case(text, label, prediction)
         counts = {"tp": len(expected & actual), "fp": len(actual - expected), "fn": len(expected - actual),
                       "cases": 1, "exact_cases": int(expected == actual),
                       "positive_cases": int(bool(expected)), "negative_cases": int(not expected),

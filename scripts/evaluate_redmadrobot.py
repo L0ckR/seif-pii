@@ -76,6 +76,18 @@ def parse_bio(row):
     return _align_bio(row["text"], tokens, labels)
 
 
+def _append_bio(spans, label, previous, offsets):
+    start, end = offsets
+    if label.startswith("B-") and label[2:] in ALL_FINE:
+        spans.append((label[2:], start, end))
+    elif label.startswith("I-") and label[2:] in ALL_FINE and previous in {"B-" + label[2:], label}:
+        kind, begin, _ = spans[-1]
+        spans[-1] = (kind, begin, end)
+    elif label != "O":
+        return False
+    return True
+
+
 def _align_bio(text, tokens, labels):
     cursor, previous, spans = 0, "O", []
     for token, label in zip(tokens, labels, strict=True):
@@ -90,12 +102,7 @@ def _align_bio(text, tokens, labels):
         if start < 0 or text[cursor:start].strip():
             return None, "token_not_exactly_alignable"
         end = start + len(token)
-        if label.startswith("B-") and label[2:] in ALL_FINE:
-            spans.append((label[2:], start, end))
-        elif label.startswith("I-") and label[2:] in ALL_FINE and previous in {"B-" + label[2:], label}:
-            kind, begin, _ = spans[-1]
-            spans[-1] = (kind, begin, end)
-        elif label != "O":
+        if not _append_bio(spans, label, previous, (start, end)):
             return None, "invalid_bio_transition"
         previous, cursor = label, end
     if text[cursor:].strip():

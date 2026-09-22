@@ -48,7 +48,7 @@ _ISSUER_CONTEXT = re.compile(
 )
 _AUTHORITY_START = re.compile(rf"\b{_AUTHORITY_HEAD}\b", _FLAGS)
 _AFTER_BIRTH_DATE_PLACE = re.compile(
-    r"\bродил(?:ся|ась)[ \t]+[0-9]{1,2}[./-][0-9]{1,2}[./-][0-9]{4}"
+    r"\bродил(?:ся|ась)[ \t]+(?:[0-9]{1,2}[./-]){2}[0-9]{4}"
     r"[ \t]+в[ \t]+(?P<value>(?:г[.]|городе?)[ \t]+"
     r"[а-яё]{2,35}(?:-[а-яё]{2,35}){0,3}(?:[ \t]+[а-яё]{2,35})?)"
     r"(?=[ \t]*(?:[,;.!?\n]|$))", _FLAGS,

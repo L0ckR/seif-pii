@@ -16,8 +16,9 @@ def options(**updates):
 @pytest.mark.parametrize("value", [float("inf"), float("-inf"), float("nan"), 0, -1])
 def test_nonfinite_and_nonpositive_rates_are_rejected_without_network(name, value):
     opts = options(**{name: value})
+    pending = benchmark(opts)
     with pytest.raises(ValueError, match="finite and positive"):
-        asyncio.run(benchmark(opts))
+        asyncio.run(pending)
 
 
 @pytest.mark.parametrize("changes", [

@@ -71,7 +71,7 @@ def _rx(pattern: str) -> re.Pattern[str]:
 _SEP = r"[ \t]*(?::|=|—|-)?[ \t]*"
 _WORD = r"[а-яё][а-яё'-]{0,39}"
 _NAMEWORD = r"[а-яё][а-яё'-]{1,39}"
-_PATR = r"[а-яё-]{2,30}(?:ович(?:а|у|ем|е)?|евич(?:а|у|ем|е)?|ич|овн[аыеу]|евн[аыеу]|овной|евной|иничн[аыеу])"
+_PATR = r"[а-яё-]{2,30}(?:[ое]вич(?:ем|[ауе])?|ич|[ое]вн(?:[аыеу]|ой)|иничн[аыеу])"
 _NAMES = {
     "иван", "петр", "пётр", "александр", "алексей", "андрей", "антон", "артём", "артем", "артур", "борис", "вадим",
     "валентин", "валерий", "василий", "виктор", "виталий", "владимир", "владислав", "вячеслав", "геннадий",
@@ -731,6 +731,24 @@ def _validate_ner_span(span: Span, external: bool, text: str, allowed_types: fro
         raise ValueError("NER candidates need a supported type and at most 200 characters")
 
 
+def _normalize_ner_candidate(
+    text: str,
+    span: Span,
+    person_starts: Sequence[int],
+    person_cover_ends: Sequence[int],
+) -> Span | None:
+    if span.type == "PERSON":
+        if _is_public_name(text, span.start, span.end):
+            return None
+        return _trim_ner_person_role(text, span, person_starts, person_cover_ends)
+    if span.type == "LOCATION":
+        # A bank in an earlier sentence cannot exempt an unrelated place.
+        prefix = _local_record_prefix(text, span.start, limit=150)
+        if _is_public_address(prefix, len(prefix)):
+            return None
+    return span
+
+
 def _accept_ner_candidates(
     text: str,
     candidates: Sequence[Span],
@@ -743,21 +761,12 @@ def _accept_ner_candidates(
         identity = (span.type, span.start, span.end)
         if identity in existing:
             continue
-        if span.type == "PERSON" and _is_public_name(text, span.start, span.end):
+        span = _normalize_ner_candidate(text, span, person_starts, person_cover_ends)
+        if span is None:
             continue
-        if span.type == "PERSON":
-            span = _trim_ner_person_role(text, span, person_starts, person_cover_ends)
-            if span is None:
-                continue
-            identity = (span.type, span.start, span.end)
-            if identity in existing:
-                continue
-        if span.type == "LOCATION":
-            # Reuse the same public/private bank policy in this sentence only;
-            # a bank in an earlier sentence cannot exempt an unrelated place.
-            prefix = _local_record_prefix(text, span.start, limit=150)
-            if _is_public_address(prefix, len(prefix)):
-                continue
+        identity = (span.type, span.start, span.end)
+        if identity in existing:
+            continue
         previous = accepted.get(identity)
         if previous is None or span.confidence > previous.confidence:
             # Do not propagate free-form upstream explanations into API metadata.
@@ -853,21 +862,26 @@ class _CandidateCollector:
     text: str
     candidates: list[Span]
 
+    def _value_end(self, start: int, end: int, kind: str, reason: str) -> int:
+        if kind == "PERSON" and reason == "personal-record-context":
+            words = list(re.finditer(_NAMEWORD, self.text[start:end], _FLAGS))
+            if len(words) == 3 and not any(re.fullmatch(_PATR, word.group(), _FLAGS) for word in words[1:]):
+                end = start + words[1].end()
+        while end > start and self.text[end - 1] in " \t,":
+            end -= 1
+        if kind in {"ADDRESS", "BIRTH_PLACE", "PASSPORT_ISSUER"}:
+            while end > start and self.text[end - 1] in ".!?":
+                end -= 1
+        return end
+
     def add(self, pattern: re.Pattern, kind: str, reason: str = "context", confidence: float = 0.98, check=None) -> None:
         for match in pattern.finditer(self.text):
             start, end = match.span("value")
-            if kind == "PERSON" and reason == "personal-record-context":
-                words = list(re.finditer(_NAMEWORD, self.text[start:end], _FLAGS))
-                if len(words) == 3 and not any(re.fullmatch(_PATR, word.group(), _FLAGS) for word in words[1:]):
-                    end = start + words[1].end()
-            while end > start and self.text[end - 1] in " \t,":
-                end -= 1
-            if kind in {"ADDRESS", "BIRTH_PLACE", "PASSPORT_ISSUER"}:
-                while end > start and self.text[end - 1] in ".!?":
-                    end -= 1
+            end = self._value_end(start, end, kind, reason)
             value = self.text[start:end]
             if value and (check is None or check(value, start, end)):
                 self.candidates.append(Span(start, end, kind, confidence, reason))
+
 
 def _detect_contacts(text: str, lower: str, add) -> None:
     if "@" in text:
@@ -889,7 +903,7 @@ def _detect_documents(text: str, lower: str, add) -> None:
         add(_DEPT, "DEPARTMENT_CODE")
 
 
-def _detect_identifiers(text: str, lower: str, add) -> None:
+def _detect_identifiers(text: str, add) -> None:
     add(_INN_LABEL, "INN", check=lambda v, s, e: not _is_public_inn(text, s, v))
     add(
         _INN_BARE,
@@ -954,7 +968,7 @@ def _detect_numeric(text: str, lower: str, add) -> None:
     if any(label in lower for label in ("тел", "моб", "phone")):
         add(_LABEL_PHONE, "PHONE", check=lambda value, *_: 7 <= len(_digits(value)) <= 15)
     _detect_documents(text, lower, add)
-    _detect_identifiers(text, lower, add)
+    _detect_identifiers(text, add)
     _detect_dates(text, lower, add)
     add(_POSTAL, "POSTAL_CODE", check=lambda _, s, e: not _is_public_address(text, s))
     add(
@@ -987,7 +1001,7 @@ def _detect_birth_place(text: str, lower: str, add) -> None:
         add(_CITIZENSHIP, "CITIZENSHIP")
 
 
-def _detect_names(text: str, lower: str, add, candidates: list[Span]) -> None:
+def _detect_names(text: str, add, candidates: list[Span]) -> None:
     candidates.extend(Span(*candidate) for candidate in cardholder_candidates(text, given_names=_NAME_FORMS))
     add(_STRONG_NAME_FIELD, "PERSON", "explicit-unicode-name-field")
     add(
@@ -1090,7 +1104,7 @@ def detect(text: str, *, extra_rules: list[dict] | None = None) -> list[Span]:
     _detect_numeric(text, lower, add)
     _detect_issuer(text, lower, add)
     _detect_birth_place(text, lower, add)
-    _detect_names(text, lower, add, candidates)
+    _detect_names(text, add, candidates)
     _detect_addresses(text, lower, add, candidates)
     _detect_custom(text, extra_rules, candidates)
     candidates.extend(Span(*candidate) for candidate in structured_candidates(text))

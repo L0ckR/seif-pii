@@ -13,6 +13,7 @@ import hmac
 import logging
 import math
 import os
+from concurrent.futures import CancelledError as WorkerCancelledError
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import asynccontextmanager
 from dataclasses import dataclass, field
@@ -221,6 +222,10 @@ def _lifespan(settings, analyzer_factory):
     return lifespan
 
 
+# Starlette dispatches synchronous exception handlers through a worker thread.
+# These handlers perform only constant-time response construction; keeping the
+# async callback contract avoids an extra thread-pool hop under invalid traffic.
+# No artificial checkpoint is required or useful for this bounded work.
 async def _validation_error(_request, _exc):
     return error(422, "invalid_request", "Expected one text string of at most 20000 characters.")
 
@@ -240,18 +245,17 @@ def _consume_model_exception(future):
 
 
 def _complete_model_job(state, waiter, job):
-    # Runs in the owner event loop only after CPU work really ends. Catching
-    # BaseException transfers cancellation/system exceptions to the owner;
-    # narrowing it would strand the waiter and retain request data indefinitely.
+    # Runs on the owner loop after real CPU completion. Future.exception()
+    # transfers even BaseException failures without raising on the loop, where
+    # a third-party failure could otherwise expose private input in a traceback.
     state.model_inflight -= 1
-    try:
-        result = job.result()
-    except BaseException as exc:
-        if not waiter.done():
-            waiter.set_exception(exc)
+    exception = WorkerCancelledError() if job.cancelled() else job.exception()
+    if waiter.done():
+        return
+    if exception is not None:
+        waiter.set_exception(exception)
     else:
-        if not waiter.done():
-            waiter.set_result(result)
+        waiter.set_result(job.result())
 
 
 async def _run_model(state, text):

@@ -34,6 +34,16 @@ class CheckFailed(Exception):
     """Only fixed non-sensitive reasons are allowed in user-visible errors."""
 
 
+def _response_body(response):
+    try:
+        body = response.json()
+    except ValueError:
+        raise CheckFailed("invalid_json_response") from None
+    if not isinstance(body, dict) or set(body) != {"result"} or not isinstance(body["result"], str):
+        raise CheckFailed("invalid_contract_response")
+    return body
+
+
 def request(client: httpx.Client, payload: str, payload_id: str, deadline: float) -> tuple[str, dict]:
     started = time.perf_counter()
     attempts = 0
@@ -44,12 +54,7 @@ def request(client: httpx.Client, payload: str, payload_id: str, deadline: float
         try:
             response = client.post("/process", json={"payload": payload, "payload_id": payload_id})
             if response.status_code == 200:
-                try:
-                    body = response.json()
-                except ValueError:
-                    raise CheckFailed("invalid_json_response") from None
-                if not isinstance(body, dict) or set(body) != {"result"} or not isinstance(body["result"], str):
-                    raise CheckFailed("invalid_contract_response")
+                body = _response_body(response)
                 return body["result"], {"attempts": attempts, "transient_errors": dict(errors),
                                         "elapsed_ms": round((time.perf_counter() - started) * 1000, 3)}
             if response.status_code not in {429, 502, 503, 504}:

@@ -188,19 +188,24 @@ def _field_value_valid(label, words, parts, given_names, max_given_length) -> bo
     return valid
 
 
+def _field_sequence(text: str, label: re.Match) -> re.Match | None:
+    """Locate the value only when this personal label owns its delimiter."""
+    if _OTHER_FIELD_OWNER.search(text[max(0, label.start() - 100):label.start()]):
+        return None
+    suffix = _ROLE_SUFFIX.match(text, label.end())
+    if suffix is None or _ORGANIZATION_OWNER.search(text[label.end():suffix.end()]):
+        return None
+    qualifier = text[label.end():suffix.end()].rstrip(" \t:=«\"'“")
+    if _ROLE.search(qualifier) or _OTHER_FIELD_OWNER.search(qualifier):
+        # Another field owns the later colon; a nearby earlier client role
+        # cannot transfer its personal-name interpretation to that value.
+        return None
+    return _SEQUENCE.match(text, suffix.end())
+
+
 def _field_candidates(text: str, given_names: Collection[str], max_given_length: int) -> Iterator[Candidate]:
     for label in _ROLE.finditer(text):
-        if _OTHER_FIELD_OWNER.search(text[max(0, label.start() - 100):label.start()]):
-            continue
-        suffix = _ROLE_SUFFIX.match(text, label.end())
-        if suffix is None or _ORGANIZATION_OWNER.search(text[label.end():suffix.end()]):
-            continue
-        qualifier = text[label.end():suffix.end()].rstrip(" \t:=«\"'“")
-        if _ROLE.search(qualifier) or _OTHER_FIELD_OWNER.search(qualifier):
-            # Another field owns the later colon; a nearby earlier client role
-            # cannot transfer its personal-name interpretation to that value.
-            continue
-        value = _SEQUENCE.match(text, suffix.end())
+        value = _field_sequence(text, label)
         if value is None:
             continue
         words = list(_PARTS.finditer(text, value.start(), value.end()))

@@ -35,6 +35,9 @@ from .transform import RestorationTooLarge, mask, restore_exact, restore_tokens
 from .vault import Vault, VaultFull
 
 LOG = logging.getLogger("seif.audit")
+PROCESS_ROUTE = "/process"
+MASK_ROUTE = "/v1/mask"
+UNMASK_ROUTE = "/v1/unmask"
 
 
 class ProcessRequest(BaseModel):
@@ -112,7 +115,7 @@ class Boundary:
         if scope["type"] != "http":
             return await self.app(scope, receive, send)
         path = scope.get("path", "")
-        route = path if path in {"/process", "/v1/mask", "/v1/unmask", "/health", "/metrics", "/v1/types"} else "other"
+        route = path if path in {PROCESS_ROUTE, MASK_ROUTE, UNMASK_ROUTE, "/health", "/metrics", "/v1/types"} else "other"
         start, request_id, status = time.perf_counter(), uuid.uuid4().hex, 500
         overloaded = self.inflight >= self.settings.max_inflight
         self.inflight += 1
@@ -120,7 +123,7 @@ class Boundary:
         scope.setdefault("state", {})["request_id"] = request_id
         headers = dict(scope.get("headers", []))
         capture_this = self.capture is not None and scope["method"] == "POST" and path in {
-            "/process", "/v1/mask", "/v1/unmask",
+            PROCESS_ROUTE, MASK_ROUTE, UNMASK_ROUTE,
         }
         received_at = datetime.now(timezone.utc).isoformat() if capture_this else None
 
@@ -519,6 +522,9 @@ class _AppContext:
                 "detector_profile": "hybrid" if self.ner else "rules"}
 
     async def types(self):
+        # FastAPI executes async endpoints directly on the event loop. This
+        # constant response performs no blocking work; a sync handler would
+        # consume thread-pool capacity, while an artificial await adds overhead.
         return {"types": TYPES}
 
     async def metrics(self, request: Request):
@@ -561,9 +567,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         detail = exc.detail if isinstance(exc.detail, dict) else {"code": "http_error", "message": "Запрос не выполнен."}
         return error(exc.status_code, detail["code"], detail["message"], exc.headers)
 
-    app.post("/process", response_model=dict[str, str])(ctx.process)
-    app.post("/v1/mask")(ctx.mask)
-    app.post("/v1/unmask")(ctx.unmask)
+    app.post(PROCESS_ROUTE, response_model=dict[str, str])(ctx.process)
+    app.post(MASK_ROUTE)(ctx.mask)
+    app.post(UNMASK_ROUTE)(ctx.unmask)
     app.get("/health")(ctx.health)
     app.get("/v1/types")(ctx.types)
     app.get("/metrics")(ctx.metrics)

@@ -252,6 +252,7 @@ def test_completed_task_failure_is_retrieved_and_sanitized(monkeypatch):
         raise RuntimeError("private-text")
 
     config = tiny_config()
+    scheduled = bench.schedule(config, pair, Counter(), lambda index: index)
     with pytest.raises(bench.BenchmarkError, match="Pair execution failed") as error:
-        asyncio.run(bench.schedule(config, pair, Counter(), lambda index: index))
+        asyncio.run(scheduled)
     assert "private-text" not in str(error.value)

@@ -149,7 +149,9 @@ class NerClient:
             offset, part = pending[0]
             return await self._chunk(offset, part, total_length)
         # TaskGroup cancels sibling chunks on failure; no model requests may
-        # outlive a failed protection operation.
+        # outlive a failed protection operation. The comprehension creates one
+        # task per chunk (2–4 here); the single-chunk path returns above.
+        # A single create_task call site does not mean a single runtime task.
         async with asyncio.TaskGroup() as group:
             jobs = [group.create_task(self._chunk(offset, part, total_length)) for offset, part in pending]
         return [span for job in jobs for span in job.result()]

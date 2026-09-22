@@ -257,7 +257,7 @@ $("connection-toggle").addEventListener("click", () => {
 $("copy-button").addEventListener("click", async () => {
   if (!lastResult) return;
   try { await navigator.clipboard.writeText(lastResult.result); notice("Текст скопирован.", true); noticeTimer = setTimeout(() => notice(""), 2200); }
-  catch (_) { /* The notice already informs the user; the exception itself needs no further handling. */ notice("Браузер не разрешил доступ к буферу обмена. Выделите результат и скопируйте его вручную."); }
+  catch { notice("Браузер не разрешил доступ к буферу обмена. Выделите результат и скопируйте его вручную."); }
 });
 async function initialize() {
   source.value = examples.client; updateCount();
@@ -273,4 +273,4 @@ async function initialize() {
   const types = outcomes[1];
   if (types.status === "fulfilled" && types.value.types && typeof types.value.types === "object") typeLabels = types.value.types;
 }
-initialize();
+await initialize();

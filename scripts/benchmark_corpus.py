@@ -74,6 +74,25 @@ def strict_json(content):
     return json.loads(content, object_pairs_hook=strict_object, parse_constant=reject_constant)
 
 
+def _read_case(raw, seen, line_number):
+    try:
+        row = strict_json(raw.decode("utf-8"))
+        if not isinstance(row, dict) or set(row) - {"case_id", "payload", "weight"}:
+            raise ValueError
+        identifier, payload = row["case_id"], row["payload"]
+        weight = row.get("weight", 1)
+        if (not isinstance(identifier, str) or not identifier.strip() or len(identifier) > 256
+                or identifier in seen or not isinstance(payload, str)
+                or len(payload) > MAX_PAYLOAD_CHARS or type(weight) not in (int, float)
+                or not math.isfinite(weight) or not 0.000001 <= weight <= 1_000_000):
+            raise ValueError
+        identifier.encode("utf-8")
+        payload.encode("utf-8")
+    except (ValueError, TypeError, KeyError, OverflowError, RecursionError):
+        raise BenchmarkError(f"Invalid corpus row at line {line_number}") from None
+    return identifier, Case(payload, float(weight))
+
+
 def load_corpus(path: Path) -> Corpus:
     cases, seen = [], set()
     digest, byte_count = hashlib.sha256(), 0
@@ -86,23 +105,9 @@ def load_corpus(path: Path) -> Corpus:
                 digest.update(raw)
                 if not raw.strip():
                     continue
-                try:
-                    row = strict_json(raw.decode("utf-8"))
-                    if not isinstance(row, dict) or set(row) - {"case_id", "payload", "weight"}:
-                        raise ValueError
-                    identifier, payload = row["case_id"], row["payload"]
-                    weight = row.get("weight", 1)
-                    if (not isinstance(identifier, str) or not identifier.strip() or len(identifier) > 256
-                            or identifier in seen or not isinstance(payload, str)
-                            or len(payload) > MAX_PAYLOAD_CHARS or type(weight) not in (int, float)
-                            or not math.isfinite(weight) or not 0.000001 <= weight <= 1_000_000):
-                        raise ValueError
-                    identifier.encode("utf-8")
-                    payload.encode("utf-8")
-                except (ValueError, TypeError, KeyError, OverflowError, RecursionError):
-                    raise BenchmarkError(f"Invalid corpus row at line {line_number}") from None
+                identifier, case = _read_case(raw, seen, line_number)
                 seen.add(identifier)
-                cases.append(Case(payload, float(weight)))
+                cases.append(case)
                 if len(cases) > 100_000:
                     raise BenchmarkError("Corpus exceeds the 100000-case limit")
     except OSError:

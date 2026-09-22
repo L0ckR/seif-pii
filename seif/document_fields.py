@@ -25,7 +25,7 @@ _PART = re.compile(
     _FLAGS,
 )
 _PART_LABEL_SUFFIX = re.compile(
-    r"(?<!\w)(?:серия|серии|серией|сер[.]|номер(?:ом)?|ном[.]|№)[ \t]*[:=—–-]?[ \t]*$", _FLAGS,
+    r"(?<!\w)(?:серия|серии|серией|сер[.]|номер(?:ом)?|ном[.]|№)[ \t]*+[:=—–-]?[ \t]*+$", _FLAGS,
 )
 _PART_JOIN = re.compile(r"[ \t,;./—–-]*(?:\r?\n[ \t]*)?(?:и[ \t]+)?", _FLAGS)
 _DRIVER_CARD = (
@@ -72,7 +72,7 @@ _DEPARTMENT = re.compile(
 # introduction. Paragraphs, other records and unrelated narrative cannot carry
 # document ownership. Numeric references such as "2. 3" are not sentence ends.
 _CARD_PURPOSE = re.compile(r"\b(?:для|к)[ \t]+(?:цифров[а-яё]*[ \t]+)?тахограф[а-яё]*[ ,:—–-]*$", _FLAGS)
-_OWNER_BOUNDARY = re.compile(r"[!?;]|(?:\r?\n)[ \t]*(?:\r?\n)?|[.]")
+_OWNER_BOUNDARY = re.compile(r"[!?;]|\r?\n[ \t]*(?:\r?\n)?|[.]")
 _FIELD_ABBREVIATION = re.compile(r"\b(?:сер|ном|п|стр|гл)[.]$", _FLAGS)
 _OWNER_CLAUSE_END = re.compile(
     r"[ \t]*(?:(?:клиента|заявителя|водителя|владельца|представителя)[ \t]*)?"
@@ -179,21 +179,27 @@ def document_kind_at_value(text: str, start: int) -> str | None:
     return _number_kind(text, owner_start, paired=True)
 
 
+def _joined_part_candidates(text: str, previous: re.Match[str], part: re.Match[str]) -> Iterator[Candidate]:
+    if part.start() - previous.end() > 48:
+        return
+    different_parts = bool(previous.group("series")) != bool(part.group("series"))
+    gap = text[previous.end():part.start()]
+    if not different_parts or not _PART_JOIN.fullmatch(gap) or _BUSINESS_SUFFIX.match(text, part.end()):
+        return
+    kind = _number_kind(text, previous.start(), paired=True)
+    if kind is not None:
+        for item in (previous, part):
+            field = "series_value" if item.group("series") else "number_value"
+            start, end = item.span(field)
+            yield start, end, kind, 0.94, "paired-personal-document-parts"
+
+
 def _part_candidates(text: str) -> Iterator[Candidate]:
     previous = None
     for part in _PART.finditer(text):
-        if previous is not None and part.start() - previous.end() <= 48:
-            different_parts = bool(previous.group("series")) != bool(part.group("series"))
-            gap = text[previous.end():part.start()]
-            if different_parts and _PART_JOIN.fullmatch(gap) and not _BUSINESS_SUFFIX.match(text, part.end()):
-                kind = _number_kind(text, previous.start(), paired=True)
-                if kind is not None:
-                    for item in (previous, part):
-                        field = "series_value" if item.group("series") else "number_value"
-                        start, end = item.span(field)
-                        yield start, end, kind, 0.94, "paired-personal-document-parts"
+        if previous is not None:
+            yield from _joined_part_candidates(text, previous, part)
         previous = part
-
 
 def document_candidates(text: str) -> Iterator[Candidate]:
     """Yield document formats without consuming labels or surrounding prose."""

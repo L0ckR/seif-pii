@@ -135,7 +135,7 @@ def _valid_field_date(value: str) -> bool:
     A missing/short year retains the February 29 possibility. Both numeric
     day-month orders are supported, matching the assignment's format variants.
     """
-    numbers = [int(part) for part in re.findall(r"[0-9]+", value)]
+    numbers = [int(part) for part in re.findall(r"(?a:\d)+", value)]
     month_match = next((index + 1 for index, month in enumerate(_MONTH_NAMES)
                         if re.search(rf"(?<!\w){month}(?!\w)", value, _FLAGS)), None)
     for year, month, day in _date_options(numbers, month_match):
@@ -162,6 +162,16 @@ def _date_candidates(text: str) -> Iterator[Candidate]:
         yield from _labelled_date(text, label)
 
 
+def _personal_date_owner(text: str, label: re.Match, prefix: re.Match) -> bool:
+    owner = text[label.end():prefix.end()]
+    if _UNKNOWN_FIELD.search(owner) or _NEXT_DATE_FIELD.search(owner):
+        return False
+    before = text[max(0, label.start() - 80):prefix.end()]
+    before = re.split(r"[.!?;\n]", before)[-1]
+    public_owner = _PUBLIC_OWNER.search(owner) or _HISTORICAL_OWNER.search(before)
+    return not public_owner or _PRIVATE_OWNER.search(before) is not None
+
+
 def _labelled_date(text: str, label: re.Match) -> Iterator[Candidate]:
     # A bounded prefix admits owner qualifiers and '(day and month)', but
     # cannot consume another field, sentence or a date before the delimiter.
@@ -171,12 +181,7 @@ def _labelled_date(text: str, label: re.Match) -> Iterator[Candidate]:
         prefix = _DIRECT_PREFIX.match(text, label.end(), end)
     if prefix is None:
         return
-    owner = text[label.end():prefix.end()]
-    if _UNKNOWN_FIELD.search(owner) or _NEXT_DATE_FIELD.search(owner):
-        return
-    before = text[max(0, label.start() - 80):prefix.end()]
-    before = re.split(r"[.!?;\n]", before)[-1]
-    if (_PUBLIC_OWNER.search(owner) or _HISTORICAL_OWNER.search(before)) and not _PRIVATE_OWNER.search(before):
+    if not _personal_date_owner(text, label, prefix):
         return
     value, valid = _match_date_value(text, label, prefix, end)
     if value is not None and valid:
@@ -246,7 +251,7 @@ _NONPERSONAL_DOCUMENT = re.compile(
 
 def _document_qualifier(text: str, label, end) -> str:
     qualifier_end = min(end, label.end() + 80)
-    first_digit = re.search(r"[0-9]", text[label.end():qualifier_end])
+    first_digit = re.search(r"(?a:\d)", text[label.end():qualifier_end])
     if first_digit is not None:
         qualifier_end = label.end() + first_digit.start()
     first_part = _DOCUMENT_PART.search(text, label.end(), end)
