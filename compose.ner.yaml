@@ -23,7 +23,7 @@ services:
     expose: ["8770"]
     networks: [ner-internal]
     read_only: true
-    tmpfs: [/tmp:size=64m,mode=1777]
+    tmpfs: ["/tmp:size=64m,mode=1777"]
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]
     mem_limit: 3g

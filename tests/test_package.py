@@ -10,6 +10,7 @@ import tomllib
 from zipfile import ZipFile
 
 import pytest
+import yaml
 
 from scripts.package import REQUIRED_FILES, ROOT, TEMPLATES, build_archive
 
@@ -76,6 +77,23 @@ def test_runtime_unchanged_except_optional_static_ui(project):
         assert isinstance(factory.body[-2], ast.Expr) and factory.body[-2].value.func.attr == "mount"
         del factory.body[-3:-1]
         assert ast.dump(original) == ast.dump(ast.parse(packaged.read("seif/app.py")))
+
+
+def test_packaged_compose_mounts_and_build_inputs_are_valid(project):
+    archive = build_archive(project, project / "output/source.zip")
+    with ZipFile(archive) as packaged:
+        for name in ("compose.yaml", "compose.ner.yaml"):
+            services = yaml.safe_load(packaged.read(name))["services"]
+            for service in services.values():
+                assert all(mount.startswith("/") for mount in service.get("tmpfs", []))
+                if "build" in service:
+                    build = service["build"]
+                    context = build["context"] if isinstance(build, dict) else build
+                    dockerfile = build.get("dockerfile", "Dockerfile") if isinstance(build, dict) else "Dockerfile"
+                    assert context == "." and dockerfile in packaged.namelist()
+        ner = yaml.safe_load(packaged.read("compose.ner.yaml"))["services"]["ner"]
+        assert len(ner["tmpfs"]) == 1
+        assert set(ner["tmpfs"][0].split(":", 1)[1].split(",")) == {"size=64m", "mode=1777"}
 
 
 @pytest.mark.parametrize("name", [*REQUIRED_FILES, *TEMPLATES.values(), "seif/detector.py", "seif/async_callbacks.py"])
