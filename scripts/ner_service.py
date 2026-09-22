@@ -24,6 +24,8 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from starlette.exceptions import HTTPException
 
+from seif.async_callbacks import immediate_response
+
 LOG = logging.getLogger("seif.ner")
 MAX_TEXT_CHARS = 20_000
 MAX_BODY_BYTES = 128 * 1024
@@ -222,16 +224,19 @@ def _lifespan(settings, analyzer_factory):
     return lifespan
 
 
-# These bounded response constructors follow Starlette's synchronous handler
-# contract. Model execution and successful protection requests remain async.
+# Bounded response construction stays on the request's event loop. Successful
+# model operations retain their regular asynchronous implementation.
+@immediate_response
 def _validation_error(_request, _exc):
     return error(422, "invalid_request", "Expected one text string of at most 20000 characters.")
 
 
+@immediate_response
 def _http_error(_request, exc):
     return error(exc.status_code, "invalid_request", INVALID_REQUEST)
 
 
+@immediate_response
 def _unexpected_error(_request, _exc):
     LOG.warning("ner_request_failed")
     return error(503, "unavailable", NER_UNAVAILABLE)

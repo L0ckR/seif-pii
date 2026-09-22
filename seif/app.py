@@ -27,6 +27,7 @@ from prometheus_client import CollectorRegistry, Counter, Histogram, generate_la
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from .async_callbacks import immediate_response
 from .config import Policy, Settings
 from .detector import TYPES, detect, merge_ner_candidates, validate_extra_rule
 from .ner import NerClient, validate_ner_settings
@@ -521,8 +522,9 @@ class _AppContext:
                 "gil_enabled": getattr(sys, "_is_gil_enabled", lambda: True)(),
                 "detector_profile": "hybrid" if self.ner else "rules"}
 
+    @immediate_response
     def types(self):
-        """Return fixed type metadata as a bounded synchronous endpoint."""
+        """Return fixed metadata inline through the framework's await contract."""
         return {"types": TYPES}
 
     async def metrics(self, request: Request):
