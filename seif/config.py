@@ -13,6 +13,38 @@ from pathlib import Path
 import yaml
 
 
+def _validate_host(host: str, ipv6: bool) -> None:
+    if ipv6:
+        try:
+            ipaddress.IPv6Address(host)
+        except ValueError:
+            raise ValueError("SEIF_SENTINELS contains an invalid IPv6 address") from None
+        return
+    labels = host.rstrip(".").split(".")
+    if len(host) > 253 or not all(
+        re.fullmatch(r"[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?", label) for label in labels
+    ):
+        raise ValueError("SEIF_SENTINELS contains an invalid hostname")
+    if re.fullmatch(r"[0-9.]+", host):
+        try:
+            ipaddress.IPv4Address(host)
+        except ValueError:
+            raise ValueError("SEIF_SENTINELS contains an invalid IPv4 address") from None
+
+
+def _parse_endpoint(endpoint: str) -> tuple[str, int]:
+    match = re.fullmatch(r"(?:\[([^\]]+)\]|([^:]+)):(\d{1,5})", endpoint)
+    if not match:
+        raise ValueError("SEIF_SENTINELS requires host:port or [IPv6]:port endpoints")
+    ipv6, hostname, port_text = match.groups()
+    host = ipv6 or hostname
+    port = int(port_text)
+    if not 1 <= port <= 65535:
+        raise ValueError("SEIF_SENTINELS ports must be between 1 and 65535")
+    _validate_host(host, ipv6)
+    return host, port
+
+
 def parse_sentinels(value: str) -> tuple[tuple[str, int], ...]:
     """Parse DNS/IPv4 host:port and bracketed IPv6 endpoints without secrets.
 
@@ -26,31 +58,7 @@ def parse_sentinels(value: str) -> tuple[tuple[str, int], ...]:
         raise ValueError("SEIF_SENTINELS accepts at most 16 host:port endpoints")
     addresses = []
     for entry in entries:
-        endpoint = entry.strip()
-        match = re.fullmatch(r"(?:\[([^\]]+)\]|([^:]+)):(\d{1,5})", endpoint)
-        if not match:
-            raise ValueError("SEIF_SENTINELS requires host:port or [IPv6]:port endpoints")
-        ipv6, hostname, port_text = match.groups()
-        host = ipv6 or hostname
-        port = int(port_text)
-        if not 1 <= port <= 65535:
-            raise ValueError("SEIF_SENTINELS ports must be between 1 and 65535")
-        if ipv6:
-            try:
-                ipaddress.IPv6Address(host)
-            except ValueError:
-                raise ValueError("SEIF_SENTINELS contains an invalid IPv6 address") from None
-        else:
-            labels = host.rstrip(".").split(".")
-            if len(host) > 253 or not all(
-                re.fullmatch(r"[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?", label) for label in labels
-            ):
-                raise ValueError("SEIF_SENTINELS contains an invalid hostname")
-            if re.fullmatch(r"[0-9.]+", host):
-                try:
-                    ipaddress.IPv4Address(host)
-                except ValueError:
-                    raise ValueError("SEIF_SENTINELS contains an invalid IPv4 address") from None
+        host, port = _parse_endpoint(entry.strip())
         address = (host, port)
         if address in addresses:
             raise ValueError("SEIF_SENTINELS endpoints must be unique")
@@ -121,15 +129,18 @@ class Settings:
         if type(timeout) not in (int, float) or not math.isfinite(timeout) or timeout <= 0:
             raise ValueError("request_body_timeout_seconds must be a positive finite number")
 
-    @classmethod
-    def from_env(cls) -> "Settings":
-        demo = os.getenv("SEIF_DEMO", "0") == "1"
+    @staticmethod
+    def _load_master_key(demo: bool) -> tuple[bytes, str]:
         encoded = os.getenv("SEIF_MASTER_KEY", "")
         if not encoded and not demo:
             raise ValueError("SEIF_MASTER_KEY is required outside demo mode")
         key = base64.b64decode(encoded, validate=True) if encoded else os.urandom(32)
         if len(key) != 32:
             raise ValueError("SEIF_MASTER_KEY must encode exactly 32 bytes")
+        return key, encoded
+
+    @staticmethod
+    def _load_redis(encoded: str) -> tuple[str, tuple[tuple[str, int], ...], str, str, str]:
         redis_url = os.getenv("SEIF_REDIS_URL", "")
         sentinels = parse_sentinels(os.getenv("SEIF_SENTINELS", ""))
         if redis_url and sentinels:
@@ -141,6 +152,10 @@ class Settings:
         sentinel_password = os.getenv("SEIF_SENTINEL_PASSWORD", redis_password)
         if (redis_url or sentinels) and not encoded:
             raise ValueError("Shared Redis requires a stable SEIF_MASTER_KEY")
+        return redis_url, sentinels, sentinel_master, redis_password, sentinel_password
+
+    @staticmethod
+    def _load_policies(demo: bool) -> dict[str, Policy]:
         path = Path(os.getenv("SEIF_CONFIG", "config/policies.yaml"))
         raw = yaml.safe_load(path.read_text()) if path.exists() else {}
         policies = {}
@@ -161,6 +176,14 @@ class Settings:
             policies.setdefault("demo", Policy())
         if not policies:
             raise ValueError("At least one system must be configured")
+        return policies
+
+    @classmethod
+    def from_env(cls) -> "Settings":
+        demo = os.getenv("SEIF_DEMO", "0") == "1"
+        key, encoded = cls._load_master_key(demo)
+        redis_url, sentinels, sentinel_master, redis_password, sentinel_password = cls._load_redis(encoded)
+        policies = cls._load_policies(demo)
         return cls(
             demo=demo,
             encryption_key=key,
