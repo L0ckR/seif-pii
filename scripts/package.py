@@ -16,6 +16,8 @@ REQUIRED_FILES = (
     "config/policies.yaml", "requirements.lock", "deploy/ner/requirements-ner.txt",
     "Dockerfile", "Dockerfile.ner", "compose.yaml", "compose.ner.yaml",
     "pyproject.toml", ".python-version", "process_api.yaml",
+    "third_party/pii-guard/LICENSE", "third_party/pii-guard/NOTICE",
+    "third_party/pii-guard/ADAPTATION.md", "deploy/ner/requirements-rubert-tensorrt.txt",
 )
 TEMPLATES = {name: f"deploy/service/{name}" for name in ("README.md", ".env.example", ".dockerignore")}
 UI_LINES = (

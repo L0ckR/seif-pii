@@ -190,7 +190,7 @@ def test_environment_backend_selection_is_explicit(monkeypatch):
     assert build_analyzer() is expected
     assert calls[-1] == ("/local/prepared-checkpoint", "cuda", "described-names", 0.95)
     monkeypatch.setenv("SEIF_NER_BACKEND", "unknown")
-    with pytest.raises(RuntimeError, match="presidio or gliner"):
+    with pytest.raises(RuntimeError, match="SEIF_NER_BACKEND"):
         build_analyzer()
 
 

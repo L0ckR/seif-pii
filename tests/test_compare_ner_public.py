@@ -68,7 +68,7 @@ def test_model_output_cannot_silently_exceed_gateway_span_contract():
         def analyze(self, **_kwargs):
             return [SimpleNamespace(start=0, end=201, score=.9, entity_type="PERSON")]
 
-    with pytest.raises(RuntimeError):
+    with pytest.raises((RuntimeError, ValueError)):
         public.infer_document(Analyzer(), "a" * 201)
 
 

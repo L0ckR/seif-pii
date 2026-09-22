@@ -1,9 +1,8 @@
-"""Pinned RuBERT TensorRT experiment using the published local PiiNER runtime.
+"""Pinned local RuBERT TensorRT with word decoding and complete PII transport.
 
-The 21 native types remain available independently. The gateway profile maps
-name parts to PERSON and six address components to LOCATION, then joins only
-whitespace-adjacent spans of the same mapped type. This explicit coarse profile
-is broader than geographic-name NER and never rewrites native predictions.
+The explicit published/person-location profile remains available for historical
+experiments. The service defaults to word decoding and preserves every native
+type through a lossless mapping of label names and original span boundaries.
 """
 from __future__ import annotations
 
@@ -12,11 +11,13 @@ import importlib.metadata
 import importlib.util
 import json
 import math
+import os
 from copy import deepcopy
 from pathlib import Path
 from threading import Lock
 
 from seif.gliner_ner import GlinerSpan
+from seif.ner_contract import LEGACY_NER_TYPES, MAX_ENTITIES, NER_ENTITY_TYPES, max_entity_chars
 
 MODEL_NAME = "lockR/rubert-base-pii-ner-tensorrt"
 MODEL_REVISION = "73be581047bf123dac6505e7b3900ec292942296"
@@ -27,6 +28,8 @@ NATIVE_TYPES = frozenset({
 })
 PERSON_TYPES = frozenset({"FIRST_NAME", "LAST_NAME", "MIDDLE_NAME"})
 LOCATION_TYPES = frozenset({"CITY", "COUNTRY", "DISTRICT", "REGION", "STREET", "HOUSE"})
+NATIVE_MAPPING = {kind: "PERSON" if kind in PERSON_TYPES else "LOCATION" if kind in LOCATION_TYPES
+                  else "CARD" if kind == "CREDIT_CARD" else kind for kind in NATIVE_TYPES}
 PINNED_FILES = {
     "pii_ner.py": "4591fc8c5580c39dc5121ca649f4a2a4936276ea4c9e82ae144e5c467eb5a5ca",
     "trt_backend.py": "eafc144a9b698e94dfe155074c7a3ab1063ee7817ab1a285b69639db1c07b424",
@@ -79,7 +82,7 @@ def validate_native(text, output):
     return result
 
 
-def _gateway_from_validated(text, native):
+def _legacy_gateway(text, native):
     result = []
     for span in native:
         label = span["label"]
@@ -100,9 +103,23 @@ def _gateway_from_validated(text, native):
     return result
 
 
-def gateway_entities(text, native):
-    """Map complete validated native output into the frozen gateway profile."""
-    return _gateway_from_validated(text, validate_native(text, native))
+def _gateway_from_validated(text, native, profile):
+    if profile == "person-location":
+        return _legacy_gateway(text, native)
+    if profile != "native":
+        raise ValueError("Unknown RuBERT gateway profile.")
+    result = [{"start": item["start"], "end": item["end"], "entity_type": NATIVE_MAPPING[item["label"]],
+               "score": item["score"]} for item in native]
+    if len(result) > MAX_ENTITIES or any(
+        item["end"] - item["start"] > max_entity_chars(item["entity_type"]) for item in result
+    ):
+        raise ValueError(GATEWAY_LIMIT)
+    return result
+
+
+def gateway_entities(text, native, *, profile="person-location"):
+    """Validate all native predictions, then apply the explicitly selected profile."""
+    return _gateway_from_validated(text, validate_native(text, native), profile)
 
 
 class _ValidatedBackend:
@@ -160,14 +177,18 @@ class RubertAnalyzer:
 
     model_name = MODEL_NAME
 
-    def __init__(self, runtime, *, runtime_metadata=None):
+    def __init__(self, runtime, *, runtime_metadata=None, decoder="published", profile="person-location"):
+        if decoder not in {"published", "word"} or profile not in {"person-location", "native"}:
+            raise ValueError("Unknown RuBERT decoder or gateway profile.")
         self.runtime = runtime
+        self.decoder, self.profile = decoder, profile
+        self.supported_entities = NER_ENTITY_TYPES if profile == "native" else LEGACY_NER_TYPES
         self._metadata = {} if runtime_metadata is None else deepcopy(runtime_metadata)
         self._model_lock = Lock()
         self._warmed = False
 
     @classmethod
-    def from_local(cls, model_path, *, device="cuda", warmup=True):
+    def from_local(cls, model_path, *, device="cuda", warmup=True, decoder="word", profile="native"):
         if device != "cuda" or type(warmup) is not bool:
             raise ValueError("RuBERT TensorRT requires device='cuda' and boolean warmup.")
         files = fingerprint_checkpoint(model_path)
@@ -177,19 +198,32 @@ class RubertAnalyzer:
         runtime.backend = _ValidatedBackend(runtime.backend)
         metadata = {
             "model": MODEL_NAME, "revision": MODEL_REVISION, "files_sha256": files,
-            "backend": "trt-graph", "device": "cuda", "min_confidence": 0.3, "batch_size": 1,
+            "backend": "trt-graph", "device": "cuda", "min_confidence": None if decoder == "word" else 0.3,
+            "decoder": decoder, "gateway_profile": profile, "batch_size": 1,
             "max_tokens": 512, "overlap_tokens": 128, "native_types": sorted(NATIVE_TYPES),
             "person_labels": sorted(PERSON_TYPES), "location_labels": sorted(LOCATION_TYPES),
-            "gateway_merge": "same mapped type, empty/whitespace gap, maximum constituent score; no punctuation expansion",
+            "gateway_merge": ("none; original native boundaries" if profile == "native" else
+                              "same mapped type, empty/whitespace gap, maximum constituent score"),
             "location_scope": "six address-component types, broader than geographic proper names",
             "native_predictions": "all21 labels retained before coarse gateway mapping",
             "precision": "published TensorRT FP16 engine with FP32 normalization accumulation; TF32 disabled at build",
             "packages": _package_versions(), "logits_shape_validation": "exact [batch, padded_tokens,43]",
         }
-        analyzer = cls(runtime, runtime_metadata=metadata)
+        analyzer = cls(runtime, runtime_metadata=metadata, decoder=decoder, profile=profile)
         if warmup:
             analyzer.warmup()
         return analyzer
+
+    @classmethod
+    def from_env(cls):
+        import torch
+
+        torch.set_num_threads(4)
+        torch.backends.cuda.matmul.allow_tf32 = False
+        torch.backends.cudnn.allow_tf32 = False
+        return cls.from_local(os.getenv("SEIF_RUBERT_MODEL_PATH"),
+                              decoder=os.getenv("SEIF_RUBERT_DECODER", "word"),
+                              profile=os.getenv("SEIF_RUBERT_PROFILE", "native"))
 
     def warmup(self):
         with self._model_lock:
@@ -201,21 +235,30 @@ class RubertAnalyzer:
         if not isinstance(text, str):
             raise ValueError("RuBERT input must be a string.")
         with self._model_lock:
-            return validate_native(text, self.runtime.predict(text))
+            if self.decoder == "word":
+                from seif.rubert_decoder import word_predict
+
+                output = word_predict(self.runtime, text)
+            else:
+                output = self.runtime.predict(text)
+            return validate_native(text, output)
 
     def predict_both(self, text):
         native = self.predict_native(text)
         try:
-            gateway = _gateway_from_validated(text, native)
+            gateway = _gateway_from_validated(text, native, self.profile)
         except ValueError as error:
             return {"native": native, "gateway": None, "gateway_error": str(error)}
         return {"native": native, "gateway": gateway, "gateway_error": None}
 
     def analyze(self, *, text, language, entities, score_threshold):
-        if not isinstance(text, str) or language != "ru" or entities != ["PERSON", "LOCATION"] or score_threshold != 0.0:
+        if (not isinstance(text, str) or language != "ru" or not isinstance(entities, list)
+                or any(not isinstance(kind, str) or kind not in self.supported_entities for kind in entities)
+                or score_threshold != 0.0):
             raise ValueError("Unsupported RuBERT analyzer request.")
         native = self.predict_native(text)
-        return [GlinerSpan(**item) for item in _gateway_from_validated(text, native)]
+        return [GlinerSpan(**item) for item in _gateway_from_validated(text, native, self.profile)
+                if item["entity_type"] in entities]
 
     def metadata(self):
         result = deepcopy(self._metadata)

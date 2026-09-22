@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Optional, private PERSON/LOCATION NER service for ordinary CPython 3.13.
+"""Optional private NER service with explicit model capabilities.
 
 Install deploy/ner/requirements-ner.txt in a separate environment. The model
 must already be installed: this service never downloads a model at startup.
@@ -25,6 +25,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from starlette.exceptions import HTTPException
 
 from seif.async_callbacks import immediate_response
+from seif.ner_contract import MAX_ENTITIES, analyzer_entities, validate_entity
 
 LOG = logging.getLogger("seif.ner")
 MAX_TEXT_CHARS = 20_000
@@ -161,12 +162,16 @@ def build_analyzer():
     for name in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
         os.environ[name] = "1"
     backend = os.getenv("SEIF_NER_BACKEND", "presidio")
+    if backend == "rubert":
+        from seif.rubert_ner import RubertAnalyzer
+
+        return RubertAnalyzer.from_env()
     if backend == "gliner":
         from seif.gliner_ner import GlinerAnalyzer
 
         return GlinerAnalyzer.from_env()
     if backend != "presidio":
-        raise RuntimeError("SEIF_NER_BACKEND must be presidio or gliner.")
+        raise RuntimeError("SEIF_NER_BACKEND must be presidio, gliner or rubert.")
     import spacy.util
     from presidio_analyzer import AnalyzerEngine, RecognizerRegistry
     from presidio_analyzer.nlp_engine import NlpEngineProvider
@@ -192,17 +197,24 @@ def build_analyzer():
 
 
 def infer(analyzer, text):
-    results = analyzer.analyze(text=text, language="ru", entities=["PERSON", "LOCATION"], score_threshold=0.0)
+    requested = analyzer_entities(analyzer)
+    results = analyzer.analyze(text=text, language="ru", entities=requested, score_threshold=0.0)
+    if not isinstance(results, list) or len(results) > MAX_ENTITIES:
+        raise ValueError("Invalid model result count.")
     entities = []
     for item in results:
-        if item.entity_type not in {"PERSON", "LOCATION"}:
+        if item.entity_type not in requested:
             continue
         start, end, score = item.start, item.end, item.score
         if (type(start) is not int or type(end) is not int or not 0 <= start < end <= len(text)
                 or not isinstance(score, (int, float)) or isinstance(score, bool)
                 or not math.isfinite(score) or not 0 <= score <= 1):
             raise ValueError("Invalid model output.")
-        entities.append({"start": start, "end": end, "score": float(score), "entity_type": item.entity_type})
+        entity = {"start": start, "end": end, "score": float(score), "entity_type": item.entity_type}
+        validate_entity(entity, len(text))
+        entities.append(entity)
+        if len(entities) > MAX_ENTITIES:
+            raise ValueError("NER output exceeds entity count limit.")
     entities.sort(key=lambda item: (item["start"], item["end"]))
     return {"entities": entities}
 
@@ -217,6 +229,7 @@ def _lifespan(settings, analyzer_factory):
         # Preload before readiness; avoid logging third-party exception content.
         try:
             app.state.analyzer = analyzer_factory()
+            analyzer_entities(app.state.analyzer)
         except Exception:
             raise RuntimeError("NER model initialization failed.") from None
         pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="seif-ner")
@@ -295,7 +308,7 @@ async def _run_model(state, text):
 def create_app(settings=None, analyzer_factory=None):
     settings = settings or NerSettings.from_env()
     lifespan = _lifespan(settings, analyzer_factory or build_analyzer)
-    app = FastAPI(title="СЕЙФ private PERSON/LOCATION NER", lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
+    app = FastAPI(title="СЕЙФ private PII NER", lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
     app.state.ready = False
     app.state.model_inflight = 0
     app.add_middleware(Boundary, settings=settings)
@@ -308,7 +321,7 @@ def create_app(settings=None, analyzer_factory=None):
         if not app.state.ready:
             return error(503, "not_ready", "NER not ready.")
         model_name = getattr(app.state.analyzer, "model_name", "ru_core_news_sm")
-        return JSONResponse({"status": "ok", "model": model_name, "entities": ["PERSON", "LOCATION"]},
+        return JSONResponse({"status": "ok", "model": model_name, "entities": analyzer_entities(app.state.analyzer)},
                             headers={"Cache-Control": "no-store"})
 
     @app.post("/analyze")
@@ -328,7 +341,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--host", default=os.getenv("SEIF_NER_HOST", "127.0.0.1"))
     parser.add_argument("--port", type=int, default=int(os.getenv("SEIF_NER_PORT", "8770")))
-    parser.add_argument("--workers", type=int, default=int(os.getenv("SEIF_NER_WORKERS", "4")))
+    default_workers = "1" if os.getenv("SEIF_NER_BACKEND") == "rubert" else "4"
+    parser.add_argument("--workers", type=int, default=int(os.getenv("SEIF_NER_WORKERS", default_workers)))
     args = parser.parse_args()
     if args.workers < 1:
         parser.error("workers must be positive")

@@ -6,6 +6,12 @@
 
 Основной профиль — **Python 3.14.7 без GIL + FastAPI/Uvicorn + Redis + AES-256-GCM**. Необязательный `hybrid` добавляет локальный Presidio PERSON/LOCATION NER-сервис на Python 3.13. Внешняя LLM, платный API и GPU не нужны; модель устанавливается при сборке NER-образа, интернет при обработке не используется. [Выбор стека](docs/stack.md), [сравнение с Presidio](docs/presidio.md).
 
+В ветке `experiment/rubert-tensorrt` также доступен отдельный GPU-профиль RuBERT:
+декодирование слов, все 21 категории модели в 14 типах NER-интерфейса и исходные
+Unicode-смещения. Он требует локальных весов, CUDA и Python 3.12 для NER;
+Compose по умолчанию сохраняет CPU-профиль. [Запуск RuBERT](deploy/service/README.md#опциональный-rubert-tensorrt),
+[сравнение с pii-guard на трёх корпусах и HTTP RPS](benchmarks/ner-models/rubert-upgrade/README.md).
+
 [Открыть демо и выбрать профиль](docs/demo-access.md) · [Проверка для жюри](docs/judge-demo.md) · [Новые критерии оценивания](docs/judging-criteria.md) · [План развития](docs/roadmap.md)
 
 ## Что реализовано

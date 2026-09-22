@@ -9,7 +9,8 @@ RUN pip install --no-cache-dir -r /tmp/requirements-ner.txt \
     && python -c "import spacy; spacy.load('ru_core_news_sm')" \
     && useradd --uid 10001 --create-home seif
 COPY scripts/ner_service.py ./scripts/ner_service.py
-COPY seif/__init__.py seif/async_callbacks.py ./seif/
+COPY seif/__init__.py seif/async_callbacks.py seif/ner_contract.py ./seif/
+COPY third_party ./third_party
 USER seif
 EXPOSE 8770
 HEALTHCHECK --interval=30s --timeout=5s --start-period=60s \

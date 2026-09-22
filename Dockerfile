@@ -8,6 +8,7 @@ ENV SEIF_HOST=0.0.0.0 SEIF_PORT=8000 SEIF_WORKERS=3
 COPY pyproject.toml requirements.lock ./
 RUN uv pip install --python /opt/venv/bin/python -r requirements.lock && useradd --uid 10001 --create-home seif
 COPY seif ./seif
+COPY third_party ./third_party
 COPY web ./web
 COPY config ./config
 COPY scripts/serve.py ./scripts/serve.py

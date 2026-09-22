@@ -10,6 +10,7 @@ from urllib.parse import urlsplit
 import httpx
 
 from .detector import Span
+from .ner_contract import MAX_ENTITIES, MAX_NER_SPAN, validate_entity
 
 NER_UNAVAILABLE = "NER is unavailable"
 INVALID_NER_RESPONSE = "Invalid NER response"
@@ -63,18 +64,10 @@ async def _response_json(response, limit: int, error_message: str):
 
 
 def _entity_values(item: dict, text_length: int) -> tuple[int, int, float, str]:
-    if not isinstance(item, dict) or set(item) != {"start", "end", "score", "entity_type"}:
-        raise NerUnavailable(INVALID_NER_RESPONSE)
-    start, end, score = item["start"], item["end"], item["score"]
-    kind = item["entity_type"]
-    if (
-        kind not in ("PERSON", "LOCATION")
-        or type(start) is not int or type(end) is not int
-        or not 0 <= start < end <= text_length or end - start > 200
-        or type(score) not in (int, float) or not math.isfinite(score) or not 0 <= score <= 1
-    ):
-        raise NerUnavailable(INVALID_NER_RESPONSE)
-    return start, end, score, kind
+    try:
+        return validate_entity(item, text_length)
+    except ValueError:
+        raise NerUnavailable(INVALID_NER_RESPONSE) from None
 
 
 class NerClient:
@@ -127,16 +120,17 @@ class NerClient:
         if not isinstance(body, dict) or set(body) != {"entities"}:
             raise NerUnavailable(INVALID_NER_RESPONSE)
         entities = body["entities"]
-        if not isinstance(entities, list) or len(entities) > 2048:
+        if not isinstance(entities, list) or len(entities) > MAX_ENTITIES:
             raise NerUnavailable(INVALID_NER_RESPONSE)
         result = []
         for item in entities:
             start, end, score, kind = _entity_values(item, len(text))
-            # Do not accept a name visibly clipped by an artificial chunk edge.
-            # The overlapping neighbouring chunk contains the complete name.
+            # Do not accept an entity clipped by an artificial chunk edge.
+            # Overlap exceeds every accepted span length, so another chunk
+            # contains even a maximum-length entity away from both edges.
             if (offset and start == 0) or (offset + len(text) < total_length and end == len(text)):
                 continue
-            result.append(Span(offset + start, offset + end, kind, score, "presidio-ru-ner"))
+            result.append(Span(offset + start, offset + end, kind, score, "private-ner"))
         return result
 
     async def _chunk(self, offset: int, text: str, total_length: int) -> list[Span]:
@@ -163,7 +157,7 @@ class NerClient:
         try:
             # Includes waiting for capacity, all chunks and bounded 429 retries.
             async with asyncio.timeout(self.timeout):
-                for offset, part in chunks(text):
+                for offset, part in chunks(text, overlap=MAX_NER_SPAN + 32):
                     pending.append((offset, part))
                     if len(pending) == 4:
                         result.extend(await self._detect_batch(pending, len(text)))

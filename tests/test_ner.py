@@ -45,7 +45,13 @@ def test_longer_ner_name_extends_a_short_context_fallback():
 def test_short_ner_name_cannot_shrink_a_full_core_name():
     text = "Клиент: Дина Марковна Штольц."
     complete = person(text, "Дина Марковна Штольц", 0.96, "personal-record-context")
-    assert merge_person_candidates(text, [complete], [person(text, "Дина Марковна")]) == [complete]
+    result = merge_person_candidates(text, [complete], [person(text, "Дина Марковна")])
+    assert [(span.start, span.end) for span in result] == [(8, 21), (22, 28)]
+    assert all((span.type, span.confidence, span.reason) ==
+               (complete.type, complete.confidence, complete.reason) for span in result)
+    assert {i for span in result for i in range(span.start, span.end) if text[i].isalnum()} == {
+        i for i in range(complete.start, complete.end) if text[i].isalnum()
+    }
 
 
 def test_equal_boundaries_keep_core_provenance_and_empty_candidates_are_stable():
