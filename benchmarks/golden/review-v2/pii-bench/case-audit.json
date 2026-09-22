@@ -1,0 +1,173 @@
+{
+  "scope": "Paired per-case changes within historical whole-case subsets; offsets only, no error texts inspected.",
+  "slices": [
+    {
+      "split": "domain",
+      "subset": "common4",
+      "profile": "rules",
+      "cases": 612,
+      "changed_cases": 0,
+      "regression_counts": {
+        "exact_span": {
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "lost_tp": 0,
+          "new_fp": 0
+        },
+        "typed_character": {
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "lost_tp": 0,
+          "new_fp": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "subset": "common4",
+      "profile": "hybrid_person_only",
+      "cases": 612,
+      "changed_cases": 0,
+      "regression_counts": {
+        "exact_span": {
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "lost_tp": 0,
+          "new_fp": 0
+        },
+        "typed_character": {
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "lost_tp": 0,
+          "new_fp": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "subset": "supported8",
+      "profile": "rules",
+      "cases": 787,
+      "changed_cases": 7,
+      "regression_counts": {
+        "exact_span": {
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "lost_tp": 0,
+          "new_fp": 0
+        },
+        "typed_character": {
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "lost_tp": 0,
+          "new_fp": 0
+        }
+      }
+    },
+    {
+      "split": "domain",
+      "subset": "supported8",
+      "profile": "hybrid_person_only",
+      "cases": 787,
+      "changed_cases": 7,
+      "regression_counts": {
+        "exact_span": {
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "lost_tp": 0,
+          "new_fp": 0
+        },
+        "typed_character": {
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "lost_tp": 0,
+          "new_fp": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "subset": "common4",
+      "profile": "rules",
+      "cases": 280,
+      "changed_cases": 0,
+      "regression_counts": {
+        "exact_span": {
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "lost_tp": 0,
+          "new_fp": 0
+        },
+        "typed_character": {
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "lost_tp": 0,
+          "new_fp": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "subset": "common4",
+      "profile": "hybrid_person_only",
+      "cases": 280,
+      "changed_cases": 0,
+      "regression_counts": {
+        "exact_span": {
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "lost_tp": 0,
+          "new_fp": 0
+        },
+        "typed_character": {
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "lost_tp": 0,
+          "new_fp": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "subset": "supported8",
+      "profile": "rules",
+      "cases": 560,
+      "changed_cases": 7,
+      "regression_counts": {
+        "exact_span": {
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "lost_tp": 0,
+          "new_fp": 0
+        },
+        "typed_character": {
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "lost_tp": 0,
+          "new_fp": 0
+        }
+      }
+    },
+    {
+      "split": "entity",
+      "subset": "supported8",
+      "profile": "hybrid_person_only",
+      "cases": 560,
+      "changed_cases": 7,
+      "regression_counts": {
+        "exact_span": {
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "lost_tp": 0,
+          "new_fp": 0
+        },
+        "typed_character": {
+          "cases_with_lost_tp": 0,
+          "cases_with_new_fp": 0,
+          "lost_tp": 0,
+          "new_fp": 0
+        }
+      }
+    }
+  ]
+}

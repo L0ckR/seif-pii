@@ -1,0 +1,436 @@
+{
+  "schema_version": 1,
+  "baseline_revision": "cbb628562f68afd764fb5a9f271c017d4c8fdeb1",
+  "implementation_revision": "4e46c86a6f6c7bf91e9525968981ae47d7984aba",
+  "evaluator_sha256": "9c7735b3bcc202dab4ce3fbb7cea91f42632188e943eb673674e3ae08fc9bc3c",
+  "before": {
+    "schema_version": 1,
+    "method": "exact (type, Unicode character start, end) span match; micro averaged",
+    "fixture_count": 48,
+    "cases_exact_match": 48,
+    "metrics": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "true_positive": 47,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "by_type": {
+      "ADDRESS": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "APARTMENT": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "BIRTH_DATE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 4,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "BIRTH_PLACE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "CARD": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 2,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "CARDHOLDER": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "CITIZENSHIP": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 2,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "CITY": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "COUNTRY": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "CVV": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "DEPARTMENT_CODE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "DRIVER_LICENSE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 2,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "EMAIL": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 6,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "FOREIGN_DOCUMENT": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "HOUSE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "INN": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 2,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "PASSPORT": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 5,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "PASSPORT_DATE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 2,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "PASSPORT_ISSUER": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "PERSON": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 4,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "PHONE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 4,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "PIN": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "POSTAL_CODE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "STREET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      }
+    },
+    "failures": [],
+    "limitations": [
+      "Fixtures are a small synthetic development suite, not a representative held-out bank corpus.",
+      "These scores do not establish 95% accuracy on the organizer's private evaluation data.",
+      "Exact-span F1 differs from the organizer's normalized span-based Levenshtein score.",
+      "Reversibility and HTTP correctness are tested independently by tests/test_api.py."
+    ]
+  },
+  "after": {
+    "schema_version": 1,
+    "method": "exact (type, Unicode character start, end) span match; micro averaged",
+    "fixture_count": 48,
+    "cases_exact_match": 48,
+    "metrics": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "true_positive": 47,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "by_type": {
+      "ADDRESS": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "APARTMENT": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "BIRTH_DATE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 4,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "BIRTH_PLACE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "CARD": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 2,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "CARDHOLDER": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "CITIZENSHIP": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 2,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "CITY": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "COUNTRY": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "CVV": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "DEPARTMENT_CODE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "DRIVER_LICENSE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 2,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "EMAIL": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 6,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "FOREIGN_DOCUMENT": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "HOUSE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "INN": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 2,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "PASSPORT": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 5,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "PASSPORT_DATE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 2,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "PASSPORT_ISSUER": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "PERSON": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 4,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "PHONE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 4,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "PIN": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "POSTAL_CODE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      },
+      "STREET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      }
+    },
+    "failures": [],
+    "limitations": [
+      "Fixtures are a small synthetic development suite, not a representative held-out bank corpus.",
+      "These scores do not establish 95% accuracy on the organizer's private evaluation data.",
+      "Exact-span F1 differs from the organizer's normalized span-based Levenshtein score.",
+      "Reversibility and HTTP correctness are tested independently by tests/test_api.py."
+    ]
+  }
+}

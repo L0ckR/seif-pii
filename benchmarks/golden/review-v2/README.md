@@ -16,6 +16,21 @@ excluded from submission ZIPs and image builds.
   unchanged external dataset/model-output replay, including original-prediction
   reproduction, all 14 source hashes and prior/new aggregate comparisons.
 - `manifest.json`: hashes of the evidence files, dataset and NER cache.
+- `pii-bench/`: frozen historical PERSON-only regression, both original splits,
+  unchanged common4 and improved supported8 results, independent per-case audit.
+- `redmadrobot/`: frozen PERSON+LOCATION and historical PERSON-only regression;
+  includes the observed exact-case regressions and paired bootstrap interval.
+- `authored-fixtures.json`: unchanged evaluator, 48/48 exact cases before/after.
+
+The two additional external directories include exact archived replay tools.
+Their READMEs record host-specific measurement paths and required cached inputs;
+adapt these paths on another host. Original external texts/caches and PII-Bench
+offset prediction files remain local and are not bundled here. The PII-Bench
+artifact manifest also records hashes of those omitted local prediction files.
+RedMadRobot compressed count files contain only numeric per-row diagnostics and
+support aggregate-only reproduction without the original texts. External reports
+measure changes within each fixed protocol; PII-Bench PERSON-only is not a
+measurement of the deployed PERSON+LOCATION profile.
 
 The first parallel CPU trial overlapped with tests and was not used. A separate
 sequential baseline/current pair produced the reported measurements. The earlier
