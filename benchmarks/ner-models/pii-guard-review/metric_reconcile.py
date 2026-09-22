@@ -133,6 +133,25 @@ def validate_scorer_semantics(paper):
         raise ValueError("Prediction-only merge changed or now rewrites gold")
 
 
+def historical_summary(corpora):
+    """Keep aggregate reference scores without duplicating the original report."""
+    selected = ("rules", "rubert_hybrid", "spacy_hybrid", "native_hybrid")
+    output = {}
+    for dataset, part in corpora.items():
+        result = {"cases": part["cases"], "full_masking_all_gold_types": {
+            name: part["full_masking_all_gold_types"]["systems"][name] for name in selected}}
+        if dataset == "organizer":
+            result["organizer_unique_case_primary"] = {
+                name: part["service_profiles"][name]["unique_case_primary"] for name in selected}
+        else:
+            result["coarse_service_typed_all_types_unfiltered"] = {
+                name: {metric: {k: v for k, v in values.items() if not isinstance(v, (dict, list))}
+                       for metric, values in part["service_typed_all_types_unfiltered"]["systems"][name].items()}
+                for name in selected}
+        output[dataset] = result
+    return output
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--upstream", type=Path, default=ROOT / "local-data/pii-guard-review/upstream")
@@ -174,11 +193,7 @@ def main():
         "scorer_synthetic_checks": "PASS: exact vs overlap and prediction-only merge preserve original gold",
         "folded14_mapping": paper.NER_LABEL_TO_FAMILY,
         "results": systems,
-        "historical_service_profiles_separate_protocol": {
-            name: {"full_masking_all_gold_types": part["full_masking_all_gold_types"],
-                   "service_typed_all_types_unfiltered": part.get("service_typed_all_types_unfiltered"),
-                   "organizer_service_profiles": part.get("service_profiles")}
-            for name, part in previous["corpora"].items()},
+        "historical_service_profiles_separate_protocol": historical_summary(previous["corpora"]),
         "interpretation": [
             "All recomputed metrics retain frozen 2839 RMR rows; two historical alignment exclusions remain. Published card uses 2841.",
             "Native21 exact and folded14 raw exact are different taxonomies; neither merges or normalizes gold boundaries.",
