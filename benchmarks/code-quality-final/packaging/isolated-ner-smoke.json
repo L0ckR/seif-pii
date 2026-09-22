@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "python": "3.13.7 (main, Aug 18 2025, 19:20:03) [Clang 20.1.4 ]",
+  "fastapi": "0.141.1",
+  "starlette": "1.6.0",
+  "checks": [
+    "isolated_container_imports",
+    "health",
+    "validation_422",
+    "http_404",
+    "analyze_200",
+    "no_handler_threadpool"
+  ],
+  "source_sha256": {
+    "scripts/ner_service.py": "9f1119266c837fa025350ddb4ca9d9ab95d964054849b2b2d4000b41308e60ee",
+    "seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+    "seif/async_callbacks.py": "b5ce7aae9979e6251c827d3e2099a4377266bcb8076606d67dbe86c38fa21ebe"
+  }
+}

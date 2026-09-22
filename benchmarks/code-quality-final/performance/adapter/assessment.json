@@ -1,0 +1,110 @@
+{
+  "production_adapter_installed": false,
+  "original_async_callbacks_restored": true,
+  "explicit_taskgroup_loop_retained": true,
+  "correctness_checks": {
+    "fastapi_async_recognition": true,
+    "starlette_async_recognition": true,
+    "signature_preserved": true,
+    "completed_future_without_scheduling": true,
+    "exception_identity_preserved": true,
+    "same_caller_task_and_loop_thread": true,
+    "no_threadpool_dispatch_endpoint_and_handler": true,
+    "python": "3.14.7 free-threading build (main, Sep  1 2026, 14:17:47) [Clang 22.1.3 ]"
+  },
+  "median_direct_callback_overhead_ns": 374.0424,
+  "asgi_comparison": {
+    "api_types": [
+      {
+        "before_us": 282.514,
+        "after_us": 287.874,
+        "delta_us": 5.360000000000014,
+        "delta_percent": 1.897251109679532
+      },
+      {
+        "before_us": 316.468,
+        "after_us": 319.343,
+        "delta_us": 2.875,
+        "delta_percent": 0.9084646788932949
+      }
+    ],
+    "api_invalid_control": [
+      {
+        "before_us": 322.2235,
+        "after_us": 325.6135,
+        "delta_us": 3.3899999999999864,
+        "delta_percent": 1.052064793536167
+      },
+      {
+        "before_us": 372.073,
+        "after_us": 339.9585,
+        "delta_us": -32.114499999999964,
+        "delta_percent": -8.631236343405725
+      }
+    ],
+    "api_process": [
+      {
+        "before_us": 546.463,
+        "after_us": 547.3275,
+        "delta_us": 0.8645000000000209,
+        "delta_percent": 0.15819918274431188
+      },
+      {
+        "before_us": 569.178,
+        "after_us": 559.4425,
+        "delta_us": -9.735500000000002,
+        "delta_percent": -1.7104491037952974
+      }
+    ],
+    "ner_validation": [
+      {
+        "before_us": 280.5585,
+        "after_us": 297.85400000000004,
+        "delta_us": 17.29550000000006,
+        "delta_percent": 6.164667974771776
+      },
+      {
+        "before_us": 298.234,
+        "after_us": 293.4935,
+        "delta_us": -4.740499999999997,
+        "delta_percent": -1.5895236626273346
+      }
+    ],
+    "ner_http_error": [
+      {
+        "before_us": 185.0095,
+        "after_us": 196.639,
+        "delta_us": 11.629500000000007,
+        "delta_percent": 6.285893427094291
+      },
+      {
+        "before_us": 205.1495,
+        "after_us": 200.98399999999998,
+        "delta_us": -4.165500000000009,
+        "delta_percent": -2.0304704617851943
+      }
+    ],
+    "ner_unexpected_error": [
+      {
+        "before_us": 221.094,
+        "after_us": 245.139,
+        "delta_us": 24.045000000000016,
+        "delta_percent": 10.875464734456841
+      },
+      {
+        "before_us": 231.31650000000002,
+        "after_us": 220.92399999999998,
+        "delta_us": -10.392500000000041,
+        "delta_percent": -4.492762081390667
+      }
+    ]
+  },
+  "assessment": "Valid as a small internal adapter for FastAPI/Starlette immediate await dispatch; avoids threadpool scheduling. It adds one Future allocation and measured ~0.374 microseconds per callback compared with native async. Native async remains simpler and faster; no claim of zero overhead or throughput improvement.",
+  "limits": [
+    "Prototype only, not production source.",
+    "Returned Future is an Awaitable, not a Coroutine accepted by asyncio.create_task.",
+    "Only for bounded nonblocking framework callbacks executed on the active event loop.",
+    "Local ASGI timings are noisy and are not an HTTP capacity benchmark.",
+    "Markcoroutinefunction exists from Python 3.12; execution was verified on installed Python 3.14.7t/FastAPI/Starlette, not every supported combination."
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "native_async": {
+    "per_call_ns": [
+      64.981935,
+      62.94794,
+      58.370615,
+      63.825285,
+      64.86823,
+      59.63411
+    ],
+    "median_ns": 63.3866125
+  },
+  "completed_future_adapter": {
+    "per_call_ns": [
+      461.788865,
+      459.25171,
+      425.72887,
+      432.44519,
+      432.05559,
+      442.412835
+    ],
+    "median_ns": 437.4290125
+  },
+  "method": "6 alternating rounds of 200000 awaited fixed responses; no framework or scheduling"
+}

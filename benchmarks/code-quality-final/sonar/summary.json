@@ -1,0 +1,29 @@
+{
+  "project": "seif-quality-2384f86-all-source",
+  "url": "http://127.0.0.1:19000/dashboard?id=seif-quality-2384f86-all-source",
+  "issues_total": 0,
+  "severities": {},
+  "types": {},
+  "top_rules": [],
+  "top_files": [],
+  "scope_counts": {},
+  "hotspots": 0,
+  "measures": {
+    "coverage": "0.0",
+    "complexity": "2715",
+    "reliability_rating": "1.0",
+    "code_smells": "0",
+    "duplicated_lines_density": "0.0",
+    "security_rating": "1.0",
+    "security_hotspots": "0",
+    "sqale_index": "0",
+    "sqale_rating": "1.0",
+    "bugs": "0",
+    "cognitive_complexity": "2009",
+    "ncloc": "13262",
+    "files": "97",
+    "vulnerabilities": "0",
+    "lines": "16308"
+  },
+  "quality_gate": "OK"
+}

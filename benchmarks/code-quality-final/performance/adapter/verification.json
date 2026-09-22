@@ -1,0 +1,10 @@
+{
+  "fastapi_async_recognition": true,
+  "starlette_async_recognition": true,
+  "signature_preserved": true,
+  "completed_future_without_scheduling": true,
+  "exception_identity_preserved": true,
+  "same_caller_task_and_loop_thread": true,
+  "no_threadpool_dispatch_endpoint_and_handler": true,
+  "python": "3.14.7 free-threading build (main, Sep  1 2026, 14:17:47) [Clang 22.1.3 ]"
+}

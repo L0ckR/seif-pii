@@ -1,0 +1,98 @@
+{
+  "comparison": "016a9c6 -> synchronous callbacks and explicit task creation loop",
+  "method": "sequential httpx ASGITransport; 60 warmup + 1200 measured requests per path; in-memory vault, synthetic email, stub NER",
+  "runs_per_revision": 2,
+  "cases": {
+    "api_types": [
+      {
+        "before_median_us": 307.098,
+        "after_median_us": 475.088,
+        "median_delta_us": 167.99,
+        "median_delta_pct": 54.70240770047346
+      },
+      {
+        "before_median_us": 290.829,
+        "after_median_us": 472.99699999999996,
+        "median_delta_us": 182.16799999999995,
+        "median_delta_pct": 62.63749488531059
+      }
+    ],
+    "api_invalid_control": [
+      {
+        "before_median_us": 344.853,
+        "after_median_us": 343.5785,
+        "median_delta_us": -1.274499999999989,
+        "median_delta_pct": -0.36957776211893334
+      },
+      {
+        "before_median_us": 351.75350000000003,
+        "after_median_us": 320.379,
+        "median_delta_us": -31.374500000000012,
+        "median_delta_pct": -8.919456380675673
+      }
+    ],
+    "api_process": [
+      {
+        "before_median_us": 538.2529999999999,
+        "after_median_us": 576.9225,
+        "median_delta_us": 38.669500000000085,
+        "median_delta_pct": 7.184260933055664
+      },
+      {
+        "before_median_us": 545.498,
+        "after_median_us": 562.4875,
+        "median_delta_us": 16.989499999999907,
+        "median_delta_pct": 3.114493545347541
+      }
+    ],
+    "ner_validation": [
+      {
+        "before_median_us": 281.923,
+        "after_median_us": 514.0405000000001,
+        "median_delta_us": 232.11750000000006,
+        "median_delta_pct": 82.33365138708089
+      },
+      {
+        "before_median_us": 293.23900000000003,
+        "after_median_us": 506.1625,
+        "median_delta_us": 212.9235,
+        "median_delta_pct": 72.6109078260395
+      }
+    ],
+    "ner_http_error": [
+      {
+        "before_median_us": 186.394,
+        "after_median_us": 421.841,
+        "median_delta_us": 235.447,
+        "median_delta_pct": 126.31683423286155
+      },
+      {
+        "before_median_us": 205.6945,
+        "after_median_us": 440.65549999999996,
+        "median_delta_us": 234.96099999999996,
+        "median_delta_pct": 114.22813930367606
+      }
+    ],
+    "ner_unexpected_error": [
+      {
+        "before_median_us": 215.264,
+        "after_median_us": 255.4135,
+        "median_delta_us": 40.14949999999999,
+        "median_delta_pct": 18.651284004756953
+      },
+      {
+        "before_median_us": 222.534,
+        "after_median_us": 241.514,
+        "median_delta_us": 18.980000000000018,
+        "median_delta_pct": 8.529033765626837
+      }
+    ]
+  },
+  "interpretation": "Sync metadata/error callbacks incur threadpool scheduling. Their median overhead ranged +19 to +236 microseconds. The unchanged async /process path measured +3.1% and +7.2%; these short local sequential runs cannot establish causality or production capacity. Invalid API control varied -0.4% to -8.9%.",
+  "production_process_handler_remains_async": true,
+  "warnings": [
+    "Local latency only; excludes network/Redis/model and concurrent load.",
+    "Not an HTTP RPS capacity benchmark.",
+    "Other system activity can affect timings."
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "baseline_revision": "1cde5ce3c6a70fabfe8f09b56f01de624d69633d",
+  "compare_presidio_functions": {
+    "ast_runtime": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "changed_existing_functions": [
+      "benchmark"
+    ],
+    "new_functions": [
+      "_ranked_order"
+    ],
+    "unchanged_existing_functions": [
+      "build_presidio",
+      "canonical_hash",
+      "evaluate_corpus",
+      "main",
+      "metric",
+      "percentile",
+      "remap",
+      "sha256"
+    ],
+    "unchanged_function_ast_sha256": {
+      "build_presidio": "29a0b75c1699250f6c606be65dba589b5b746da8bf091539eaedabdf08b21953",
+      "canonical_hash": "6ddb1d2e957f4671d7ac9826e0700ee806418dc862ea481004b181d3cc5defdb",
+      "evaluate_corpus": "7aa92212f099d301124f72895b5e222c329dd8fd7214725650074bb4eb4bdbb2",
+      "main": "2012bed14e042faf44a603576e7415b6a0c0f623bd6ab6cd0df53c6db0920919",
+      "metric": "faa15c01b65d0cf9a4f9cc8b8b68e85deeb2f082e2e22f311a9d322c877b76dd",
+      "percentile": "635097eb48849d8ddcbd3bee52d829ab6b0e7167d5f7991ae9173be31426bff8",
+      "remap": "cf62d3cf8c21518546c51764264ed3fcc9e31bc5aab08cf7a1f511d26b4d3d63",
+      "sha256": "a36d44c9c5db157732f8816f14441bb21763988118540ab9f82d93eb939e1530"
+    }
+  },
+  "detector_modules": {
+    "seif/cardholder_fields.py": {
+      "baseline_sha256": "3d80d59636e4b2e1a668325fbb945027b48a37e60aad5297c39b727a51806462",
+      "byte_identical": true,
+      "final_sha256": "3d80d59636e4b2e1a668325fbb945027b48a37e60aad5297c39b727a51806462"
+    },
+    "seif/config.py": {
+      "baseline_sha256": "ca9c4e4bc80fcb6847f53f08593b25e5a3b41d6ae5a44ce7c416075ffd7b4b45",
+      "byte_identical": true,
+      "final_sha256": "ca9c4e4bc80fcb6847f53f08593b25e5a3b41d6ae5a44ce7c416075ffd7b4b45"
+    },
+    "seif/context_filters.py": {
+      "baseline_sha256": "c3fbd2c356784e87c481d3ac7d58a8cbf5863d04db96e47d4ef062e348bfd7fb",
+      "byte_identical": true,
+      "final_sha256": "c3fbd2c356784e87c481d3ac7d58a8cbf5863d04db96e47d4ef062e348bfd7fb"
+    },
+    "seif/detector.py": {
+      "baseline_sha256": "e0b09cda385168f401ed1d1aa81ae4b1457d701be977f8f9aee789e444534025",
+      "byte_identical": true,
+      "final_sha256": "e0b09cda385168f401ed1d1aa81ae4b1457d701be977f8f9aee789e444534025"
+    },
+    "seif/document_fields.py": {
+      "baseline_sha256": "2200ed9f9751ee4894f164a4b43654de6f204c9661da83cdbf7a2a455d46ba51",
+      "byte_identical": true,
+      "final_sha256": "2200ed9f9751ee4894f164a4b43654de6f204c9661da83cdbf7a2a455d46ba51"
+    },
+    "seif/location_fields.py": {
+      "baseline_sha256": "2d806e7a35bb7669001e796deba5cbac020dddb2887284390d27becebc43009e",
+      "byte_identical": true,
+      "final_sha256": "2d806e7a35bb7669001e796deba5cbac020dddb2887284390d27becebc43009e"
+    },
+    "seif/person_fields.py": {
+      "baseline_sha256": "ca843e9b6f8ef9d4739703e83b1438a96d114dc95782626fa2e89366bf29f08d",
+      "byte_identical": true,
+      "final_sha256": "ca843e9b6f8ef9d4739703e83b1438a96d114dc95782626fa2e89366bf29f08d"
+    },
+    "seif/structured_fields.py": {
+      "baseline_sha256": "26462106b1a29140a3bbf2b2370feab631145932ee44fbb78ca007b6d1d1218c",
+      "byte_identical": true,
+      "final_sha256": "26462106b1a29140a3bbf2b2370feab631145932ee44fbb78ca007b6d1d1218c"
+    },
+    "seif/transform.py": {
+      "baseline_sha256": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+      "byte_identical": true,
+      "final_sha256": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3"
+    },
+    "seif/vault.py": {
+      "baseline_sha256": "b6b4f59bc911bb0a0c745b6801bcd9a034200e016f321e38c2984206c2946554",
+      "byte_identical": true,
+      "final_sha256": "b6b4f59bc911bb0a0c745b6801bcd9a034200e016f321e38c2984206c2946554"
+    }
+  },
+  "final_revision": "2384f8602514bf5e81b88340d7b3f28cd0e378ce",
+  "prototype_adapter_ast_comparison_excludes_docstring": true,
+  "prototype_adapter_executable_function_ast_matches_installed_helper": true,
+  "schema_version": 1
+}

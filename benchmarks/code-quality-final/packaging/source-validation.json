@@ -1,0 +1,47 @@
+{
+  "all_ruff_analyzed_source_hashes_match_revision": true,
+  "analyzed_python_files": 83,
+  "analyzed_source_zip": "seif-2384f86.zip",
+  "artifact_stage": "Analyzed source ZIP before these final evidence documents; later documentation packaging has a different ZIP checksum.",
+  "docker_image_built": false,
+  "isolated_ner_layout_smoke": {
+    "checks": [
+      "isolated_container_imports",
+      "health",
+      "validation_422",
+      "http_404",
+      "analyze_200",
+      "no_handler_threadpool"
+    ],
+    "fastapi": "0.141.1",
+    "python": "3.13.7 (main, Aug 18 2025, 19:20:03) [Clang 20.1.4 ]",
+    "source_sha256": {
+      "scripts/ner_service.py": "9f1119266c837fa025350ddb4ca9d9ab95d964054849b2b2d4000b41308e60ee",
+      "seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+      "seif/async_callbacks.py": "b5ce7aae9979e6251c827d3e2099a4377266bcb8076606d67dbe86c38fa21ebe"
+    },
+    "starlette": "1.6.0",
+    "status": "PASS"
+  },
+  "ner_container_copy_includes_stdlib_only_adapter": true,
+  "pipeline_files_match_zip_and_git": true,
+  "pipeline_source_sha256": {
+    ".github/workflows/ci.yml": "792bc07ba122779d3d1351a8681275c2d6060e9c81e9a37c4c030ad14c746816",
+    "Dockerfile": "87145dabfa2f5ee6c895436455fadf8c5adc96131e3b4b8e1ba9fe35542df36d",
+    "Dockerfile.ner": "08c35863e52a6820cf35f6330e22623322214b4074d6f4d180b5279bf4c3fede",
+    "deploy/ner/requirements-ner.txt": "9e3d26804f71da81fb7d099093623de3785914e8fe676a2d362a5bae0068ed94",
+    "pyproject.toml": "deee93a00526dd28cbf163c3ca794e3c6a13ff71b1a28356b2f131826dfbae21",
+    "scripts/compare_presidio.py": "e6839cccbeccb27303d69037a7f4d73256a5e89a15b5bb04bafcb5fe86c7e99a",
+    "scripts/ner_service.py": "9f1119266c837fa025350ddb4ca9d9ab95d964054849b2b2d4000b41308e60ee",
+    "scripts/package.py": "8c1f4bd25be2896aa7c18407bccc4522e9d6fbfdfd9d03498b7e594f8a31c8ea",
+    "seif/app.py": "e958559569fae134ace1e54ef02af655dc65a4fc481a93545c315721bc1f8951",
+    "seif/async_callbacks.py": "b5ce7aae9979e6251c827d3e2099a4377266bcb8076606d67dbe86c38fa21ebe",
+    "seif/ner.py": "66c64453390bd851f2283c01bd995145e3a21e4cd23ad9af1f8330a665816068",
+    "tests/test_async_callbacks.py": "e886db151e1152562904ebdcb9401dccc8b9582beed434a17941215ea9212958",
+    "tests/test_presidio_benchmark_order.py": "8bc4b15de6858de33624eec89801efa2ebfebfc132dc409882009496bd74daf3"
+  },
+  "privacy": "Source ZIP excludes local-data, datasets, benchmarks, output and .env; no credentials were copied.",
+  "revision": "2384f8602514bf5e81b88340d7b3f28cd0e378ce",
+  "schema_version": 1,
+  "source_zip_sha256": "880b0435222d9e521fc0957e209cfb48dadc8a3f5413dc29b01234da0909d78a"
+}

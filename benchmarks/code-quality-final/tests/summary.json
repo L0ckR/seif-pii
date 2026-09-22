@@ -1,0 +1,22 @@
+{
+  "captured_output_archived": false,
+  "errors": 0,
+  "failures": 0,
+  "revision": "2384f8602514bf5e81b88340d7b3f28cd0e378ce",
+  "schema_version": 1,
+  "skipped": 0,
+  "source_junit_sha256": "0199c3a3b76b33129480e95cd812c0069eb2faabe557faf3ba31b831ceeaca5f",
+  "suites": [
+    {
+      "errors": "0",
+      "failures": "0",
+      "hostname": "lockR",
+      "name": "pytest",
+      "skipped": "0",
+      "tests": "2641",
+      "time": "24.540",
+      "timestamp": "2026-09-22T20:05:46.557063+03:00"
+    }
+  ],
+  "tests": 2641
+}

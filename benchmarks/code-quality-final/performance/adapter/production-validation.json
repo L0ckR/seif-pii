@@ -1,0 +1,29 @@
+{
+  "stage": "Production immediate_response adapter after explicit parent GO",
+  "targeted_tests": {
+    "passed": 135,
+    "failures": 0,
+    "skips": 0,
+    "warnings": 2,
+    "seconds": 6.81
+  },
+  "ruff": "passed",
+  "diff_check": "passed",
+  "source_sha256": {
+    "seif/async_callbacks.py": "b5ce7aae9979e6251c827d3e2099a4377266bcb8076606d67dbe86c38fa21ebe",
+    "seif/app.py": "e958559569fae134ace1e54ef02af655dc65a4fc481a93545c315721bc1f8951",
+    "seif/ner.py": "66c64453390bd851f2283c01bd995145e3a21e4cd23ad9af1f8330a665816068",
+    "scripts/ner_service.py": "9f1119266c837fa025350ddb4ca9d9ab95d964054849b2b2d4000b41308e60ee",
+    "tests/test_async_callbacks.py": "e886db151e1152562904ebdcb9401dccc8b9582beed434a17941215ea9212958"
+  },
+  "covered_contracts": [
+    "callable signature and bound method self",
+    "completed Future without event-loop scheduling",
+    "same caller Task and thread",
+    "ValueError/BaseException/CancelledError identity without unhandled logging",
+    "FastAPI route and Starlette HTTP handler bypass run_in_threadpool"
+  ],
+  "scope": "Four bounded framework callbacks only; successful process/model request paths remain regular async.",
+  "performance_reference": "assessment.json and callback-cost.json are immutable prototype measurements; direct helper overhead approximately 0.374 microseconds per affected callback, not zero cost or HTTP RPS proof.",
+  "packaging": "Parent handles Dockerfile.ner helper inclusion and isolated image-layout validation."
+}

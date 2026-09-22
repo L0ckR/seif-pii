@@ -1,0 +1,522 @@
+{
+  "external_corpus_evidence": {
+    "pii_bench": {
+      "cases": 1810,
+      "changed_case_profiles": 0,
+      "final_detector_source_byte_identical_to_evidence_revision": true,
+      "limitation": "These cached-corpus replays were executed for 1cde5ce, not rerun for 2384f86. Their unchanged detector/config/transform source supports inheritance, not new HTTP/model-concurrency evidence.",
+      "prior_report": "benchmarks/code-quality-integration/pii-bench/report.json",
+      "prior_report_sha256": "b1edc91126104d80b70ef651a786b803ca8088043aa825589cf33155073a4b94",
+      "profiles": [
+        "rules",
+        "hybrid_person_only"
+      ],
+      "rerun_for_final_revision": false,
+      "source_evidence_revision": "1cde5ce3c6a70fabfe8f09b56f01de624d69633d",
+      "status": "inherited unchanged detector quality evidence"
+    },
+    "redmadrobot": {
+      "cases": 2839,
+      "changed_case_profiles": 0,
+      "final_detector_source_byte_identical_to_evidence_revision": true,
+      "limitation": "These cached-corpus replays were executed for 1cde5ce, not rerun for 2384f86. Their unchanged detector/config/transform source supports inheritance, not new HTTP/model-concurrency evidence.",
+      "prior_report": "benchmarks/code-quality-integration/redmadrobot/report.json",
+      "prior_report_sha256": "d6edcb8272eccc064b560eb4b60d916685df828038994984f198ac05346cb9c3",
+      "profiles": [
+        "person_location",
+        "person_only",
+        "rules"
+      ],
+      "rerun_for_final_revision": false,
+      "source_evidence_revision": "1cde5ce3c6a70fabfe8f09b56f01de624d69633d",
+      "status": "inherited unchanged detector quality evidence"
+    },
+    "scanpatch": {
+      "cases": 532,
+      "changed_case_profiles": 0,
+      "final_detector_source_byte_identical_to_evidence_revision": true,
+      "limitation": "These cached-corpus replays were executed for 1cde5ce, not rerun for 2384f86. Their unchanged detector/config/transform source supports inheritance, not new HTTP/model-concurrency evidence.",
+      "prior_report": "benchmarks/code-quality-integration/scanpatch/report.json",
+      "prior_report_sha256": "6797f30f7a37e2e5b5b54692ffcff8cff5bed8ddcde0619e3035e755c6d4e118",
+      "profiles": [
+        "rules",
+        "hybrid"
+      ],
+      "rerun_for_final_revision": false,
+      "source_evidence_revision": "1cde5ce3c6a70fabfe8f09b56f01de624d69633d",
+      "status": "inherited unchanged detector quality evidence"
+    }
+  },
+  "golden": {
+    "all_profile_metrics_identical_to_previous_evidence": true,
+    "changed_case_profiles": 0,
+    "compared_case_profiles": 892,
+    "dataset_sha256": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46",
+    "ner_cache_sha256": "c0152894401d87c1848aab145aa5b734b30754c678d66e733545308d596f054f",
+    "profiles": {
+      "hybrid": {
+        "cases": 446,
+        "character_metrics": {
+          "f1": 0.968856,
+          "false_negative": 227,
+          "false_positive": 105,
+          "precision": 0.980072,
+          "recall": 0.957893,
+          "true_positive": 5164
+        },
+        "exact_case_rate": 0.930493,
+        "exact_cases": 415,
+        "false_positive_negative_cases": 6,
+        "false_positive_negative_rate": 0.077922,
+        "fully_protected_positive_cases": 344,
+        "fully_protected_positive_rate": 0.932249,
+        "negative_cases": 77,
+        "positive_cases": 369,
+        "uncertain_cases": 117
+      },
+      "rules": {
+        "cases": 446,
+        "character_metrics": {
+          "f1": 0.930011,
+          "false_negative": 614,
+          "false_positive": 105,
+          "precision": 0.978492,
+          "recall": 0.886106,
+          "true_positive": 4777
+        },
+        "exact_case_rate": 0.865471,
+        "exact_cases": 386,
+        "false_positive_negative_cases": 6,
+        "false_positive_negative_rate": 0.077922,
+        "fully_protected_positive_cases": 315,
+        "fully_protected_positive_rate": 0.853659,
+        "negative_cases": 77,
+        "positive_cases": 369,
+        "uncertain_cases": 117
+      }
+    },
+    "proof": "benchmarks/code-quality-final/golden/parity.json",
+    "rerun": true
+  },
+  "limitations": [
+    "Zero findings is specific to this local analyzer version/profile/scope, not proof of no defects or the official hackathon score.",
+    "Previously inspected Golden and external corpora remain regression evidence; no new holdout was evaluated.",
+    "Documentation was added after the analyzed source ZIP; source hashes and immutable artifacts identify the measured revision."
+  ],
+  "packaging": {
+    "all_ruff_analyzed_source_hashes_match_revision": true,
+    "analyzed_python_files": 83,
+    "analyzed_source_zip": "seif-2384f86.zip",
+    "artifact_stage": "Analyzed source ZIP before these final evidence documents; later documentation packaging has a different ZIP checksum.",
+    "docker_image_built": false,
+    "isolated_ner_layout_smoke": {
+      "checks": [
+        "isolated_container_imports",
+        "health",
+        "validation_422",
+        "http_404",
+        "analyze_200",
+        "no_handler_threadpool"
+      ],
+      "fastapi": "0.141.1",
+      "python": "3.13.7 (main, Aug 18 2025, 19:20:03) [Clang 20.1.4 ]",
+      "source_sha256": {
+        "scripts/ner_service.py": "9f1119266c837fa025350ddb4ca9d9ab95d964054849b2b2d4000b41308e60ee",
+        "seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+        "seif/async_callbacks.py": "b5ce7aae9979e6251c827d3e2099a4377266bcb8076606d67dbe86c38fa21ebe"
+      },
+      "starlette": "1.6.0",
+      "status": "PASS"
+    },
+    "ner_container_copy_includes_stdlib_only_adapter": true,
+    "pipeline_files_match_zip_and_git": true,
+    "pipeline_source_sha256": {
+      ".github/workflows/ci.yml": "792bc07ba122779d3d1351a8681275c2d6060e9c81e9a37c4c030ad14c746816",
+      "Dockerfile": "87145dabfa2f5ee6c895436455fadf8c5adc96131e3b4b8e1ba9fe35542df36d",
+      "Dockerfile.ner": "08c35863e52a6820cf35f6330e22623322214b4074d6f4d180b5279bf4c3fede",
+      "deploy/ner/requirements-ner.txt": "9e3d26804f71da81fb7d099093623de3785914e8fe676a2d362a5bae0068ed94",
+      "pyproject.toml": "deee93a00526dd28cbf163c3ca794e3c6a13ff71b1a28356b2f131826dfbae21",
+      "scripts/compare_presidio.py": "e6839cccbeccb27303d69037a7f4d73256a5e89a15b5bb04bafcb5fe86c7e99a",
+      "scripts/ner_service.py": "9f1119266c837fa025350ddb4ca9d9ab95d964054849b2b2d4000b41308e60ee",
+      "scripts/package.py": "8c1f4bd25be2896aa7c18407bccc4522e9d6fbfdfd9d03498b7e594f8a31c8ea",
+      "seif/app.py": "e958559569fae134ace1e54ef02af655dc65a4fc481a93545c315721bc1f8951",
+      "seif/async_callbacks.py": "b5ce7aae9979e6251c827d3e2099a4377266bcb8076606d67dbe86c38fa21ebe",
+      "seif/ner.py": "66c64453390bd851f2283c01bd995145e3a21e4cd23ad9af1f8330a665816068",
+      "tests/test_async_callbacks.py": "e886db151e1152562904ebdcb9401dccc8b9582beed434a17941215ea9212958",
+      "tests/test_presidio_benchmark_order.py": "8bc4b15de6858de33624eec89801efa2ebfebfc132dc409882009496bd74daf3"
+    },
+    "privacy": "Source ZIP excludes local-data, datasets, benchmarks, output and .env; no credentials were copied.",
+    "revision": "2384f8602514bf5e81b88340d7b3f28cd0e378ce",
+    "schema_version": 1,
+    "source_zip_sha256": "880b0435222d9e521fc0957e209cfb48dadc8a3f5413dc29b01234da0909d78a"
+  },
+  "performance": {
+    "all_measured_asgi_paths": {
+      "api_invalid_control": [
+        {
+          "after_us": 325.6135,
+          "before_us": 322.2235,
+          "delta_percent": 1.052064793536167,
+          "delta_us": 3.3899999999999864
+        },
+        {
+          "after_us": 339.9585,
+          "before_us": 372.073,
+          "delta_percent": -8.631236343405725,
+          "delta_us": -32.114499999999964
+        }
+      ],
+      "api_process": [
+        {
+          "after_us": 547.3275,
+          "before_us": 546.463,
+          "delta_percent": 0.15819918274431188,
+          "delta_us": 0.8645000000000209
+        },
+        {
+          "after_us": 559.4425,
+          "before_us": 569.178,
+          "delta_percent": -1.7104491037952974,
+          "delta_us": -9.735500000000002
+        }
+      ],
+      "api_types": [
+        {
+          "after_us": 287.874,
+          "before_us": 282.514,
+          "delta_percent": 1.897251109679532,
+          "delta_us": 5.360000000000014
+        },
+        {
+          "after_us": 319.343,
+          "before_us": 316.468,
+          "delta_percent": 0.9084646788932949,
+          "delta_us": 2.875
+        }
+      ],
+      "ner_http_error": [
+        {
+          "after_us": 196.639,
+          "before_us": 185.0095,
+          "delta_percent": 6.285893427094291,
+          "delta_us": 11.629500000000007
+        },
+        {
+          "after_us": 200.98399999999998,
+          "before_us": 205.1495,
+          "delta_percent": -2.0304704617851943,
+          "delta_us": -4.165500000000009
+        }
+      ],
+      "ner_unexpected_error": [
+        {
+          "after_us": 245.139,
+          "before_us": 221.094,
+          "delta_percent": 10.875464734456841,
+          "delta_us": 24.045000000000016
+        },
+        {
+          "after_us": 220.92399999999998,
+          "before_us": 231.31650000000002,
+          "delta_percent": -4.492762081390667,
+          "delta_us": -10.392500000000041
+        }
+      ],
+      "ner_validation": [
+        {
+          "after_us": 297.85400000000004,
+          "before_us": 280.5585,
+          "delta_percent": 6.164667974771776,
+          "delta_us": 17.29550000000006
+        },
+        {
+          "after_us": 293.4935,
+          "before_us": 298.234,
+          "delta_percent": -1.5895236626273346,
+          "delta_us": -4.740499999999997
+        }
+      ]
+    },
+    "asgi_process_delta_percent": [
+      0.15819918274431188,
+      -1.7104491037952974
+    ],
+    "direct_callback_adapter_median_ns": 437.4290125,
+    "direct_callback_added_median_ns": 374.0424,
+    "direct_callback_native_async_median_ns": 63.3866125,
+    "full_assessment": "benchmarks/code-quality-final/performance/adapter/assessment.json",
+    "http_capacity_rps_measured": false,
+    "limitations": [
+      "Local sequential ASGI timings with synthetic data/stub NLP, no network/Redis/real model or concurrent capacity sweep.",
+      "Completed-Future adapter adds one Future allocation and approximately 0.374 microseconds per adapted callback.",
+      "Successful /process and model paths retain ordinary async handlers; timings vary and do not prove identical production throughput.",
+      "A returned Future is accepted by await callback(...) but is not a general Coroutine accepted by asyncio.create_task."
+    ],
+    "measurement_stage": "Adapter prototype; executable function AST matches installed helper, excluding docstring; installed production contract tests and source hashes checked separately.",
+    "production_validation": "benchmarks/code-quality-final/performance/adapter/production-validation.json",
+    "rejected_sync_measurements": "benchmarks/code-quality-final/performance/rejected-sync/comparison.json",
+    "rejected_sync_selected_for_final": false,
+    "zero_overhead_claim": false
+  },
+  "preserved_previous_evidence": "benchmarks/code-quality-integration",
+  "previous_evidence_revision": "1cde5ce3c6a70fabfe8f09b56f01de624d69633d",
+  "recorded_at_utc": "2026-09-22T17:10:20.486057+00:00",
+  "revision": "2384f8602514bf5e81b88340d7b3f28cd0e378ce",
+  "ruff": {
+    "analyzer": "ruff 0.16.8",
+    "archive_sha256": "880b0435222d9e521fc0957e209cfb48dadc8a3f5413dc29b01234da0909d78a",
+    "profiles": {
+      "maintainability": {
+        "by_rule": {},
+        "by_scope": {},
+        "by_severity": {},
+        "report": "maintainability.gitlab.json",
+        "ruff_arguments": [
+          "check",
+          "--isolated",
+          "--no-cache",
+          "--target-version",
+          "py312",
+          "--exclude",
+          "",
+          "--no-respect-gitignore",
+          "--line-length",
+          "120",
+          "--select",
+          "C901,C4,SIM,PERF,PLR0911,PLR0912,PLR0913,PLR0915",
+          "--output-format",
+          "gitlab",
+          "."
+        ],
+        "top_files": {},
+        "total": 0
+      },
+      "project": {
+        "by_rule": {},
+        "by_scope": {},
+        "by_severity": {},
+        "report": "project.gitlab.json",
+        "ruff_arguments": [
+          "check",
+          "--isolated",
+          "--no-cache",
+          "--target-version",
+          "py312",
+          "--exclude",
+          "",
+          "--no-respect-gitignore",
+          "--line-length",
+          "120",
+          "--select",
+          "E4,E7,E9,F,I,B",
+          "--output-format",
+          "gitlab",
+          "."
+        ],
+        "top_files": {},
+        "total": 0
+      },
+      "security": {
+        "by_rule": {
+          "S101": 994,
+          "S105": 4,
+          "S106": 13,
+          "S311": 1,
+          "S603": 8
+        },
+        "by_scope": {
+          "deploy": 1,
+          "scripts": 4,
+          "tests": 1015
+        },
+        "by_severity": {
+          "major": 1020
+        },
+        "report": "security.gitlab.json",
+        "ruff_arguments": [
+          "check",
+          "--isolated",
+          "--no-cache",
+          "--target-version",
+          "py312",
+          "--exclude",
+          "",
+          "--no-respect-gitignore",
+          "--line-length",
+          "120",
+          "--select",
+          "S",
+          "--output-format",
+          "gitlab",
+          "."
+        ],
+        "top_files": {
+          "tests/test_api.py": 141,
+          "tests/test_benchmark_corpus.py": 49,
+          "tests/test_boundary_upload.py": 27,
+          "tests/test_cardholder_fields.py": 27,
+          "tests/test_generalization_adversarial.py": 29,
+          "tests/test_golden_dataset.py": 40,
+          "tests/test_masking_policy.py": 55,
+          "tests/test_ner_service.py": 75,
+          "tests/test_presidio_benchmark_order.py": 32,
+          "tests/test_request_capture_api.py": 36,
+          "tests/test_request_capture_writer.py": 55,
+          "tests/test_sentinel.py": 33
+        },
+        "total": 1020
+      }
+    },
+    "pytest_assertions_in_raw_security": 994,
+    "raw_security_findings_retained": 1020,
+    "reviewed_ci_policy_separate_from_isolated_native_reports": true
+  },
+  "schema_version": 1,
+  "sonar": {
+    "full_report": "benchmarks/code-quality-final/sonar/issues.json",
+    "rules_suppressed_or_findings_removed": false,
+    "scope": "All-source scan, tests included as source; same local Sonar way environment; 0% coverage means no coverage report imported.",
+    "summary": {
+      "hotspots": 0,
+      "issues_total": 0,
+      "measures": {
+        "bugs": "0",
+        "code_smells": "0",
+        "cognitive_complexity": "2009",
+        "complexity": "2715",
+        "coverage": "0.0",
+        "duplicated_lines_density": "0.0",
+        "files": "97",
+        "lines": "16308",
+        "ncloc": "13262",
+        "reliability_rating": "1.0",
+        "security_hotspots": "0",
+        "security_rating": "1.0",
+        "sqale_index": "0",
+        "sqale_rating": "1.0",
+        "vulnerabilities": "0"
+      },
+      "project": "seif-quality-2384f86-all-source",
+      "quality_gate": "OK",
+      "scope_counts": {},
+      "severities": {},
+      "top_files": [],
+      "top_rules": [],
+      "types": {},
+      "url": "http://127.0.0.1:19000/dashboard?id=seif-quality-2384f86-all-source"
+    }
+  },
+  "source_changes": {
+    "comparison_benchmark": "SHA256 positional ranking replaces seeded Random shuffle; version and seed are reported; historical timing order differs.",
+    "four_framework_callbacks": "Completed-Future immediate-response adapter preserves awaiting framework event-loop dispatch without worker thread handoff.",
+    "ner_container": "Dockerfile.ner copies the standard-library adapter and package initializer.",
+    "other_runtime_change": "TaskGroup jobs are created through an explicit loop; original structured cancellation ownership retained."
+  },
+  "source_parity": {
+    "byte_identical_detector_modules": {
+      "seif/cardholder_fields.py": {
+        "baseline_sha256": "3d80d59636e4b2e1a668325fbb945027b48a37e60aad5297c39b727a51806462",
+        "byte_identical": true,
+        "final_sha256": "3d80d59636e4b2e1a668325fbb945027b48a37e60aad5297c39b727a51806462"
+      },
+      "seif/config.py": {
+        "baseline_sha256": "ca9c4e4bc80fcb6847f53f08593b25e5a3b41d6ae5a44ce7c416075ffd7b4b45",
+        "byte_identical": true,
+        "final_sha256": "ca9c4e4bc80fcb6847f53f08593b25e5a3b41d6ae5a44ce7c416075ffd7b4b45"
+      },
+      "seif/context_filters.py": {
+        "baseline_sha256": "c3fbd2c356784e87c481d3ac7d58a8cbf5863d04db96e47d4ef062e348bfd7fb",
+        "byte_identical": true,
+        "final_sha256": "c3fbd2c356784e87c481d3ac7d58a8cbf5863d04db96e47d4ef062e348bfd7fb"
+      },
+      "seif/detector.py": {
+        "baseline_sha256": "e0b09cda385168f401ed1d1aa81ae4b1457d701be977f8f9aee789e444534025",
+        "byte_identical": true,
+        "final_sha256": "e0b09cda385168f401ed1d1aa81ae4b1457d701be977f8f9aee789e444534025"
+      },
+      "seif/document_fields.py": {
+        "baseline_sha256": "2200ed9f9751ee4894f164a4b43654de6f204c9661da83cdbf7a2a455d46ba51",
+        "byte_identical": true,
+        "final_sha256": "2200ed9f9751ee4894f164a4b43654de6f204c9661da83cdbf7a2a455d46ba51"
+      },
+      "seif/location_fields.py": {
+        "baseline_sha256": "2d806e7a35bb7669001e796deba5cbac020dddb2887284390d27becebc43009e",
+        "byte_identical": true,
+        "final_sha256": "2d806e7a35bb7669001e796deba5cbac020dddb2887284390d27becebc43009e"
+      },
+      "seif/person_fields.py": {
+        "baseline_sha256": "ca843e9b6f8ef9d4739703e83b1438a96d114dc95782626fa2e89366bf29f08d",
+        "byte_identical": true,
+        "final_sha256": "ca843e9b6f8ef9d4739703e83b1438a96d114dc95782626fa2e89366bf29f08d"
+      },
+      "seif/structured_fields.py": {
+        "baseline_sha256": "26462106b1a29140a3bbf2b2370feab631145932ee44fbb78ca007b6d1d1218c",
+        "byte_identical": true,
+        "final_sha256": "26462106b1a29140a3bbf2b2370feab631145932ee44fbb78ca007b6d1d1218c"
+      },
+      "seif/transform.py": {
+        "baseline_sha256": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+        "byte_identical": true,
+        "final_sha256": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3"
+      },
+      "seif/vault.py": {
+        "baseline_sha256": "b6b4f59bc911bb0a0c745b6801bcd9a034200e016f321e38c2984206c2946554",
+        "byte_identical": true,
+        "final_sha256": "b6b4f59bc911bb0a0c745b6801bcd9a034200e016f321e38c2984206c2946554"
+      }
+    },
+    "comparison_quality_functions": {
+      "ast_runtime": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+      "changed_existing_functions": [
+        "benchmark"
+      ],
+      "new_functions": [
+        "_ranked_order"
+      ],
+      "unchanged_existing_functions": [
+        "build_presidio",
+        "canonical_hash",
+        "evaluate_corpus",
+        "main",
+        "metric",
+        "percentile",
+        "remap",
+        "sha256"
+      ],
+      "unchanged_function_ast_sha256": {
+        "build_presidio": "29a0b75c1699250f6c606be65dba589b5b746da8bf091539eaedabdf08b21953",
+        "canonical_hash": "6ddb1d2e957f4671d7ac9826e0700ee806418dc862ea481004b181d3cc5defdb",
+        "evaluate_corpus": "7aa92212f099d301124f72895b5e222c329dd8fd7214725650074bb4eb4bdbb2",
+        "main": "2012bed14e042faf44a603576e7415b6a0c0f623bd6ab6cd0df53c6db0920919",
+        "metric": "faa15c01b65d0cf9a4f9cc8b8b68e85deeb2f082e2e22f311a9d322c877b76dd",
+        "percentile": "635097eb48849d8ddcbd3bee52d829ab6b0e7167d5f7991ae9173be31426bff8",
+        "remap": "cf62d3cf8c21518546c51764264ed3fcc9e31bc5aab08cf7a1f511d26b4d3d63",
+        "sha256": "a36d44c9c5db157732f8816f14441bb21763988118540ab9f82d93eb939e1530"
+      }
+    },
+    "proof": "benchmarks/code-quality-final/source-parity.json"
+  },
+  "status": "complete",
+  "tests": {
+    "captured_output_archived": false,
+    "errors": 0,
+    "failures": 0,
+    "revision": "2384f8602514bf5e81b88340d7b3f28cd0e378ce",
+    "schema_version": 1,
+    "skipped": 0,
+    "source_junit_sha256": "0199c3a3b76b33129480e95cd812c0069eb2faabe557faf3ba31b831ceeaca5f",
+    "suites": [
+      {
+        "errors": "0",
+        "failures": "0",
+        "hostname": "lockR",
+        "name": "pytest",
+        "skipped": "0",
+        "tests": "2641",
+        "time": "24.540",
+        "timestamp": "2026-09-22T20:05:46.557063+03:00"
+      }
+    ],
+    "tests": 2641
+  }
+}

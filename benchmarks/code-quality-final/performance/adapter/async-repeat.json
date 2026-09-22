@@ -1,0 +1,53 @@
+{
+  "method": "sequential httpx ASGITransport; 60 warmup + 1200 measured requests per path; in-memory vault, synthetic email, stub NER",
+  "python": "3.14.7 free-threading build (main, Sep  1 2026, 14:17:47) [Clang 22.1.3 ]",
+  "completed_future_adapter": false,
+  "source_sha256": {
+    "seif/app.py": "f1f92194bba95fbebb500e59bd7e36cf2547ea0e410faa2ad536b786b44ba3d7",
+    "seif/ner.py": "da765f44543aef65e0183bdcb7b58d0416432e90acbe833b39ff517ba6869427",
+    "scripts/ner_service.py": "87630a1975e8d805bd5af506ac4ef022fb448486a3e8823c5e2a9b3d641c86c1"
+  },
+  "cases": {
+    "api_types": {
+      "requests": 1200,
+      "mean_us": 328.88779,
+      "median_us": 316.468,
+      "p95_us": 454.458
+    },
+    "api_invalid_control": {
+      "requests": 1200,
+      "mean_us": 424.8529858333333,
+      "median_us": 372.073,
+      "p95_us": 577.997
+    },
+    "api_process": {
+      "requests": 1200,
+      "mean_us": 601.3054483333333,
+      "median_us": 569.178,
+      "p95_us": 816.152
+    },
+    "ner_validation": {
+      "requests": 1200,
+      "mean_us": 348.78400833333336,
+      "median_us": 298.234,
+      "p95_us": 505.028
+    },
+    "ner_http_error": {
+      "requests": 1200,
+      "mean_us": 257.6196483333333,
+      "median_us": 205.1495,
+      "p95_us": 389.188
+    },
+    "ner_unexpected_error": {
+      "requests": 1200,
+      "mean_us": 251.75176166666668,
+      "median_us": 231.31650000000002,
+      "p95_us": 392.348
+    }
+  },
+  "limitations": [
+    "Local latency only; excludes network/Redis/model and concurrent load.",
+    "Not an HTTP RPS capacity benchmark.",
+    "Other system activity can affect timings."
+  ]
+}

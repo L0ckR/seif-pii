@@ -1,0 +1,48 @@
+{
+  "pii_bench": {
+    "cases": 1810,
+    "changed_case_profiles": 0,
+    "final_detector_source_byte_identical_to_evidence_revision": true,
+    "limitation": "These cached-corpus replays were executed for 1cde5ce, not rerun for 2384f86. Their unchanged detector/config/transform source supports inheritance, not new HTTP/model-concurrency evidence.",
+    "prior_report": "benchmarks/code-quality-integration/pii-bench/report.json",
+    "prior_report_sha256": "b1edc91126104d80b70ef651a786b803ca8088043aa825589cf33155073a4b94",
+    "profiles": [
+      "rules",
+      "hybrid_person_only"
+    ],
+    "rerun_for_final_revision": false,
+    "source_evidence_revision": "1cde5ce3c6a70fabfe8f09b56f01de624d69633d",
+    "status": "inherited unchanged detector quality evidence"
+  },
+  "redmadrobot": {
+    "cases": 2839,
+    "changed_case_profiles": 0,
+    "final_detector_source_byte_identical_to_evidence_revision": true,
+    "limitation": "These cached-corpus replays were executed for 1cde5ce, not rerun for 2384f86. Their unchanged detector/config/transform source supports inheritance, not new HTTP/model-concurrency evidence.",
+    "prior_report": "benchmarks/code-quality-integration/redmadrobot/report.json",
+    "prior_report_sha256": "d6edcb8272eccc064b560eb4b60d916685df828038994984f198ac05346cb9c3",
+    "profiles": [
+      "person_location",
+      "person_only",
+      "rules"
+    ],
+    "rerun_for_final_revision": false,
+    "source_evidence_revision": "1cde5ce3c6a70fabfe8f09b56f01de624d69633d",
+    "status": "inherited unchanged detector quality evidence"
+  },
+  "scanpatch": {
+    "cases": 532,
+    "changed_case_profiles": 0,
+    "final_detector_source_byte_identical_to_evidence_revision": true,
+    "limitation": "These cached-corpus replays were executed for 1cde5ce, not rerun for 2384f86. Their unchanged detector/config/transform source supports inheritance, not new HTTP/model-concurrency evidence.",
+    "prior_report": "benchmarks/code-quality-integration/scanpatch/report.json",
+    "prior_report_sha256": "6797f30f7a37e2e5b5b54692ffcff8cff5bed8ddcde0619e3035e755c6d4e118",
+    "profiles": [
+      "rules",
+      "hybrid"
+    ],
+    "rerun_for_final_revision": false,
+    "source_evidence_revision": "1cde5ce3c6a70fabfe8f09b56f01de624d69633d",
+    "status": "inherited unchanged detector quality evidence"
+  }
+}
