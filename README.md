@@ -88,6 +88,7 @@ python3 - <<'PY'
 import base64
 import os
 import secrets
+```
 
 <img width="260" height="177" alt="image" src="https://github.com/user-attachments/assets/0a4edd11-0dda-41bd-99ff-ecaa096b2907" />
 
