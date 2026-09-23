@@ -28,6 +28,7 @@ REQUIRED_FILES = (
     "Dockerfile.ner",
     "compose.yaml",
     "compose.ner.yaml",
+    "compose.presidio.yaml",
     PYPROJECT_FILE,
     ".python-version",
     "process_api.yaml",
@@ -35,6 +36,8 @@ REQUIRED_FILES = (
     "third_party/pii-guard/NOTICE",
     "third_party/pii-guard/ADAPTATION.md",
     "deploy/ner/requirements-rubert-tensorrt.txt",
+    "deploy/rubert/Dockerfile",
+    "deploy/rubert/requirements-runtime.txt",
 )
 TEMPLATES = {name: f"deploy/service/{name}" for name in (README_FILE, ".env.example", ".dockerignore")}
 KUBERNETES_FILES = (
@@ -199,7 +202,7 @@ def _validate_copy_line(name: str, line: str, members: dict[str, bytes]) -> None
 
 
 def _validate_docker_files(members: dict[str, bytes]) -> None:
-    for name in ("Dockerfile", "Dockerfile.ner"):
+    for name in ("Dockerfile", "Dockerfile.ner", "deploy/rubert/Dockerfile"):
         for line in members[name].decode("utf-8").splitlines():
             instruction = line.split(maxsplit=1)
             if instruction and instruction[0].upper() == "COPY":

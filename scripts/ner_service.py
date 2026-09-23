@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Optional private NER service with explicit model capabilities.
+"""Private NER service with RuBERT TensorRT by default.
 
-Install deploy/ner/requirements-ner.txt in a separate environment. The model
+Install the matching backend dependencies in a separate environment. The model
 must already be installed: this service never downloads a model at startup.
 Run with SEIF_NER_TOKEN set; SEIF_NER_DEMO=1 is for loopback demos only.
 """
@@ -170,7 +170,7 @@ def build_analyzer():
     # Set before importing NumPy, avoiding hidden per-worker BLAS thread pools.
     for name in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
         os.environ[name] = "1"
-    backend = os.getenv("SEIF_NER_BACKEND", "presidio")
+    backend = os.getenv("SEIF_NER_BACKEND", "rubert")
     if backend == "rubert":
         from seif.rubert_ner import RubertAnalyzer
 
@@ -375,7 +375,7 @@ def create_app(settings=None, analyzer_factory=None):
     async def health():
         if not app.state.ready:
             return error(503, "not_ready", "NER not ready.")
-        model_name = getattr(app.state.analyzer, "model_name", "ru_core_news_sm")
+        model_name = getattr(app.state.analyzer, "model_name", "unknown")
         return JSONResponse(
             {"status": "ok", "model": model_name, "entities": analyzer_entities(app.state.analyzer)},
             headers={"Cache-Control": "no-store"},
@@ -398,7 +398,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--host", default=os.getenv("SEIF_NER_HOST", "127.0.0.1"))
     parser.add_argument("--port", type=int, default=int(os.getenv("SEIF_NER_PORT", "8770")))
-    default_workers = "1" if os.getenv("SEIF_NER_BACKEND") == "rubert" else "4"
+    default_workers = "4" if os.getenv("SEIF_NER_BACKEND", "rubert") == "presidio" else "1"
     parser.add_argument("--workers", type=int, default=int(os.getenv("SEIF_NER_WORKERS", default_workers)))
     args = parser.parse_args()
     if args.workers < 1:

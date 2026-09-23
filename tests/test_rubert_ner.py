@@ -8,7 +8,15 @@ from types import SimpleNamespace
 
 import pytest
 
+from scripts.ner_service import build_analyzer
 from seif import rubert_ner as adapter
+
+
+def test_rubert_is_default_ner_backend(monkeypatch):
+    expected = object()
+    monkeypatch.delenv("SEIF_NER_BACKEND", raising=False)
+    monkeypatch.setattr(adapter.RubertAnalyzer, "from_env", classmethod(lambda cls: expected))
+    assert build_analyzer() is expected
 
 
 def span(text, value, label, score=.8, start=None):

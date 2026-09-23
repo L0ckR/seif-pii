@@ -6,8 +6,10 @@ NER-сервис, зависимости и конфигурация запус�
 
 ## Запуск с Redis и русскоязычным NER
 
-Нужны Docker с Linux-контейнерами и Docker Compose. При первой сборке нужен
-доступ в интернет для установки зависимостей и русской модели. Из каталога распакованного архива создайте
+Нужны Docker с Linux-контейнерами, Docker Compose, NVIDIA Container Toolkit и
+совместимая GPU. При первой сборке нужен интернет для установки зависимостей.
+Checkpoint RuBERT должен быть заранее подготовлен локально; он не входит в ZIP.
+Из каталога распакованного архива создайте
 новый `.env` (существующий файл эта команда не перезаписывает):
 
 ```bash
@@ -17,6 +19,7 @@ values = {
     "SEIF_MASTER_KEY": base64.b64encode(secrets.token_bytes(32)).decode(),
     "SEIF_DEMO_API_KEY": secrets.token_urlsafe(32),
     "SEIF_NER_TOKEN": secrets.token_urlsafe(32),
+    "SEIF_RUBERT_MODEL_HOST_PATH": "/absolute/path/to/verified/rubert/checkpoint",
     "SEIF_DEMO": "0",
 }
 with os.fdopen(os.open(".env", os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600), "w") as f:
@@ -26,12 +29,12 @@ docker compose -f compose.yaml -f compose.ner.yaml up --build -d
 ```
 
 API: `http://127.0.0.1:8765`. Проверка готовности: `GET /health`.
-Русская модель устанавливается при сборке NER-образа из зафиксированного
-`deploy/ner/requirements-ner.txt`; при старте сервис модель не скачивает.
+По умолчанию NER использует RuBERT TensorRT с декодером слов и native-профилем.
+Docker монтирует локальный checkpoint только для чтения; сервис сверяет SHA256
+семи обязательных файлов при старте и не загружает модель из сети.
 Запуск только правил без NER: `docker compose up --build -d`.
-По умолчанию NER использует четыре worker и лимит 4 CPU. На меньшем хосте
-добавьте в `.env` `SEIF_NER_WORKERS=1` и `SEIF_NER_CPUS=1.0` перед запуском.
-Это уменьшит требования к ресурсам и пропускную способность NER.
+На хосте без GPU доступен явный CPU-режим Presidio/spaCy:
+`docker compose -f compose.yaml -f compose.presidio.yaml up --build -d`.
 
 В режиме `SEIF_DEMO=0` передавайте `X-System-ID: demo` и `X-API-Key`
 со значением `SEIF_DEMO_API_KEY` из созданного `.env`. Для проверки хакатона
@@ -69,9 +72,9 @@ Compose настраивает общий Redis автоматически. По
 
 Целостность файлов после распаковки: `sha256sum -c SHA256SUMS`.
 
-## Опциональный RuBERT TensorRT
+## RuBERT TensorRT
 
-Существующий Docker Compose выше использует spaCy. Для GPU-профиля нужен отдельный
+Docker Compose выше использует RuBERT. Для запуска вне контейнера нужен отдельный
 процесс Python 3.12 с CUDA и локальный проверенный checkpoint
 `lockR/rubert-base-pii-ner-tensorrt` ревизии
 `73be581047bf123dac6505e7b3900ec292942296`. Опубликованный движок проверен на
@@ -83,7 +86,7 @@ RTX 4070 Ti SUPER / TensorRT 10.13.3.9; его совместимость с д�
 `SEIF_NER_TOKEN` через окружение и запустите из корня распакованного проекта:
 
 ```bash
-SEIF_NER_BACKEND=rubert SEIF_RUBERT_MODEL_PATH=/absolute/path/to/checkpoint \
+SEIF_RUBERT_MODEL_PATH=/absolute/path/to/checkpoint \
   .venv-ner/bin/python -m scripts.ner_service --host 127.0.0.1 --port 8770 --workers 1
 ```
 
@@ -94,6 +97,12 @@ SEIF_NER_BACKEND=rubert SEIF_RUBERT_MODEL_PATH=/absolute/path/to/checkpoint \
 паспорт, водительское удостоверение, ИНН, СНИЛС, ОМС, IP-адрес, URL, военный билет
 и свидетельство о рождении. `GET /health` NER-процесса сообщает доступные типы.
 Поле `types` политики потребителя по-прежнему ограничивает фактическое маскирование.
+
+На текущей версии правил локальная проверка полного HTTP-пути с двумя GPU NER-репликами,
+batch 32 и общим Redis дала F1 маскирования **97,1285%** и **417/446** точных масок
+на размеченном golden-наборе организаторов. Прежний spaCy-гибрид на том же наборе
+давал 96,8856% и 415/446. Это локальная разметка, а не официальный балл платформы;
+эта проверка качества не устанавливает устойчивый RPS.
 
 Границы остаются в исходном Unicode-тексте. Ограничения одного модельного span:
 URL — 2048 символов, email — 320, остальные типы — 200; длинные запросы имеют

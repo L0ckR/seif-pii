@@ -1,0 +1,45 @@
+# Explicit CPU fallback for hosts without the pinned RuBERT GPU checkpoint.
+services:
+  api:
+    environment:
+      SEIF_NER_URL: http://ner:8770
+      SEIF_NER_TOKEN: ${SEIF_NER_TOKEN:?Set a random SEIF_NER_TOKEN in your protected environment file}
+    depends_on:
+      ner:
+        condition: service_healthy
+    networks: [default, ner-internal]
+  ner:
+    build:
+      context: .
+      dockerfile: Dockerfile.ner
+    restart: unless-stopped
+    environment:
+      SEIF_NER_BACKEND: presidio
+      SEIF_NER_TOKEN: ${SEIF_NER_TOKEN:?Set a random SEIF_NER_TOKEN in your protected environment file}
+      SEIF_NER_WORKERS: ${SEIF_NER_WORKERS:-4}
+      OMP_NUM_THREADS: "1"
+      OPENBLAS_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+    expose: ["8770"]
+    networks: [ner-internal]
+    read_only: true
+    tmpfs: ["/tmp:size=64m,mode=1777"]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 3g
+    cpus: ${SEIF_NER_CPUS:-4.0}
+    pids_limit: 256
+    stop_grace_period: 45s
+    logging:
+      options:
+        max-size: 10m
+        max-file: '3'
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8770/health', timeout=3)"]
+      interval: 10s
+      timeout: 4s
+      start_period: 90s
+      retries: 6
+networks:
+  ner-internal:
+    internal: true

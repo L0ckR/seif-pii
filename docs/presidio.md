@@ -125,7 +125,7 @@ API работает на Python 3.14 без GIL; модель изолиров�
 
 ## Включение и выбор профиля
 
-Обычный запуск сохраняет профиль правил. Для гибрида используются [`Dockerfile.ner`](../Dockerfile.ner) и [`compose.ner.yaml`](../compose.ner.yaml); NER-порт не публикуется на хост. После подготовки основного `.env` создайте отдельный ключ без вывода и перезаписи существующего файла:
+Обычный запуск сохраняет профиль правил. Для явного CPU-гибрида Presidio используются [`Dockerfile.ner`](../Dockerfile.ner) и [`compose.presidio.yaml`](../compose.presidio.yaml); NER-порт не публикуется на хост. После подготовки основного `.env` создайте отдельный ключ без вывода и перезаписи существующего файла:
 
 ```bash
 python3 - <<'PY'
@@ -136,7 +136,7 @@ with os.fdopen(fd, 'w', encoding='ascii') as stream:
     stream.write('SEIF_NER_TOKEN=' + secrets.token_urlsafe(48) + '\n')
 PY
 docker compose --env-file .env --env-file .env.ner \
-  -f compose.yaml -f compose.ner.yaml up --build -d
+  -f compose.yaml -f compose.presidio.yaml up --build -d
 ```
 
 Для Kubernetes подготовлен [hybrid overlay](../deploy/k8s/overlays/hybrid/kustomization.yaml) с двумя NER-репликами и Secret `ner-key`; [инструкция добавления ключа](kubernetes.md#необязательный-hybrid-профиль-с-presidio-ner) сохраняет существующие секреты. Манифесты проверены статически; факт запуска кластера этим не подтверждается.

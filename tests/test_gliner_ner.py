@@ -292,9 +292,9 @@ def test_http_health_reports_actual_model_and_prediction_errors_are_redacted():
         assert client.post("/analyze", json={"text": "обычный текст"}).json() == {"entities": []}
 
 
-def test_stub_health_keeps_presidio_model_default():
+def test_stub_health_reports_unknown_model():
     with TestClient(create_app(NerSettings(demo=True), analyzer_factory=object)) as client:
-        assert client.get("/health").json()["model"] == "ru_core_news_sm"
+        assert client.get("/health").json()["model"] == "unknown"
 
 
 def test_concurrent_calls_share_one_model_lock():

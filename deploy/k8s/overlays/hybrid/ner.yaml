@@ -58,6 +58,8 @@ spec:
             capabilities:
               drop: [ALL]
           env:
+            - name: SEIF_NER_BACKEND
+              value: presidio
             - name: SEIF_NER_WORKERS
               value: "1"
             - name: SEIF_NER_TOKEN

@@ -84,7 +84,7 @@ def test_runtime_unchanged_except_optional_static_ui(project):
 def test_packaged_compose_mounts_and_build_inputs_are_valid(project):
     archive = build_archive(project, project / "output/source.zip")
     with ZipFile(archive) as packaged:
-        for name in ("compose.yaml", "compose.ner.yaml"):
+        for name in ("compose.yaml", "compose.ner.yaml", "compose.presidio.yaml"):
             services = yaml.safe_load(packaged.read(name))["services"]
             for service in services.values():
                 assert all(mount.startswith("/") for mount in service.get("tmpfs", []))

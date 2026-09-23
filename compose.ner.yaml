@@ -1,10 +1,12 @@
-# Optional profile: docker compose -f compose.yaml -f compose.ner.yaml up --build -d
-# SEIF_NER_TOKEN is shared only by the API and the private NER service.
+# Default GPU NER: docker compose -f compose.yaml -f compose.ner.yaml up --build -d
+# The pinned local checkpoint is mounted read-only; SEIF_NER_TOKEN is private.
 services:
   api:
     environment:
       SEIF_NER_URL: http://ner:8770
       SEIF_NER_TOKEN: ${SEIF_NER_TOKEN:?Set a random SEIF_NER_TOKEN in your protected environment file}
+      SEIF_NER_HTTP_BACKEND: aiohttp
+      SEIF_NER_MAX_CONCURRENCY: ${SEIF_NER_MAX_CONCURRENCY:-32}
     depends_on:
       ner:
         condition: service_healthy
@@ -12,21 +14,44 @@ services:
   ner:
     build:
       context: .
-      dockerfile: Dockerfile.ner
+      dockerfile: deploy/rubert/Dockerfile
     restart: unless-stopped
     environment:
       SEIF_NER_TOKEN: ${SEIF_NER_TOKEN:?Set a random SEIF_NER_TOKEN in your protected environment file}
-      SEIF_NER_WORKERS: ${SEIF_NER_WORKERS:-4}
+      SEIF_NER_BACKEND: rubert
+      SEIF_NER_WORKERS: "1"
+      SEIF_NER_BATCH_SIZE: ${SEIF_NER_BATCH_SIZE:-32}
+      SEIF_NER_BATCH_WAIT_MS: ${SEIF_NER_BATCH_WAIT_MS:-2}
+      SEIF_NER_MAX_MODEL_JOBS: ${SEIF_NER_MAX_MODEL_JOBS:-64}
+      SEIF_NER_MAX_HTTP_INFLIGHT: ${SEIF_NER_MAX_HTTP_INFLIGHT:-128}
+      SEIF_RUBERT_MODEL_PATH: /models/rubert
+      SEIF_RUBERT_DECODER: word
+      SEIF_RUBERT_PROFILE: native
+      SEIF_RUBERT_CPU_THREADS: ${SEIF_RUBERT_CPU_THREADS:-1}
       OMP_NUM_THREADS: "1"
       OPENBLAS_NUM_THREADS: "1"
       MKL_NUM_THREADS: "1"
+    volumes:
+      - type: bind
+        source: ${SEIF_RUBERT_MODEL_HOST_PATH:?Set the absolute path to the verified local checkpoint}
+        target: /models/rubert
+        read_only: true
+        bind:
+          create_host_path: false
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["${SEIF_NER_GPU:-0}"]
+              capabilities: [gpu]
     expose: ["8770"]
     networks: [ner-internal]
     read_only: true
     tmpfs: ["/tmp:size=64m,mode=1777"]
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]
-    mem_limit: 3g
+    mem_limit: 4g
     cpus: ${SEIF_NER_CPUS:-4.0}
     pids_limit: 256
     stop_grace_period: 45s

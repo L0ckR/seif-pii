@@ -3,7 +3,8 @@ LABEL org.opencontainers.image.source="https://github.com/L0ckR/seif-pii"
 WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 \
     OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
-    SEIF_NER_HOST=0.0.0.0 SEIF_NER_PORT=8770 SEIF_NER_WORKERS=4
+    SEIF_NER_HOST=0.0.0.0 SEIF_NER_PORT=8770 SEIF_NER_WORKERS=4 \
+    SEIF_NER_BACKEND=presidio
 COPY deploy/ner/requirements-ner.txt /tmp/requirements-ner.txt
 RUN pip install --no-cache-dir -r /tmp/requirements-ner.txt \
     && python -c "import spacy; spacy.load('ru_core_news_sm')" \
