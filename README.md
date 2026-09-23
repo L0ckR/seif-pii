@@ -20,7 +20,12 @@
 
 ## Профили распознавания
 
-По умолчанию используется быстрый профиль на правилах. Дополнительно доступны:
+Публичный `/process` сейчас работает в гибридном режиме с двумя GPU-репликами
+RuBERT. В NER-сервисе и `compose.ner.yaml` RuBERT выбран по умолчанию.
+Простой `make run` без NER запускает только правила; для CPU-хоста Presidio
+включается отдельно через `compose.presidio.yaml`.
+
+Доступные варианты:
 
 - CPU-гибрид с Presidio для распознавания `PERSON` и `LOCATION`.
 - GPU-профиль RuBERT с локальными весами и CUDA.
@@ -28,7 +33,7 @@
 
 Внешние LLM, платные API и интернет во время обработки не требуются. При недоступности NER-сервиса hybrid-профиль возвращает ошибку, а не неполный результат.
 
-Подробнее: [выбор стека](docs/stack.md), [сравнение с Presidio](docs/presidio.md), [запуск RuBERT](deploy/service/README.md#опциональный-rubert-tensorrt).
+Подробнее: [выбор стека](docs/stack.md), [сравнение с Presidio](docs/presidio.md), [запуск RuBERT](deploy/service/README.md#rubert-tensorrt).
 
 ## Демонстрация
 
