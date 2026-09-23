@@ -1,14 +1,14 @@
 # Локальный Kubernetes (kind)
 
-Этот overlay запускает API из текущего `main`, две CPU NER-реплики и три Redis/Sentinel-пода на одном kind-узле. Он нужен для проверки Kubernetes-развёртывания и отказа отдельного пода. GPU RuBERT и измеренные 2000 RPS относятся к отдельному профилю `deploy/rubert` и этим overlay не подтверждаются.
+Этот overlay запускает API из коммита `fcf76c5`, две CPU NER-реплики и три Redis/Sentinel-пода на одном kind-узле. Он нужен для проверки Kubernetes-развёртывания и отказа отдельного пода. GPU RuBERT и измеренные 2000 RPS относятся к отдельному профилю `deploy/rubert` и этим overlay не подтверждаются.
 
-Создайте кластер с именем `seif` и соберите образы из текущего `main` (теги фиксируют проверенную версию кода `2e9076e`):
+Создайте кластер с именем `seif` и соберите образы из коммита `fcf76c5` (теги фиксируют проверенную версию кода):
 
 ```bash
 kind create cluster --name seif --wait 5m
-docker build -t seif-api:local-2e9076e .
-docker build -t seif-ner:local-2e9076e -f Dockerfile.ner .
-kind load docker-image seif-api:local-2e9076e seif-ner:local-2e9076e --name seif
+docker build -t seif-api:local-fcf76c5 .
+docker build -t seif-ner:local-fcf76c5 -f Dockerfile.ner .
+kind load docker-image seif-api:local-fcf76c5 seif-ner:local-fcf76c5 --name seif
 ```
 
 Локальные PV используют каталоги внутри kind-узла. Создайте их с правами UID Redis:
