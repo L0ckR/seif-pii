@@ -1,4 +1,5 @@
 """Build a reproducible, complete service ZIP; development tools stay in Git."""
+
 from __future__ import annotations
 
 import ast
@@ -12,12 +13,24 @@ from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED_FILES = (
-    "seif/__init__.py", "seif/app.py", "scripts/serve.py", "scripts/ner_service.py",
-    "config/policies.yaml", "requirements.lock", "deploy/ner/requirements-ner.txt",
-    "Dockerfile", "Dockerfile.ner", "compose.yaml", "compose.ner.yaml",
-    "pyproject.toml", ".python-version", "process_api.yaml",
-    "third_party/pii-guard/LICENSE", "third_party/pii-guard/NOTICE",
-    "third_party/pii-guard/ADAPTATION.md", "deploy/ner/requirements-rubert-tensorrt.txt",
+    "seif/__init__.py",
+    "seif/app.py",
+    "scripts/serve.py",
+    "scripts/ner_service.py",
+    "config/policies.yaml",
+    "requirements.lock",
+    "deploy/ner/requirements-ner.txt",
+    "Dockerfile",
+    "Dockerfile.ner",
+    "compose.yaml",
+    "compose.ner.yaml",
+    "pyproject.toml",
+    ".python-version",
+    "process_api.yaml",
+    "third_party/pii-guard/LICENSE",
+    "third_party/pii-guard/NOTICE",
+    "third_party/pii-guard/ADAPTATION.md",
+    "deploy/ner/requirements-rubert-tensorrt.txt",
 )
 TEMPLATES = {name: f"deploy/service/{name}" for name in ("README.md", ".env.example", ".dockerignore")}
 UI_LINES = (
@@ -43,11 +56,16 @@ def source_files(root: Path):
     """Select runtime modules and explicit deployment files, never other tools."""
     names = set(REQUIRED_FILES) | set(TEMPLATES.values())
     for current, directories, files in os.walk(root / "seif", followlinks=False):
-        directories[:] = sorted(name for name in directories
-                                if not name.startswith(".") and name != "__pycache__"
-                                and not (Path(current) / name).is_symlink())
-        names.update((Path(current) / name).relative_to(root).as_posix()
-                     for name in files if name.endswith(".py") and not name.startswith("."))
+        directories[:] = sorted(
+            name
+            for name in directories
+            if not name.startswith(".") and name != "__pycache__" and not (Path(current) / name).is_symlink()
+        )
+        names.update(
+            (Path(current) / name).relative_to(root).as_posix()
+            for name in files
+            if name.endswith(".py") and not name.startswith(".")
+        )
     return [root / name for name in sorted(names)]
 
 
@@ -62,8 +80,7 @@ def _service_app(data: bytes) -> bytes:
     for line in UI_LINES:
         text = _remove_exact(text, line, "seif/app.py static UI")
     # New uses must retain their imports or receive an updated packaging recipe.
-    if any(isinstance(node, ast.Name) and node.id in {"Path", "StaticFiles"}
-           for node in ast.walk(ast.parse(text))):
+    if any(isinstance(node, ast.Name) and node.id in {"Path", "StaticFiles"} for node in ast.walk(ast.parse(text))):
         raise ValueError("Service app still requires a removed UI import")
     return text.encode("utf-8")
 
@@ -81,7 +98,7 @@ def _runtime_metadata(data: bytes) -> bytes:
 
 
 def _from_module(package: list[str], node: ast.ImportFrom) -> str:
-    base = package[:len(package) - node.level + 1] if node.level else []
+    base = package[: len(package) - node.level + 1] if node.level else []
     return ".".join([*base, node.module] if node.module else base)
 
 
@@ -149,18 +166,22 @@ def _validate_docker_files(members: dict[str, bytes]) -> None:
 
 
 def service_members(root: Path) -> dict[str, bytes]:
-    members = {path.relative_to(root).as_posix(): _read_source(root, path.relative_to(root).as_posix())
-               for path in source_files(root)}
+    members = {
+        path.relative_to(root).as_posix(): _read_source(root, path.relative_to(root).as_posix())
+        for path in source_files(root)
+    }
     for target, source in TEMPLATES.items():
         members[target] = members.pop(source)
     members["seif/app.py"] = _service_app(members["seif/app.py"])
-    members["Dockerfile"] = _remove_exact(members["Dockerfile"].decode("utf-8"),
-                                         "COPY web ./web\n", "Dockerfile static UI").encode("utf-8")
+    members["Dockerfile"] = _remove_exact(
+        members["Dockerfile"].decode("utf-8"), "COPY web ./web\n", "Dockerfile static UI"
+    ).encode("utf-8")
     members["pyproject.toml"] = _runtime_metadata(members["pyproject.toml"])
     _validate_imports(members)
     _validate_docker_files(members)
-    members["SHA256SUMS"] = "".join(f"{hashlib.sha256(data).hexdigest()}  {name}\n"
-                                    for name, data in sorted(members.items())).encode("utf-8")
+    members["SHA256SUMS"] = "".join(
+        f"{hashlib.sha256(data).hexdigest()}  {name}\n" for name, data in sorted(members.items())
+    ).encode("utf-8")
     return members
 
 

@@ -5,6 +5,7 @@ Run --prepare-only before inference to freeze token alignment exclusions and
 the shared coarse mapping. Corpus bytes stay in ignored output/. Original
 sentences are never printed, changed or copied into the aggregate report.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -32,13 +33,36 @@ FILES = {
 }
 NAME_TYPES = frozenset(("FIRST_NAME", "LAST_NAME", "MIDDLE_NAME"))
 LOCATION_TYPES = frozenset(("COUNTRY", "REGION", "DISTRICT", "CITY", "STREET", "HOUSE"))
-GOLD_MAP = {**dict.fromkeys(NAME_TYPES, "PERSON"), **dict.fromkeys(LOCATION_TYPES, "LOCATION"),
-            "EMAIL": "EMAIL", "PHONE": "PHONE", "CREDIT_CARD": "CARD", "PASSPORT": "PASSPORT",
-            "INN": "INN", "DRIVER_LICENSE": "DRIVER_LICENSE"}
-SEIF_MAP = {"PERSON": "PERSON", "CARDHOLDER": "PERSON", "EMAIL": "EMAIL", "PHONE": "PHONE", "CARD": "CARD",
-            "PASSPORT": "PASSPORT", "INN": "INN", "DRIVER_LICENSE": "DRIVER_LICENSE",
-            **dict.fromkeys(("ADDRESS", "COUNTRY", "CITY", "STREET", "HOUSE", "APARTMENT", "POSTAL_CODE", "BIRTH_PLACE"), "LOCATION")}
-PRESIDIO_MAP = {"PERSON": "PERSON", "LOCATION": "LOCATION", "EMAIL_ADDRESS": "EMAIL", "PHONE_NUMBER": "PHONE", "CREDIT_CARD": "CARD"}
+GOLD_MAP = {
+    **dict.fromkeys(NAME_TYPES, "PERSON"),
+    **dict.fromkeys(LOCATION_TYPES, "LOCATION"),
+    "EMAIL": "EMAIL",
+    "PHONE": "PHONE",
+    "CREDIT_CARD": "CARD",
+    "PASSPORT": "PASSPORT",
+    "INN": "INN",
+    "DRIVER_LICENSE": "DRIVER_LICENSE",
+}
+SEIF_MAP = {
+    "PERSON": "PERSON",
+    "CARDHOLDER": "PERSON",
+    "EMAIL": "EMAIL",
+    "PHONE": "PHONE",
+    "CARD": "CARD",
+    "PASSPORT": "PASSPORT",
+    "INN": "INN",
+    "DRIVER_LICENSE": "DRIVER_LICENSE",
+    **dict.fromkeys(
+        ("ADDRESS", "COUNTRY", "CITY", "STREET", "HOUSE", "APARTMENT", "POSTAL_CODE", "BIRTH_PLACE"), "LOCATION"
+    ),
+}
+PRESIDIO_MAP = {
+    "PERSON": "PERSON",
+    "LOCATION": "LOCATION",
+    "EMAIL_ADDRESS": "EMAIL",
+    "PHONE_NUMBER": "PHONE",
+    "CREDIT_CARD": "CARD",
+}
 COMMON = frozenset(("PERSON", "LOCATION", "EMAIL", "PHONE", "CARD"))
 STRUCTURED = frozenset(("PASSPORT", "INN", "DRIVER_LICENSE"))
 UNMAPPED = frozenset(("URL", "IP_ADDRESS", "SNILS", "OMS", "MILITARY_ID", "BIRTH_CERTIFICATE"))
@@ -56,7 +80,9 @@ def fetch(folder):
     for remote, (filename, checksum) in FILES.items():
         path = folder / filename
         if not path.exists():
-            response = requests.get(f"https://huggingface.co/datasets/{REPOSITORY}/resolve/{REVISION}/{remote}", timeout=60)
+            response = requests.get(
+                f"https://huggingface.co/datasets/{REPOSITORY}/resolve/{REVISION}/{remote}", timeout=60
+            )
             response.raise_for_status()
             if sha(response.content) != checksum:
                 raise RuntimeError("Dataset download checksum mismatch.")
@@ -127,7 +153,11 @@ def read_rows(folder):
 
 
 def coarsen(spans, mapping, keep_unknown=False):
-    return {(mapping.get(kind, "UNMAPPED:" + kind), start, end) for kind, start, end in spans if keep_unknown or kind in mapping}
+    return {
+        (mapping.get(kind, "UNMAPPED:" + kind), start, end)
+        for kind, start, end in spans
+        if keep_unknown or kind in mapping
+    }
 
 
 def merge_adjacent(text, spans):
@@ -142,7 +172,7 @@ def _merge_kind(text, spans, kind):
     merged = []
     current = None
     for _, start, end in sorted(span for span in spans if span[0] == kind):
-        if current is not None and (start <= current[2] or not text[current[2]:start].strip()):
+        if current is not None and (start <= current[2] or not text[current[2] : start].strip()):
             current = (kind, current[1], max(end, current[2]))
         else:
             if current is not None:
@@ -165,8 +195,14 @@ def score_scope(truth, predictions, allowed, whole_cases=True):
         }
         # Character-level error lists can contain thousands of individual points.
         results[system]["typed_character_primary"].pop("first_five_error_offsets", None)
-    return {"case_ids": ids, "types": sorted(allowed), "systems": results,
-            "selection": "whole cases: every gold type is allowed; all gold-empty rows retained" if whole_cases else "all aligned cases, filter only types (diagnostic)"}
+    return {
+        "case_ids": ids,
+        "types": sorted(allowed),
+        "systems": results,
+        "selection": "whole cases: every gold type is allowed; all gold-empty rows retained"
+        if whole_cases
+        else "all aligned cases, filter only types (diagnostic)",
+    }
 
 
 def _infer_rows(rows, analyzer, original_outputs):
@@ -180,7 +216,11 @@ def _infer_rows(rows, analyzer, original_outputs):
             key, text = row["id"], row["text"]
             base = detect(text)
             upstream = analyzer.analyze(text=text, language="ru", score_threshold=0.0)
-            candidates = [Span(item.start, item.end, "PERSON", item.score, "ner-person") for item in upstream if item.entity_type == "PERSON"]
+            candidates = [
+                Span(item.start, item.end, "PERSON", item.score, "ner-person")
+                for item in upstream
+                if item.entity_type == "PERSON"
+            ]
             hybrid = merge_person_candidates(text, base, candidates)
             original = {
                 "seif_fast": {(item.type, item.start, item.end) for item in base},
@@ -192,9 +232,20 @@ def _infer_rows(rows, analyzer, original_outputs):
             for system, spans in original.items():
                 raw_coarse[system][key] = coarsen(spans, PRESIDIO_MAP if system == "presidio_ru" else SEIF_MAP)
                 predictions[system][key] = merge_adjacent(text, raw_coarse[system][key])
-            stream.write(json.dumps({"id": key, "fine_gold": sorted(row["fine_gold"]), "raw_coarse_gold": sorted(raw_truth[key]),
-                                     "merged_gold": sorted(truth[key]), "original_predictions": {name: sorted(spans) for name, spans in original.items()},
-                                     "merged_predictions": {name: sorted(values[key]) for name, values in predictions.items()}}, ensure_ascii=False) + "\n")
+            stream.write(
+                json.dumps(
+                    {
+                        "id": key,
+                        "fine_gold": sorted(row["fine_gold"]),
+                        "raw_coarse_gold": sorted(raw_truth[key]),
+                        "merged_gold": sorted(truth[key]),
+                        "original_predictions": {name: sorted(spans) for name, spans in original.items()},
+                        "merged_predictions": {name: sorted(values[key]) for name, values in predictions.items()},
+                    },
+                    ensure_ascii=False,
+                )
+                + "\n"
+            )
     return truth, raw_truth, predictions, raw_coarse
 
 
@@ -209,25 +260,61 @@ def main():
     fetch(args.data_dir)
     rows, excluded = read_rows(args.data_dir)
     metadata = {
-        "repository": REPOSITORY, "revision": REVISION, "license_declared_in_pinned_card": "MIT",
+        "repository": REPOSITORY,
+        "revision": REVISION,
+        "license_declared_in_pinned_card": "MIT",
         "card_url": f"https://huggingface.co/datasets/{REPOSITORY}/blob/{REVISION}/README.md",
-        "original_split": "test.csv", "declared_language": "ru", "offered_rows": 2841, "aligned_rows": len(rows),
-        "excluded_before_inference": excluded, "file_sha256": {key: value[1] for key, value in FILES.items()},
+        "original_split": "test.csv",
+        "declared_language": "ru",
+        "offered_rows": 2841,
+        "aligned_rows": len(rows),
+        "excluded_before_inference": excluded,
+        "file_sha256": {key: value[1] for key, value in FILES.items()},
         "offered_row_ids": [f"row_{index:04d}" for index in range(2841)],
-        "aligned_gold_type_counts": dict(sorted(Counter(kind for row in rows for kind, *_ in row["fine_gold"]).items())),
+        "aligned_gold_type_counts": dict(
+            sorted(Counter(kind for row in rows for kind, *_ in row["fine_gold"]).items())
+        ),
         "original_text_policy": "Original text unchanged; exact monotonic token offsets, whitespace-only gaps; an empty O token marks zero characters and preserves the BIO boundary; invalid rows excluded before detector predictions",
     }
     protocol = {
-        "dataset": metadata, "mapping": {"gold": GOLD_MAP, "seif": SEIF_MAP, "presidio": PRESIDIO_MAP},
-        "common_scope": sorted(COMMON), "primary": "typed-character precision/recall/F1 on whole cases in common5 plus all negatives",
+        "dataset": metadata,
+        "mapping": {"gold": GOLD_MAP, "seif": SEIF_MAP, "presidio": PRESIDIO_MAP},
+        "common_scope": sorted(COMMON),
+        "primary": "typed-character precision/recall/F1 on whole cases in common5 plus all negatives",
         "secondary": "exact spans after identical merge; PERSON/LOCATION on all aligned cases; structured requirement coverage separately",
         "merge_rule": "Same coarse category; merge overlapping spans or spans separated only by Unicode whitespace, on BOTH gold and EVERY system; no punctuation merging",
         "uncertainty": "2000 paired case bootstrap resamples, seed20260922; percentile95 differences vs fixed PresidioRU; character and exact units separately",
         "pdf_overlap": {
-            "13_fine_labels_with_direct_counterpart": sorted(NAME_TYPES | {"COUNTRY", "CITY", "STREET", "HOUSE", "EMAIL", "PHONE", "PASSPORT", "INN", "CREDIT_CARD", "DRIVER_LICENSE"}),
+            "13_fine_labels_with_direct_counterpart": sorted(
+                NAME_TYPES
+                | {
+                    "COUNTRY",
+                    "CITY",
+                    "STREET",
+                    "HOUSE",
+                    "EMAIL",
+                    "PHONE",
+                    "PASSPORT",
+                    "INN",
+                    "CREDIT_CARD",
+                    "DRIVER_LICENSE",
+                }
+            ),
             "2_address_components_only_coarse": ["REGION", "DISTRICT"],
             "6_without_unique_assignment_counterpart": sorted(UNMAPPED),
-            "missing_distinctions": ["birth date/purpose", "birth place/purpose", "passport issuer", "passport issue date", "department code", "citizenship", "postal code", "apartment", "CVV", "PIN", "cardholder/purpose"],
+            "missing_distinctions": [
+                "birth date/purpose",
+                "birth place/purpose",
+                "passport issuer",
+                "passport issue date",
+                "department code",
+                "citizenship",
+                "postal code",
+                "apartment",
+                "CVV",
+                "PIN",
+                "cardholder/purpose",
+            ],
         },
         "policy_caveat": "Coarse LOCATION is a spatial NER category, not proof that the full personal ADDRESS or public/private exception was identified",
     }
@@ -239,8 +326,19 @@ def main():
     if protocol_path.read_text() != encoded_protocol:
         raise RuntimeError("Prepared protocol differs; evaluation mapping/exclusions cannot change silently.")
     if args.prepare_only:
-        print(json.dumps({"prepared": True, "rows": len(rows), "excluded": excluded,
-                          "protocol_sha256": sha(protocol_path.read_bytes()), "pdf_overlap": protocol["pdf_overlap"]}, ensure_ascii=False, indent=2))
+        print(
+            json.dumps(
+                {
+                    "prepared": True,
+                    "rows": len(rows),
+                    "excluded": excluded,
+                    "protocol_sha256": sha(protocol_path.read_bytes()),
+                    "pdf_overlap": protocol["pdf_overlap"],
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
         return
     if (marker.exists() or args.output.exists()) and not args.repeat:
         parser.error("Prior inference/report exists; repeated runs require --repeat and are not a fresh holdout.")
@@ -248,26 +346,50 @@ def main():
     first = not marker.exists()
     if first:
         with marker.open("x", encoding="utf-8") as file:
-            json.dump({"started_at_utc": datetime.now(timezone.utc).isoformat(), "detector_sha256": source_hash,
-                       "protocol_sha256": sha(protocol_path.read_bytes())}, file)
+            json.dump(
+                {
+                    "started_at_utc": datetime.now(timezone.utc).isoformat(),
+                    "detector_sha256": source_hash,
+                    "protocol_sha256": sha(protocol_path.read_bytes()),
+                },
+                file,
+            )
     analyzer, configuration = build_presidio()
-    original_outputs = args.data_dir / ("redmadrobot-predictions-first.jsonl" if first else "redmadrobot-predictions-repeat.jsonl")
+    original_outputs = args.data_dir / (
+        "redmadrobot-predictions-first.jsonl" if first else "redmadrobot-predictions-repeat.jsonl"
+    )
     truth, raw_truth, predictions, raw_coarse = _infer_rows(rows, analyzer, original_outputs)
     if sha((ROOT / "seif/detector.py").read_bytes()) != source_hash:
         raise RuntimeError("Detector changed during inference; report not published.")
     primary = score_scope(truth, predictions, COMMON)
     ids = primary["case_ids"]
     selected_truth = {key: truth[key] for key in ids}
-    selected_predictions = {system: {key: {span for span in values[key] if span[0] in COMMON} for key in ids} for system, values in predictions.items()}
+    selected_predictions = {
+        system: {key: {span for span in values[key] if span[0] in COMMON} for key in ids}
+        for system, values in predictions.items()
+    }
     report = {
-        "schema_version": 1, "measured_at_utc": datetime.now(timezone.utc).isoformat(),
-        "evaluation_status": "first frozen-implementation evaluation on this previously unused corpus in this task" if first else "repeat: reproduction or post-result development",
-        "dataset": metadata, "protocol": protocol, "protocol_sha256": sha(protocol_path.read_bytes()),
-        "source_hashes": {"detector": source_hash, "evaluator": sha(Path(__file__).read_bytes()),
-                          "presidio_configuration_script": sha((ROOT / "scripts/compare_presidio.py").read_bytes())},
-        "presidio_configuration": configuration, "common5": primary,
-        "common5_character_uncertainty": paired_bootstrap(typed_characters(selected_truth),
-                                            {system: typed_characters(values) for system, values in selected_predictions.items()}, {"all": ids}, COMMON),
+        "schema_version": 1,
+        "measured_at_utc": datetime.now(timezone.utc).isoformat(),
+        "evaluation_status": "first frozen-implementation evaluation on this previously unused corpus in this task"
+        if first
+        else "repeat: reproduction or post-result development",
+        "dataset": metadata,
+        "protocol": protocol,
+        "protocol_sha256": sha(protocol_path.read_bytes()),
+        "source_hashes": {
+            "detector": source_hash,
+            "evaluator": sha(Path(__file__).read_bytes()),
+            "presidio_configuration_script": sha((ROOT / "scripts/compare_presidio.py").read_bytes()),
+        },
+        "presidio_configuration": configuration,
+        "common5": primary,
+        "common5_character_uncertainty": paired_bootstrap(
+            typed_characters(selected_truth),
+            {system: typed_characters(values) for system, values in selected_predictions.items()},
+            {"all": ids},
+            COMMON,
+        ),
         "common5_exact_uncertainty": paired_bootstrap(selected_truth, selected_predictions, {"all": ids}, COMMON),
         "person_all_cases": score_scope(truth, predictions, {"PERSON"}, whole_cases=False),
         "location_all_cases": score_scope(truth, predictions, {"LOCATION"}, whole_cases=False),
@@ -275,7 +397,10 @@ def main():
         "all_mapped8_requirement_coverage": score_scope(truth, predictions, COMMON | STRUCTURED),
         "raw_unmerged_common5_secondary": score_scope(raw_truth, raw_coarse, COMMON),
         "raw_prediction_sha256": sha(original_outputs.read_bytes()),
-        "environment": {"python": sys.version, "packages": dict(sorted((d.metadata["Name"], d.version) for d in importlib.metadata.distributions()))},
+        "environment": {
+            "python": sys.version,
+            "packages": dict(sorted((d.metadata["Name"], d.version) for d in importlib.metadata.distributions())),
+        },
         "limitations": [
             "Russian corpus only; this result does not establish Ukrainian, Kazakh or general CIS language quality.",
             "Source has pseudonymized production examples, synthetic documents and hard negatives; no representative banking-traffic guarantee.",
@@ -291,9 +416,20 @@ def main():
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({system: {metric: {key: value for key, value in data.items() if key not in ("by_type", "first_five_error_offsets")}
-                               for metric, data in results.items()}
-                      for system, results in primary["systems"].items()}, indent=2))
+    print(
+        json.dumps(
+            {
+                system: {
+                    metric: {
+                        key: value for key, value in data.items() if key not in ("by_type", "first_five_error_offsets")
+                    }
+                    for metric, data in results.items()
+                }
+                for system, results in primary["systems"].items()
+            },
+            indent=2,
+        )
+    )
 
 
 if __name__ == "__main__":

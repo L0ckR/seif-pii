@@ -3,6 +3,7 @@
 Hybrid measurements reuse pinned model predictions to isolate detector changes.
 This is a development regression score, not the organizer's official metric.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -65,14 +66,17 @@ def predict(cases: dict, *, profile: str, cache: dict | None = None) -> dict:
         if profile == "hybrid":
             if cache is None:
                 raise ValueError("Hybrid evaluation requires pinned NER predictions")
-            candidates = [Span(e["start"], e["end"], e["entity_type"], e["score"], "frozen-ner")
-                          for e in cache[case_id]["entities"]]
+            candidates = [
+                Span(e["start"], e["end"], e["entity_type"], e["score"], "frozen-ner")
+                for e in cache[case_id]["entities"]
+            ]
             spans = merge_ner_candidates(text, spans, candidates)
         masked, replacements = mask(text, spans, "mask")
         if restore_exact({"masked": masked, "replacements": replacements}) != text:
             raise ValueError("Exact restoration failed; quality result rejected")
         predictions[case_id] = {
-            "case_id": case_id, "masked": masked,
+            "case_id": case_id,
+            "masked": masked,
             "entities": [{"type": s.type, "start": s.start, "end": s.end} for s in spans],
         }
     return predictions
@@ -91,10 +95,14 @@ def compare_quality(current: dict, baseline: dict) -> list[str]:
         actual = current["profiles"][profile]
         for group in ("unique_case_primary", "certain_cases_sensitivity"):
             failures.extend(
-                f"{profile}.{group}.{metric}" for metric in ("precision", "recall", "f1")
+                f"{profile}.{group}.{metric}"
+                for metric in ("precision", "recall", "f1")
                 if actual[group]["character_metrics"][metric] + 1e-6 < reference[group]["character_metrics"][metric]
             )
-        if actual["unique_case_primary"]["false_positive_negative_cases"] > reference["unique_case_primary"]["false_positive_negative_cases"]:
+        if (
+            actual["unique_case_primary"]["false_positive_negative_cases"]
+            > reference["unique_case_primary"]["false_positive_negative_cases"]
+        ):
             failures.append(f"{profile}.false_positive_negative_cases")
     return failures
 
@@ -107,8 +115,10 @@ def run(dataset: Path, cache_path: Path, profiles: tuple[str, ...]) -> tuple[dic
     predictions = {profile: predict(cases, profile=profile, cache=cache) for profile in profiles}
     sources = sorted((ROOT / "seif").glob("*.py")) + [Path(__file__), ROOT / "scripts/evaluate_annotations.py"]
     report = {
-        "schema_version": 1, "measured_at_utc": datetime.now(timezone.utc).isoformat(),
-        "dataset_sha256": sha256(dataset), "ner_cache_sha256": sha256(cache_path) if cache else None,
+        "schema_version": 1,
+        "measured_at_utc": datetime.now(timezone.utc).isoformat(),
+        "dataset_sha256": sha256(dataset),
+        "ner_cache_sha256": sha256(cache_path) if cache else None,
         "source_sha256": {str(p.relative_to(ROOT)): sha256(p) for p in sources},
         "profiles": {profile: evaluate(inputs, cases, rows, weights) for profile, rows in predictions.items()},
         "limitations": [
@@ -142,8 +152,16 @@ def main() -> int:
     report["regressions_against_baseline"] = failures
     if args.output:
         save_json(args.output, report)
-    print(json.dumps({"profiles": {key: value["unique_case_primary"] for key, value in report["profiles"].items()},
-                      "regressions": failures}, ensure_ascii=False, indent=2))
+    print(
+        json.dumps(
+            {
+                "profiles": {key: value["unique_case_primary"] for key, value in report["profiles"].items()},
+                "regressions": failures,
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+    )
     return int(bool(failures))
 
 

@@ -5,6 +5,7 @@ Install deploy/ner/requirements-ner.txt in a separate environment. The model
 must already be installed: this service never downloads a model at startup.
 Run with SEIF_NER_TOKEN set; SEIF_NER_DEMO=1 is for loopback demos only.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -46,11 +47,14 @@ class NerSettings:
 
     @classmethod
     def from_env(cls):
-        return cls(token=os.getenv("SEIF_NER_TOKEN", ""), demo=os.getenv("SEIF_NER_DEMO") == "1",
-                   max_model_jobs=int(os.getenv("SEIF_NER_MAX_MODEL_JOBS", "4")),
-                   max_http_inflight=int(os.getenv("SEIF_NER_MAX_HTTP_INFLIGHT", "16")),
-                   batch_size=int(os.getenv("SEIF_NER_BATCH_SIZE", "1")),
-                   batch_wait_ms=float(os.getenv("SEIF_NER_BATCH_WAIT_MS", "1")))
+        return cls(
+            token=os.getenv("SEIF_NER_TOKEN", ""),
+            demo=os.getenv("SEIF_NER_DEMO") == "1",
+            max_model_jobs=int(os.getenv("SEIF_NER_MAX_MODEL_JOBS", "4")),
+            max_http_inflight=int(os.getenv("SEIF_NER_MAX_HTTP_INFLIGHT", "16")),
+            batch_size=int(os.getenv("SEIF_NER_BATCH_SIZE", "1")),
+            batch_wait_ms=float(os.getenv("SEIF_NER_BATCH_WAIT_MS", "1")),
+        )
 
 
 class AnalyzeRequest(BaseModel):
@@ -184,14 +188,16 @@ def build_analyzer():
 
     if not spacy.util.is_package("ru_core_news_sm"):
         raise RuntimeError("Required local Russian NLP model is missing; install the locked environment.")
-    engine = NlpEngineProvider(nlp_configuration={
-        "nlp_engine_name": "spacy",
-        "models": [{"lang_code": "ru", "model_name": "ru_core_news_sm"}],
-        "ner_model_configuration": {
-            "model_to_presidio_entity_mapping": {"PER": "PERSON", "LOC": "LOCATION", "ORG": "ORGANIZATION"},
-            "labels_to_ignore": [],
-        },
-    }).create_engine()
+    engine = NlpEngineProvider(
+        nlp_configuration={
+            "nlp_engine_name": "spacy",
+            "models": [{"lang_code": "ru", "model_name": "ru_core_news_sm"}],
+            "ner_model_configuration": {
+                "model_to_presidio_entity_mapping": {"PER": "PERSON", "LOC": "LOCATION", "ORG": "ORGANIZATION"},
+                "labels_to_ignore": [],
+            },
+        }
+    ).create_engine()
     # This service requests PERSON and LOCATION only and has no lemma/context recognizers.
     # Keep the pretrained token encoder and NER weights; omit unrelated syntax,
     # morphology and lemmatization work (76-case equivalence checked separately).
@@ -223,9 +229,15 @@ def _format_results(text, results, requested):
         if item.entity_type not in requested:
             continue
         start, end, score = item.start, item.end, item.score
-        if (type(start) is not int or type(end) is not int or not 0 <= start < end <= len(text)
-                or not isinstance(score, (int, float)) or isinstance(score, bool)
-                or not math.isfinite(score) or not 0 <= score <= 1):
+        if (
+            type(start) is not int
+            or type(end) is not int
+            or not 0 <= start < end <= len(text)
+            or not isinstance(score, (int, float))
+            or isinstance(score, bool)
+            or not math.isfinite(score)
+            or not 0 <= score <= 1
+        ):
             raise ValueError("Invalid model output.")
         entity = {"start": start, "end": end, "score": float(score), "entity_type": item.entity_type}
         validate_entity(entity, len(text))
@@ -243,9 +255,13 @@ def _lifespan(settings, analyzer_factory):
             raise RuntimeError("SEIF_NER_TOKEN is required outside demo mode.")
         if settings.max_http_inflight < 1 or not 1 <= settings.max_model_jobs <= settings.max_http_inflight:
             raise RuntimeError("NER model capacity must be positive and bounded by HTTP capacity.")
-        if (type(settings.batch_size) is not int or settings.batch_size not in (1, 2, 4, 8, 16, 32)
-                or settings.batch_size > settings.max_model_jobs
-                or not math.isfinite(settings.batch_wait_ms) or not 0 <= settings.batch_wait_ms <= 20):
+        if (
+            type(settings.batch_size) is not int
+            or settings.batch_size not in (1, 2, 4, 8, 16, 32)
+            or settings.batch_size > settings.max_model_jobs
+            or not math.isfinite(settings.batch_wait_ms)
+            or not 0 <= settings.batch_wait_ms <= 20
+        ):
             raise RuntimeError("Invalid NER batch size, delay or model capacity.")
         # Preload before readiness; avoid logging third-party exception content.
         try:
@@ -259,9 +275,12 @@ def _lifespan(settings, analyzer_factory):
 
             if not callable(getattr(app.state.analyzer, "analyze_batch", None)):
                 raise RuntimeError("Configured analyzer does not support batching.")
-            pool = BatchExecutor(lambda texts: infer_batch(app.state.analyzer, texts),
-                                 batch_size=settings.batch_size, wait_ms=settings.batch_wait_ms,
-                                 capacity=settings.max_model_jobs)
+            pool = BatchExecutor(
+                lambda texts: infer_batch(app.state.analyzer, texts),
+                batch_size=settings.batch_size,
+                wait_ms=settings.batch_wait_ms,
+                capacity=settings.max_model_jobs,
+            )
         else:
             pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="seif-ner")
         app.state.pool = pool
@@ -272,6 +291,7 @@ def _lifespan(settings, analyzer_factory):
             app.state.ready = False
             await asyncio.to_thread(pool.shutdown, wait=True, cancel_futures=True)
             app.state.analyzer = None
+
     return lifespan
 
 
@@ -318,8 +338,11 @@ async def _run_model(state, text):
     waiter = loop.create_future()
     waiter.add_done_callback(_consume_model_exception)
     try:
-        job = (state.pool.submit(text) if getattr(state, "batched", False)
-               else state.pool.submit(infer, state.analyzer, text))
+        job = (
+            state.pool.submit(text)
+            if getattr(state, "batched", False)
+            else state.pool.submit(infer, state.analyzer, text)
+        )
     except Exception:
         state.model_inflight -= 1
         return error(503, "unavailable", NER_UNAVAILABLE)
@@ -353,8 +376,10 @@ def create_app(settings=None, analyzer_factory=None):
         if not app.state.ready:
             return error(503, "not_ready", "NER not ready.")
         model_name = getattr(app.state.analyzer, "model_name", "ru_core_news_sm")
-        return JSONResponse({"status": "ok", "model": model_name, "entities": analyzer_entities(app.state.analyzer)},
-                            headers={"Cache-Control": "no-store"})
+        return JSONResponse(
+            {"status": "ok", "model": model_name, "entities": analyzer_entities(app.state.analyzer)},
+            headers={"Cache-Control": "no-store"},
+        )
 
     @app.post("/analyze")
     async def analyze(body: AnalyzeRequest):
@@ -382,8 +407,15 @@ def main():
         parser.error("demo mode must bind to loopback")
     import uvicorn
 
-    uvicorn.run("scripts.ner_service:create_app", factory=True, host=args.host, port=args.port,
-                workers=args.workers, access_log=False, log_level="warning")
+    uvicorn.run(
+        "scripts.ner_service:create_app",
+        factory=True,
+        host=args.host,
+        port=args.port,
+        workers=args.workers,
+        access_log=False,
+        log_level="warning",
+    )
 
 
 if __name__ == "__main__":

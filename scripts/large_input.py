@@ -3,6 +3,7 @@
 Optional test dependency: pip install tiktoken. Its first run fetches the public
 tokenizer vocabulary; the service itself never needs network access or tiktoken.
 """
+
 import argparse
 import json
 import time
@@ -39,11 +40,16 @@ with httpx.Client(base_url=args.url, timeout=30, trust_env=False) as client:
     second = client.post("/process", json={"payload": masked, "payload_id": payload_id})
     second.raise_for_status()
     unmask_ms = (time.perf_counter() - start) * 1000
-    result = {"tokenizer": "cl100k_base", "tokens": len(encoder.encode(text)), "characters": len(text),
-              "mask_ms": round(mask_ms, 3), "unmask_ms": round(unmask_ms, 3),
-              "sensitive_span_masked": "long@example.invalid" not in masked,
-              "exact_roundtrip": second.json()["result"] == text,
-              "scope": "One synthetic document, isolated HTTP request, not 1000 RPS of large documents"}
+    result = {
+        "tokenizer": "cl100k_base",
+        "tokens": len(encoder.encode(text)),
+        "characters": len(text),
+        "mask_ms": round(mask_ms, 3),
+        "unmask_ms": round(unmask_ms, 3),
+        "sensitive_span_masked": "long@example.invalid" not in masked,
+        "exact_roundtrip": second.json()["result"] == text,
+        "scope": "One synthetic document, isolated HTTP request, not 1000 RPS of large documents",
+    }
     if not result["sensitive_span_masked"] or not result["exact_roundtrip"]:
         raise RuntimeError("Large-input masking or exact restoration failed")
     args.output.parent.mkdir(exist_ok=True, parents=True)

@@ -5,6 +5,7 @@ score both caches offline with the same detector and immutable dataset labels.
 Source texts stay in the ignored prepared-input copy; reports contain no text.
 This runner never downloads or tunes anything.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -37,13 +38,31 @@ from seif.transform import mask, restore_exact  # noqa: E402
 SELECTED = ROOT / "benchmarks/ner-models/gliner25-multi-v1/selected-service.meta.json"
 SPACY_VERSIONS = {"spacy": "3.8.16", "ru-core-news-sm": "3.8.0", "presidio-analyzer": "2.2.364"}
 SYSTEMS = ("rules", "spacy_hybrid", "gliner_hybrid", "spacy_person_only", "gliner_person_only")
-SETTINGS = {"schema": "described-names", "threshold": 0.8, "device": "cuda", "dtype": "torch.float32",
-            "cpu_threads": 4, "seed": 20260922, "compile": False, "batch_size": 1,
-            "overlap_policy": "flat", "service_word_window": 384, "service_word_overlap": 64,
-            "gateway_character_window": 16000, "gateway_character_overlap": 256}
-SOURCE_FILES = ("scripts/compare_ner_public.py", "scripts/evaluate_external.py",
-                "scripts/evaluate_redmadrobot.py", "scripts/evaluate_annotations.py", "scripts/evaluate_golden.py",
-                "scripts/cache_gliner.py", "scripts/ner_service.py", "scripts/compare_presidio.py")
+SETTINGS = {
+    "schema": "described-names",
+    "threshold": 0.8,
+    "device": "cuda",
+    "dtype": "torch.float32",
+    "cpu_threads": 4,
+    "seed": 20260922,
+    "compile": False,
+    "batch_size": 1,
+    "overlap_policy": "flat",
+    "service_word_window": 384,
+    "service_word_overlap": 64,
+    "gateway_character_window": 16000,
+    "gateway_character_overlap": 256,
+}
+SOURCE_FILES = (
+    "scripts/compare_ner_public.py",
+    "scripts/evaluate_external.py",
+    "scripts/evaluate_redmadrobot.py",
+    "scripts/evaluate_annotations.py",
+    "scripts/evaluate_golden.py",
+    "scripts/cache_gliner.py",
+    "scripts/ner_service.py",
+    "scripts/compare_presidio.py",
+)
 
 
 def digest_json(value):
@@ -74,9 +93,18 @@ def load_pii(folder):
         if len(rows) != count or len({row["id"] for row in rows}) != count:
             raise ValueError("PII split size or IDs changed")
         pii._validate_rows(rows)
-        result.extend({"key": f"pii/{split}/{row['id']}", "id": row["id"], "dataset": "pii",
-                       "split": split, "domain": row["domain"], "text": row["text"],
-                       "gold": {(e["type"], e["start"], e["end"]) for e in row["entities"]}} for row in rows)
+        result.extend(
+            {
+                "key": f"pii/{split}/{row['id']}",
+                "id": row["id"],
+                "dataset": "pii",
+                "split": split,
+                "domain": row["domain"],
+                "text": row["text"],
+                "gold": {(e["type"], e["start"], e["end"]) for e in row["entities"]},
+            }
+            for row in rows
+        )
     return result
 
 
@@ -84,14 +112,26 @@ def load_redmad(folder):
     verify_files(folder, dict(redmad.FILES.values()))
     stored = json.loads((folder / "redmadrobot-protocol.json").read_text())
     rows, excluded = redmad.read_rows(folder)
-    expected = [{"id": f"row_{index:04d}", "source_row_zero_based": index, "reason": "token_not_exactly_alignable"}
-                for index in (0, 1628)]
+    expected = [
+        {"id": f"row_{index:04d}", "source_row_zero_based": index, "reason": "token_not_exactly_alignable"}
+        for index in (0, 1628)
+    ]
     if len(rows) != 2839 or excluded != expected or excluded != stored["dataset"]["excluded_before_inference"]:
         raise ValueError("Frozen redmadrobot alignment exclusions differ")
     if stored["mapping"]["gold"] != redmad.GOLD_MAP or stored["mapping"]["seif"] != redmad.SEIF_MAP:
         raise ValueError("Historical redmadrobot taxonomy differs")
-    return [{"key": f"redmadrobot/test/{row['id']}", "id": row["id"], "dataset": "redmadrobot",
-             "split": "test", "domain": "test", "text": row["text"], "gold": row["fine_gold"]} for row in rows], excluded
+    return [
+        {
+            "key": f"redmadrobot/test/{row['id']}",
+            "id": row["id"],
+            "dataset": "redmadrobot",
+            "split": "test",
+            "domain": "test",
+            "text": row["text"],
+            "gold": row["fine_gold"],
+        }
+        for row in rows
+    ], excluded
 
 
 def load_corpora(args):
@@ -116,8 +156,10 @@ def load_prepared_inputs(path, protocol):
 
 
 def input_hashes(args):
-    groups = (("pii", args.pii_data, [*pii.FILES, "prepared-protocol.json"]),
-              ("redmadrobot", args.redmad_data, [*(item[0] for item in redmad.FILES.values()), "redmadrobot-protocol.json"]))
+    groups = (
+        ("pii", args.pii_data, [*pii.FILES, "prepared-protocol.json"]),
+        ("redmadrobot", args.redmad_data, [*(item[0] for item in redmad.FILES.values()), "redmadrobot-protocol.json"]),
+    )
     return {f"{name}/{file}": sha256(folder / file) for name, folder, files in groups for file in files}
 
 
@@ -127,44 +169,71 @@ def make_protocol(args, rows, excluded):
     if model_hashes != selected["model_file_sha256"]:
         raise ValueError("Model snapshot differs from selected organizer configuration")
     configuration = selected["configuration"]
-    if (configuration["schema"] != SETTINGS["schema"] or configuration["threshold"] != SETTINGS["threshold"]
-            or configuration["labels"] != SCHEMAS[SETTINGS["schema"]]):
+    if (
+        configuration["schema"] != SETTINGS["schema"]
+        or configuration["threshold"] != SETTINGS["threshold"]
+        or configuration["labels"] != SCHEMAS[SETTINGS["schema"]]
+    ):
         raise ValueError("Selected schema or threshold differs")
     return {
-        "schema_version": 1, "prepared_at_utc": datetime.now(timezone.utc).isoformat(),
+        "schema_version": 1,
+        "prepared_at_utc": datetime.now(timezone.utc).isoformat(),
         "purpose": "External transfer check after organizer-only model selection; no external-result tuning.",
-        "source_sha256": freeze_source(), "input_sha256": input_hashes(args),
+        "source_sha256": freeze_source(),
+        "input_sha256": input_hashes(args),
         "prepared_inputs_sha256": sha256(args.run_dir / "prepared-inputs.jsonl"),
-        "datasets": {"pii": {"repository": pii.DATASET, "revision": pii.REVISION},
-                     "redmadrobot": {"repository": redmad.REPOSITORY, "revision": redmad.REVISION,
-                                     "excluded_before_inference": excluded}},
-        "cases": len(rows), "split_counts": dict(Counter(f"{r['dataset']}/{r['split']}" for r in rows)),
+        "datasets": {
+            "pii": {"repository": pii.DATASET, "revision": pii.REVISION},
+            "redmadrobot": {
+                "repository": redmad.REPOSITORY,
+                "revision": redmad.REVISION,
+                "excluded_before_inference": excluded,
+            },
+        },
+        "cases": len(rows),
+        "split_counts": dict(Counter(f"{r['dataset']}/{r['split']}" for r in rows)),
         "ordered_membership_sha256": digest_json([r["key"] for r in rows]),
         "text_sha256": digest_json({r["key"]: hashlib.sha256(r["text"].encode()).hexdigest() for r in rows}),
         "gold_sha256": digest_json({r["key"]: sorted(r["gold"]) for r in rows}),
-        "input_lengths": {"maximum_characters": max(len(r["text"]) for r in rows),
-                          "maximum_whitespace_words": max(len(r["text"].split()) for r in rows)},
+        "input_lengths": {
+            "maximum_characters": max(len(r["text"]) for r in rows),
+            "maximum_whitespace_words": max(len(r["text"].split()) for r in rows),
+        },
         "selected_organizer_metadata_sha256": sha256(SELECTED),
-        "gliner": {"model": MODEL_ID, "revision": MODEL_REVISION, "file_sha256": model_hashes,
-                   "versions": selected["versions"], "settings": SETTINGS, "labels": SCHEMAS[SETTINGS["schema"]]},
+        "gliner": {
+            "model": MODEL_ID,
+            "revision": MODEL_REVISION,
+            "file_sha256": model_hashes,
+            "versions": selected["versions"],
+            "settings": SETTINGS,
+            "labels": SCHEMAS[SETTINGS["schema"]],
+        },
         "spacy": {"model": "ru_core_news_sm", "versions": SPACY_VERSIONS, "score_threshold": 0.0},
         "mapping": {"pii": pii.SEIF_MAP, "redmadrobot": {**redmad.SEIF_MAP, "LOCATION": "LOCATION"}},
-        "policy": {"labels": "Original labels and fixed BIO exclusions unchanged.",
-                   "pii": "Historical common4 and supported8 whole-case subsets; exact spans and typed characters.",
-                   "redmadrobot": "Historical common5 and mapped8 subsets; identical adjacent/overlap merge on every side.",
-                   "unfiltered_protection": "All rows and all original gold types, including unsupported types; actual maskable alphanumeric characters.",
-                   "typed_unfiltered": "All original gold types and every prediction retained, unmapped predictions penalized explicitly.",
-                   "prepared_inputs": "Text copy remains under ignored local-data; reports and model caches contain no raw text.",
-                   "historical_person_only": "Same current detector and merge, retaining only each model's PERSON candidates.",
-                   "timing": "Sequential local NER calls only; not HTTP throughput or service RPS."},
+        "policy": {
+            "labels": "Original labels and fixed BIO exclusions unchanged.",
+            "pii": "Historical common4 and supported8 whole-case subsets; exact spans and typed characters.",
+            "redmadrobot": "Historical common5 and mapped8 subsets; identical adjacent/overlap merge on every side.",
+            "unfiltered_protection": "All rows and all original gold types, including unsupported types; actual maskable alphanumeric characters.",
+            "typed_unfiltered": "All original gold types and every prediction retained, unmapped predictions penalized explicitly.",
+            "prepared_inputs": "Text copy remains under ignored local-data; reports and model caches contain no raw text.",
+            "historical_person_only": "Same current detector and merge, retaining only each model's PERSON candidates.",
+            "timing": "Sequential local NER calls only; not HTTP throughput or service RPS.",
+        },
     }
 
 
 def verify_frozen(args, rows, protocol):
-    checks = ((protocol["source_sha256"], freeze_source()), (protocol["input_sha256"], input_hashes(args)),
-              (protocol["ordered_membership_sha256"], digest_json([r["key"] for r in rows])),
-              (protocol["text_sha256"], digest_json({r["key"]: hashlib.sha256(r["text"].encode()).hexdigest() for r in rows})),
-              (protocol["gold_sha256"], digest_json({r["key"]: sorted(r["gold"]) for r in rows})))
+    checks = (
+        (protocol["source_sha256"], freeze_source()),
+        (protocol["input_sha256"], input_hashes(args)),
+        (protocol["ordered_membership_sha256"], digest_json([r["key"] for r in rows])),
+        (
+            protocol["text_sha256"],
+            digest_json({r["key"]: hashlib.sha256(r["text"].encode()).hexdigest() for r in rows}),
+        ),
+        (protocol["gold_sha256"], digest_json({r["key"]: sorted(r["gold"]) for r in rows})),
+    )
     if any(before != after for before, after in checks):
         raise ValueError("Sources, inputs, order or annotations differ from the pre-inference protocol")
 
@@ -198,8 +267,9 @@ def create_backend(args, protocol):
         raise ValueError("Checkpoint changed after protocol preparation")
     torch.set_num_threads(SETTINGS["cpu_threads"])
     torch.manual_seed(SETTINGS["seed"])
-    analyzer = GlinerAnalyzer.from_local(args.model_path, device=SETTINGS["device"],
-                                        schema=SETTINGS["schema"], threshold=SETTINGS["threshold"])
+    analyzer = GlinerAnalyzer.from_local(
+        args.model_path, device=SETTINGS["device"], schema=SETTINGS["schema"], threshold=SETTINGS["threshold"]
+    )
     if str(next(analyzer.extractor.parameters()).dtype) != SETTINGS["dtype"]:
         raise ValueError("Model precision differs from the frozen FP32 protocol")
     return analyzer, versions
@@ -243,22 +313,37 @@ def cache_backend(args, rows, protocol):
             synchronize(args.backend)
             timings.append((time.perf_counter() - before) * 1000)
             counts.update(e["entity_type"] for e in entities)
-            record = {"case_id": row["key"], "text_sha256": hashlib.sha256(row["text"].encode()).hexdigest(),
-                      "entities": entities}
+            record = {
+                "case_id": row["key"],
+                "text_sha256": hashlib.sha256(row["text"].encode()).hexdigest(),
+                "entities": entities,
+            }
             stream.write(json.dumps(record, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n")
             if index % 100 == 0:
                 stream.flush()
                 print(json.dumps({"backend": args.backend, "completed": index, "total": len(rows)}), flush=True)
     elapsed = time.perf_counter() - started
     verify_frozen(args, rows, protocol)
-    metadata = {"backend": args.backend, "cases": len(rows), "versions": versions,
-                "protocol_sha256": sha256(args.run_dir / "protocol.json"), "cache_sha256": sha256(target),
-                "candidate_counts": dict(counts), "source_sha256": protocol["source_sha256"],
-                "runtime": {"python": platform.python_version(), "platform": platform.platform()},
-                "timing": {"elapsed_seconds": elapsed, "sequential_documents_per_second": len(rows) / elapsed,
-                           "mean_ms": statistics.mean(timings), "p50_ms": statistics.median(timings),
-                           "p95_ms": percentile(timings, .95), "p99_ms": percentile(timings, .99),
-                           "max_ms": max(timings), "scope": protocol["policy"]["timing"]}}
+    metadata = {
+        "backend": args.backend,
+        "cases": len(rows),
+        "versions": versions,
+        "protocol_sha256": sha256(args.run_dir / "protocol.json"),
+        "cache_sha256": sha256(target),
+        "candidate_counts": dict(counts),
+        "source_sha256": protocol["source_sha256"],
+        "runtime": {"python": platform.python_version(), "platform": platform.platform()},
+        "timing": {
+            "elapsed_seconds": elapsed,
+            "sequential_documents_per_second": len(rows) / elapsed,
+            "mean_ms": statistics.mean(timings),
+            "p50_ms": statistics.median(timings),
+            "p95_ms": percentile(timings, 0.95),
+            "p99_ms": percentile(timings, 0.99),
+            "max_ms": max(timings),
+            "scope": protocol["policy"]["timing"],
+        },
+    }
     save_json(metadata_path, metadata)
     return metadata
 
@@ -306,16 +391,22 @@ def compact_measure(gold, predicted):
 
 
 def scope_metrics(gold, predictions, allowed=None, whole_cases=False):
-    ids = [key for key, spans in gold.items()
-           if not whole_cases or all(kind in allowed for kind, *_ in spans)]
+    ids = [key for key, spans in gold.items() if not whole_cases or all(kind in allowed for kind, *_ in spans)]
     truth = {key: {span for span in gold[key] if allowed is None or span[0] in allowed} for key in ids}
     systems = {}
     for name, values in predictions.items():
         actual = {key: {span for span in values[key] if allowed is None or span[0] in allowed} for key in ids}
-        systems[name] = {"exact_span": compact_measure(truth, actual),
-                         "typed_character": compact_measure(pii.typed_characters(truth), pii.typed_characters(actual))}
-    return {"cases": len(ids), "case_ids_sha256": digest_json(ids), "whole_cases": whole_cases,
-            "types": sorted(allowed) if allowed is not None else "all including unmapped", "systems": systems}
+        systems[name] = {
+            "exact_span": compact_measure(truth, actual),
+            "typed_character": compact_measure(pii.typed_characters(truth), pii.typed_characters(actual)),
+        }
+    return {
+        "cases": len(ids),
+        "case_ids_sha256": digest_json(ids),
+        "whole_cases": whole_cases,
+        "types": sorted(allowed) if allowed is not None else "all including unmapped",
+        "systems": systems,
+    }
 
 
 def map_split(rows, predictions):
@@ -327,30 +418,44 @@ def map_split(rows, predictions):
         raw_truth[key] = redmad.coarsen(row["gold"], redmad.GOLD_MAP, keep_unknown=True) if is_redmad else row["gold"]
         truth[key] = redmad.merge_adjacent(text, raw_truth[key]) if is_redmad else raw_truth[key]
         for name, values in predictions.items():
-            raw_pred[name][key] = {(mapping.get(s.type, "UNMAPPED_PRED:" + s.type), s.start, s.end) for s in values[key]}
+            raw_pred[name][key] = {
+                (mapping.get(s.type, "UNMAPPED_PRED:" + s.type), s.start, s.end) for s in values[key]
+            }
             mapped[name][key] = redmad.merge_adjacent(text, raw_pred[name][key]) if is_redmad else raw_pred[name][key]
     return truth, mapped, raw_truth, raw_pred
 
 
 def protection_metrics(rows, predictions):
     truth = {r["key"]: untyped_gold(r["text"], r["gold"]) for r in rows}
-    systems = {name: compact_measure(truth, {r["key"]: mask_positions(r["text"], values[r["key"]]) for r in rows})
-               for name, values in predictions.items()}
-    return {"cases": len(rows), "gold_scope": "All original gold categories, including unsupported categories.",
-            "prediction_scope": "Actual service masks; every model/rule type retained; alphanumeric characters only.",
-            "systems": systems}
+    systems = {
+        name: compact_measure(truth, {r["key"]: mask_positions(r["text"], values[r["key"]]) for r in rows})
+        for name, values in predictions.items()
+    }
+    return {
+        "cases": len(rows),
+        "gold_scope": "All original gold categories, including unsupported categories.",
+        "prediction_scope": "Actual service masks; every model/rule type retained; alphanumeric characters only.",
+        "systems": systems,
+    }
 
 
 def raw_person_metrics(rows, caches):
     is_redmad = rows[0]["dataset"] == "redmadrobot"
     allowed = redmad.NAME_TYPES if is_redmad else {"NAME"}
     truth = {r["key"]: {("PERSON", start, end) for kind, start, end in r["gold"] if kind in allowed} for r in rows}
-    predictions = {name: {r["key"]: {("PERSON", e["start"], e["end"]) for e in values[r["key"]]
-                                     if e["entity_type"] == "PERSON"} for r in rows} for name, values in caches.items()}
+    predictions = {
+        name: {
+            r["key"]: {("PERSON", e["start"], e["end"]) for e in values[r["key"]] if e["entity_type"] == "PERSON"}
+            for r in rows
+        }
+        for name, values in caches.items()
+    }
     if is_redmad:
         truth = {r["key"]: redmad.merge_adjacent(r["text"], truth[r["key"]]) for r in rows}
-        predictions = {name: {r["key"]: redmad.merge_adjacent(r["text"], values[r["key"]]) for r in rows}
-                       for name, values in predictions.items()}
+        predictions = {
+            name: {r["key"]: redmad.merge_adjacent(r["text"], values[r["key"]]) for r in rows}
+            for name, values in predictions.items()
+        }
     return scope_metrics(truth, predictions)
 
 
@@ -359,14 +464,19 @@ def score_split(rows, predictions, caches):
     is_redmad = rows[0]["dataset"] == "redmadrobot"
     common = redmad.COMMON if is_redmad else pii.COMMON
     supported = common | redmad.STRUCTURED if is_redmad else pii.SUPPORTED
-    result = {"cases": len(rows), "common5" if is_redmad else "common4": scope_metrics(truth, mapped, common, True),
-              "supported8": scope_metrics(truth, mapped, supported, True),
-              "supported_types_all_rows": scope_metrics(truth, mapped, supported),
-              "all_types_unfiltered": scope_metrics(truth, mapped),
-              "full_masking_all_gold_types": protection_metrics(rows, predictions),
-              "raw_model_person": raw_person_metrics(rows, caches),
-              "raw_unmerged_common": scope_metrics(raw_truth, raw_pred, common, True),
-              "span_policy": "Identical coarse-category adjacency merge on gold and all predictions." if is_redmad else "Original exact boundaries, no aggregation."}
+    result = {
+        "cases": len(rows),
+        "common5" if is_redmad else "common4": scope_metrics(truth, mapped, common, True),
+        "supported8": scope_metrics(truth, mapped, supported, True),
+        "supported_types_all_rows": scope_metrics(truth, mapped, supported),
+        "all_types_unfiltered": scope_metrics(truth, mapped),
+        "full_masking_all_gold_types": protection_metrics(rows, predictions),
+        "raw_model_person": raw_person_metrics(rows, caches),
+        "raw_unmerged_common": scope_metrics(raw_truth, raw_pred, common, True),
+        "span_policy": "Identical coarse-category adjacency merge on gold and all predictions."
+        if is_redmad
+        else "Original exact boundaries, no aggregation.",
+    }
     if is_redmad:
         result["person_all_rows"] = scope_metrics(truth, mapped, {"PERSON"})
         result["location_all_rows"] = scope_metrics(truth, mapped, {"LOCATION"})
@@ -389,19 +499,25 @@ def evaluate_caches(args, rows, protocol):
         splits[f"{dataset}/{split}"] = score_split(selected, predictions, caches)
     splits["pii/all"] = score_split([r for r in rows if r["dataset"] == "pii"], predictions, caches)
     verify_frozen(args, rows, protocol)
-    return {"schema_version": 1, "measured_at_utc": datetime.now(timezone.utc).isoformat(),
-            "protocol_sha256": protocol_hash, "protocol": protocol, "caches": metadata, "splits": splits,
-            "limitations": [
-                "External datasets were already used for rule development; this is a fixed-model transfer check, not a wholly unseen pipeline holdout.",
-                "The single schema and threshold were selected on organizer development data and frozen before external inference; no external-result tuning.",
-                "PII common4/supported8 maps exclude LOCATION because generic geography is not equivalent to a full ADDRESS; full masking/unfiltered scopes expose these extra outputs.",
-                "Redmadrobot uses historical coarse name/location mapping and identical adjacency merge; LOCATION is not exact private-address identification.",
-                "Unsupported gold categories remain in provenance and unfiltered/full masking scores, which therefore include known assignment coverage gaps.",
-                "PERSON-only systems are historical-protocol sensitivity checks with the current detector, not published historical numerical baselines.",
-                "Typed-character scores count all characters inside spans; full masking scores count alphanumeric characters actually replaced by the service.",
-                "Sequential inference observations are not HTTP RPS; no deployment or threshold changes follow automatically from this evaluation.",
-                "Original source text is never included in the report; inference is local with network connections disabled.",
-            ]}
+    return {
+        "schema_version": 1,
+        "measured_at_utc": datetime.now(timezone.utc).isoformat(),
+        "protocol_sha256": protocol_hash,
+        "protocol": protocol,
+        "caches": metadata,
+        "splits": splits,
+        "limitations": [
+            "External datasets were already used for rule development; this is a fixed-model transfer check, not a wholly unseen pipeline holdout.",
+            "The single schema and threshold were selected on organizer development data and frozen before external inference; no external-result tuning.",
+            "PII common4/supported8 maps exclude LOCATION because generic geography is not equivalent to a full ADDRESS; full masking/unfiltered scopes expose these extra outputs.",
+            "Redmadrobot uses historical coarse name/location mapping and identical adjacency merge; LOCATION is not exact private-address identification.",
+            "Unsupported gold categories remain in provenance and unfiltered/full masking scores, which therefore include known assignment coverage gaps.",
+            "PERSON-only systems are historical-protocol sensitivity checks with the current detector, not published historical numerical baselines.",
+            "Typed-character scores count all characters inside spans; full masking scores count alphanumeric characters actually replaced by the service.",
+            "Sequential inference observations are not HTTP RPS; no deployment or threshold changes follow automatically from this evaluation.",
+            "Original source text is never included in the report; inference is local with network connections disabled.",
+        ],
+    }
 
 
 def parse_args():
@@ -435,8 +551,17 @@ def main():
         save_prepared_inputs(args.run_dir / "prepared-inputs.jsonl", rows)
         protocol = make_protocol(args, rows, excluded)
         save_json(path, protocol)
-        print(json.dumps({"prepared": True, "cases": len(rows), "splits": protocol["split_counts"],
-                          "protocol_sha256": sha256(path), "input_lengths": protocol["input_lengths"]}))
+        print(
+            json.dumps(
+                {
+                    "prepared": True,
+                    "cases": len(rows),
+                    "splits": protocol["split_counts"],
+                    "protocol_sha256": sha256(path),
+                    "input_lengths": protocol["input_lengths"],
+                }
+            )
+        )
         return
     protocol = json.loads(path.read_text())
     rows = load_prepared_inputs(args.run_dir / "prepared-inputs.jsonl", protocol)

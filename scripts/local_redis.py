@@ -210,7 +210,7 @@ def _start_node(directory, executable, environment, credentials, identity):
     descriptor = os.open(log_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
     command = [str(executable), str(config)] + (["--sentinel"] if kind == "sentinel" else [])
     with os.fdopen(descriptor, "wb") as log:
-        process = subprocess.Popen(
+        process = subprocess.Popen( # nosec B603
             command,
             cwd=node_directory,
             env=environment,

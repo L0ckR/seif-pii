@@ -1,4 +1,5 @@
 """Process supervisor with one fresh metrics directory shared by its workers."""
+
 import os
 import shutil
 import sys
@@ -22,9 +23,16 @@ def main():
     os.environ["PROMETHEUS_MULTIPROC_DIR"] = directory
     # Must happen after the environment is set; worker processes inherit it.
     import uvicorn
+
     try:
-        uvicorn.run("seif.app:create_app", factory=True, host=os.getenv("SEIF_HOST", "127.0.0.1"),
-                    port=int(os.getenv("SEIF_PORT", "8765")), workers=workers, access_log=False)
+        uvicorn.run(
+            "seif.app:create_app",
+            factory=True,
+            host=os.getenv("SEIF_HOST", "127.0.0.1"),
+            port=int(os.getenv("SEIF_PORT", "8765")),
+            workers=workers,
+            access_log=False,
+        )
     finally:
         shutil.rmtree(directory, ignore_errors=True)
 
