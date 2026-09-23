@@ -158,7 +158,10 @@ def _validate_runtime(runtime, directory):
     expected = {int(key): value for key, value in json.loads((directory / "config.json").read_text())["id2label"].items()}
     inventory = {"O"} | {f"{prefix}-{kind}" for prefix in ("B", "I") for kind in NATIVE_TYPES}
     if (runtime.id2label != expected or set(expected.values()) != inventory or len(expected) != 43
-            or runtime.backend_name != "trt-graph" or runtime.min_confidence != 0.3 or runtime.batch_size != 1):
+            or runtime.backend_name != "trt-graph"
+            or not isinstance(runtime.min_confidence, (int, float))
+            or not math.isclose(runtime.min_confidence, 0.3, rel_tol=0, abs_tol=0)
+            or runtime.batch_size != 1):
         raise ValueError("Unexpected RuBERT label inventory or runtime configuration.")
 
 
@@ -301,7 +304,8 @@ class RubertAnalyzer:
     def analyze_batch(self, *, texts, language, entities, score_threshold):
         if (language != "ru" or not isinstance(entities, list)
                 or any(not isinstance(kind, str) or kind not in self.supported_entities for kind in entities)
-                or score_threshold != 0.0):
+                or not isinstance(score_threshold, (int, float))
+                or not math.isclose(score_threshold, 0.0, rel_tol=0, abs_tol=0)):
             raise ValueError("Unsupported RuBERT analyzer request.")
         native = self.predict_native_batch(texts)
         return [[GlinerSpan(**item) for item in _gateway_from_validated(text, output, self.profile)
@@ -310,7 +314,8 @@ class RubertAnalyzer:
     def analyze(self, *, text, language, entities, score_threshold):
         if (not isinstance(text, str) or language != "ru" or not isinstance(entities, list)
                 or any(not isinstance(kind, str) or kind not in self.supported_entities for kind in entities)
-                or score_threshold != 0.0):
+                or not isinstance(score_threshold, (int, float))
+                or not math.isclose(score_threshold, 0.0, rel_tol=0, abs_tol=0)):
             raise ValueError("Unsupported RuBERT analyzer request.")
         native = self.predict_native(text)
         return [GlinerSpan(**item) for item in _gateway_from_validated(text, native, self.profile)

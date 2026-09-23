@@ -660,6 +660,12 @@ def _is_public_inn(text: str, start: int, value: str) -> bool:
     return bool(owner and not _PRIVATE_INN_OWNER.search(owner.group()))
 
 
+def _cluster_priority(span: Span) -> int:
+    if span.reason == "ner-structured":
+        return 65
+    return max(_PRIORITY.get(span.type, 85), 96 if span.reason == "cis-personal-id" else 0)
+
+
 def _select_cluster(cluster: list[Span]) -> list[Span]:
     if len(cluster) == 1:
         return [cluster[0]]
@@ -670,9 +676,7 @@ def _select_cluster(cluster: list[Span]) -> list[Span]:
         key=lambda s: (
             # An explicitly labelled regional personal ID can coincidentally
             # pass Luhn; its field meaning takes precedence over bare CARD.
-            -(65 if s.reason == "ner-structured" else max(
-                _PRIORITY.get(s.type, 85), 96 if s.reason == "cis-personal-id" else 0,
-            )),
+            -_cluster_priority(s),
             -(s.end - s.start),
             -s.confidence,
             s.start,
@@ -792,6 +796,7 @@ _NER_IPV4_VALUE = _rx(r"(?:[0-9]{1,3}[.]){3}[0-9]{1,3}")
 _NER_IP_CHARACTER = re.compile(r"[0-9a-fA-F:. \t]")
 _NER_LOCAL_PHONE = _rx(r"[0-9]{3}[ \t.-]+[0-9]{3}[ \t.-]+[0-9]{2}[ \t.-]+[0-9]{2}")
 _NER_FLOAT_SUFFIX = re.compile(r"[.,]0+$")
+_HORIZONTAL_SPACE = re.compile(r"[ \t]+")
 _NER_URL_VALUE = _rx(
     r"(?:https?://|ftp://|www[.])[^\s]+|"
     r"(?:[a-zа-яё0-9-]+[.])+[a-zа-яё]{2,63}(?:[:/?#][^\s]*)?"
@@ -803,7 +808,7 @@ def _ner_number_owner(text: str, start: int) -> str | None:
     # A completed field or sentence cannot grant ownership to the next value.
     prefix = re.split(r"[;\n]", prefix)[-1]
     owners = list(_NER_NUMBER_OWNER.finditer(prefix))
-    if not owners or re.search(r"[0-9]", prefix[owners[-1].end():]):
+    if not owners or re.search(r"(?a:\d)", prefix[owners[-1].end():]):
         return None
     return owners[-1].lastgroup
 
@@ -819,7 +824,7 @@ def _valid_ner_ip_value(value: str) -> bool:
 
 
 def _valid_ip_match(value: str, _start: int, _end: int) -> bool:
-    compact = re.sub(r"[ \t]+", "", value)
+    compact = _HORIZONTAL_SPACE.sub("", value)
     if not any(char in "0123456789abcdefABCDEF" for char in compact):
         return False
     try:
@@ -830,7 +835,7 @@ def _valid_ip_match(value: str, _start: int, _end: int) -> bool:
 
 
 def _valid_ner_ip(text: str, span: Span) -> bool:
-    if _valid_ner_ip_value(re.sub(r"[ \t]+", "", text[span.start:span.end])):
+    if _valid_ner_ip_value(_HORIZONTAL_SPACE.sub("", text[span.start:span.end])):
         return True
     begin, end = span.start, span.end
     # The decoder preserves atomic IPv6 components. Validate their containing
@@ -839,7 +844,7 @@ def _valid_ner_ip(text: str, span: Span) -> bool:
         begin -= 1
     while end < min(len(text), span.end + 100) and _NER_IP_CHARACTER.fullmatch(text[end]):
         end += 1
-    compact = re.sub(r"[ \t]+", "", text[begin:end]).strip(".")
+    compact = _HORIZONTAL_SPACE.sub("", text[begin:end]).strip(".")
     # An adjacent field's colon is punctuation, not an extra IPv6 group.
     without_label = compact[1:] if compact.startswith(":") and not compact.startswith("::") else compact
     return _valid_ner_ip_value(compact) or _valid_ner_ip_value(without_label)
@@ -848,7 +853,7 @@ def _valid_ner_ip(text: str, span: Span) -> bool:
 def _valid_ner_network_value(text: str, span: Span) -> bool:
     # Tokenized corpora may put spaces around punctuation. Use a temporary
     # validation view; the accepted span still points into the exact input.
-    compact = re.sub(r"[ \t]+", "", text[span.start:span.end])
+    compact = _HORIZONTAL_SPACE.sub("", text[span.start:span.end])
     if span.type == "EMAIL":
         return bool(_EMAIL.fullmatch(compact))
     if span.type == "URL":
@@ -988,30 +993,42 @@ def _address_fragment(text: str, span: Span, start: int, end: int) -> Span | Non
     return Span(start, end, "LOCATION", span.confidence, "ner-location")
 
 
+def _address_tail_overlaps(candidate: Span, resolved: Sequence[Span], starts: list[int]) -> list[Span]:
+    if candidate.type != "LOCATION":
+        return []
+    first = max(0, bisect_right(starts, candidate.start) - 1)
+    last = bisect_left(starts, candidate.end)
+    overlaps = [span for span in resolved[first:last] if span.end > candidate.start]
+    if not overlaps or any(
+        span.type not in _ADDRESS_COMPONENT_TYPES or span.reason == "custom-rule" for span in overlaps
+    ):
+        return []
+    return overlaps
+
+
+def _address_tail_fragments(text: str, candidate: Span, overlaps: Sequence[Span]) -> list[Span]:
+    cursor = candidate.start
+    additions = []
+    for span in overlaps:
+        if span.start > cursor:
+            fragment = _address_fragment(text, candidate, cursor, span.start)
+            if fragment is not None:
+                additions.append(fragment)
+        cursor = max(cursor, span.end)
+    if cursor < candidate.end:
+        fragment = _address_fragment(text, candidate, cursor, candidate.end)
+        if fragment is not None:
+            additions.append(fragment)
+    return additions
+
+
 def _preserve_address_tails(text: str, resolved: Sequence[Span], candidates: Iterable[Span]) -> list[Span]:
     starts = [span.start for span in resolved]
     additions: list[Span] = []
     for candidate in candidates:
-        if candidate.type != "LOCATION":
-            continue
-        first = max(0, bisect_right(starts, candidate.start) - 1)
-        last = bisect_left(starts, candidate.end)
-        overlaps = [span for span in resolved[first:last] if span.end > candidate.start]
-        if not overlaps or any(
-            span.type not in _ADDRESS_COMPONENT_TYPES or span.reason == "custom-rule" for span in overlaps
-        ):
-            continue
-        cursor = candidate.start
-        for span in overlaps:
-            if span.start > cursor:
-                fragment = _address_fragment(text, candidate, cursor, span.start)
-                if fragment is not None:
-                    additions.append(fragment)
-            cursor = max(cursor, span.end)
-        if cursor < candidate.end:
-            fragment = _address_fragment(text, candidate, cursor, candidate.end)
-            if fragment is not None:
-                additions.append(fragment)
+        overlaps = _address_tail_overlaps(candidate, resolved, starts)
+        if overlaps:
+            additions.extend(_address_tail_fragments(text, candidate, overlaps))
     return _resolve([*resolved, *additions]) if additions else list(resolved)
 
 

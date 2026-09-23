@@ -30,6 +30,7 @@ SCHEMAS = {
 ENTITY_TYPES = {**LABELS, "name": "PERSON", "organization": "ORGANIZATION"}
 CHUNK_WORDS = 384
 CHUNK_OVERLAP = 64
+_INVALID_OUTPUT = "Invalid GLiNER model output."
 
 
 @dataclass(frozen=True)
@@ -42,26 +43,31 @@ class GlinerSpan:
 
 def _validate_span(item, entity_type, text):
     if not isinstance(item, dict):
-        raise ValueError("Invalid GLiNER model output.")
+        raise ValueError(_INVALID_OUTPUT)
     start, end, score = item.get("start"), item.get("end"), item.get("confidence")
     if (type(start) is not int or type(end) is not int or not 0 <= start < end <= len(text)
             or not isinstance(score, (int, float)) or isinstance(score, bool)
             or not math.isfinite(score) or not 0 <= score <= 1
             or not isinstance(item.get("text"), str) or item["text"] != text[start:end]):
-        raise ValueError("Invalid GLiNER model output.")
+        raise ValueError(_INVALID_OUTPUT)
     return GlinerSpan(start=start, end=end, entity_type=entity_type, score=float(score))
 
 
-def _parse_output(output, text, schema="person-location"):
+def _validated_entities(output, schema):
     if not isinstance(output, dict) or set(output) != {"entities"}:
-        raise ValueError("Invalid GLiNER model output.")
+        raise ValueError(_INVALID_OUTPUT)
     entities = output["entities"]
     if not isinstance(entities, dict) or set(entities) != set(SCHEMAS[schema]):
-        raise ValueError("Invalid GLiNER model output.")
+        raise ValueError(_INVALID_OUTPUT)
+    return entities
+
+
+def _parse_output(output, text, schema="person-location"):
+    entities = _validated_entities(output, schema)
     unique = {}
     for label, items in entities.items():
         if not isinstance(items, list):
-            raise ValueError("Invalid GLiNER model output.")
+            raise ValueError(_INVALID_OUTPUT)
         for item in items:
             span = _validate_span(item, ENTITY_TYPES[label], text)
             # Organization is a competing label, not a gateway PII target. Its
@@ -152,7 +158,7 @@ class GlinerAnalyzer:
     def analyze(self, *, text, language, entities, score_threshold):
         if not isinstance(text, str) or language != "ru" or entities != ["PERSON", "LOCATION"]:
             raise ValueError("Unsupported GLiNER analyzer request.")
-        if score_threshold != 0.0:
+        if not isinstance(score_threshold, (int, float)) or not math.isclose(score_threshold, 0.0, rel_tol=0, abs_tol=0):
             raise ValueError("The gateway score threshold must be zero; configure the GLiNER threshold on the analyzer.")
         if not text:
             return []

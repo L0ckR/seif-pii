@@ -41,7 +41,8 @@ def test_one_inference_keeps_all_native_types_and_merges_coarse_names_by_offsets
     runtime = FakeRuntime(raw)
     result = adapter.RubertAnalyzer(runtime).predict_both(text)
     assert runtime.inputs == [text]
-    assert result["native"] == saved and raw == saved
+    assert result["native"] == saved
+    assert raw == saved
     assert result["gateway_error"] is None
     assert [(text[item["start"]:item["end"]], item["entity_type"], item["score"]) for item in result["gateway"]] == [
         ("Иванов\tПётр Сергеевич", "PERSON", .9), ("Москва Россия", "LOCATION", .7)]
@@ -99,8 +100,9 @@ def test_malformed_native_container_fails(output):
 
 def test_overlapping_native_rows_reject_instead_of_redecoding_published_output():
     text = "Иванов"
+    rows = [span(text, text, "LAST_NAME"), span(text, "Иван", "FIRST_NAME")]
     with pytest.raises(ValueError, match="Invalid RuBERT native output"):
-        adapter.validate_native(text, [span(text, text, "LAST_NAME"), span(text, "Иван", "FIRST_NAME")])
+        adapter.validate_native(text, rows)
 
 
 def test_native_retained_when_coarse_merge_exceeds_gateway_limit():
@@ -111,7 +113,8 @@ def test_native_retained_when_coarse_merge_exceeds_gateway_limit():
     result = model.predict_both(text)
     assert runtime.inputs == [text]
     assert result["native"] == native
-    assert result["gateway"] is None and result["gateway_error"] == adapter.GATEWAY_LIMIT
+    assert result["gateway"] is None
+    assert result["gateway_error"] == adapter.GATEWAY_LIMIT
     with pytest.raises(ValueError, match="span length/count contract"):
         model.analyze(text=text, language="ru", entities=["PERSON", "LOCATION"], score_threshold=0.)
 
@@ -121,14 +124,16 @@ def test_gateway_count_limit_rejects_without_dropping_native():
     native = [span(text, "А", "FIRST_NAME", start=index) for index in range(0, len(text), 2)]
     result = adapter.RubertAnalyzer(FakeRuntime(native)).predict_both(text)
     assert len(result["native"]) == 2049
-    assert result["gateway"] is None and result["gateway_error"] == adapter.GATEWAY_LIMIT
+    assert result["gateway"] is None
+    assert result["gateway_error"] == adapter.GATEWAY_LIMIT
 
 
 def test_unmapped_long_entity_preserved_without_failing_gateway():
     text = "x" * 201
     result = adapter.RubertAnalyzer(FakeRuntime([span(text, text, "URL")])).predict_both(text)
     assert result["native"][0]["end"] == 201
-    assert result["gateway"] == [] and result["gateway_error"] is None
+    assert result["gateway"] == []
+    assert result["gateway_error"] is None
 
 
 def test_empty_and_long_input_pass_to_published_windowing_without_adapter_truncation():
@@ -213,8 +218,9 @@ def test_logits_guard_blocks_silent_zip_truncation_and_nonfinite_values(numpy, b
     else:
         output[0, 0, 0] = np.nan
     wrapped = adapter._ValidatedBackend(SimpleNamespace(run=lambda _: output))
+    inputs = {"input_ids": np.zeros((1, 8), dtype=np.int64)}
     with pytest.raises(ValueError, match="logits shape"):
-        wrapped.run({"input_ids": np.zeros((1, 8), dtype=np.int64)})
+        wrapped.run(inputs)
 
 
 @pytest.mark.parametrize("dtype", ["float16", "float32"])

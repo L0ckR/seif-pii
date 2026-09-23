@@ -20,6 +20,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+PROTOCOL_FILE = "protocol.json"
+ORGANIZER_PREFIX = "organizer/"
 sys.path.insert(0, str(ROOT))
 
 from scripts import compare_ner_public as public  # noqa: E402
@@ -95,7 +97,7 @@ def input_files(args):
             "public_" + name: args.public_run_dir / name
             for name in (
                 "prepared-inputs.jsonl",
-                "protocol.json",
+                PROTOCOL_FILE,
                 "spacy.jsonl",
                 "spacy.meta.json",
                 "gliner.jsonl",
@@ -112,7 +114,7 @@ def load_inputs(args):
         raise ValueError("Expected the unchanged 446 organizer cases")
     rows = [
         {
-            "key": "organizer/" + key,
+            "key": ORGANIZER_PREFIX + key,
             "id": key,
             "dataset": "organizer",
             "split": "all",
@@ -121,9 +123,9 @@ def load_inputs(args):
         }
         for key, case in cases.items()
     ]
-    protocol = json.loads((args.public_run_dir / "protocol.json").read_text())
+    protocol = json.loads((args.public_run_dir / PROTOCOL_FILE).read_text())
     if (
-        golden.sha256(args.public_run_dir / "protocol.json")
+        golden.sha256(args.public_run_dir / PROTOCOL_FILE)
         != "6058374163fc3978ec4a882d19328e96fad1032d61bbac168ad8a3c78df68a27"
     ):
         raise ValueError("Public reference protocol differs")
@@ -162,7 +164,7 @@ def prepare(args):
         "ONNX CPU/GPU and native CPU/GPU timed separately. Local inference only; no HTTP RPS claim.",
     }
     protocol["baseline_control"] = baseline_control(args, rows)
-    save(args.run_dir / "protocol.json", protocol)
+    save(args.run_dir / PROTOCOL_FILE, protocol)
     return protocol
 
 
@@ -225,6 +227,34 @@ def measured_call(analyzer, text, device):
     return entities, error, (time.perf_counter() - started) * 1000
 
 
+def _write_prediction_cache(target, selected, analyzer, backend, device):
+    by_corpus, per_case, failures = defaultdict(list), [], defaultdict(list)
+    started = time.perf_counter()
+    with target.open("x", encoding="utf-8") as stream:
+        for index, row in enumerate(selected, 1):
+            entities, error, ms = measured_call(analyzer, row["text"], device)
+            by_corpus[row["dataset"]].append(ms)
+            per_case.append({"case_id": row["key"], "latency_ms": ms, "error_type": error})
+            record = {
+                "case_id": row["key"],
+                "text_sha256": hashlib.sha256(row["text"].encode()).hexdigest(),
+                "entities": entities,
+            }
+            if error:
+                record["inference_error"] = error
+                failures[row["dataset"]].append({"case_id": row["key"], "error_type": error})
+            stream.write(json.dumps(record, sort_keys=True, separators=(",", ":")) + "\n")
+            if index % 100 == 0:
+                stream.flush()
+                print(
+                    json.dumps(
+                        {"completed": index, "total": len(selected), "backend": backend, "device": device}
+                    ),
+                    flush=True,
+                )
+    return by_corpus, per_case, failures, time.perf_counter() - started
+
+
 def cache(args, rows, protocol):
     import torch
 
@@ -242,31 +272,7 @@ def cache(args, rows, protocol):
         public.infer_document(analyzer, "Иван Иванов приехал в Москву.")
     if args.device == "cuda":
         torch.cuda.synchronize()
-    by_corpus, per_case, failures = defaultdict(list), [], defaultdict(list)
-    started = time.perf_counter()
-    with target.open("x", encoding="utf-8") as stream:
-        for index, row in enumerate(selected, 1):
-            entities, error, ms = measured_call(analyzer, row["text"], args.device)
-            by_corpus[row["dataset"]].append(ms)
-            per_case.append({"case_id": row["key"], "latency_ms": ms, "error_type": error})
-            record = {
-                "case_id": row["key"],
-                "text_sha256": hashlib.sha256(row["text"].encode()).hexdigest(),
-                "entities": entities,
-            }
-            if error:
-                record["inference_error"] = error
-                failures[row["dataset"]].append({"case_id": row["key"], "error_type": error})
-            stream.write(json.dumps(record, sort_keys=True, separators=(",", ":")) + "\n")
-            if index % 100 == 0:
-                stream.flush()
-                print(
-                    json.dumps(
-                        {"completed": index, "total": len(selected), "backend": args.backend, "device": args.device}
-                    ),
-                    flush=True,
-                )
-    elapsed = time.perf_counter() - started
+    by_corpus, per_case, failures, elapsed = _write_prediction_cache(target, selected, analyzer, args.backend, args.device)
     verify(args, protocol)
     if (
         fingerprint_onnx(args.model_path) != protocol["onnx_file_sha256"]
@@ -281,7 +287,7 @@ def cache(args, rows, protocol):
         "cases": len(selected),
         "measured_at_utc": datetime.now(timezone.utc).isoformat(),
         "cache_sha256": golden.sha256(target),
-        "protocol_sha256": golden.sha256(args.run_dir / "protocol.json"),
+        "protocol_sha256": golden.sha256(args.run_dir / PROTOCOL_FILE),
         "settings": SETTINGS,
         "versions": versions(),
         "source_sha256": protocol["source_sha256"],
@@ -314,14 +320,14 @@ def cache(args, rows, protocol):
 def reference_caches(args, rows):
     cases = golden.load_cases(DATA)
     native = {
-        "organizer/" + k: v["entities"]
+        ORGANIZER_PREFIX + k: v["entities"]
         for k, v in golden.load_ner_cache(BASE / "selected-service.jsonl", cases).items()
     }
     spacy = {
-        "organizer/" + k: v["entities"] for k, v in golden.load_ner_cache(BASE / "spacy-fresh.jsonl", cases).items()
+        ORGANIZER_PREFIX + k: v["entities"] for k, v in golden.load_ner_cache(BASE / "spacy-fresh.jsonl", cases).items()
     }
     external = [r for r in rows if r["dataset"] != "organizer"]
-    digest = golden.sha256(args.public_run_dir / "protocol.json")
+    digest = golden.sha256(args.public_run_dir / PROTOCOL_FILE)
     for name, result in (("gliner", native), ("spacy", spacy)):
         predictions, _ = public.load_cache(args.public_run_dir / f"{name}.jsonl", external, digest)
         result.update(predictions)
@@ -376,11 +382,25 @@ def score_public(rows, predictions, caches):
 def score_organizer(cases, cache):
     from scripts.evaluate_annotations import evaluate
 
-    formatted = {key: {"entities": cache["organizer/" + key]} for key in cases}
+    formatted = {key: {"entities": cache[ORGANIZER_PREFIX + key]} for key in cases}
     predicted = golden.predict(cases, profile="hybrid", cache=formatted)
     inputs = {key: {"text": row["text"]} for key, row in cases.items()}
     weights = {key: row["traffic_weight"] for key, row in cases.items()}
     return compact_evaluation(evaluate(inputs, cases, predicted, weights))
+
+
+def _verify_public_baseline(dataset, selected, predictions, caches, expected_public):
+    ds, split = dataset
+    measured = score_public([r for r in selected if r["dataset"] == ds], predictions, caches)
+    metrics = measured["full_masking_all_gold_types"]["systems"]
+    reference = expected_public["splits"][split]["full_masking_all_gold_types"]["systems"]
+    typed = expected_public["splits"][split]["all_types_unfiltered"]["systems"]
+    for name, slot in (("native", "gliner"), ("spacy", "spacy")):
+        for profile in ("hybrid", "person_only"):
+            if metrics[name + "_" + profile] != reference[slot + "_" + profile]:
+                raise ValueError("Public baseline aggregates do not reproduce: " + ds + "/" + name)
+            if measured["typed_all_types_unfiltered"]["systems"][name + "_" + profile] != typed[slot + "_" + profile]:
+                raise ValueError("Public typed baseline aggregates differ: " + ds + "/" + name)
 
 
 def baseline_control(args, rows):
@@ -395,20 +415,8 @@ def baseline_control(args, rows):
     for row in selected:
         for name, spans in public.predictions_for(row["text"], {k: v[row["key"]] for k, v in caches.items()}).items():
             predictions[name][row["key"]] = spans
-    for ds, split in (("pii", "pii/all"), ("redmadrobot", "redmadrobot/test")):
-        measured = score_public([r for r in selected if r["dataset"] == ds], predictions, caches)
-        metrics = measured["full_masking_all_gold_types"]["systems"]
-        reference = expected_public["splits"][split]["full_masking_all_gold_types"]["systems"]
-        typed = expected_public["splits"][split]["all_types_unfiltered"]["systems"]
-        for name, slot in (("native", "gliner"), ("spacy", "spacy")):
-            for profile in ("hybrid", "person_only"):
-                if metrics[name + "_" + profile] != reference[slot + "_" + profile]:
-                    raise ValueError("Public baseline aggregates do not reproduce: " + ds + "/" + name)
-                if (
-                    measured["typed_all_types_unfiltered"]["systems"][name + "_" + profile]
-                    != typed[slot + "_" + profile]
-                ):
-                    raise ValueError("Public typed baseline aggregates differ: " + ds + "/" + name)
+    for dataset in (("pii", "pii/all"), ("redmadrobot", "redmadrobot/test")):
+        _verify_public_baseline(dataset, selected, predictions, caches, expected_public)
     return {
         "organizer_all_aggregates_exact": True,
         "public_full_masking_all_gold_types_exact": True,
@@ -421,7 +429,7 @@ def baseline_control(args, rows):
 def evaluate(args, rows, protocol):
     selected = [r for r in rows if args.scope == "all" or r["dataset"] == "organizer"]
     path = args.run_dir / f"{args.backend}-{args.device}-{args.scope}.jsonl"
-    candidate, metadata = public.load_cache(path, selected, golden.sha256(args.run_dir / "protocol.json"))
+    candidate, metadata = public.load_cache(path, selected, golden.sha256(args.run_dir / PROTOCOL_FILE))
     records = [json.loads(line) for line in path.read_text().splitlines()]
     failed_ids = {r["case_id"] for r in records if "inference_error" in r}
     expected_failed = {r["case_id"] for group in metadata["failures_by_corpus"].values() for r in group}
@@ -448,7 +456,7 @@ def evaluate(args, rows, protocol):
         if dataset != "organizer":
             corpora[dataset] = score_public(part, predictions, caches)
             continue
-        organizer_cache = {key: {"entities": candidate["organizer/" + key]} for key in cases}
+        organizer_cache = {key: {"entities": candidate[ORGANIZER_PREFIX + key]} for key in cases}
         scored = {name: score_organizer(cases, values) for name, values in caches.items()}
         corpora[dataset] = {
             "cases": len(part),
@@ -457,7 +465,7 @@ def evaluate(args, rows, protocol):
         }
     result = {
         "schema_version": 1,
-        "protocol_sha256": golden.sha256(args.run_dir / "protocol.json"),
+        "protocol_sha256": golden.sha256(args.run_dir / PROTOCOL_FILE),
         "protocol": protocol,
         "candidate_metadata": metadata,
         "corpora": corpora,
@@ -504,7 +512,7 @@ def main():
         value = prepare(args)
         print(json.dumps({"cases": value["cases"], "prepared": True}))
         return
-    protocol = json.loads((args.run_dir / "protocol.json").read_text())
+    protocol = json.loads((args.run_dir / PROTOCOL_FILE).read_text())
     rows = verify(args, protocol)
     print(json.dumps(cache(args, rows, protocol) if args.mode == "cache" else evaluate(args, rows, protocol), indent=2))
 

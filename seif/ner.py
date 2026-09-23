@@ -111,7 +111,7 @@ class NerClient:
     async def health(self) -> None:
         try:
             async with asyncio.timeout(2.0):
-                async with self.client.stream("GET", "health", timeout=2.0) as response:
+                async with self.client.stream("GET", "health") as response:
                     if response.status_code != 200:
                         raise NerUnavailable(NER_UNAVAILABLE)
                     body = await _response_json(response, 4096, NER_UNAVAILABLE)

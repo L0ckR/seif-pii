@@ -86,8 +86,9 @@ def test_exact_word_limit_reserves_upstream_period_without_rewriting_input():
 def test_malformed_outputs_fail_closed(output):
     extractor = FakeExtractor()
     extractor.output = output
+    analyzer = GlinerAnalyzer(extractor)
     with pytest.raises(ValueError, match="Invalid GLiNER model output"):
-        infer(GlinerAnalyzer(extractor), "Иван")
+        infer(analyzer, "Иван")
 
 
 @pytest.mark.parametrize(("field", "value"), [
@@ -101,14 +102,16 @@ def test_malformed_outputs_fail_closed(output):
 def test_rejects_invalid_span_types_bounds_confidence_and_text(field, value):
     entity = {**raw_span("Иван", "Иван"), field: value}
     extractor = FakeExtractor({"entities": {"person": [entity], "location": []}})
+    analyzer = GlinerAnalyzer(extractor)
     with pytest.raises(ValueError, match="Invalid GLiNER model output"):
-        infer(GlinerAnalyzer(extractor), "Иван")
+        infer(analyzer, "Иван")
 
 
 def test_one_invalid_entity_rejects_entire_prediction_instead_of_partial_success():
     extractor = FakeExtractor({"entities": {"person": [raw_span("Иван", "Иван"), {}], "location": []}})
+    analyzer = GlinerAnalyzer(extractor)
     with pytest.raises(ValueError, match="Invalid GLiNER model output"):
-        infer(GlinerAnalyzer(extractor), "Иван")
+        infer(analyzer, "Иван")
 
 
 @pytest.mark.parametrize("label", ["person", "location"])
@@ -116,8 +119,9 @@ def test_partial_label_groups_reject_even_valid_predictions(label):
     text = "Иван в Москве"
     value = "Иван" if label == "person" else "Москве"
     extractor = FakeExtractor({"entities": {label: [raw_span(text, value)]}})
+    analyzer = GlinerAnalyzer(extractor)
     with pytest.raises(ValueError, match="Invalid GLiNER model output"):
-        infer(GlinerAnalyzer(extractor), text)
+        infer(analyzer, text)
 
 
 def test_empty_text_does_not_invoke_model():
@@ -132,8 +136,9 @@ def test_empty_text_does_not_invoke_model():
 ])
 def test_analyzer_protocol_does_not_silently_change(changes):
     args = {"text": "Иван", "language": "ru", "entities": ["PERSON", "LOCATION"], "score_threshold": 0.0}
+    analyzer = GlinerAnalyzer(FakeExtractor())
     with pytest.raises(ValueError):
-        GlinerAnalyzer(FakeExtractor()).analyze(**(args | changes))
+        analyzer.analyze(**(args | changes))
 
 
 def test_local_loader_checks_files_before_import_and_forces_local_unquantized_model(tmp_path, monkeypatch):
@@ -250,16 +255,18 @@ def test_person_and_name_duplicates_preserve_highest_score_without_merging_diffe
 @pytest.mark.parametrize("threshold", [None, True, False, "0.5", 0, 1, -0.1, 1.1,
                                        float("nan"), float("inf"), float("-inf")])
 def test_invalid_threshold_rejected_before_loading_or_inference(threshold):
+    extractor = FakeExtractor()
     with pytest.raises(ValueError, match="SEIF_GLINER_THRESHOLD"):
-        GlinerAnalyzer(FakeExtractor(), threshold=threshold)
+        GlinerAnalyzer(extractor, threshold=threshold)
     with pytest.raises(ValueError, match="SEIF_GLINER_THRESHOLD"):
         GlinerAnalyzer.from_local("/nonexistent-checkpoint", threshold=threshold)
 
 
 @pytest.mark.parametrize("schema", [None, "", "unknown", [], {}])
 def test_unknown_schema_rejected_before_loading_or_inference(schema):
+    extractor = FakeExtractor()
     with pytest.raises(ValueError, match="SEIF_GLINER_SCHEMA"):
-        GlinerAnalyzer(FakeExtractor(), schema=schema)
+        GlinerAnalyzer(extractor, schema=schema)
     with pytest.raises(ValueError, match="SEIF_GLINER_SCHEMA"):
         GlinerAnalyzer.from_local("/nonexistent-checkpoint", schema=schema)
 

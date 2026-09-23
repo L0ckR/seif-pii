@@ -99,7 +99,8 @@ def test_native_factory_warms_graphs_before_readiness_and_counts_actual_calls(mo
     assert stats["server_environment"]["python_executable"] == sys.executable
     assert stats["counts"]["model_started"] == stats["counts"]["model_completed"] == 1
     assert stats["counts"]["http_200"] == 1
-    assert not torch.backends.cuda.matmul.allow_tf32 and not torch.backends.cudnn.allow_tf32
+    assert not torch.backends.cuda.matmul.allow_tf32
+    assert not torch.backends.cudnn.allow_tf32
 
 
 def test_selected_phases_use_shared_checked_runner_and_unique_warmup_ids(monkeypatch):
@@ -193,7 +194,8 @@ def test_repeated_workload_preserves_expected_masks_and_uses_fresh_ids(monkeypat
             "entities": [(0, 4, "PERSON")], "types": ["PERSON"]}
     monkeypatch.setattr(bench, "prepare_cases", lambda _: [case])
     cases = bench.prepare_workload(SimpleNamespace(repeats=3))
-    assert len(cases) == 3 and all(row["expected"] == "****" for row in cases)
+    assert len(cases) == 3
+    assert all(row["expected"] == "****" for row in cases)
     counts, ids = bench.common.Counts(), []
 
     class FakeNer:
@@ -210,7 +212,8 @@ def test_repeated_workload_preserves_expected_masks_and_uses_fresh_ids(monkeypat
             if path == "/v1/unmask":
                 assert body["payload_id"] in ids
                 return 200, {"result": "Иван"}
-            assert path == "/v1/mask" and body["payload_id"] not in ids
+            assert path == "/v1/mask"
+            assert body["payload_id"] not in ids
             ids.append(body["payload_id"])
             counts.add(model_started=1, model_completed=1, http_started=1, http_completed=1, http_200=1)
             return 200, {"result": "****", "payload_id": body["payload_id"], "mode": "mask", "latency_ms": 1,

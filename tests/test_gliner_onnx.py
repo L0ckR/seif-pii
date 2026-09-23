@@ -222,8 +222,9 @@ def test_oversized_pool_rejects_even_when_all_output_shapes_agree(numeric):
               "candidate_valid": np.zeros((1, 3, 193), dtype=np.bool_),
               "pair_logits": np.zeros((1, 3, 193), dtype=np.float32),
               "null_logits": np.zeros((1, 3), dtype=np.float32)}
+    valid = np.ones((1, 3), dtype=np.bool_)
     with pytest.raises(ValueError, match="pool dimension or budget"):
-        _check_boundary_arrays(arrays, np.ones((1, 3), dtype=np.bool_), np.ones((1, 3), dtype=np.bool_))
+        _check_boundary_arrays(arrays, valid, valid)
 
 
 def test_export_runtime_failure_propagates_without_empty_prediction_or_native_fallback(numeric):
@@ -237,9 +238,12 @@ def test_export_runtime_failure_propagates_without_empty_prediction_or_native_fa
             raise RuntimeError("export cannot broadcast Where_14")
 
     _, boundary = _make_shims(None, BrokenSession())
+    word = torch.zeros((1, 1, 768))
+    word_mask = torch.ones((1, 1), dtype=torch.bool)
+    entity = torch.zeros((1, 3, 768))
+    entity_mask = torch.ones((1, 3), dtype=torch.bool)
     with pytest.raises(RuntimeError, match="cannot broadcast"):
-        boundary(torch.zeros((1, 1, 768)), torch.ones((1, 1), dtype=torch.bool),
-                 torch.zeros((1, 3, 768)), torch.ones((1, 3), dtype=torch.bool))
+        boundary(word, word_mask, entity, entity_mask)
 
 
 @pytest.mark.parametrize("malformed", ["float64", "nan", "width"])
@@ -253,8 +257,9 @@ def test_invalid_encoder_outputs_fail_closed(numeric, malformed):
     else:
         hidden = hidden[:, :, :767]
     encoder, _ = _make_shims(FakeSession([], ["hidden_states"], {"hidden_states": hidden}), None)
+    ids = torch.ones((1, 2), dtype=torch.int64)
     with pytest.raises(ValueError, match="encoder output"):
-        encoder(input_ids=torch.ones((1, 2), dtype=torch.int64), attention_mask=torch.ones((1, 2), dtype=torch.int64))
+        encoder(input_ids=ids, attention_mask=ids)
 
 
 class FakeExtractor:
@@ -281,7 +286,8 @@ def test_adapter_inherits_exact_unicode_and_long_chunk_contract(prefix):
     original, labels, options = extractor.calls[0]
     assert original == text
     assert labels == SCHEMAS["described-names"]
-    assert options["threshold"] == .8 and options["overlap_policy"] == "flat"
+    assert options["threshold"] == .8
+    assert options["overlap_policy"] == "flat"
     if len(prefix) > 100:
         assert options["chunk_size"] == CHUNK_WORDS
         assert options["chunk_overlap"] == CHUNK_OVERLAP

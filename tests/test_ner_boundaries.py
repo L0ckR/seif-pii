@@ -57,7 +57,8 @@ def test_address_markers_and_numeric_suffixes_cannot_disappear():
     assert preserve_model_boundaries(text, [original], incomplete) == [original]
     complete = [span(text, value, "LOCATION") for value in ("г. Макетный", "ул. Полевая", "д. 17Б")]
     result = preserve_model_boundaries(text, [original], complete)
-    assert len(result) == 3 and {s.type for s in result} == {"ADDRESS"}
+    assert len(result) == 3
+    assert {s.type for s in result} == {"ADDRESS"}
     assert mask(text, result, "mask")[0] == mask(text, [original], "mask")[0]
 
 
@@ -177,4 +178,5 @@ def test_api_name_components_mask_and_restore_full_payload(monkeypatch, mode):
         else:
             assert masked.count("⟦PD:PERSON:") == 3
         restored = client.post("/v1/unmask", json={"payload": masked, "payload_id": "name-components"})
-        assert restored.status_code == 200 and restored.json()["result"] == text
+        assert restored.status_code == 200
+        assert restored.json()["result"] == text

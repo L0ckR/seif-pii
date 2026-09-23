@@ -28,8 +28,9 @@ def test_batch_keeps_order_and_transfers_failure_without_killing_worker():
         jobs = [pool.submit(text) for text in ("a", "b", "c", "d")]
         assert [job.result(2) for job in jobs] == ["A", "B", "C", "D"]
         assert calls == [["a", "b", "c", "d"]]
+        bad_job = pool.submit("bad")
         with pytest.raises(ValueError, match="model error"):
-            pool.submit("bad").result(2)
+            bad_job.result(2)
         assert pool.submit("next").result(2) == "NEXT"
     finally:
         pool.shutdown(cancel_futures=True)
@@ -153,8 +154,9 @@ def test_configurable_client_capacity_does_not_leave_default_bottleneck():
         try:
             for _ in range(16):
                 await asyncio.wait_for(client.capacity.acquire(), .1)
+            acquire = client.capacity.acquire()
             with pytest.raises(TimeoutError):
-                await asyncio.wait_for(client.capacity.acquire(), .01)
+                await asyncio.wait_for(acquire, .01)
         finally:
             await client.close()
 

@@ -110,5 +110,6 @@ def test_failure_metadata_cannot_hide_an_empty_prediction_from_a_failed_model(mo
     monkeypatch.setattr(comparison.public, "load_cache", lambda *_args: (
         {"organizer/a": []}, {"failures_by_corpus": {"organizer": []}},
     ))
+    args = SimpleNamespace(run_dir=tmp_path)
     with pytest.raises(ValueError, match="failure provenance"):
-        comparison.load_cache(SimpleNamespace(run_dir=tmp_path), [{"key": "organizer/a"}])
+        comparison.load_cache(args, [{"key": "organizer/a"}])

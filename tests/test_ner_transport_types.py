@@ -56,8 +56,9 @@ def test_extended_types_keep_bounded_transport(kind):
 
 @pytest.mark.parametrize("capabilities", [("EMAIL", "UNKNOWN"), ("PERSON", "PERSON"), [], "PERSON", [[]]])
 def test_invalid_advertised_capabilities_fail_before_inference(capabilities):
+    analyzer = SimpleNamespace(supported_entities=capabilities)
     with pytest.raises(ValueError, match="capabilities"):
-        analyzer_entities(SimpleNamespace(supported_entities=capabilities))
+        analyzer_entities(analyzer)
 
 
 @pytest.mark.parametrize("length,offset", [(923, 15800), (2048, 13952)])

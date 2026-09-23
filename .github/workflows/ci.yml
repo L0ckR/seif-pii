@@ -11,9 +11,14 @@ jobs:
           kubectl kustomize deploy/k8s > /tmp/seif-base.yaml
           kubectl kustomize deploy/k8s/overlays/production > /tmp/seif-production.yaml
           kubectl kustomize deploy/k8s/overlays/hybrid > /tmp/seif-hybrid.yaml
+          python3 scripts/package.py --k8s
+          archive_dir=$(mktemp -d "$RUNNER_TEMP/seif-k8s-archive.XXXXXX")
+          python3 -m zipfile -e output/seif-pii-service-k8s.zip "$archive_dir"
+          (cd "$archive_dir" && sha256sum --check SHA256SUMS)
+          kubectl kustomize "$archive_dir/deploy/k8s/overlays/local" > /tmp/seif-local.yaml
           curl -fsSL https://github.com/yannh/kubeconform/releases/download/v0.8.0/kubeconform-linux-amd64.tar.gz -o /tmp/kubeconform.tar.gz
           tar -xzf /tmp/kubeconform.tar.gz -C /tmp kubeconform
-          /tmp/kubeconform -strict -summary -kubernetes-version 1.35.0 /tmp/seif-base.yaml /tmp/seif-production.yaml /tmp/seif-hybrid.yaml
+          /tmp/kubeconform -strict -summary -kubernetes-version 1.35.0 /tmp/seif-base.yaml /tmp/seif-production.yaml /tmp/seif-hybrid.yaml /tmp/seif-local.yaml
   ner-container:
     runs-on: ubuntu-latest
     permissions:
@@ -286,3 +291,86 @@ jobs:
         with:
           name: code-quality-reports
           path: local-data/code-analysis/ci/*.json
+  sonar:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start isolated SonarQube Community Build
+        run: |
+          sudo sysctl -w vm.max_map_count=524288
+          docker run -d --name seif-sonar-ci -p 127.0.0.1:19000:9000 sonarqube:26.9.0.129388-community
+          for attempt in $(seq 1 180); do
+            if curl -fsS http://127.0.0.1:19000/api/system/status | grep -q '"status":"UP"'; then
+              exit 0
+            fi
+            sleep 2
+          done
+          docker logs seif-sonar-ci
+          exit 1
+      - name: Create one-run scanner credential
+        run: |
+          python3 - <<'PY'
+          import base64
+          import json
+          import os
+          from urllib.parse import urlencode
+          from urllib.request import Request, urlopen
+
+          credentials = base64.b64encode(b"admin:admin").decode()
+          request = Request(
+              "http://127.0.0.1:19000/api/user_tokens/generate",
+              data=urlencode({"name": "ci-" + os.environ["GITHUB_RUN_ID"]}).encode(),
+              headers={"Authorization": "Basic " + credentials},
+          )
+          with urlopen(request, timeout=15) as response:
+              token = json.load(response)["token"]
+          print("::add-mask::" + token)
+          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as destination:
+              destination.write("SONAR_TOKEN=" + token + "\n")
+          PY
+      - name: Scan complete Python, tests and deployment source
+        uses: SonarSource/sonarqube-scan-action@v7.0.0
+        env:
+          SONAR_HOST_URL: http://127.0.0.1:19000
+        with:
+          args: >-
+            -Dsonar.projectKey=seif-ci-full-source
+            -Dsonar.sources=seif,scripts,tests,deploy
+            -Dsonar.python.version=3.14
+            -Dsonar.scm.disabled=true
+            -Dsonar.qualitygate.wait=true
+      - name: Require zero unresolved Sonar findings and hotspots
+        run: |
+          python3 - <<'PY'
+          import base64
+          import json
+          import os
+          from urllib.parse import urlencode
+          from urllib.request import Request, urlopen
+
+          authentication = base64.b64encode((os.environ["SONAR_TOKEN"] + ":").encode()).decode()
+
+          def fetch(endpoint, parameters):
+              query = urlencode(parameters)
+              request = Request(
+                  "http://127.0.0.1:19000/api/" + endpoint + "?" + query,
+                  headers={"Authorization": "Basic " + authentication},
+              )
+              with urlopen(request, timeout=15) as response:
+                  return json.load(response)
+
+          key = "seif-ci-full-source"
+          issues = fetch("issues/search", {"componentKeys": key, "resolved": "false", "ps": 1})["total"]
+          hotspots = fetch("hotspots/search", {"projectKey": key, "ps": 1})["paging"]["total"]
+          print(f"Sonar unresolved issues: {issues}; security hotspots: {hotspots}")
+          if issues or hotspots:
+              raise SystemExit(1)
+          PY
+      - name: Sonar diagnostics on failure
+        if: failure()
+        run: docker logs seif-sonar-ci || true
+      - name: Stop isolated SonarQube
+        if: always()
+        run: docker rm -f seif-sonar-ci || true

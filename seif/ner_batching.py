@@ -80,6 +80,8 @@ class BatchExecutor:
             # third-party tracebacks from the model thread.
             for future, _ in active:
                 future.set_exception(error)
+            if not isinstance(error, Exception):
+                raise
         else:
             for (future, _), result in zip(active, results, strict=True):
                 future.set_result(result)

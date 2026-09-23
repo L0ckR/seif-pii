@@ -120,7 +120,8 @@ def test_wide_words_and_bucket_sort_do_not_lose_overlapping_owned_words():
 def test_all_batch_sizes_are_bounded_and_tail_dummy_rows_never_escape(size):
     model = runtime({"Иван": "B-FIRST_NAME"})
     output = batch.word_predict_batch(model, ["Иван"] * size, max_batch=8)
-    assert len(output) == size and all(len(items) == 1 for items in output)
+    assert len(output) == size
+    assert all(len(items) == 1 for items in output)
     assert all(call.shape[0] <= 8 and call.shape[0] in batch.BATCH_BUCKETS for call in model.backend.calls)
 
 
@@ -134,8 +135,9 @@ def test_invalid_batches_fail_before_inference(texts):
 
 @pytest.mark.parametrize("maximum", [True, 0, -1, 3, 9, 33])
 def test_invalid_batch_cap_fails(maximum):
+    model = runtime()
     with pytest.raises(ValueError, match="max_batch"):
-        batch.word_predict_batch(runtime(), ["Иван"], max_batch=maximum)
+        batch.word_predict_batch(model, ["Иван"], max_batch=maximum)
 
 
 def test_empty_and_all_ignored_batches_skip_gpu():
@@ -190,7 +192,8 @@ def test_graph_contexts_are_reused_share_weights_and_cap_falls_back_without_evic
     assert graphs.run(inputs) == graphs.run(inputs) == "context"
     context = graphs.contexts[(4, 32)]
     assert context.options == {"device": 0, "cuda_graph": True, "_shared": shared}
-    assert len(context.calls) == 2 and context.path == "verified-engine"
+    assert len(context.calls) == 2
+    assert context.path == "verified-engine"
     assert graphs.run({"input_ids": np.zeros((8, 32), dtype=np.int64)}) == "original"
     assert graphs.run({"input_ids": np.zeros((1, 14), dtype=np.int64)}) == "original"
     assert graphs.batch_graph_shapes == [(4, 32)]
@@ -199,14 +202,16 @@ def test_graph_contexts_are_reused_share_weights_and_cap_falls_back_without_evic
 @pytest.mark.parametrize("shape", [(16, 32), (3, 32), (2, 14), (32,)])
 def test_graph_wrapper_rejects_unbounded_or_nonbucket_shapes(shape):
     graphs = batch.install_batch_backend(graph_runtime(), max_batch=8)
+    inputs = {"input_ids": np.zeros(shape, dtype=np.int64)}
     with pytest.raises(ValueError, match="RuBERT"):
-        graphs.run({"input_ids": np.zeros(shape, dtype=np.int64)})
+        graphs.run(inputs)
 
 
 @pytest.mark.parametrize("cap", [-1, 26, True])
 def test_graph_memory_cap_rejected(cap):
+    model = graph_runtime()
     with pytest.raises(ValueError, match="context cap"):
-        batch.install_batch_backend(graph_runtime(), max_contexts=cap)
+        batch.install_batch_backend(model, max_contexts=cap)
 
 
 def test_install_is_idempotent_and_does_not_retain_nested_context_caches():

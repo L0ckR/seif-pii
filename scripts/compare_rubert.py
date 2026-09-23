@@ -15,6 +15,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+PROTOCOL_FILE = "protocol.json"
+RUBERT_CACHE_FILE = "rubert.jsonl"
+META_SUFFIX = ".meta.json"
+ORGANIZER_PREFIX = "organizer/"
 sys.path.insert(0, str(ROOT))
 
 from scripts import compare_ner_public as public  # noqa: E402
@@ -95,7 +99,7 @@ def prepare(args):
         "maximum_characters": max(len(r["text"]) for r in rows),
         "baseline_control": reference.baseline_control(args, rows),
     }
-    reference.save(args.run_dir / "protocol.json", protocol)
+    reference.save(args.run_dir / PROTOCOL_FILE, protocol)
     return {"prepared": True, "cases": len(rows), "baseline_control": protocol["baseline_control"]}
 
 
@@ -138,8 +142,8 @@ def cache(args, rows, protocol):
 
     from seif.rubert_ner import RubertAnalyzer
 
-    target = args.run_dir / "rubert.jsonl"
-    if target.exists() or target.with_suffix(".meta.json").exists():
+    target = args.run_dir / RUBERT_CACHE_FILE
+    if target.exists() or target.with_suffix(META_SUFFIX).exists():
         raise FileExistsError("Prediction caches are immutable")
     if model_hashes(args.model_path) != protocol["model_sha256"]:
         raise ValueError("Model changed after protocol freeze")
@@ -187,7 +191,7 @@ def cache(args, rows, protocol):
         "adapter": analyzer.metadata(),
         "measured_at_utc": datetime.now(timezone.utc).isoformat(),
         "cache_sha256": golden.sha256(target),
-        "protocol_sha256": golden.sha256(args.run_dir / "protocol.json"),
+        "protocol_sha256": golden.sha256(args.run_dir / PROTOCOL_FILE),
         "hardware": {
             "platform": platform.platform(),
             "gpu": torch.cuda.get_device_name(),
@@ -208,13 +212,13 @@ def cache(args, rows, protocol):
         "documents_per_second_including_cache": len(rows) / elapsed,
         "timing_scope": "Warm synchronized sequential extraction + native validation + gateway mapping; batch1; not HTTP RPS",
     }
-    reference.save(target.with_suffix(".meta.json"), metadata)
+    reference.save(target.with_suffix(META_SUFFIX), metadata)
     return {"cases": len(rows), "timing": metadata["timing_by_corpus"], "failures": dict(failures)}
 
 
 def load_cache(args, rows):
-    target = args.run_dir / "rubert.jsonl"
-    candidates, metadata = public.load_cache(target, rows, golden.sha256(args.run_dir / "protocol.json"))
+    target = args.run_dir / RUBERT_CACHE_FILE
+    candidates, metadata = public.load_cache(target, rows, golden.sha256(args.run_dir / PROTOCOL_FILE))
     records = [json.loads(line) for line in target.read_text().splitlines()]
     if [r["case_id"] for r in records] != [r["key"] for r in rows]:
         raise ValueError("Cache order or coverage differs")
@@ -240,7 +244,7 @@ def organizer_scores(cases, predictions):
     weights = {key: row["traffic_weight"] for key, row in cases.items()}
     formatted = {}
     for key, row in cases.items():
-        spans = predictions["organizer/" + key]
+        spans = predictions[ORGANIZER_PREFIX + key]
         masked, replacements = mask(row["text"], spans, "mask")
         if restore_exact({"masked": masked, "replacements": replacements}) != row["text"]:
             raise ValueError("Restoration failed")
@@ -275,15 +279,15 @@ def export_organizer(args, rows, candidates):
                     + "\n"
                 )
     reference.save(
-        target.with_suffix(".meta.json"),
+        target.with_suffix(META_SUFFIX),
         {
             "model": MODEL,
             "model_revision": REVISION,
             "dataset_sha256": golden.sha256(reference.DATA),
             "cache_sha256": golden.sha256(target),
             "settings": SETTINGS,
-            "parent_cache_sha256": golden.sha256(args.run_dir / "rubert.jsonl"),
-            "protocol_sha256": golden.sha256(args.run_dir / "protocol.json"),
+            "parent_cache_sha256": golden.sha256(args.run_dir / RUBERT_CACHE_FILE),
+            "protocol_sha256": golden.sha256(args.run_dir / PROTOCOL_FILE),
         },
     )
 
@@ -313,7 +317,7 @@ def evaluate(args, rows, protocol):
             result["service_profiles"] = {
                 name: organizer_scores(cases, spans) for name, spans in predictions.items() if name != "rubert_native21"
             }
-            result["raw_person"] = person_only(cases, {k: {"entities": candidates["organizer/" + k]} for k in cases})
+            result["raw_person"] = person_only(cases, {k: {"entities": candidates[ORGANIZER_PREFIX + k]} for k in cases})
         else:
             service = {k: v for k, v in predictions.items() if k != "rubert_native21"}
             result["service_typed_all_types_unfiltered"] = reference.score_public(part, service, caches)[
@@ -324,7 +328,7 @@ def evaluate(args, rows, protocol):
             result["native_original21_exact_boundaries"] = native_exact_redmad(part, native)
         corpora[dataset] = result
     report = {
-        "protocol_sha256": golden.sha256(args.run_dir / "protocol.json"),
+        "protocol_sha256": golden.sha256(args.run_dir / PROTOCOL_FILE),
         "protocol": protocol,
         "candidate_metadata": metadata,
         "corpora": corpora,
@@ -339,7 +343,7 @@ def evaluate(args, rows, protocol):
     }
     verify(args, protocol)
     reference.save(args.output, report)
-    if not any(key.startswith("organizer/") for key in failures):
+    if not any(key.startswith(ORGANIZER_PREFIX) for key in failures):
         export_organizer(args, rows, candidates)
     return {"output": str(args.output), "cases": len(rows), "failed": len(failures)}
 
@@ -361,7 +365,7 @@ def main():
     if args.mode == "prepare":
         result = prepare(args)
     else:
-        protocol = json.loads((args.run_dir / "protocol.json").read_text())
+        protocol = json.loads((args.run_dir / PROTOCOL_FILE).read_text())
         rows = verify(args, protocol)
         result = cache(args, rows, protocol) if args.mode == "cache" else evaluate(args, rows, protocol)
     print(json.dumps(result, indent=2))

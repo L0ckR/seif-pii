@@ -34,7 +34,7 @@ class _Response:
             # bounds these decoded bytes before parsing JSON.
             async for part in self.response.content.iter_chunked(16384):
                 yield part
-        except (self.client_error, TimeoutError, OSError):
+        except (self.client_error, OSError):
             raise NerHttpError("NER HTTP response failed.") from None
 
 
@@ -78,18 +78,19 @@ class AiohttpNerSession:
         return self._session
 
     @asynccontextmanager
-    async def stream(self, method, path, *, json=None, timeout=None):
-        limit = self._timeout if timeout is None else timeout
+    async def stream(self, method, path, *, json=None):
+        limit = self._timeout
         if type(limit) not in (int, float) or not math.isfinite(limit) or limit <= 0:
             raise ValueError("NER HTTP timeout must be positive and finite.")
         deadline = self._aiohttp.ClientTimeout(total=None, connect=min(limit, 2.0),
                                                 sock_connect=min(limit, 2.0), sock_read=limit,
                                                 ceil_threshold=math.inf)
         try:
-            async with self._get_session().request(method, path, json=json, timeout=deadline,
-                                                    allow_redirects=False) as response:
-                yield _Response(response, self._aiohttp.ClientError)
-        except (self._aiohttp.ClientError, TimeoutError, OSError):
+            async with asyncio.timeout(limit):
+                async with self._get_session().request(method, path, json=json, timeout=deadline,
+                                                        allow_redirects=False) as response:
+                    yield _Response(response, self._aiohttp.ClientError)
+        except (self._aiohttp.ClientError, OSError):
             raise NerHttpError("NER HTTP request failed.") from None
 
     async def aclose(self):

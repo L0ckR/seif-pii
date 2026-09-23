@@ -73,8 +73,10 @@ def test_runtime_unchanged_except_optional_static_ui(project):
         original.body = [node for node in original.body if not (
             isinstance(node, ast.ImportFrom) and node.module in {"pathlib", "fastapi.staticfiles"})]
         factory = next(node for node in original.body if isinstance(node, ast.FunctionDef) and node.name == "create_app")
-        assert isinstance(factory.body[-3], ast.Assign) and factory.body[-3].targets[0].id == "web"
-        assert isinstance(factory.body[-2], ast.Expr) and factory.body[-2].value.func.attr == "mount"
+        assert isinstance(factory.body[-3], ast.Assign)
+        assert factory.body[-3].targets[0].id == "web"
+        assert isinstance(factory.body[-2], ast.Expr)
+        assert factory.body[-2].value.func.attr == "mount"
         del factory.body[-3:-1]
         assert ast.dump(original) == ast.dump(ast.parse(packaged.read("seif/app.py")))
 
@@ -90,7 +92,8 @@ def test_packaged_compose_mounts_and_build_inputs_are_valid(project):
                     build = service["build"]
                     context = build["context"] if isinstance(build, dict) else build
                     dockerfile = build.get("dockerfile", "Dockerfile") if isinstance(build, dict) else "Dockerfile"
-                    assert context == "." and dockerfile in packaged.namelist()
+                    assert context == "."
+                    assert dockerfile in packaged.namelist()
         ner = yaml.safe_load(packaged.read("compose.ner.yaml"))["services"]["ner"]
         assert len(ner["tmpfs"]) == 1
         assert set(ner["tmpfs"][0].split(":", 1)[1].split(",")) == {"size=64m", "mode=1777"}

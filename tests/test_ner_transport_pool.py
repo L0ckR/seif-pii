@@ -67,7 +67,8 @@ def test_capacity_is_bounded_and_all_pools_share_one_default_verified_context(po
     assert contexts == [{"trust_env": False}]
     for pool in instances:
         assert pool.options["verify"] is context
-        assert pool.options["trust_env"] is False and pool.options["retries"] == 0
+        assert pool.options["trust_env"] is False
+        assert pool.options["retries"] == 0
         limits = pool.options["limits"]
         assert limits.max_connections == limits.max_keepalive_connections == connections
     asyncio.run(transport.aclose())
@@ -161,13 +162,15 @@ def test_close_attempts_every_pool_once_and_preserves_failure_for_later_callers(
         with pytest.raises(httpx.CloseError) as caught:
             await transport.aclose()
         assert caught.value is failure
-        assert len(instances) == 8 and all(pool.closes == 1 for pool in instances)
+        assert len(instances) == 8
+        assert all(pool.closes == 1 for pool in instances)
         with pytest.raises(httpx.CloseError) as repeated:
             await transport.aclose()
         assert repeated.value is failure
         assert all(pool.closes == 1 for pool in instances)
+        request = httpx.Request("GET", "http://ner/health")
         with pytest.raises(RuntimeError, match="closed"):
-            await transport.handle_async_request(httpx.Request("GET", "http://ner/health"))
+            await transport.handle_async_request(request)
 
     asyncio.run(scenario())
 

@@ -26,7 +26,8 @@ def test_unknown_native_label_counted_and_email_gate_called():
 
     rows = [{"start": 0, "end": 1, "label": label} for label in ("EMAIL", "UNSUPPORTED")]
     results, counts = bench.converted_ner("я", rows, {"EMAIL": "EMAIL_ADDRESS"}, .7, SimpleNamespace, gate)
-    assert not results and seen[0][1] == "я"
+    assert not results
+    assert seen[0][1] == "я"
     assert counts["email_shape_discarded"] == counts["unmapped_native:UNSUPPORTED"] == 1
 
 
@@ -45,7 +46,8 @@ def test_missing_gold_type_not_dropped_from_fullmask_or_typed_scoring():
     predictions = {"empty": {"x": []}, "literal": {"x": [bench.Span(4, 7, "SNILS", .7, "test")]}}
     score = bench.evaluate_corpus(rows, predictions)
     systems = score["full_masking_all_gold_types"]["systems"]
-    assert systems["empty"]["false_negative"] == 3 and systems["literal"]["false_negative"] == 0
+    assert systems["empty"]["false_negative"] == 3
+    assert systems["literal"]["false_negative"] == 0
     typed = score["typed_all_types_unfiltered"]["systems"]
     assert typed["empty"]["exact_span"]["false_negative"] == 1
     assert typed["literal"]["exact_span"]["true_positive"] == 1

@@ -36,7 +36,9 @@ def test_unmasked_success_is_reported_as_disagreement_and_possible_fail_open():
     body = example_body()
     body.update(result="Иван", entities=[], types=[])
     result = bench.compare_response(example_case(), "synthetic-id", body)
-    assert not result["mask_match"] and not result["entities_match"] and not result["types_match"]
+    assert not result["mask_match"]
+    assert not result["entities_match"]
+    assert not result["types_match"]
     assert result["unexpected_unmasked"]
 
 
@@ -64,15 +66,18 @@ def test_comparison_accepts_actual_public_mask_contract(monkeypatch):
         response = client.post("/v1/mask", json={"payload": "Иван", "payload_id": "synthetic-id"})
     assert response.status_code == 200
     result = bench.compare_response(example_case(), "synthetic-id", response.json())
-    assert result["mask_match"] and result["entities_match"] and result["types_match"]
+    assert result["mask_match"]
+    assert result["entities_match"]
+    assert result["types_match"]
 
 
 @pytest.mark.parametrize("replacement", [float("nan"), True, -1, 1.1])
 def test_response_rejects_invalid_scores(replacement):
     body = example_body()
     body["entities"][0]["confidence"] = replacement
+    case = example_case()
     with pytest.raises(bench.smoke.SmokeFailure):
-        bench.compare_response(example_case(), "synthetic-id", body)
+        bench.compare_response(case, "synthetic-id", body)
 
 
 def test_summary_keeps_http_errors_and_does_not_credit_skipped_ner():
@@ -87,7 +92,8 @@ def test_summary_keeps_http_errors_and_does_not_credit_skipped_ner():
     assert report["requests_without_ner_stage"] == 1
     assert not report["valid_successful_measurement"]
     encoded = json.dumps(report)
-    assert "private-id" not in encoded and "private-value" not in encoded
+    assert "private-id" not in encoded
+    assert "private-value" not in encoded
     report = bench.phase_summary([good], 1, 1, {"model_started": 0, "model_completed": 0, "http_200": 0}, 0)
     assert report["reference_match_ratio"] == 1
     assert not report["every_mask_completed_real_ner"]
@@ -123,7 +129,8 @@ def test_counted_real_service_factory_distinguishes_calls_errors_and_http_reject
         assert client.post("/analyze", json={"text": 42}, headers=headers).status_code == 422
         analyzer.fail = True
         response = client.post("/analyze", json={"text": "пример"}, headers=headers)
-        assert response.status_code == 503 and "Sensitive" not in response.text
+        assert response.status_code == 503
+        assert "Sensitive" not in response.text
         counts = client.get("/benchmark-stats", headers=headers).json()["counts"]
     assert counts["model_started"] == 2
     assert counts["model_completed"] == counts["model_failed"] == 1
@@ -165,7 +172,8 @@ def test_closed_loop_phases_use_fresh_ids_and_restore_outside_timed_counters():
     second = bench.run_phase(api, ner, [example_case()], 4)
     assert len(api.ids) == len(set(api.ids)) == 2
     assert api.restores == 2
-    assert first["valid_successful_measurement"] and second["valid_successful_measurement"]
+    assert first["valid_successful_measurement"]
+    assert second["valid_successful_measurement"]
     assert first["ner_stage_attempts"] == second["ner_stage_attempts"] == 1
     assert first["restore"] == {"checked": 1, "exact": 1, "excluded_from_mask_timing": True}
 
@@ -179,7 +187,8 @@ def test_cli_preserves_virtualenv_interpreter_symlinks(monkeypatch, tmp_path):
                                     "--ner-python", str(interpreter), "--api-python", str(interpreter),
                                     "--output", str(tmp_path / "report.json")])
     args = bench.parse_args()
-    assert args.ner_python == interpreter and args.api_python == interpreter
+    assert args.ner_python == interpreter
+    assert args.api_python == interpreter
     assert args.ner_python != binary
 
 
@@ -207,13 +216,16 @@ def test_http_client_renews_idle_connections_before_send_without_retry(monkeypat
     client.call("/v1/mask", {"payload": "synthetic"})
     clock[0] = .5
     client.call("/v1/mask", {"payload": "synthetic"})
-    assert len(connections) == 1 and len(connections[0].requests) == 2
+    assert len(connections) == 1
+    assert len(connections[0].requests) == 2
     clock[0] = 10
     client.call("/v1/unmask", {"payload": "synthetic"})
-    assert len(connections) == 2 and connections[0].closed
+    assert len(connections) == 2
+    assert connections[0].closed
     # Administrative reads also refresh recently used sockets, outside timing.
     client.call("/metrics", raw=True)
-    assert len(connections) == 3 and connections[1].closed
+    assert len(connections) == 3
+    assert connections[1].closed
     assert sum(len(item.requests) for item in connections) == 4
     client.close()
 
@@ -266,13 +278,19 @@ def test_admin_failure_preserves_timed_summary_with_unknown_ner_counts(monkeypat
 
     monkeypatch.setattr(bench, "mask_request", result)
     reports = []
+    case = example_case()
+    api = FakeApi()
+    ner = FakeNer()
     with pytest.raises(RemoteDisconnected):
-        bench.run_phase(FakeApi(), FakeNer(), [example_case()], 1, phase_reports=reports)
+        bench.run_phase(api, ner, [case], 1, phase_reports=reports)
     assert len(reports) == 1
     report = reports[0]
-    assert report["mask_requests"] == 1 and report["success_ratio"] == 1
+    assert report["mask_requests"] == 1
+    assert report["success_ratio"] == 1
     assert report["per_case"][0]["latency_ms"] == 1
-    assert report["ner_counts"] is None and report["ner_stage_attempts"] is None
+    assert report["ner_counts"] is None
+    assert report["ner_stage_attempts"] is None
     assert report["requests_without_ner_stage"] is None
-    assert report["postflight_status"] == "failed" and report["postflight_error_type"] == "RemoteDisconnected"
+    assert report["postflight_status"] == "failed"
+    assert report["postflight_error_type"] == "RemoteDisconnected"
     assert not report["valid_successful_measurement"]

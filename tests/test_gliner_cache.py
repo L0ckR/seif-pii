@@ -38,8 +38,9 @@ def test_cache_preserves_original_unicode_offsets_combining_marks_and_confidence
     {"text": "ива\u0301н", "start": 2, "end": 7, "confidence": .9},  # Case-normalized text.
 ])
 def test_cache_rejects_normalized_or_non_codepoint_coordinates(wrong_span):
+    output = result(person=[wrong_span])
     with pytest.raises(ValueError):
-        cache_entities("😀 Ива\u0301н, Москва\n", result(person=[wrong_span]))
+        cache_entities("😀 Ива\u0301н, Москва\n", output)
 
 
 @pytest.mark.parametrize("output", [
@@ -60,8 +61,9 @@ def test_cache_rejects_incomplete_unknown_or_malformed_label_groups(output):
                                      {"text": "Иван", "start": 0, "end": 4},
                                      {"start": 0, "end": 4, "confidence": .9}])
 def test_cache_rejects_entire_prediction_when_any_span_is_malformed(broken):
+    output = result(person=[entity(), broken])
     with pytest.raises(ValueError):
-        cache_entities("Иван", result(person=[entity(), broken]))
+        cache_entities("Иван", output)
 
 
 @pytest.mark.parametrize(("field", "value"), [
@@ -73,8 +75,9 @@ def test_cache_rejects_entire_prediction_when_any_span_is_malformed(broken):
     ("text", None), ("text", "ИВАН"),
 ])
 def test_cache_rejects_bad_offsets_nonfinite_confidence_and_non_numeric_values(field, value):
+    output = result(person=[{**entity(), field: value}])
     with pytest.raises(ValueError):
-        cache_entities("Иван", result(person=[{**entity(), field: value}]))
+        cache_entities("Иван", output)
 
 
 @pytest.mark.parametrize("confidence", [0, 1, 0.5])
@@ -99,8 +102,9 @@ def test_auxiliary_organizations_are_validated_but_do_not_mask_or_veto_people(sc
 @pytest.mark.parametrize("schema", ["presidio-labels", "described-names"])
 def test_declared_auxiliary_label_cannot_be_silently_missing(schema):
     options = {"name": []} if schema == "presidio-labels" else {}
+    output = result(person=[entity()], **options)
     with pytest.raises(ValueError):
-        cache_entities("Иван", result(person=[entity()], **options), schema)
+        cache_entities("Иван", output, schema)
 
 
 def test_person_name_aliases_deduplicate_by_maximum_confidence_without_merging_other_types():

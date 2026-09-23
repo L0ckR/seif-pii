@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import ast
 import hashlib
 import os
@@ -12,9 +13,12 @@ from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 ROOT = Path(__file__).resolve().parents[1]
+APP_FILE = "seif/app.py"
+PYPROJECT_FILE = "pyproject.toml"
+README_FILE = "README.md"
 REQUIRED_FILES = (
     "seif/__init__.py",
-    "seif/app.py",
+    APP_FILE,
     "scripts/serve.py",
     "scripts/ner_service.py",
     "config/policies.yaml",
@@ -24,7 +28,7 @@ REQUIRED_FILES = (
     "Dockerfile.ner",
     "compose.yaml",
     "compose.ner.yaml",
-    "pyproject.toml",
+    PYPROJECT_FILE,
     ".python-version",
     "process_api.yaml",
     "third_party/pii-guard/LICENSE",
@@ -32,7 +36,41 @@ REQUIRED_FILES = (
     "third_party/pii-guard/ADAPTATION.md",
     "deploy/ner/requirements-rubert-tensorrt.txt",
 )
-TEMPLATES = {name: f"deploy/service/{name}" for name in ("README.md", ".env.example", ".dockerignore")}
+TEMPLATES = {name: f"deploy/service/{name}" for name in (README_FILE, ".env.example", ".dockerignore")}
+KUBERNETES_FILES = (
+    "deploy/k8s/base/app.yaml",
+    "deploy/k8s/base/kustomization.yaml",
+    "deploy/k8s/base/namespace.yaml",
+    "deploy/k8s/base/network-policies.yaml",
+    "deploy/k8s/base/policies.yaml",
+    "deploy/k8s/base/redis.yaml",
+    "deploy/k8s/base/scripts/common.sh",
+    "deploy/k8s/base/scripts/health.sh",
+    "deploy/k8s/base/scripts/start-redis.sh",
+    "deploy/k8s/base/scripts/start-sentinel.sh",
+    "deploy/k8s/create-secrets.py",
+    "deploy/k8s/kustomization.yaml",
+    "deploy/k8s/optional/ingress.example.yaml",
+    "deploy/k8s/overlays/hybrid/kustomization.yaml",
+    "deploy/k8s/overlays/hybrid/ner.yaml",
+    "deploy/k8s/overlays/hybrid/network-policies.yaml",
+    "deploy/k8s/overlays/local/README.md",
+    "deploy/k8s/overlays/local/kustomization.yaml",
+    "deploy/k8s/overlays/local/redis-pvs.yaml",
+    "deploy/k8s/overlays/production/kustomization.yaml",
+    "deploy/k8s/secret.template.yaml",
+    "deploy/rubert/Dockerfile",
+    "deploy/rubert/README.md",
+    "deploy/rubert/compose.yaml",
+    "deploy/rubert/env.template",
+    "deploy/rubert/env.tuned-4api.template",
+    "deploy/rubert/env.tuned-8api.template",
+    "deploy/rubert/haproxy-api.cfg",
+    "deploy/rubert/haproxy-ner.cfg",
+    "deploy/rubert/requirements-runtime.txt",
+    "deploy/rubert/validation.json",
+    "docs/kubernetes.md",
+)
 UI_LINES = (
     "from pathlib import Path\n",
     "from fastapi.staticfiles import StaticFiles\n",
@@ -151,18 +189,21 @@ def _validate_imports(members: dict[str, bytes]) -> None:
                 raise ValueError(f"Missing local import in service ZIP: {name} -> {module}")
 
 
+def _validate_copy_line(name: str, line: str, members: dict[str, bytes]) -> None:
+    parts = shlex.split(line, comments=True)
+    if len(parts) < 3 or any(part.startswith(("--", "[")) or "\\" in part for part in parts[1:]):
+        raise ValueError(f"Service packaging recipe needs review: {name} COPY syntax")
+    for source in parts[1:-1]:
+        if source not in members and not any(path.startswith(source.rstrip("/") + "/") for path in members):
+            raise ValueError(f"Missing Docker COPY source in service ZIP: {name} -> {source}")
+
+
 def _validate_docker_files(members: dict[str, bytes]) -> None:
     for name in ("Dockerfile", "Dockerfile.ner"):
         for line in members[name].decode("utf-8").splitlines():
             instruction = line.split(maxsplit=1)
-            if not instruction or instruction[0].upper() != "COPY":
-                continue
-            parts = shlex.split(line, comments=True)
-            if len(parts) < 3 or any(part.startswith(("--", "[")) or "\\" in part for part in parts[1:]):
-                raise ValueError(f"Service packaging recipe needs review: {name} COPY syntax")
-            for source in parts[1:-1]:
-                if source not in members and not any(path.startswith(source.rstrip("/") + "/") for path in members):
-                    raise ValueError(f"Missing Docker COPY source in service ZIP: {name} -> {source}")
+            if instruction and instruction[0].upper() == "COPY":
+                _validate_copy_line(name, line, members)
 
 
 def service_members(root: Path) -> dict[str, bytes]:
@@ -172,26 +213,51 @@ def service_members(root: Path) -> dict[str, bytes]:
     }
     for target, source in TEMPLATES.items():
         members[target] = members.pop(source)
-    members["seif/app.py"] = _service_app(members["seif/app.py"])
+    members[APP_FILE] = _service_app(members[APP_FILE])
     members["Dockerfile"] = _remove_exact(
         members["Dockerfile"].decode("utf-8"), "COPY web ./web\n", "Dockerfile static UI"
     ).encode("utf-8")
-    members["pyproject.toml"] = _runtime_metadata(members["pyproject.toml"])
+    members[PYPROJECT_FILE] = _runtime_metadata(members[PYPROJECT_FILE])
     _validate_imports(members)
     _validate_docker_files(members)
+    return _with_checksums(members)
+
+
+def _with_checksums(members: dict[str, bytes]) -> dict[str, bytes]:
     members["SHA256SUMS"] = "".join(
         f"{hashlib.sha256(data).hexdigest()}  {name}\n" for name, data in sorted(members.items())
     ).encode("utf-8")
     return members
 
 
-def build_archive(root: Path, target: Path) -> Path:
+def kubernetes_members(root: Path) -> dict[str, bytes]:
+    """Extend the runnable service archive with local and production manifests."""
+    members = service_members(root)
+    members.pop("SHA256SUMS")
+    for name in KUBERNETES_FILES:
+        members[name] = _read_source(root, name)
+    readme = members[README_FILE].decode("utf-8")
+    readme = _remove_exact(readme, "# СЕЙФ — только сервис", "Kubernetes README title")
+    exclusion = "CI, Kubernetes-обвязки, Git, локальных окружений и действующих секретов."
+    if readme.count(exclusion) != 1:
+        raise ValueError("Service packaging recipe needs review: Kubernetes README exclusions")
+    readme = readme.replace(exclusion, "CI, Git, локальных окружений и действующих секретов.")
+    members[README_FILE] = ("# СЕЙФ — сервис + Kubernetes" + readme +
+        "\n## Kubernetes\n\n"
+        "Локальный профиль: `kubectl kustomize deploy/k8s/overlays/local`. "
+        "Для production и гибридного профиля см. `docs/kubernetes.md`. "
+        "Шаблоны секретов есть в архиве, действующих ключей нет.\n"
+    ).encode("utf-8")
+    return _with_checksums(members)
+
+
+def build_archive(root: Path, target: Path, *, include_kubernetes: bool = False) -> Path:
     """Validate all inputs before atomically replacing the previous archive."""
     root = root.resolve()
     target = target.parent.resolve() / target.name
     if target.suffix != ".zip" or target.is_symlink() or target in source_files(root):
         raise ValueError("Archive output must not overwrite a source file or symbolic link")
-    members = service_members(root)
+    members = kubernetes_members(root) if include_kubernetes else service_members(root)
     target.parent.mkdir(parents=True, exist_ok=True)
     descriptor, temporary = tempfile.mkstemp(prefix=".seif-service-", suffix=".zip", dir=target.parent)
     try:
@@ -208,9 +274,13 @@ def build_archive(root: Path, target: Path) -> Path:
 
 
 def main() -> None:
-    target = build_archive(ROOT, ROOT / "output" / "seif-pii-source.zip")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--k8s", action="store_true", help="Include Kubernetes manifests and deployment notes")
+    args = parser.parse_args()
+    filename = "seif-pii-service-k8s.zip" if args.k8s else "seif-pii-source.zip"
+    target = build_archive(ROOT, ROOT / "output" / filename, include_kubernetes=args.k8s)
     print(target)
-    print(f"{target.stat().st_size:,} bytes; API, NER and deployment files only; includes SHA256SUMS")
+    print(f"{target.stat().st_size:,} bytes; API, NER and deployment files; includes SHA256SUMS")
 
 
 if __name__ == "__main__":

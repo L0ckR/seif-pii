@@ -95,8 +95,9 @@ def test_decoded_response_size_limit_is_preserved_for_gzip(health):
         async with server(handler) as url:
             client = NerClient(url, "fixture", backend="aiohttp")
             try:
+                operation = client.health() if health else client.detect("Иван")
                 with pytest.raises(NerUnavailable):
-                    await (client.health() if health else client.detect("Иван"))
+                    await operation
                 await client.health()
             finally:
                 await client.close()
@@ -207,7 +208,8 @@ def test_tls_context_keeps_certificate_and_hostname_verification(monkeypatch):
             assert len(contexts) == 1
             options, value = contexts[0]
             assert options["cafile"]
-            assert value.check_hostname is True and value.verify_mode == ssl.CERT_REQUIRED
+            assert value.check_hostname is True
+            assert value.verify_mode == ssl.CERT_REQUIRED
         finally:
             await client.aclose()
 

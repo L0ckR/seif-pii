@@ -23,6 +23,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+PREPARED_INPUTS_FILE = "prepared-inputs.jsonl"
+PROTOCOL_FILE = "protocol.json"
 sys.path.insert(0, str(ROOT))
 
 from scripts import evaluate_external as pii  # noqa: E402
@@ -181,7 +183,7 @@ def make_protocol(args, rows, excluded):
         "purpose": "External transfer check after organizer-only model selection; no external-result tuning.",
         "source_sha256": freeze_source(),
         "input_sha256": input_hashes(args),
-        "prepared_inputs_sha256": sha256(args.run_dir / "prepared-inputs.jsonl"),
+        "prepared_inputs_sha256": sha256(args.run_dir / PREPARED_INPUTS_FILE),
         "datasets": {
             "pii": {"repository": pii.DATASET, "revision": pii.REVISION},
             "redmadrobot": {
@@ -328,7 +330,7 @@ def cache_backend(args, rows, protocol):
         "backend": args.backend,
         "cases": len(rows),
         "versions": versions,
-        "protocol_sha256": sha256(args.run_dir / "protocol.json"),
+        "protocol_sha256": sha256(args.run_dir / PROTOCOL_FILE),
         "cache_sha256": sha256(target),
         "candidate_counts": dict(counts),
         "source_sha256": protocol["source_sha256"],
@@ -484,7 +486,7 @@ def score_split(rows, predictions, caches):
 
 
 def evaluate_caches(args, rows, protocol):
-    protocol_hash = sha256(args.run_dir / "protocol.json")
+    protocol_hash = sha256(args.run_dir / PROTOCOL_FILE)
     caches, metadata = {}, {}
     for name in ("spacy", "gliner"):
         caches[name], metadata[name] = load_cache(args.run_dir / f"{name}.jsonl", rows, protocol_hash)
@@ -545,10 +547,10 @@ def main():
         raise ValueError("Prepared texts and caches must remain under the ignored local-data directory")
     disable_network()
     args.run_dir.mkdir(parents=True, exist_ok=True)
-    path = args.run_dir / "protocol.json"
+    path = args.run_dir / PROTOCOL_FILE
     if args.mode == "prepare":
         rows, excluded = load_corpora(args)
-        save_prepared_inputs(args.run_dir / "prepared-inputs.jsonl", rows)
+        save_prepared_inputs(args.run_dir / PREPARED_INPUTS_FILE, rows)
         protocol = make_protocol(args, rows, excluded)
         save_json(path, protocol)
         print(
@@ -564,7 +566,7 @@ def main():
         )
         return
     protocol = json.loads(path.read_text())
-    rows = load_prepared_inputs(args.run_dir / "prepared-inputs.jsonl", protocol)
+    rows = load_prepared_inputs(args.run_dir / PREPARED_INPUTS_FILE, protocol)
     verify_frozen(args, rows, protocol)
     if args.mode == "cache":
         print(json.dumps(cache_backend(args, rows, protocol), ensure_ascii=False))

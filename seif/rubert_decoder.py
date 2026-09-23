@@ -96,10 +96,11 @@ def _window_end(counts, start):
 def _margin_words(counts, threshold):
     total = 0
     consumed = 0
-    for consumed, count in enumerate(counts, 1):
+    for count in counts:
+        consumed += 1
         total += count
         if total >= threshold:
-            return consumed
+            break
     return consumed
 
 

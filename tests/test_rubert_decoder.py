@@ -60,7 +60,8 @@ class Backend:
     def run(self, inputs):
         assert set(inputs) == {"input_ids", "attention_mask", "token_type_ids"}
         assert all(value.dtype == np.int64 and value.shape == inputs["input_ids"].shape for value in inputs.values())
-        assert np.all(inputs["attention_mask"] == 1) and np.all(inputs["token_type_ids"] == 0)
+        assert np.all(inputs["attention_mask"] == 1)
+        assert np.all(inputs["token_type_ids"] == 0)
         self.calls.append(inputs["input_ids"].copy())
         logits = np.zeros((*inputs["input_ids"].shape, len(LABELS)), dtype=np.float32)
         for position, token in enumerate(inputs["input_ids"][0]):
@@ -213,13 +214,15 @@ def test_missing_word_with_visible_character_and_control_still_fails():
 def test_empty_input_has_no_tokenizer_or_backend_side_effects(text):
     model = runtime()
     assert decoder.word_predict(model, text) == []
-    assert model.tokenizer.calls == 0 and model.backend.calls == []
+    assert model.tokenizer.calls == 0
+    assert model.backend.calls == []
 
 
 @pytest.mark.parametrize("text", [None, 42, [], b"text"])
 def test_non_string_input_rejected(text):
+    model = runtime()
     with pytest.raises(ValueError, match="must be a string"):
-        decoder.word_predict(runtime(), text)
+        decoder.word_predict(model, text)
 
 
 @pytest.mark.parametrize("change", [
