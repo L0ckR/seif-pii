@@ -6,7 +6,7 @@ from fastapi.testclient import TestClient
 
 from seif.app import create_app
 from seif.config import Policy, Settings
-from seif.detector import Span
+from seif.detector import Span, detect, merge_ner_candidates
 from seif.ner_boundaries import preserve_model_boundaries
 from seif.transform import mask, restore_exact, restore_tokens
 
@@ -16,12 +16,12 @@ def span(text, value, kind="PERSON", reason="rule", confidence=.97):
     return Span(start, start + len(value), kind, confidence, reason)
 
 
-def test_full_name_components_preserve_unicode_mask_and_rule_semantics():
+def test_full_name_stays_one_entity_despite_model_components():
     text = "🔒 Дина\tМарковна\nШтольц; конец."
     original = span(text, "Дина\tМарковна\nШтольц")
     parts = [span(text, word, confidence=.8, reason="ner-person") for word in ("Дина", "Марковна", "Штольц")]
     result = preserve_model_boundaries(text, [original], list(reversed(parts)))
-    assert [text[s.start:s.end] for s in result] == ["Дина", "Марковна", "Штольц"]
+    assert result == [original]
     assert all((s.type, s.confidence, s.reason) == (original.type, original.confidence, original.reason) for s in result)
     assert mask(text, result, "mask")[0] == mask(text, [original], "mask")[0]
     assert preserve_model_boundaries(text, result, parts) == result
@@ -30,9 +30,10 @@ def test_full_name_components_preserve_unicode_mask_and_rule_semantics():
 @pytest.mark.parametrize("mode", ["mask", "token", "synthetic"])
 def test_refined_spans_restore_exact_text_and_token_reply(mode):
     text = "🔒 José, е\u0301; конец"
-    original = span(text, "José, е\u0301")
-    parts = [span(text, "José"), span(text, "е\u0301")]
+    original = span(text, "José, е\u0301", "LOCATION")
+    parts = [span(text, "José", "LOCATION"), span(text, "е\u0301", "LOCATION")]
     result = preserve_model_boundaries(text, [original], parts)
+    assert result == parts
     masked, replacements = mask(text, result, mode)
     record = {"masked": masked, "replacements": replacements}
     assert restore_exact(record) == text
@@ -47,7 +48,7 @@ def test_incomplete_model_name_cannot_drop_rule_protected_letters(protected):
     parts = [span(text, word) for word in protected.split()]
     result = preserve_model_boundaries(text, [original], parts)
     assert mask(text, result, "mask")[0] == mask(text, [original], "mask")[0]
-    assert [text[s.start:s.end] for s in result] == text.split()
+    assert result == [original]
 
 
 def test_address_markers_and_numeric_suffixes_cannot_disappear():
@@ -57,7 +58,7 @@ def test_address_markers_and_numeric_suffixes_cannot_disappear():
     assert preserve_model_boundaries(text, [original], incomplete) == [original]
     complete = [span(text, value, "LOCATION") for value in ("г. Макетный", "ул. Полевая", "д. 17Б")]
     result = preserve_model_boundaries(text, [original], complete)
-    assert len(result) == 3
+    assert result == [original]
     assert {s.type for s in result} == {"ADDRESS"}
     assert mask(text, result, "mask")[0] == mask(text, [original], "mask")[0]
 
@@ -68,39 +69,53 @@ def test_unmodeled_address_designators_and_house_suffix_remain_protected():
     parts = [span(text, value, "LOCATION") for value in ("Макетный", "Полевая", "17Б")]
     result = preserve_model_boundaries(text, [original], parts)
     assert mask(text, result, "mask")[0] == mask(text, [original], "mask")[0]
-    assert [text[s.start:s.end] for s in result] == ["г.", "Макетный", ", ул.", "Полевая", ", д.", "17Б"]
+    assert result == [original]
     assert {s.type for s in result} == {"ADDRESS"}
+
+
+@pytest.mark.parametrize("mode", ["token", "synthetic"])
+def test_complete_personal_address_is_replaced_once(mode):
+    value = "г. Москва, ул. Лесная, д. 12, кв. 34"
+    text = "Адрес проживания: " + value
+    parts = [span(text, word, "LOCATION", "model") for word in ("Москва", "ул. Лесная", "д. 12, кв. 34")]
+    result = merge_ner_candidates(text, detect(text), parts)
+    assert [(s.type, text[s.start:s.end]) for s in result] == [("ADDRESS", value)]
+    masked, replacements = mask(text, result, mode)
+    assert len(replacements) == 1
+    assert restore_exact({"masked": masked, "replacements": replacements}) == text
+    if mode == "synthetic":
+        assert masked == "Адрес проживания: г. Макетный, ул. Тестовая, д. 1"
 
 
 @pytest.mark.parametrize("text,part", [("Марковна", "Мар"), ("Штольц", "тольц"), ("е\u0301", "е")])
 def test_model_cannot_partition_inside_letters_or_unicode_combining_marks(text, part):
-    original = span(text, text)
-    assert preserve_model_boundaries(text, [original], [span(text, part)]) == [original]
+    original = span(text, text, "LOCATION")
+    assert preserve_model_boundaries(text, [original], [span(text, part, "LOCATION")]) == [original]
 
 
 @pytest.mark.parametrize("parts", [
-    [Span(0, 4, "PERSON"), Span(3, 11, "PERSON")],
-    [Span(0, 11, "PERSON"), Span(0, 4, "PERSON")],
-    [Span(0, 4, "PERSON"), Span(5, 11, "LOCATION")],
-    [Span(0, 4, "PERSON"), Span(5, 12, "PERSON")],
+    [Span(0, 4, "LOCATION"), Span(3, 11, "LOCATION")],
+    [Span(0, 11, "LOCATION"), Span(0, 4, "LOCATION")],
+    [Span(0, 4, "LOCATION"), Span(5, 11, "PERSON")],
+    [Span(0, 4, "LOCATION"), Span(5, 12, "LOCATION")],
 ])
 def test_overlapping_crossing_or_wrong_family_candidates_keep_original(parts):
     text = "Дина Штольц!"
-    original = Span(0, 11, "PERSON")
+    original = Span(0, 11, "LOCATION")
     assert preserve_model_boundaries(text, [original], parts) == [original]
 
 
 def test_custom_rule_boundaries_are_authoritative():
     text = "Дина Штольц"
-    original = span(text, text, reason="custom-rule")
-    parts = [span(text, value) for value in text.split()]
+    original = span(text, text, "LOCATION", reason="custom-rule")
+    parts = [span(text, value, "LOCATION") for value in text.split()]
     assert preserve_model_boundaries(text, [original], parts) == [original]
 
 
 def test_model_cannot_extend_into_neighboring_protected_span():
     text = "Дина 1234"
-    originals = [span(text, "Дина"), span(text, "1234", "PIN")]
-    assert preserve_model_boundaries(text, originals, [span(text, text)]) == originals
+    originals = [span(text, "Дина", "LOCATION"), span(text, "1234", "PIN")]
+    assert preserve_model_boundaries(text, originals, [span(text, text, "LOCATION")]) == originals
 
 
 @pytest.mark.parametrize("value,pieces", [
@@ -146,7 +161,7 @@ def test_empty_models_and_matching_boundaries_keep_original_values():
     assert preserve_model_boundaries(text, [original], [original]) == [original]
 
 
-@pytest.mark.parametrize("mode", ["mask", "token"])
+@pytest.mark.parametrize("mode", ["mask", "token", "synthetic"])
 def test_api_name_components_mask_and_restore_full_payload(monkeypatch, mode):
     text = "🔒 ФИО: Дина Марковна Штольц."
     parts = [span(text, word, reason="model") for word in ("Дина", "Марковна", "Штольц")]
@@ -171,12 +186,39 @@ def test_api_name_components_mask_and_restore_full_payload(monkeypatch, mode):
     with TestClient(create_app(settings)) as client:
         response = client.post("/v1/mask", json={"payload": text, "payload_id": "name-components"})
         assert response.status_code == 200
-        masked = response.json()["result"]
+        body = response.json()
+        masked = body["result"]
+        assert [(entity["type"], text[entity["start"]:entity["end"]]) for entity in body["entities"]] == [
+            ("PERSON", "Дина Марковна Штольц"),
+        ]
         assert all(value not in masked for value in ("Дина", "Марковна", "Штольц"))
         if mode == "mask":
             assert masked == "🔒 ФИО: **** ******** ******."
+        elif mode == "token":
+            assert masked.count("⟦PD:PERSON:") == 1
         else:
-            assert masked.count("⟦PD:PERSON:") == 3
+            assert masked == "🔒 ФИО: Тестов1 Макет Макетович."
         restored = client.post("/v1/unmask", json={"payload": masked, "payload_id": "name-components"})
         assert restored.status_code == 200
         assert restored.json()["result"] == text
+
+
+@pytest.mark.parametrize("separator", ["; Клиент: ", "\nКлиент: ", ", "])
+def test_complete_names_stay_separate_and_tokens_restore_reordered_reply(separator):
+    names = ["Иванов Иван Иванович", "Петрова Анна Сергеевна"]
+    text = "Клиент: " + separator.join(names)
+    parts = []
+    cursor = 0
+    for name in names:
+        for word in name.split():
+            start = text.index(word, cursor)
+            cursor = start + len(word)
+            parts.append(Span(start, cursor, "PERSON", .9, "model"))
+    result = merge_ner_candidates(text, detect(text), parts)
+    assert [(s.type, text[s.start:s.end]) for s in result] == [("PERSON", name) for name in names]
+    masked, replacements = mask(text, result, "token")
+    record = {"masked": masked, "replacements": replacements}
+    assert len(replacements) == 2
+    assert restore_exact(record) == text
+    reply = ", ".join(replacements[index]["replacement"] for index in (1, 0, 1))
+    assert restore_tokens(reply, record) == ", ".join(names[index] for index in (1, 0, 1))

@@ -538,7 +538,7 @@ def _surname(word: str) -> bool:
     return word not in _NAME_STOP and bool(_SURNAME.search(word) or word in _RARE_SURNAMES)
 
 
-def _is_public_name(text: str, start: int, end: int) -> bool:
+def _has_public_name_context(text: str, start: int, end: int) -> bool:
     before = _local_record_prefix(text, start, limit=65)
     # Public-reference cues must attach to this name, not merely appear in an
     # earlier clause. An unrelated discussion of a poet cannot exempt a client.
@@ -563,6 +563,50 @@ def _is_public_name(text: str, start: int, end: int) -> bool:
             or (_surname(third_word) and _PUBLIC_NAME_APPOSITION.match(after[following.end() :]))
         )
     return False
+
+
+def _public_name_shape(values: list[str]) -> bool:
+    given_first = _given_name(values[0]) and _surname(values[-1])
+    surname_first = _surname(values[0]) and _given_name(values[1])
+    if len(values) == 3:
+        return bool(
+            given_first and re.fullmatch(_PATR, values[1], _FLAGS)
+            or surname_first and re.fullmatch(_PATR, values[2], _FLAGS)
+        )
+    return given_first or surname_first
+
+
+def _public_name_bounds(window: str, window_start: int, parts: list[re.Match], count: int, end: int):
+    if len(parts) != count or window_start + parts[-1].end() < end:
+        return None
+    if any(not re.fullmatch(r"[ \t]+", window[a.end():b.start()])
+           for a, b in zip(parts, parts[1:], strict=False)):
+        return None
+    if not _public_name_shape([part.group() for part in parts]):
+        return None
+    return window_start + parts[0].start(), window_start + parts[-1].end()
+
+
+def _is_public_name(text: str, start: int, end: int) -> bool:
+    # Models may return any component of a full name. Apply public context to
+    # the containing name, so a split first name cannot bypass the exemption
+    # and a split surname in a quoted work title inherits its title context.
+    # At most two adjacent name words are relevant on either side; never scan
+    # the sentence for a distant public cue or bridge punctuation/newlines.
+    window_start = max(0, start - 82)
+    window = text[window_start:min(len(text), end + 82)]
+    words = list(re.finditer(_NAMEWORD, window, _FLAGS))
+    name_start, name_end = start, end
+    for index, first in enumerate(words):
+        if window_start + first.start() > start:
+            break
+        for count in (2, 3):
+            bounds = _public_name_bounds(window, window_start, words[index:index + count], count, end)
+            if bounds and bounds[1] - bounds[0] > name_end - name_start:
+                name_start, name_end = bounds
+    # Evaluate the complete name first: a private cue such as "по имени"
+    # belongs to its first word and must also protect subsequent components.
+    return _has_public_name_context(text, name_start, name_end)
 
 
 def _is_public_record(text: str, start: int) -> bool:

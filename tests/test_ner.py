@@ -46,12 +46,7 @@ def test_short_ner_name_cannot_shrink_a_full_core_name():
     text = "Клиент: Дина Марковна Штольц."
     complete = person(text, "Дина Марковна Штольц", 0.96, "personal-record-context")
     result = merge_person_candidates(text, [complete], [person(text, "Дина Марковна")])
-    assert [(span.start, span.end) for span in result] == [(8, 21), (22, 28)]
-    assert all((span.type, span.confidence, span.reason) ==
-               (complete.type, complete.confidence, complete.reason) for span in result)
-    assert {i for span in result for i in range(span.start, span.end) if text[i].isalnum()} == {
-        i for i in range(complete.start, complete.end) if text[i].isalnum()
-    }
+    assert result == [complete]
 
 
 def test_equal_boundaries_keep_core_provenance_and_empty_candidates_are_stable():
@@ -90,6 +85,65 @@ def test_name_context_is_local_and_has_no_new_author_allowlist(text, value, publ
     assert (result == []) is public
     if not public:
         assert [(span.start, span.end) for span in result] == [(candidate.start, candidate.end)]
+
+
+@pytest.mark.parametrize(
+    "text,name",
+    [
+        ("Александр Сергеевич Пушкин — русский поэт.", "Александр Сергеевич Пушкин"),
+        ("александр сергеевич пушкин — русский поэт.", "александр сергеевич пушкин"),
+        ("Николай Васильевич Гоголь — русский писатель.", "Николай Васильевич Гоголь"),
+        ("Произведения писателя Антона Павловича Чехова.", "Антона Павловича Чехова"),
+        ("Роман «Евгений Онегин» находится в библиотеке.", "Евгений Онегин"),
+        ("Пушкин Александр Сергеевич — русский поэт.", "Пушкин Александр Сергеевич"),
+    ],
+)
+def test_public_context_applies_to_every_ner_fragment_of_a_complete_name(text, name):
+    words = name.split()
+    for first in range(len(words)):
+        for last in range(first + 1, len(words) + 1):
+            fragment = " ".join(words[first:last])
+            assert merge_person_candidates(text, [], [person(text, fragment)]) == [], fragment
+
+
+@pytest.mark.parametrize(
+    "text,name",
+    [
+        ("Клиент Александр Сергеевич Пушкин — русский поэт.", "Александр Сергеевич Пушкин"),
+        ("Человек по имени Александр Сергеевич Пушкин — русский поэт.", "Александр Сергеевич Пушкин"),
+        ("Клиент Евгений Онегин подписал документ.", "Евгений Онегин"),
+        ("Поэт выступил. Николай Васильевич Гоголь подписал документ.", "Николай Васильевич Гоголь"),
+        ("Николай Васильевич Гоголь спросил — поэт ли его собеседник.", "Николай Васильевич Гоголь"),
+    ],
+)
+def test_public_context_does_not_exempt_private_name_fragments(text, name):
+    for word in name.split():
+        candidate = person(text, word)
+        assert merge_person_candidates(text, [], [candidate]) == [
+            Span(candidate.start, candidate.end, "PERSON", candidate.confidence, "ner-person")
+        ], word
+
+
+def test_split_ner_names_preserve_the_complete_public_demo():
+    text = (
+        "Подготовь справку для посетителей.\n\n"
+        "Александр Сергеевич Пушкин — русский поэт, автор романа «Евгений Онегин».\n\n"
+        "Публичные реквизиты банка:\nПАО Сбербанк\n"
+        "Адрес банка: 117312, г. Москва, ул. Вавилова, д. 19.\n"
+        "БИК банка: 044525225\nИНН банка: 7707083893\n\n"
+        "Сравни описание банковского сервиса с литературной метафорой."
+    )
+    fragments = [person(text, word) for word in ("Александр", "Сергеевич", "Пушкин", "Евгений", "Онегин")]
+    assert merge_person_candidates(text, detect(text), fragments) == []
+
+
+@pytest.mark.parametrize("separator", [". ", "; ", "\n", ", "])
+def test_public_name_fragment_context_does_not_cross_a_record_boundary(separator):
+    text = "Роман «Евгений Онегин»" + separator + "ФИО: Николай Васильевич Гоголь"
+    candidate = person(text, "Васильевич")
+    assert merge_person_candidates(text, [], [candidate]) == [
+        Span(candidate.start, candidate.end, "PERSON", candidate.confidence, "ner-person")
+    ]
 
 
 @pytest.mark.parametrize(

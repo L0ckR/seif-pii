@@ -25,6 +25,13 @@ const reasonLabels = {
   "personal-record-context": "Имя в контексте клиентской записи",
   "surname-initials": "Фамилия и инициалы",
   "given-name-and-surname": "Сочетание имени и фамилии",
+  "explicit-personal-name-field": "ФИО указано в личном поле",
+  "explicit-personal-date-field": "Дата указана в личном поле",
+  "explicit-personal-document-field": "Номер указан в поле личного документа",
+  "linked-address-components": "Компоненты полного личного адреса",
+  "ner-person": "Имя распознано языковой моделью",
+  "ner-location": "Географическое название распознано языковой моделью",
+  "ner-structured": "Персональные данные распознаны языковой моделью",
   "structured-address-context": "Структура личного адреса",
   "custom-rule": "Дополнительное правило политики системы"
 };
@@ -123,7 +130,7 @@ function emptyOutput() {
   $("output-area").replaceChildren(wrapper);
 }
 function labelFor(type) { return typeLabels[type] || typeLabels[String(type).toLowerCase()] || String(type || "Данные"); }
-function reasonFor(reason) { return reasonLabels[reason] || reason || "Фрагмент соответствует признакам персональных данных."; }
+function reasonFor(reason) { return reasonLabels[reason] || "Фрагмент соответствует признакам персональных данных."; }
 function renderEntities(original, entities, payloadId) {
   // API offsets count Unicode code points, while JavaScript slice counts UTF-16 units.
   const codepoints = Array.from(original);

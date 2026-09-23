@@ -1,7 +1,8 @@
 """Bounded private NER vocabulary, independent of a particular model runtime.
 
 The model advertises its capabilities; a consumer policy still decides which
-types to mask. Native name/address components keep their original boundaries.
+types to mask. Native components keep their transport offsets; the gateway
+preserves complete names and addresses recognized by its rules as single entities.
 """
 from __future__ import annotations
 

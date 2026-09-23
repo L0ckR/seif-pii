@@ -1,9 +1,9 @@
 """Keep model entity boundaries when rule coverage and meaning are identical.
 
-Rules often recognize a complete name/address while a model identifies its
-components. Keeping those components improves typed extraction without changing
-which alphanumeric characters are masked. No labels, corpus IDs, dictionaries,
-or learned thresholds participate in this decision.
+Rules often recognize a complete value while a model identifies its components.
+Names and complete addresses remain one entity: splitting them would create
+several person/address tokens or synthetic full values for one original value.
+Other compatible components retain rule coverage and meaning.
 """
 from __future__ import annotations
 
@@ -20,6 +20,7 @@ if TYPE_CHECKING:
 
 _ADDRESSES = frozenset({"ADDRESS", "LOCATION", "COUNTRY", "REGION", "DISTRICT", "CITY", "STREET", "HOUSE",
                         "APARTMENT", "POSTAL_CODE"})
+_ATOMIC_TYPES = frozenset({"PERSON", "CARDHOLDER", "ADDRESS"})
 
 
 def _family(kind: str) -> str:
@@ -84,8 +85,9 @@ def preserve_model_boundaries(text: str, resolved: Sequence[Span], model_candida
 
     Only wholly contained, unambiguous model components of the same semantic
     family may partition a resolved span. Unmodeled rule remainders retain every
-    protected letter/digit. Explicit custom rules and valid complete IP addresses
-    keep their boundaries; individual hex groups are not independent IPs.
+    protected letter/digit. Names, complete addresses, explicit custom rules and
+    valid complete IP addresses keep their boundaries; their model components
+    are not independent values.
     Inputs are validated by the detector; output retains its non-overlap invariant.
     """
     if not resolved or not model_candidates:
@@ -99,7 +101,7 @@ def preserve_model_boundaries(text: str, resolved: Sequence[Span], model_candida
         last = bisect_left(starts, original.end)
         parts = [span for span in models[first:last] if span.end > original.start]
         unchanged = len(parts) == 1 and (parts[0].start, parts[0].end) == (original.start, original.end)
-        if (unchanged or original.reason == "custom-rule" or not parts
+        if (unchanged or original.type in _ATOMIC_TYPES or original.reason == "custom-rule" or not parts
                 or _atomic_ip(text, original) or not _compatible_parts(text, original, parts)):
             output.append(original)
             continue
