@@ -1,0 +1,1384 @@
+{
+  "schema_version": 1,
+  "corpora": {
+    "organizer": {
+      "seif_rubert": {
+        "character": {
+          "tp": 5226,
+          "fp": 144,
+          "fn": 165,
+          "exact_cases": 417,
+          "cases": 446,
+          "precision": 0.973184,
+          "recall": 0.969393,
+          "f1": 0.971285
+        },
+        "entity_exact": {
+          "tp": 432,
+          "fp": 52,
+          "fn": 37,
+          "exact_cases": 399,
+          "cases": 446,
+          "precision": 0.892562,
+          "recall": 0.921109,
+          "f1": 0.906611
+        },
+        "entity_joined": {
+          "tp": 439,
+          "fp": 32,
+          "fn": 30,
+          "exact_cases": 406,
+          "cases": 446,
+          "precision": 0.932059,
+          "recall": 0.936034,
+          "f1": 0.934043
+        }
+      },
+      "seif_spacy": {
+        "character": {
+          "tp": 5164,
+          "fp": 105,
+          "fn": 227,
+          "exact_cases": 415,
+          "cases": 446,
+          "precision": 0.980072,
+          "recall": 0.957893,
+          "f1": 0.968856
+        },
+        "entity_exact": {
+          "tp": 432,
+          "fp": 25,
+          "fn": 37,
+          "exact_cases": 404,
+          "cases": 446,
+          "precision": 0.945295,
+          "recall": 0.921109,
+          "f1": 0.933045
+        },
+        "entity_joined": {
+          "tp": 434,
+          "fp": 21,
+          "fn": 35,
+          "exact_cases": 406,
+          "cases": 446,
+          "precision": 0.953846,
+          "recall": 0.925373,
+          "f1": 0.939394
+        }
+      },
+      "pii_guard_rubert": {
+        "character": {
+          "tp": 4284,
+          "fp": 798,
+          "fn": 1107,
+          "exact_cases": 200,
+          "cases": 446,
+          "precision": 0.842975,
+          "recall": 0.794658,
+          "f1": 0.818104
+        },
+        "entity_exact": {
+          "tp": 179,
+          "fp": 435,
+          "fn": 290,
+          "exact_cases": 142,
+          "cases": 446,
+          "precision": 0.291531,
+          "recall": 0.381663,
+          "f1": 0.330563
+        },
+        "entity_joined": {
+          "tp": 227,
+          "fp": 301,
+          "fn": 242,
+          "exact_cases": 180,
+          "cases": 446,
+          "precision": 0.429924,
+          "recall": 0.484009,
+          "f1": 0.455366
+        }
+      },
+      "presidio_rubert": {
+        "character": {
+          "tp": 4221,
+          "fp": 732,
+          "fn": 1170,
+          "exact_cases": 203,
+          "cases": 446,
+          "precision": 0.852211,
+          "recall": 0.782972,
+          "f1": 0.816125
+        },
+        "entity_exact": {
+          "tp": 167,
+          "fp": 491,
+          "fn": 302,
+          "exact_cases": 116,
+          "cases": 446,
+          "precision": 0.253799,
+          "recall": 0.356077,
+          "f1": 0.296362
+        },
+        "entity_joined": {
+          "tp": 215,
+          "fp": 353,
+          "fn": 254,
+          "exact_cases": 154,
+          "cases": 446,
+          "precision": 0.378521,
+          "recall": 0.458422,
+          "f1": 0.414658
+        }
+      },
+      "pii_guard_spacy": {
+        "character": {
+          "tp": 3063,
+          "fp": 653,
+          "fn": 2328,
+          "exact_cases": 158,
+          "cases": 446,
+          "precision": 0.824273,
+          "recall": 0.568169,
+          "f1": 0.672669
+        },
+        "entity_exact": {
+          "tp": 156,
+          "fp": 216,
+          "fn": 313,
+          "exact_cases": 146,
+          "cases": 446,
+          "precision": 0.419355,
+          "recall": 0.332623,
+          "f1": 0.370987
+        },
+        "entity_joined": {
+          "tp": 165,
+          "fp": 196,
+          "fn": 304,
+          "exact_cases": 150,
+          "cases": 446,
+          "precision": 0.457064,
+          "recall": 0.351812,
+          "f1": 0.39759
+        }
+      },
+      "presidio_spacy": {
+        "character": {
+          "tp": 3011,
+          "fp": 528,
+          "fn": 2380,
+          "exact_cases": 175,
+          "cases": 446,
+          "precision": 0.850805,
+          "recall": 0.558523,
+          "f1": 0.674356
+        },
+        "entity_exact": {
+          "tp": 126,
+          "fp": 252,
+          "fn": 343,
+          "exact_cases": 131,
+          "cases": 446,
+          "precision": 0.333333,
+          "recall": 0.268657,
+          "f1": 0.297521
+        },
+        "entity_joined": {
+          "tp": 135,
+          "fp": 232,
+          "fn": 334,
+          "exact_cases": 134,
+          "cases": 446,
+          "precision": 0.367847,
+          "recall": 0.287846,
+          "f1": 0.322967
+        }
+      }
+    },
+    "pii": {
+      "seif_rubert": {
+        "character": {
+          "tp": 18087,
+          "fp": 396,
+          "fn": 9888,
+          "exact_cases": 1322,
+          "cases": 1810,
+          "precision": 0.978575,
+          "recall": 0.646542,
+          "f1": 0.778639
+        },
+        "entity_exact": {
+          "tp": 1027,
+          "fp": 462,
+          "fn": 640,
+          "exact_cases": 1162,
+          "cases": 1810,
+          "precision": 0.689725,
+          "recall": 0.616077,
+          "f1": 0.650824
+        },
+        "entity_joined": {
+          "tp": 1083,
+          "fp": 301,
+          "fn": 584,
+          "exact_cases": 1208,
+          "cases": 1810,
+          "precision": 0.782514,
+          "recall": 0.64967,
+          "f1": 0.709931
+        }
+      },
+      "seif_spacy": {
+        "character": {
+          "tp": 16959,
+          "fp": 656,
+          "fn": 11016,
+          "exact_cases": 1196,
+          "cases": 1810,
+          "precision": 0.962759,
+          "recall": 0.60622,
+          "f1": 0.743979
+        },
+        "entity_exact": {
+          "tp": 1025,
+          "fp": 305,
+          "fn": 642,
+          "exact_cases": 1137,
+          "cases": 1810,
+          "precision": 0.770677,
+          "recall": 0.614877,
+          "f1": 0.684017
+        },
+        "entity_joined": {
+          "tp": 1026,
+          "fp": 302,
+          "fn": 641,
+          "exact_cases": 1138,
+          "cases": 1810,
+          "precision": 0.77259,
+          "recall": 0.615477,
+          "f1": 0.685142
+        }
+      },
+      "pii_guard_rubert": {
+        "character": {
+          "tp": 18348,
+          "fp": 395,
+          "fn": 9627,
+          "exact_cases": 1324,
+          "cases": 1810,
+          "precision": 0.978925,
+          "recall": 0.655871,
+          "f1": 0.785479
+        },
+        "entity_exact": {
+          "tp": 805,
+          "fp": 1031,
+          "fn": 862,
+          "exact_cases": 970,
+          "cases": 1810,
+          "precision": 0.438453,
+          "recall": 0.482903,
+          "f1": 0.459606
+        },
+        "entity_joined": {
+          "tp": 1081,
+          "fp": 420,
+          "fn": 586,
+          "exact_cases": 1190,
+          "cases": 1810,
+          "precision": 0.720187,
+          "recall": 0.64847,
+          "f1": 0.682449
+        }
+      },
+      "presidio_rubert": {
+        "character": {
+          "tp": 18812,
+          "fp": 260,
+          "fn": 9163,
+          "exact_cases": 1341,
+          "cases": 1810,
+          "precision": 0.986367,
+          "recall": 0.672458,
+          "f1": 0.799711
+        },
+        "entity_exact": {
+          "tp": 765,
+          "fp": 1398,
+          "fn": 902,
+          "exact_cases": 727,
+          "cases": 1810,
+          "precision": 0.353675,
+          "recall": 0.458908,
+          "f1": 0.399478
+        },
+        "entity_joined": {
+          "tp": 1041,
+          "fp": 785,
+          "fn": 626,
+          "exact_cases": 924,
+          "cases": 1810,
+          "precision": 0.570099,
+          "recall": 0.624475,
+          "f1": 0.596049
+        }
+      },
+      "pii_guard_spacy": {
+        "character": {
+          "tp": 13305,
+          "fp": 651,
+          "fn": 14670,
+          "exact_cases": 951,
+          "cases": 1810,
+          "precision": 0.953353,
+          "recall": 0.475603,
+          "f1": 0.634614
+        },
+        "entity_exact": {
+          "tp": 793,
+          "fp": 359,
+          "fn": 874,
+          "exact_cases": 929,
+          "cases": 1810,
+          "precision": 0.688368,
+          "recall": 0.475705,
+          "f1": 0.562611
+        },
+        "entity_joined": {
+          "tp": 794,
+          "fp": 357,
+          "fn": 873,
+          "exact_cases": 930,
+          "cases": 1810,
+          "precision": 0.689835,
+          "recall": 0.476305,
+          "f1": 0.56352
+        }
+      },
+      "presidio_spacy": {
+        "character": {
+          "tp": 14297,
+          "fp": 507,
+          "fn": 13678,
+          "exact_cases": 994,
+          "cases": 1810,
+          "precision": 0.965752,
+          "recall": 0.511063,
+          "f1": 0.668412
+        },
+        "entity_exact": {
+          "tp": 708,
+          "fp": 686,
+          "fn": 959,
+          "exact_cases": 714,
+          "cases": 1810,
+          "precision": 0.507891,
+          "recall": 0.424715,
+          "f1": 0.462594
+        },
+        "entity_joined": {
+          "tp": 709,
+          "fp": 684,
+          "fn": 958,
+          "exact_cases": 714,
+          "cases": 1810,
+          "precision": 0.508973,
+          "recall": 0.425315,
+          "f1": 0.463399
+        }
+      }
+    },
+    "redmadrobot": {
+      "seif_rubert": {
+        "character": {
+          "tp": 50943,
+          "fp": 1454,
+          "fn": 5160,
+          "exact_cases": 2404,
+          "cases": 2839,
+          "precision": 0.97225,
+          "recall": 0.908026,
+          "f1": 0.939041
+        },
+        "entity_exact": {
+          "tp": 4175,
+          "fp": 870,
+          "fn": 1426,
+          "exact_cases": 2084,
+          "cases": 2839,
+          "precision": 0.827552,
+          "recall": 0.745403,
+          "f1": 0.784332
+        },
+        "entity_joined": {
+          "tp": 4041,
+          "fp": 570,
+          "fn": 789,
+          "exact_cases": 2272,
+          "cases": 2839,
+          "precision": 0.876383,
+          "recall": 0.836646,
+          "f1": 0.856053
+        }
+      },
+      "seif_spacy": {
+        "character": {
+          "tp": 28649,
+          "fp": 2905,
+          "fn": 27454,
+          "exact_cases": 1124,
+          "cases": 2839,
+          "precision": 0.907936,
+          "recall": 0.51065,
+          "f1": 0.653661
+        },
+        "entity_exact": {
+          "tp": 1752,
+          "fp": 1102,
+          "fn": 3849,
+          "exact_cases": 930,
+          "cases": 2839,
+          "precision": 0.613875,
+          "recall": 0.312801,
+          "f1": 0.414429
+        },
+        "entity_joined": {
+          "tp": 1972,
+          "fp": 851,
+          "fn": 2858,
+          "exact_cases": 1048,
+          "cases": 2839,
+          "precision": 0.698548,
+          "recall": 0.408282,
+          "f1": 0.515353
+        }
+      },
+      "pii_guard_rubert": {
+        "character": {
+          "tp": 52239,
+          "fp": 2864,
+          "fn": 3864,
+          "exact_cases": 2466,
+          "cases": 2839,
+          "precision": 0.948025,
+          "recall": 0.931127,
+          "f1": 0.9395
+        },
+        "entity_exact": {
+          "tp": 4948,
+          "fp": 664,
+          "fn": 653,
+          "exact_cases": 2265,
+          "cases": 2839,
+          "precision": 0.881682,
+          "recall": 0.883414,
+          "f1": 0.882547
+        },
+        "entity_joined": {
+          "tp": 4392,
+          "fp": 569,
+          "fn": 438,
+          "exact_cases": 2355,
+          "cases": 2839,
+          "precision": 0.885305,
+          "recall": 0.909317,
+          "f1": 0.89715
+        }
+      },
+      "presidio_rubert": {
+        "character": {
+          "tp": 52261,
+          "fp": 2351,
+          "fn": 3842,
+          "exact_cases": 2495,
+          "cases": 2839,
+          "precision": 0.956951,
+          "recall": 0.931519,
+          "f1": 0.944064
+        },
+        "entity_exact": {
+          "tp": 4972,
+          "fp": 1139,
+          "fn": 629,
+          "exact_cases": 1922,
+          "cases": 2839,
+          "precision": 0.813615,
+          "recall": 0.887699,
+          "f1": 0.849044
+        },
+        "entity_joined": {
+          "tp": 4355,
+          "fp": 1012,
+          "fn": 475,
+          "exact_cases": 2009,
+          "cases": 2839,
+          "precision": 0.81144,
+          "recall": 0.901656,
+          "f1": 0.854173
+        }
+      },
+      "pii_guard_spacy": {
+        "character": {
+          "tp": 27180,
+          "fp": 4272,
+          "fn": 28923,
+          "exact_cases": 1055,
+          "cases": 2839,
+          "precision": 0.864174,
+          "recall": 0.484466,
+          "f1": 0.620867
+        },
+        "entity_exact": {
+          "tp": 1898,
+          "fp": 1110,
+          "fn": 3703,
+          "exact_cases": 884,
+          "cases": 2839,
+          "precision": 0.630984,
+          "recall": 0.338868,
+          "f1": 0.440934
+        },
+        "entity_joined": {
+          "tp": 2078,
+          "fp": 880,
+          "fn": 2752,
+          "exact_cases": 998,
+          "cases": 2839,
+          "precision": 0.702502,
+          "recall": 0.430228,
+          "f1": 0.533641
+        }
+      },
+      "presidio_spacy": {
+        "character": {
+          "tp": 25618,
+          "fp": 3711,
+          "fn": 30485,
+          "exact_cases": 956,
+          "cases": 2839,
+          "precision": 0.87347,
+          "recall": 0.456624,
+          "f1": 0.599728
+        },
+        "entity_exact": {
+          "tp": 1187,
+          "fp": 1433,
+          "fn": 4414,
+          "exact_cases": 629,
+          "cases": 2839,
+          "precision": 0.453053,
+          "recall": 0.211926,
+          "f1": 0.288773
+        },
+        "entity_joined": {
+          "tp": 1288,
+          "fp": 1288,
+          "fn": 3542,
+          "exact_cases": 662,
+          "cases": 2839,
+          "precision": 0.5,
+          "recall": 0.266667,
+          "f1": 0.347826
+        }
+      }
+    },
+    "organizer_certain": {
+      "seif_rubert": {
+        "character": {
+          "tp": 4063,
+          "fp": 55,
+          "fn": 1,
+          "exact_cases": 324,
+          "cases": 329,
+          "precision": 0.986644,
+          "recall": 0.999754,
+          "f1": 0.993156
+        },
+        "entity_exact": {
+          "tp": 333,
+          "fp": 36,
+          "fn": 15,
+          "exact_cases": 310,
+          "cases": 329,
+          "precision": 0.902439,
+          "recall": 0.956897,
+          "f1": 0.92887
+        },
+        "entity_joined": {
+          "tp": 339,
+          "fp": 18,
+          "fn": 9,
+          "exact_cases": 316,
+          "cases": 329,
+          "precision": 0.94958,
+          "recall": 0.974138,
+          "f1": 0.961702
+        }
+      },
+      "seif_spacy": {
+        "character": {
+          "tp": 4064,
+          "fp": 42,
+          "fn": 0,
+          "exact_cases": 328,
+          "cases": 329,
+          "precision": 0.989771,
+          "recall": 1.0,
+          "f1": 0.994859
+        },
+        "entity_exact": {
+          "tp": 339,
+          "fp": 17,
+          "fn": 9,
+          "exact_cases": 319,
+          "cases": 329,
+          "precision": 0.952247,
+          "recall": 0.974138,
+          "f1": 0.963068
+        },
+        "entity_joined": {
+          "tp": 341,
+          "fp": 13,
+          "fn": 7,
+          "exact_cases": 321,
+          "cases": 329,
+          "precision": 0.963277,
+          "recall": 0.979885,
+          "f1": 0.97151
+        }
+      },
+      "pii_guard_rubert": {
+        "character": {
+          "tp": 3320,
+          "fp": 386,
+          "fn": 744,
+          "exact_cases": 162,
+          "cases": 329,
+          "precision": 0.895845,
+          "recall": 0.816929,
+          "f1": 0.854569
+        },
+        "entity_exact": {
+          "tp": 130,
+          "fp": 323,
+          "fn": 218,
+          "exact_cases": 109,
+          "cases": 329,
+          "precision": 0.286976,
+          "recall": 0.373563,
+          "f1": 0.324594
+        },
+        "entity_joined": {
+          "tp": 174,
+          "fp": 201,
+          "fn": 174,
+          "exact_cases": 146,
+          "cases": 329,
+          "precision": 0.464,
+          "recall": 0.5,
+          "f1": 0.481328
+        }
+      },
+      "presidio_rubert": {
+        "character": {
+          "tp": 3208,
+          "fp": 345,
+          "fn": 856,
+          "exact_cases": 155,
+          "cases": 329,
+          "precision": 0.902899,
+          "recall": 0.78937,
+          "f1": 0.842326
+        },
+        "entity_exact": {
+          "tp": 119,
+          "fp": 366,
+          "fn": 229,
+          "exact_cases": 81,
+          "cases": 329,
+          "precision": 0.245361,
+          "recall": 0.341954,
+          "f1": 0.285714
+        },
+        "entity_joined": {
+          "tp": 163,
+          "fp": 242,
+          "fn": 185,
+          "exact_cases": 118,
+          "cases": 329,
+          "precision": 0.402469,
+          "recall": 0.468391,
+          "f1": 0.432935
+        }
+      },
+      "pii_guard_spacy": {
+        "character": {
+          "tp": 2465,
+          "fp": 358,
+          "fn": 1599,
+          "exact_cases": 129,
+          "cases": 329,
+          "precision": 0.873185,
+          "recall": 0.606545,
+          "f1": 0.715841
+        },
+        "entity_exact": {
+          "tp": 135,
+          "fp": 150,
+          "fn": 213,
+          "exact_cases": 118,
+          "cases": 329,
+          "precision": 0.473684,
+          "recall": 0.387931,
+          "f1": 0.42654
+        },
+        "entity_joined": {
+          "tp": 143,
+          "fp": 133,
+          "fn": 205,
+          "exact_cases": 122,
+          "cases": 329,
+          "precision": 0.518116,
+          "recall": 0.41092,
+          "f1": 0.458333
+        }
+      },
+      "presidio_spacy": {
+        "character": {
+          "tp": 2297,
+          "fp": 298,
+          "fn": 1767,
+          "exact_cases": 128,
+          "cases": 329,
+          "precision": 0.885164,
+          "recall": 0.565207,
+          "f1": 0.689893
+        },
+        "entity_exact": {
+          "tp": 104,
+          "fp": 180,
+          "fn": 244,
+          "exact_cases": 94,
+          "cases": 329,
+          "precision": 0.366197,
+          "recall": 0.298851,
+          "f1": 0.329114
+        },
+        "entity_joined": {
+          "tp": 112,
+          "fp": 163,
+          "fn": 236,
+          "exact_cases": 97,
+          "cases": 329,
+          "precision": 0.407273,
+          "recall": 0.321839,
+          "f1": 0.359551
+        }
+      }
+    },
+    "pii_domain": {
+      "seif_rubert": {
+        "character": {
+          "tp": 9317,
+          "fp": 287,
+          "fn": 1654,
+          "exact_cases": 766,
+          "cases": 900,
+          "precision": 0.970117,
+          "recall": 0.849239,
+          "f1": 0.905662
+        },
+        "entity_exact": {
+          "tp": 577,
+          "fp": 211,
+          "fn": 180,
+          "exact_cases": 717,
+          "cases": 900,
+          "precision": 0.732234,
+          "recall": 0.762219,
+          "f1": 0.746926
+        },
+        "entity_joined": {
+          "tp": 622,
+          "fp": 98,
+          "fn": 135,
+          "exact_cases": 752,
+          "cases": 900,
+          "precision": 0.863889,
+          "recall": 0.821664,
+          "f1": 0.842248
+        }
+      },
+      "seif_spacy": {
+        "character": {
+          "tp": 8898,
+          "fp": 388,
+          "fn": 2073,
+          "exact_cases": 714,
+          "cases": 900,
+          "precision": 0.958217,
+          "recall": 0.811047,
+          "f1": 0.878511
+        },
+        "entity_exact": {
+          "tp": 578,
+          "fp": 128,
+          "fn": 179,
+          "exact_cases": 705,
+          "cases": 900,
+          "precision": 0.818697,
+          "recall": 0.76354,
+          "f1": 0.790157
+        },
+        "entity_joined": {
+          "tp": 579,
+          "fp": 125,
+          "fn": 178,
+          "exact_cases": 706,
+          "cases": 900,
+          "precision": 0.822443,
+          "recall": 0.764861,
+          "f1": 0.792608
+        }
+      },
+      "pii_guard_rubert": {
+        "character": {
+          "tp": 9556,
+          "fp": 353,
+          "fn": 1415,
+          "exact_cases": 770,
+          "cases": 900,
+          "precision": 0.964376,
+          "recall": 0.871024,
+          "f1": 0.915326
+        },
+        "entity_exact": {
+          "tp": 412,
+          "fp": 614,
+          "fn": 345,
+          "exact_cases": 582,
+          "cases": 900,
+          "precision": 0.401559,
+          "recall": 0.544254,
+          "f1": 0.462142
+        },
+        "entity_joined": {
+          "tp": 618,
+          "fp": 168,
+          "fn": 139,
+          "exact_cases": 733,
+          "cases": 900,
+          "precision": 0.78626,
+          "recall": 0.81638,
+          "f1": 0.801037
+        }
+      },
+      "presidio_rubert": {
+        "character": {
+          "tp": 9426,
+          "fp": 235,
+          "fn": 1545,
+          "exact_cases": 777,
+          "cases": 900,
+          "precision": 0.975675,
+          "recall": 0.859174,
+          "f1": 0.913726
+        },
+        "entity_exact": {
+          "tp": 392,
+          "fp": 809,
+          "fn": 365,
+          "exact_cases": 469,
+          "cases": 900,
+          "precision": 0.326395,
+          "recall": 0.517834,
+          "f1": 0.400409
+        },
+        "entity_joined": {
+          "tp": 598,
+          "fp": 361,
+          "fn": 159,
+          "exact_cases": 596,
+          "cases": 900,
+          "precision": 0.623566,
+          "recall": 0.78996,
+          "f1": 0.69697
+        }
+      },
+      "pii_guard_spacy": {
+        "character": {
+          "tp": 6649,
+          "fp": 450,
+          "fn": 4322,
+          "exact_cases": 561,
+          "cases": 900,
+          "precision": 0.936611,
+          "recall": 0.606052,
+          "f1": 0.735916
+        },
+        "entity_exact": {
+          "tp": 409,
+          "fp": 177,
+          "fn": 348,
+          "exact_cases": 554,
+          "cases": 900,
+          "precision": 0.697952,
+          "recall": 0.540291,
+          "f1": 0.609084
+        },
+        "entity_joined": {
+          "tp": 410,
+          "fp": 175,
+          "fn": 347,
+          "exact_cases": 555,
+          "cases": 900,
+          "precision": 0.700855,
+          "recall": 0.541612,
+          "f1": 0.611028
+        }
+      },
+      "presidio_spacy": {
+        "character": {
+          "tp": 7604,
+          "fp": 323,
+          "fn": 3367,
+          "exact_cases": 643,
+          "cases": 900,
+          "precision": 0.959253,
+          "recall": 0.6931,
+          "f1": 0.804741
+        },
+        "entity_exact": {
+          "tp": 428,
+          "fp": 363,
+          "fn": 329,
+          "exact_cases": 510,
+          "cases": 900,
+          "precision": 0.541087,
+          "recall": 0.56539,
+          "f1": 0.552972
+        },
+        "entity_joined": {
+          "tp": 429,
+          "fp": 361,
+          "fn": 328,
+          "exact_cases": 510,
+          "cases": 900,
+          "precision": 0.543038,
+          "recall": 0.566711,
+          "f1": 0.554622
+        }
+      }
+    },
+    "pii_entity": {
+      "seif_rubert": {
+        "character": {
+          "tp": 8770,
+          "fp": 109,
+          "fn": 8234,
+          "exact_cases": 556,
+          "cases": 910,
+          "precision": 0.987724,
+          "recall": 0.515761,
+          "f1": 0.677665
+        },
+        "entity_exact": {
+          "tp": 450,
+          "fp": 251,
+          "fn": 460,
+          "exact_cases": 445,
+          "cases": 910,
+          "precision": 0.64194,
+          "recall": 0.494505,
+          "f1": 0.558659
+        },
+        "entity_joined": {
+          "tp": 461,
+          "fp": 203,
+          "fn": 449,
+          "exact_cases": 456,
+          "cases": 910,
+          "precision": 0.694277,
+          "recall": 0.506593,
+          "f1": 0.585769
+        }
+      },
+      "seif_spacy": {
+        "character": {
+          "tp": 8061,
+          "fp": 268,
+          "fn": 8943,
+          "exact_cases": 482,
+          "cases": 910,
+          "precision": 0.967823,
+          "recall": 0.474065,
+          "f1": 0.636403
+        },
+        "entity_exact": {
+          "tp": 447,
+          "fp": 177,
+          "fn": 463,
+          "exact_cases": 432,
+          "cases": 910,
+          "precision": 0.716346,
+          "recall": 0.491209,
+          "f1": 0.58279
+        },
+        "entity_joined": {
+          "tp": 447,
+          "fp": 177,
+          "fn": 463,
+          "exact_cases": 432,
+          "cases": 910,
+          "precision": 0.716346,
+          "recall": 0.491209,
+          "f1": 0.58279
+        }
+      },
+      "pii_guard_rubert": {
+        "character": {
+          "tp": 8792,
+          "fp": 42,
+          "fn": 8212,
+          "exact_cases": 554,
+          "cases": 910,
+          "precision": 0.995246,
+          "recall": 0.517055,
+          "f1": 0.680548
+        },
+        "entity_exact": {
+          "tp": 393,
+          "fp": 417,
+          "fn": 517,
+          "exact_cases": 388,
+          "cases": 910,
+          "precision": 0.485185,
+          "recall": 0.431868,
+          "f1": 0.456977
+        },
+        "entity_joined": {
+          "tp": 463,
+          "fp": 252,
+          "fn": 447,
+          "exact_cases": 457,
+          "cases": 910,
+          "precision": 0.647552,
+          "recall": 0.508791,
+          "f1": 0.569846
+        }
+      },
+      "presidio_rubert": {
+        "character": {
+          "tp": 9386,
+          "fp": 25,
+          "fn": 7618,
+          "exact_cases": 564,
+          "cases": 910,
+          "precision": 0.997344,
+          "recall": 0.551988,
+          "f1": 0.710657
+        },
+        "entity_exact": {
+          "tp": 373,
+          "fp": 589,
+          "fn": 537,
+          "exact_cases": 258,
+          "cases": 910,
+          "precision": 0.387734,
+          "recall": 0.40989,
+          "f1": 0.398504
+        },
+        "entity_joined": {
+          "tp": 443,
+          "fp": 424,
+          "fn": 467,
+          "exact_cases": 328,
+          "cases": 910,
+          "precision": 0.510957,
+          "recall": 0.486813,
+          "f1": 0.498593
+        }
+      },
+      "pii_guard_spacy": {
+        "character": {
+          "tp": 6656,
+          "fp": 201,
+          "fn": 10348,
+          "exact_cases": 390,
+          "cases": 910,
+          "precision": 0.970687,
+          "recall": 0.391437,
+          "f1": 0.557898
+        },
+        "entity_exact": {
+          "tp": 384,
+          "fp": 182,
+          "fn": 526,
+          "exact_cases": 375,
+          "cases": 910,
+          "precision": 0.678445,
+          "recall": 0.421978,
+          "f1": 0.520325
+        },
+        "entity_joined": {
+          "tp": 384,
+          "fp": 182,
+          "fn": 526,
+          "exact_cases": 375,
+          "cases": 910,
+          "precision": 0.678445,
+          "recall": 0.421978,
+          "f1": 0.520325
+        }
+      },
+      "presidio_spacy": {
+        "character": {
+          "tp": 6693,
+          "fp": 184,
+          "fn": 10311,
+          "exact_cases": 351,
+          "cases": 910,
+          "precision": 0.973244,
+          "recall": 0.393613,
+          "f1": 0.560529
+        },
+        "entity_exact": {
+          "tp": 280,
+          "fp": 323,
+          "fn": 630,
+          "exact_cases": 204,
+          "cases": 910,
+          "precision": 0.464345,
+          "recall": 0.307692,
+          "f1": 0.370126
+        },
+        "entity_joined": {
+          "tp": 280,
+          "fp": 323,
+          "fn": 630,
+          "exact_cases": 204,
+          "cases": 910,
+          "precision": 0.464345,
+          "recall": 0.307692,
+          "f1": 0.370126
+        }
+      }
+    }
+  },
+  "cases": {
+    "organizer": 446,
+    "organizer_certain": 329,
+    "pii": 1810,
+    "pii_domain": 900,
+    "pii_entity": 910,
+    "redmadrobot": 2839
+  },
+  "input_membership": {
+    "ordered_membership_sha256": "8c330eeee653b2414824a28e9c45863d5bfeb43965698174a3516a96f00a12e8",
+    "text_sha256": "04d16d733c44eb8917f3138399ebbb8df05a27db9a1399dd86ff1ee2cf93aec9",
+    "gold_sha256": "932cd5d5d3573b043a74c845503e89af7dbbd87fda99316075e3a5dcbd7e1720"
+  },
+  "source_sha256": {
+    "local-data/wrapper-matrix-20260923/inputs.jsonl": "347e9a69c434a70c10518761dcacd2e1a4de35359023516b5f62278a228613ae",
+    "local-data/wrapper-matrix-20260923/seif.jsonl": "221ccb134c0d6c48844ab729c14289f55db847749a197f18bffd77db9affe321",
+    "local-data/wrapper-matrix-20260923/wrappers.jsonl": "c6603fafa34dc0354591bc2425f10498d7ba107d3e8c91aa94d93dad20285141"
+  },
+  "runner_sha256": {
+    "prepare.py": "6d7aa15c640ca348aaa10b77251bcf7ac45ea7b7432259b179ad69cd4c910d3b",
+    "seif_run.py": "16f14429b3cbebfc3881a983169cc786dd0003acfd2dc0c358e5f355d4365808",
+    "wrappers_run.py": "de34ee3a1c1b6a13507959c71c472a5e3ae99882689290963dfe9cab613037a4",
+    "score.py": "3760fd2cbd0fe0e12dad9be5f436798a97545da853e0fb059c285c67f730da5e"
+  },
+  "seif_source_sha256": {
+    "detector.py": "bb979d8b7d1ed049ce25a65269b5db40515772352b0f1d614cedcde4db2401af",
+    "ner_boundaries.py": "56bfc8f07f9e90b0eeda34e0e29eab298369aa0736b8a765754a90f9396d23f7",
+    "ner_contract.py": "48320a074781a398a7157902351e46619faf1c243f2cf5cb6521faff0a20a4ee",
+    "rubert_ner.py": "9dd1287c06abd18e5b3b45e2257e586d3c66c66877d82b91c323193e9c928c33",
+    "transform.py": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3"
+  },
+  "wrapper_runtime": {
+    "cache_sha256": "c6603fafa34dc0354591bc2425f10498d7ba107d3e8c91aa94d93dad20285141",
+    "cases": 5095,
+    "versions": {
+      "presidio-analyzer": "2.2.364",
+      "spacy": "3.8.16"
+    },
+    "pii_guard_revision": "24230abb72949a9f85499244dd4f15a0ad0cdd9e",
+    "spacy_model_sha256": "7bd32bdbccc80c9439517e141482504166350328cc54e634fe2827b61d327528",
+    "pii_guard_preprocessors_enabled": {
+      "translit": false,
+      "english_numbers": false,
+      "base64": false
+    },
+    "presidio_recognizers": [
+      "cached-NER",
+      "email",
+      "phone",
+      "credit-card",
+      "date",
+      "URL",
+      "IP",
+      "IBAN",
+      "crypto"
+    ]
+  },
+  "model_cache": {
+    "rubert_sha256": "d2c01606f1e8bdb1da7686847b559dbe33c72c40bbc7d37f215e9337bbd99e93",
+    "rubert_meta": {
+      "model": "lockR/rubert-base-pii-ner-tensorrt",
+      "model_revision": "73be581047bf123dac6505e7b3900ec292942296",
+      "model_sha256": {
+        "pii_ner.py": "4591fc8c5580c39dc5121ca649f4a2a4936276ea4c9e82ae144e5c467eb5a5ca",
+        "trt_backend.py": "eafc144a9b698e94dfe155074c7a3ab1063ee7817ab1a285b69639db1c07b424",
+        "model.fp16.engine": "f4d3f4eaa72ed8543b81ef4f6acf216f95be93fe4da8c3be27c8513cb9e80b35",
+        "config.json": "f4eeba88d1503a56d629195c9307d42c1acf4ce53ab88fdaecfc754fd0745cf9",
+        "runtime_config.json": "841420d76f5e7ec4ec7dd781b79987fe0f3facb25cc68896e7c88012f7af1b5d",
+        "tokenizer.json": "f61eee9d0dc18f14c195321a37eadf9e5aeb3a323bc278dec689adeb89dec1b9",
+        "tokenizer_config.json": "ffe381e31042ba94cb077bf7d5b9cee944dbd0c2a85079b095bea7e5a5a6058b"
+      },
+      "source_sha256": {
+        "seif/rubert_decoder.py": "303608a624d591c20e0d68730537009a0694f78d614307e46b9cf288063ffe81",
+        "seif/rubert_ner.py": "92e977971f3764c00a3dc7fb9e2c957163f7682b5b1e87ea34ef2fac4db7178a",
+        "seif/ner_contract.py": "83ce1bf1345ece197c74e7477e4524f08f511a5b0fb3218247039efb7e1addb2",
+        "seif/gliner_ner.py": "8012d0c3fc83b6c0a0defd4a07735d6e9cd4aa0c5debb1f7c395ddafb7431311"
+      },
+      "runner_sha256": "c3b66cd430ca970061255188de05e9d566f7184e6121fd6469d400de4eaadd1d",
+      "input_membership": {
+        "ordered_membership_sha256": "8c330eeee653b2414824a28e9c45863d5bfeb43965698174a3516a96f00a12e8",
+        "text_sha256": "04d16d733c44eb8917f3138399ebbb8df05a27db9a1399dd86ff1ee2cf93aec9",
+        "gold_sha256": "932cd5d5d3573b043a74c845503e89af7dbbd87fda99316075e3a5dcbd7e1720"
+      },
+      "corpus_counts": {
+        "organizer": 446,
+        "pii": 1810,
+        "redmadrobot": 2839
+      },
+      "decoder": "word",
+      "profile": "native",
+      "confidence_threshold": null,
+      "versions": {
+        "torch": "2.8.0+cu128",
+        "transformers": "4.57.1",
+        "tokenizers": "0.22.2",
+        "numpy": "2.5.3",
+        "tensorrt-cu12": "10.13.3.9"
+      },
+      "protocol_sha256": "d1f5faa2274222ea9da01ff429a584b23766e3da9f473259bade55e91218cd15",
+      "cases": 5095,
+      "cache_sha256": "d2c01606f1e8bdb1da7686847b559dbe33c72c40bbc7d37f215e9337bbd99e93",
+      "failures_by_corpus": {},
+      "upstream_span_differences": {
+        "redmadrobot": 4
+      },
+      "elapsed_seconds_not_rps": 6.776244877000863,
+      "analyzer": {
+        "model": "lockR/rubert-base-pii-ner-tensorrt",
+        "revision": "73be581047bf123dac6505e7b3900ec292942296",
+        "files_sha256": {
+          "pii_ner.py": "4591fc8c5580c39dc5121ca649f4a2a4936276ea4c9e82ae144e5c467eb5a5ca",
+          "trt_backend.py": "eafc144a9b698e94dfe155074c7a3ab1063ee7817ab1a285b69639db1c07b424",
+          "model.fp16.engine": "f4d3f4eaa72ed8543b81ef4f6acf216f95be93fe4da8c3be27c8513cb9e80b35",
+          "config.json": "f4eeba88d1503a56d629195c9307d42c1acf4ce53ab88fdaecfc754fd0745cf9",
+          "runtime_config.json": "841420d76f5e7ec4ec7dd781b79987fe0f3facb25cc68896e7c88012f7af1b5d",
+          "tokenizer.json": "f61eee9d0dc18f14c195321a37eadf9e5aeb3a323bc278dec689adeb89dec1b9",
+          "tokenizer_config.json": "ffe381e31042ba94cb077bf7d5b9cee944dbd0c2a85079b095bea7e5a5a6058b"
+        },
+        "backend": "trt-graph",
+        "device": "cuda",
+        "min_confidence": null,
+        "decoder": "word",
+        "gateway_profile": "native",
+        "batch_size": 1,
+        "max_tokens": 512,
+        "overlap_tokens": 128,
+        "native_types": [
+          "BIRTH_CERTIFICATE",
+          "CITY",
+          "COUNTRY",
+          "CREDIT_CARD",
+          "DISTRICT",
+          "DRIVER_LICENSE",
+          "EMAIL",
+          "FIRST_NAME",
+          "HOUSE",
+          "INN",
+          "IP_ADDRESS",
+          "LAST_NAME",
+          "MIDDLE_NAME",
+          "MILITARY_ID",
+          "OMS",
+          "PASSPORT",
+          "PHONE",
+          "REGION",
+          "SNILS",
+          "STREET",
+          "URL"
+        ],
+        "person_labels": [
+          "FIRST_NAME",
+          "LAST_NAME",
+          "MIDDLE_NAME"
+        ],
+        "location_labels": [
+          "CITY",
+          "COUNTRY",
+          "DISTRICT",
+          "HOUSE",
+          "REGION",
+          "STREET"
+        ],
+        "gateway_merge": "none; original native boundaries",
+        "location_scope": "six address-component types, broader than geographic proper names",
+        "native_predictions": "all21 labels retained before coarse gateway mapping",
+        "precision": "published TensorRT FP16 engine with FP32 normalization accumulation; TF32 disabled at build",
+        "packages": {
+          "torch": "2.8.0+cu128",
+          "numpy": "2.5.3",
+          "transformers": "4.57.1",
+          "tokenizers": "0.22.2",
+          "tensorrt-cu12": "10.13.3.9",
+          "tensorrt-cu12-bindings": "10.13.3.9"
+        },
+        "logits_shape_validation": "exact [batch, padded_tokens,43]",
+        "warmup_complete": true,
+        "graph_buckets_captured": [
+          32,
+          64,
+          128,
+          256,
+          512
+        ]
+      }
+    },
+    "spacy_sha256": "71f7bad8efe26de393df03f9a5ac9c2ad48509c0115783fc67117cff51144919",
+    "spacy_meta": {
+      "cache_sha256": "71f7bad8efe26de393df03f9a5ac9c2ad48509c0115783fc67117cff51144919",
+      "source_sha256": {
+        "/home/lockr/projects/seif-pii/benchmarks/ner-models/gliner25-multi-v1/spacy-fresh.jsonl": "1a439aab58c675036f3b05e497f0038904ddcbcb39620991b9bc96ef5ad883dc",
+        "/home/lockr/projects/seif-pii-gliner/local-data/gliner25-public/spacy.jsonl": "27300f63d2818f9d97dc933d59593018a61a83ce77aa2b388605abb33de22496",
+        "/home/lockr/projects/seif-pii-rubert/local-data/rubert-upgrade/run-v2/native.jsonl": "d2c01606f1e8bdb1da7686847b559dbe33c72c40bbc7d37f215e9337bbd99e93"
+      },
+      "cases": {
+        "organizer": 446,
+        "pii": 1810,
+        "redmadrobot": 2839
+      },
+      "model": "ru_core_news_sm",
+      "model_version": "3.8.0",
+      "candidate_types": [
+        "LOCATION",
+        "PERSON"
+      ],
+      "source_profile": "PERSON/LOCATION only, 0.0 threshold"
+    }
+  },
+  "metric_policy": {
+    "character": "micro precision/recall/F1 over alphanumeric Unicode code points covered by any final entity; all original gold labels and all predicted labels counted",
+    "entity_exact": "micro typed exact span after one fixed family map, original boundaries",
+    "entity_joined": "same family map, symmetric same-type overlap/whitespace adjacency merge of both predictions and gold",
+    "unmapped": "unknown prediction types remain their own family and count as false positives",
+    "models": "RuBERT word/native no probability cutoff; ru_core_news_sm PERSON/LOCATION cache; no new NER inference",
+    "wrappers": "raw-text detection layers; PII Guard preprocessing disabled to preserve offsets; Presidio stock generic rules adapted to ru; SEIF current detector"
+  }
+}
