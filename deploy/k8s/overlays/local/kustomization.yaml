@@ -7,10 +7,10 @@ resources:
 images:
   - name: ghcr.io/l0ckr/seif-pii
     newName: seif-api
-    newTag: local-50f8a89
+    newTag: local-2e9076e
   - name: ghcr.io/l0ckr/seif-pii-ner
     newName: seif-ner
-    newTag: local-50f8a89
+    newTag: local-2e9076e
 patches:
   - target:
       kind: StatefulSet

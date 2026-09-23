@@ -2,13 +2,13 @@
 
 Этот overlay запускает API из текущего `main`, две CPU NER-реплики и три Redis/Sentinel-пода на одном kind-узле. Он нужен для проверки Kubernetes-развёртывания и отказа отдельного пода. GPU RuBERT и измеренные 2000 RPS относятся к отдельному профилю `deploy/rubert` и этим overlay не подтверждаются.
 
-Создайте кластер с именем `seif` и соберите образы из текущего `main` (теги фиксируют проверенную версию кода `50f8a89`):
+Создайте кластер с именем `seif` и соберите образы из текущего `main` (теги фиксируют проверенную версию кода `2e9076e`):
 
 ```bash
 kind create cluster --name seif --wait 5m
-docker build -t seif-api:local-50f8a89 .
-docker build -t seif-ner:local-50f8a89 -f Dockerfile.ner .
-kind load docker-image seif-api:local-50f8a89 seif-ner:local-50f8a89 --name seif
+docker build -t seif-api:local-2e9076e .
+docker build -t seif-ner:local-2e9076e -f Dockerfile.ner .
+kind load docker-image seif-api:local-2e9076e seif-ner:local-2e9076e --name seif
 ```
 
 Локальные PV используют каталоги внутри kind-узла. Создайте их с правами UID Redis:
