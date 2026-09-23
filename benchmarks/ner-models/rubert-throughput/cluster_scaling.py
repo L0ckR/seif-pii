@@ -77,7 +77,7 @@ def start_redis(args, temporary, children, log):
     socket_path = temporary / "redis.sock"
     config = temporary / "redis.conf"
     config.write_text(f"port 0\ndir {temporary}\nunixsocket {socket_path}\nunixsocketperm 700\n"
-                      f"requirepass {password}\nsave \"\"\nappendonly no\nmaxmemory 512mb\n"
+                      f"requirepass {password}\nsave \"\"\nappendonly no\nmaxmemory {args.redis_maxmemory_mb}mb\n"
                       "maxmemory-policy noeviction\ndaemonize no\nloglevel warning\n")
     config.chmod(0o600)
     # Validated local executable and private generated config; no shell.
@@ -93,7 +93,8 @@ def start_redis(args, temporary, children, log):
                 if client.ping():
                     info = client.info("server")
                     return socket_path, password, {"version": info["redis_version"], "transport": "private Unix socket",
-                                                   "authenticated": True, "maxmemory_mb": 512, "persistence": False,
+                                                   "authenticated": True, "maxmemory_mb": args.redis_maxmemory_mb,
+                                                   "persistence": False,
                                                    "before_load": redis_usage(socket_path, password)}
             except Exception:
                 time.sleep(.1)
@@ -238,7 +239,9 @@ def launch_group(args, replica, temporary, children, logs, redis_socket, redis_p
                "PROMETHEUS_MULTIPROC_DIR": str(metric_directory),
                "SEIF_NER_URL": ner_url, "SEIF_NER_TOKEN": token, "SEIF_NER_TIMEOUT_SECONDS": "20",
                "SEIF_NER_MAX_CONCURRENCY": str(args.api_ner_concurrency), "SEIF_CPU_WORKERS": str(args.api_cpu_workers),
-               "SEIF_REQUIRE_FREE_THREADING": "1", "SEIF_LOG_LEVEL": "WARNING"}
+               "SEIF_MAX_INFLIGHT": str(args.api_max_inflight),
+               "SEIF_NER_HTTP_BACKEND": args.ner_http_backend,
+               "SEIF_REQUIRE_FREE_THREADING": "1", "SEIF_LOG_LEVEL": args.api_log_level}
     process, api_url = start_api_workers(args, api_env, logs[1], children, f"api-group-{replica}")
     api_health = smoke.await_ready(process, api_url, args.startup_timeout)
     require(api_health.get("storage") == "redis" and api_health.get("detector_profile") == "hybrid"
@@ -421,12 +424,16 @@ def parse_args():
     parser.add_argument("--api-python", type=Path, default=ROOT.parent / "seif-pii/.venv/bin/python")
     parser.add_argument("--dataset", type=Path, default=ROOT / "datasets/golden/organizer-v1/cases.jsonl")
     parser.add_argument("--redis-server", type=Path, help="Executable path; default searches PATH")
+    parser.add_argument("--redis-maxmemory-mb", type=int, choices=(512, 1024, 4096), default=512)
     parser.add_argument("--replicas", type=int, choices=(1, 2, 4), default=2)
     parser.add_argument("--api-processes-per-replica", type=int, choices=(1, 2, 3, 4, 6), default=3)
     parser.add_argument("--concurrency", nargs="+", type=int, choices=(8, 16, 32, 64, 128, 256), default=[32, 64])
     parser.add_argument("--repeats", type=int, default=20)
     parser.add_argument("--cpu-threads", type=int, choices=(1, 2, 4, 8), default=4)
     parser.add_argument("--api-cpu-workers", type=int, choices=(1, 2, 4, 8), default=1)
+    parser.add_argument("--api-max-inflight", type=int, choices=(128, 256, 512), default=128)
+    parser.add_argument("--ner-http-backend", choices=("httpx", "aiohttp"), default="httpx")
+    parser.add_argument("--api-log-level", choices=("INFO", "WARNING"), default="WARNING")
     parser.add_argument("--api-ner-concurrency", type=int, default=16)
     parser.add_argument("--model-batch-size", "--batch-size", type=int, choices=(1, 2, 4, 8, 16, 32), default=32)
     parser.add_argument("--batch-wait-ms", type=float, default=2)
@@ -437,7 +444,7 @@ def parse_args():
     parser.add_argument("--include-traces", action="store_true")
     parser.add_argument("--offered-rps", type=float, default=0, help="Optional fixed-rate mask load instead of closed-loop phases")
     parser.add_argument("--duration", type=float, default=30)
-    parser.add_argument("--max-inflight", type=int, choices=(32, 64, 128, 256), default=256)
+    parser.add_argument("--max-inflight", type=int, choices=(32, 64, 128, 256, 512), default=256)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if args.concurrency != sorted(set(args.concurrency)) or not 1 <= args.repeats <= 100:
@@ -467,6 +474,8 @@ def parse_args():
 def main():
     args = parse_args()
     config_keys = ("replicas", "api_processes_per_replica", "concurrency", "repeats", "cpu_threads", "api_cpu_workers",
+                   "api_max_inflight",
+                   "ner_http_backend", "api_log_level", "redis_maxmemory_mb",
                    "api_ner_concurrency", "model_batch_size", "batch_wait_ms", "ner_max_jobs", "ner_max_http",
                    "offered_rps", "duration", "max_inflight")
     report = {"schema_version": 1, "status": "FAIL", "started_at_utc": datetime.now(timezone.utc).isoformat(),

@@ -12,10 +12,12 @@ Unicode-смещения. Он требует локальных весов, CUD
 Compose по умолчанию сохраняет CPU-профиль. [Запуск RuBERT](deploy/service/README.md#опциональный-rubert-tensorrt),
 [сравнение с pii-guard на трёх корпусах и HTTP RPS](benchmarks/ner-models/rubert-upgrade/README.md).
 
-Эксперимент с GPU microbatching, репликами API/NER и общим Redis:
+Ветка `experiment/rubert-throughput`: GPU microbatching, оптимизация HTTP-клиента,
+реплики API/NER и общий Redis:
 [измерения на корпусе организаторов](benchmarks/ner-models/rubert-throughput/README.md),
 [конфигурация двух NER и нескольких API workers](deploy/rubert/README.md).
-Качество сохранено на всех 5 095 проверенных документах. Короткие closed-loop
+На одинаковом коротком тесте двух API переход HTTPX → aiohttp дал +62.4% RPS.
+Предсказания сохранены на всех 5 095 проверенных документах. Короткие closed-loop
 цифры отделены от фиксированного входящего потока и его потерь; Compose и
 публичный туннель не входят в локальный процессный RPS-прогон.
 

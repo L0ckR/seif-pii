@@ -1,0 +1,345 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "started_at_utc": "2026-09-23T00:12:18.282563+00:00",
+  "configuration": {
+    "batch_size": 32,
+    "decoder": "word",
+    "profile": "native",
+    "max_documents_per_model_batch": 32,
+    "cpu_threads": 4,
+    "reference": "/home/lockr/projects/seif-pii-rubert/local-data/rubert-upgrade/run-v2/native.jsonl",
+    "fresh_inference": true,
+    "text_cache": false
+  },
+  "limitations": [
+    "Exact preservation check against frozen model predictions, not perfect ground truth.",
+    "All 5095 previously inspected development texts; not independent held-out evidence.",
+    "Native type/offset, service type/offset, and mask equality are separate checks.",
+    "Different float confidences are reported; no numerical-equality requirement.",
+    "Elapsed time includes CPU parity checks and lazy graph capture; it is not HTTP RPS.",
+    "No input text, matched values, original text hashes by case or credentials are retained."
+  ],
+  "provenance_before": {
+    "source_sha256": {
+      "seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+      "seif/app.py": "00a6622d5d55ac2ac7262db0b98e13c4fc3460c698b8bd710d2d9be29532eded",
+      "seif/async_callbacks.py": "b5ce7aae9979e6251c827d3e2099a4377266bcb8076606d67dbe86c38fa21ebe",
+      "seif/cardholder_fields.py": "3d80d59636e4b2e1a668325fbb945027b48a37e60aad5297c39b727a51806462",
+      "seif/config.py": "57496802847d890d4dbf8d072537b7c426c90ac0fd48bd69057ea8ab5579fa18",
+      "seif/context_filters.py": "d2bd0a0303aaae5bb44e6748ae429c5348e34f0f711a46285ed869b657c59fa1",
+      "seif/detector.py": "0fa80ea590895f862be2d44278bf68e75f5ce4a7f8cabb76d079f065f491b98c",
+      "seif/document_fields.py": "2200ed9f9751ee4894f164a4b43654de6f204c9661da83cdbf7a2a455d46ba51",
+      "seif/gliner_ner.py": "8012d0c3fc83b6c0a0defd4a07735d6e9cd4aa0c5debb1f7c395ddafb7431311",
+      "seif/gliner_onnx.py": "08118aaf0326e89d7a0ef890a24f7a29728578a713690e930cf7cf48cd12056d",
+      "seif/location_fields.py": "2d806e7a35bb7669001e796deba5cbac020dddb2887284390d27becebc43009e",
+      "seif/ner.py": "cd1c5f86912b7917350c6a5289ecebadd555c1c4cba09dee6d08eec51d953802",
+      "seif/ner_batching.py": "0d1d44fc5c889412d58a74587c5985ac49ba1bf2720a88817a9aa0fc27d97777",
+      "seif/ner_boundaries.py": "0f93e7eeed5125933de09e2e05f8ebb037a477b46d9be93cab7cbb1c750bf815",
+      "seif/ner_contract.py": "83ce1bf1345ece197c74e7477e4524f08f511a5b0fb3218247039efb7e1addb2",
+      "seif/ner_http.py": "3537e1c93cfd2131911e3cabdc500db2a81d1a5ea668e660c10315ccf57b1ccf",
+      "seif/ner_transport.py": "436ae1230801b6d087391077035d90d01981543ee381ef7b976231c96632dff1",
+      "seif/person_fields.py": "ca843e9b6f8ef9d4739703e83b1438a96d114dc95782626fa2e89366bf29f08d",
+      "seif/request_capture.py": "ce9d53ed7827992cd5c0c4b10914e3f9becc978cc192263116112c642e506855",
+      "seif/rubert_batch.py": "b74355817920135f8c9775fd15098631bf6485d3f0c78bbb1e97db3a23343636",
+      "seif/rubert_decoder.py": "303608a624d591c20e0d68730537009a0694f78d614307e46b9cf288063ffe81",
+      "seif/rubert_ner.py": "e27cd8c5aee9f783df5fb9f23254ed563efc4c3fcd1845b5e0935c87124a4aa1",
+      "seif/structured_fields.py": "26462106b1a29140a3bbf2b2370feab631145932ee44fbb78ca007b6d1d1218c",
+      "seif/transform.py": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+      "seif/vault.py": "b6b4f59bc911bb0a0c745b6801bcd9a034200e016f321e38c2984206c2946554",
+      "benchmarks/ner-models/rubert-throughput/quality_batch.py": "8d97e43d960ed2a1c595c5e1eae8cd0be8bccd493b7bfbf7aeebc9da5d5c50fb",
+      "benchmarks/ner-models/rubert-upgrade/evaluate.py": "e888c75735697fbc5e4176bf5748f8c35196234f4a47c22a91fe1910af838035",
+      "scripts/compare_ner_public.py": "a781a7fc73b3ac947f27c14459f1e40aafd7bb8fcc6bdf064bcba14c7ded6286",
+      "scripts/evaluate_golden.py": "02e1160fbfbb2933e4e90d65573e559962e6b474ab69ddaa1c2c0f66e68226ff",
+      "scripts/evaluate_annotations.py": "b429e3605b90a9090a8eae0185ee9286708836494235617901fbd6ae4e0d5463"
+    },
+    "asset_sha256": {
+      "/home/lockr/projects/seif-pii-rubert/local-data/rubert-upgrade/run-v2/native.jsonl": "d2c01606f1e8bdb1da7686847b559dbe33c72c40bbc7d37f215e9337bbd99e93",
+      "/home/lockr/projects/seif-pii-rubert/local-data/rubert-upgrade/run-v2/native.meta.json": "b8c4ae06285c731c3cf1d8754977728a84ff8ee34ee6a0bc6b7184efc5076625",
+      "/home/lockr/projects/seif-pii-gliner/local-data/gliner25-public/prepared-inputs.jsonl": "b8b80873a507ae3841c1c74143162f8f169c0a68d6509da8509907cf11a20405",
+      "/home/lockr/projects/seif-pii-gliner/local-data/gliner25-public/protocol.json": "6058374163fc3978ec4a882d19328e96fad1032d61bbac168ad8a3c78df68a27",
+      "/home/lockr/projects/seif-pii-rubert/datasets/golden/organizer-v1/cases.jsonl": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46",
+      "/home/lockr/projects/seif-pii-rubert/datasets/golden/organizer-v1/manifest.json": "74f6b661ff33cbc88b53fde91cb1103acaa1f6002a4008463d3100b7c9b2305a",
+      "/home/lockr/projects/seif-pii-rubert/local-data/rubert-tensorrt/run-v1/protocol.json": "7c61be943b1d3f83b37842da3ba55d919dcea44dc57be4682bb80ace63790856"
+    },
+    "model_sha256": {
+      "pii_ner.py": "4591fc8c5580c39dc5121ca649f4a2a4936276ea4c9e82ae144e5c467eb5a5ca",
+      "trt_backend.py": "eafc144a9b698e94dfe155074c7a3ab1063ee7817ab1a285b69639db1c07b424",
+      "model.fp16.engine": "f4d3f4eaa72ed8543b81ef4f6acf216f95be93fe4da8c3be27c8513cb9e80b35",
+      "config.json": "f4eeba88d1503a56d629195c9307d42c1acf4ce53ab88fdaecfc754fd0745cf9",
+      "runtime_config.json": "841420d76f5e7ec4ec7dd781b79987fe0f3facb25cc68896e7c88012f7af1b5d",
+      "tokenizer.json": "f61eee9d0dc18f14c195321a37eadf9e5aeb3a323bc278dec689adeb89dec1b9",
+      "tokenizer_config.json": "ffe381e31042ba94cb077bf7d5b9cee944dbd0c2a85079b095bea7e5a5a6058b"
+    }
+  },
+  "corpus_identity": {
+    "ordered_membership_sha256": "8c330eeee653b2414824a28e9c45863d5bfeb43965698174a3516a96f00a12e8",
+    "text_sha256": "04d16d733c44eb8917f3138399ebbb8df05a27db9a1399dd86ff1ee2cf93aec9",
+    "gold_sha256": "932cd5d5d3573b043a74c845503e89af7dbbd87fda99316075e3a5dcbd7e1720"
+  },
+  "input_counts": {
+    "organizer": 446,
+    "pii": 1810,
+    "redmadrobot": 2839
+  },
+  "runtime": {
+    "python": "3.12.11 (main, Aug 18 2025, 19:19:11) [Clang 20.1.4 ]",
+    "python_executable": "/home/lockr/projects/seif-pii-rubert/.venv/bin/python",
+    "packages": {
+      "torch": "2.8.0+cu128",
+      "numpy": "2.5.3",
+      "transformers": "4.57.1",
+      "tokenizers": "0.22.2",
+      "tensorrt-cu12": "10.13.3.9"
+    }
+  },
+  "corpora": {
+    "organizer": {
+      "documents": 446,
+      "native_span_matches": 446,
+      "service_span_matches": 446,
+      "mask_matches": 446,
+      "mismatches": {
+        "native_spans": [],
+        "service_spans": [],
+        "mask": []
+      },
+      "confidence_on_aligned_native_spans": {
+        "pairs": 547,
+        "different": 0,
+        "max_absolute_delta": 0.0,
+        "mean_absolute_delta": 0.0
+      },
+      "native_span_matches_ratio": 1.0,
+      "service_span_matches_ratio": 1.0,
+      "mask_matches_ratio": 1.0
+    },
+    "pii": {
+      "documents": 1810,
+      "native_span_matches": 1810,
+      "service_span_matches": 1810,
+      "mask_matches": 1810,
+      "mismatches": {
+        "native_spans": [],
+        "service_spans": [],
+        "mask": []
+      },
+      "confidence_on_aligned_native_spans": {
+        "pairs": 1740,
+        "different": 0,
+        "max_absolute_delta": 0.0,
+        "mean_absolute_delta": 0.0
+      },
+      "native_span_matches_ratio": 1.0,
+      "service_span_matches_ratio": 1.0,
+      "mask_matches_ratio": 1.0
+    },
+    "redmadrobot": {
+      "documents": 2839,
+      "native_span_matches": 2839,
+      "service_span_matches": 2839,
+      "mask_matches": 2839,
+      "mismatches": {
+        "native_spans": [],
+        "service_spans": [],
+        "mask": []
+      },
+      "confidence_on_aligned_native_spans": {
+        "pairs": 5340,
+        "different": 0,
+        "max_absolute_delta": 0.0,
+        "mean_absolute_delta": 0.0
+      },
+      "native_span_matches_ratio": 1.0,
+      "service_span_matches_ratio": 1.0,
+      "mask_matches_ratio": 1.0
+    }
+  },
+  "elapsed_quality_seconds_not_rps": 7.340323691998492,
+  "analyzer": {
+    "model": "lockR/rubert-base-pii-ner-tensorrt",
+    "revision": "73be581047bf123dac6505e7b3900ec292942296",
+    "files_sha256": {
+      "pii_ner.py": "4591fc8c5580c39dc5121ca649f4a2a4936276ea4c9e82ae144e5c467eb5a5ca",
+      "trt_backend.py": "eafc144a9b698e94dfe155074c7a3ab1063ee7817ab1a285b69639db1c07b424",
+      "model.fp16.engine": "f4d3f4eaa72ed8543b81ef4f6acf216f95be93fe4da8c3be27c8513cb9e80b35",
+      "config.json": "f4eeba88d1503a56d629195c9307d42c1acf4ce53ab88fdaecfc754fd0745cf9",
+      "runtime_config.json": "841420d76f5e7ec4ec7dd781b79987fe0f3facb25cc68896e7c88012f7af1b5d",
+      "tokenizer.json": "f61eee9d0dc18f14c195321a37eadf9e5aeb3a323bc278dec689adeb89dec1b9",
+      "tokenizer_config.json": "ffe381e31042ba94cb077bf7d5b9cee944dbd0c2a85079b095bea7e5a5a6058b"
+    },
+    "backend": "trt-graph",
+    "device": "cuda",
+    "min_confidence": null,
+    "decoder": "word",
+    "gateway_profile": "native",
+    "batch_size": 32,
+    "max_tokens": 512,
+    "overlap_tokens": 128,
+    "native_types": [
+      "BIRTH_CERTIFICATE",
+      "CITY",
+      "COUNTRY",
+      "CREDIT_CARD",
+      "DISTRICT",
+      "DRIVER_LICENSE",
+      "EMAIL",
+      "FIRST_NAME",
+      "HOUSE",
+      "INN",
+      "IP_ADDRESS",
+      "LAST_NAME",
+      "MIDDLE_NAME",
+      "MILITARY_ID",
+      "OMS",
+      "PASSPORT",
+      "PHONE",
+      "REGION",
+      "SNILS",
+      "STREET",
+      "URL"
+    ],
+    "person_labels": [
+      "FIRST_NAME",
+      "LAST_NAME",
+      "MIDDLE_NAME"
+    ],
+    "location_labels": [
+      "CITY",
+      "COUNTRY",
+      "DISTRICT",
+      "HOUSE",
+      "REGION",
+      "STREET"
+    ],
+    "gateway_merge": "none; original native boundaries",
+    "location_scope": "six address-component types, broader than geographic proper names",
+    "native_predictions": "all21 labels retained before coarse gateway mapping",
+    "precision": "published TensorRT FP16 engine with FP32 normalization accumulation; TF32 disabled at build",
+    "packages": {
+      "torch": "2.8.0+cu128",
+      "numpy": "2.5.3",
+      "transformers": "4.57.1",
+      "tokenizers": "0.22.2",
+      "tensorrt-cu12": "10.13.3.9",
+      "tensorrt-cu12-bindings": "10.13.3.9"
+    },
+    "logits_shape_validation": "exact [batch, padded_tokens,43]",
+    "warmup_complete": true,
+    "graph_buckets_captured": [
+      32,
+      64,
+      128,
+      256,
+      512
+    ],
+    "batch_graph_shapes": [
+      [
+        2,
+        32
+      ],
+      [
+        2,
+        64
+      ],
+      [
+        4,
+        32
+      ],
+      [
+        4,
+        64
+      ],
+      [
+        8,
+        32
+      ],
+      [
+        8,
+        64
+      ],
+      [
+        8,
+        256
+      ],
+      [
+        16,
+        32
+      ],
+      [
+        16,
+        64
+      ],
+      [
+        32,
+        32
+      ],
+      [
+        32,
+        64
+      ],
+      [
+        32,
+        128
+      ]
+    ]
+  },
+  "all_documents_compared": true,
+  "exact_native_span_parity": true,
+  "exact_service_span_parity": true,
+  "exact_mask_parity": true,
+  "provenance_after": {
+    "source_sha256": {
+      "seif/__init__.py": "c5d0edf58682125d444fe1f4f708807d255fd91501b2d1eff7dad6be2b4a7528",
+      "seif/app.py": "00a6622d5d55ac2ac7262db0b98e13c4fc3460c698b8bd710d2d9be29532eded",
+      "seif/async_callbacks.py": "b5ce7aae9979e6251c827d3e2099a4377266bcb8076606d67dbe86c38fa21ebe",
+      "seif/cardholder_fields.py": "3d80d59636e4b2e1a668325fbb945027b48a37e60aad5297c39b727a51806462",
+      "seif/config.py": "57496802847d890d4dbf8d072537b7c426c90ac0fd48bd69057ea8ab5579fa18",
+      "seif/context_filters.py": "d2bd0a0303aaae5bb44e6748ae429c5348e34f0f711a46285ed869b657c59fa1",
+      "seif/detector.py": "0fa80ea590895f862be2d44278bf68e75f5ce4a7f8cabb76d079f065f491b98c",
+      "seif/document_fields.py": "2200ed9f9751ee4894f164a4b43654de6f204c9661da83cdbf7a2a455d46ba51",
+      "seif/gliner_ner.py": "8012d0c3fc83b6c0a0defd4a07735d6e9cd4aa0c5debb1f7c395ddafb7431311",
+      "seif/gliner_onnx.py": "08118aaf0326e89d7a0ef890a24f7a29728578a713690e930cf7cf48cd12056d",
+      "seif/location_fields.py": "2d806e7a35bb7669001e796deba5cbac020dddb2887284390d27becebc43009e",
+      "seif/ner.py": "cd1c5f86912b7917350c6a5289ecebadd555c1c4cba09dee6d08eec51d953802",
+      "seif/ner_batching.py": "0d1d44fc5c889412d58a74587c5985ac49ba1bf2720a88817a9aa0fc27d97777",
+      "seif/ner_boundaries.py": "0f93e7eeed5125933de09e2e05f8ebb037a477b46d9be93cab7cbb1c750bf815",
+      "seif/ner_contract.py": "83ce1bf1345ece197c74e7477e4524f08f511a5b0fb3218247039efb7e1addb2",
+      "seif/ner_http.py": "3537e1c93cfd2131911e3cabdc500db2a81d1a5ea668e660c10315ccf57b1ccf",
+      "seif/ner_transport.py": "436ae1230801b6d087391077035d90d01981543ee381ef7b976231c96632dff1",
+      "seif/person_fields.py": "ca843e9b6f8ef9d4739703e83b1438a96d114dc95782626fa2e89366bf29f08d",
+      "seif/request_capture.py": "ce9d53ed7827992cd5c0c4b10914e3f9becc978cc192263116112c642e506855",
+      "seif/rubert_batch.py": "b74355817920135f8c9775fd15098631bf6485d3f0c78bbb1e97db3a23343636",
+      "seif/rubert_decoder.py": "303608a624d591c20e0d68730537009a0694f78d614307e46b9cf288063ffe81",
+      "seif/rubert_ner.py": "e27cd8c5aee9f783df5fb9f23254ed563efc4c3fcd1845b5e0935c87124a4aa1",
+      "seif/structured_fields.py": "26462106b1a29140a3bbf2b2370feab631145932ee44fbb78ca007b6d1d1218c",
+      "seif/transform.py": "c7f49a172b11fe4eb189125422365fa332d075964eb655990e732ed065f350b3",
+      "seif/vault.py": "b6b4f59bc911bb0a0c745b6801bcd9a034200e016f321e38c2984206c2946554",
+      "benchmarks/ner-models/rubert-throughput/quality_batch.py": "8d97e43d960ed2a1c595c5e1eae8cd0be8bccd493b7bfbf7aeebc9da5d5c50fb",
+      "benchmarks/ner-models/rubert-upgrade/evaluate.py": "e888c75735697fbc5e4176bf5748f8c35196234f4a47c22a91fe1910af838035",
+      "scripts/compare_ner_public.py": "a781a7fc73b3ac947f27c14459f1e40aafd7bb8fcc6bdf064bcba14c7ded6286",
+      "scripts/evaluate_golden.py": "02e1160fbfbb2933e4e90d65573e559962e6b474ab69ddaa1c2c0f66e68226ff",
+      "scripts/evaluate_annotations.py": "b429e3605b90a9090a8eae0185ee9286708836494235617901fbd6ae4e0d5463"
+    },
+    "asset_sha256": {
+      "/home/lockr/projects/seif-pii-rubert/local-data/rubert-upgrade/run-v2/native.jsonl": "d2c01606f1e8bdb1da7686847b559dbe33c72c40bbc7d37f215e9337bbd99e93",
+      "/home/lockr/projects/seif-pii-rubert/local-data/rubert-upgrade/run-v2/native.meta.json": "b8c4ae06285c731c3cf1d8754977728a84ff8ee34ee6a0bc6b7184efc5076625",
+      "/home/lockr/projects/seif-pii-gliner/local-data/gliner25-public/prepared-inputs.jsonl": "b8b80873a507ae3841c1c74143162f8f169c0a68d6509da8509907cf11a20405",
+      "/home/lockr/projects/seif-pii-gliner/local-data/gliner25-public/protocol.json": "6058374163fc3978ec4a882d19328e96fad1032d61bbac168ad8a3c78df68a27",
+      "/home/lockr/projects/seif-pii-rubert/datasets/golden/organizer-v1/cases.jsonl": "3bec44d5eafbffc799cd525bbe573f8b0adf84ec82e16271bd406fe92b521e46",
+      "/home/lockr/projects/seif-pii-rubert/datasets/golden/organizer-v1/manifest.json": "74f6b661ff33cbc88b53fde91cb1103acaa1f6002a4008463d3100b7c9b2305a",
+      "/home/lockr/projects/seif-pii-rubert/local-data/rubert-tensorrt/run-v1/protocol.json": "7c61be943b1d3f83b37842da3ba55d919dcea44dc57be4682bb80ace63790856"
+    },
+    "model_sha256": {
+      "pii_ner.py": "4591fc8c5580c39dc5121ca649f4a2a4936276ea4c9e82ae144e5c467eb5a5ca",
+      "trt_backend.py": "eafc144a9b698e94dfe155074c7a3ab1063ee7817ab1a285b69639db1c07b424",
+      "model.fp16.engine": "f4d3f4eaa72ed8543b81ef4f6acf216f95be93fe4da8c3be27c8513cb9e80b35",
+      "config.json": "f4eeba88d1503a56d629195c9307d42c1acf4ce53ab88fdaecfc754fd0745cf9",
+      "runtime_config.json": "841420d76f5e7ec4ec7dd781b79987fe0f3facb25cc68896e7c88012f7af1b5d",
+      "tokenizer.json": "f61eee9d0dc18f14c195321a37eadf9e5aeb3a323bc278dec689adeb89dec1b9",
+      "tokenizer_config.json": "ffe381e31042ba94cb077bf7d5b9cee944dbd0c2a85079b095bea7e5a5a6058b"
+    }
+  },
+  "immutable_sources_assets_models": true,
+  "finished_at_utc": "2026-09-23T00:12:33.087770+00:00"
+}

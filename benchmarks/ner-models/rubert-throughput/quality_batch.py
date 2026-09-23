@@ -26,6 +26,7 @@ evaluation = importlib.import_module("benchmarks.ner-models.rubert-upgrade.evalu
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--batch-size", type=int, choices=(1, 2, 4, 8, 16, 32), default=32)
+    parser.add_argument("--cpu-threads", type=int, choices=range(1, 33), default=4)
     parser.add_argument("--model-path", type=Path, default=ROOT / "local-data/rubert-tensorrt/model")
     parser.add_argument("--reference", type=Path, default=ROOT / "local-data/rubert-upgrade/run-v2/native.jsonl")
     parser.add_argument("--public-run-dir", type=Path,
@@ -122,11 +123,12 @@ def finish_summary(summary):
 
 
 def run_inference(args, rows, references, report):
+    os.environ["SEIF_RUBERT_CPU_THREADS"] = str(args.cpu_threads)
     import torch
 
     from seif.rubert_ner import RubertAnalyzer
 
-    torch.set_num_threads(4)
+    torch.set_num_threads(args.cpu_threads)
     torch.manual_seed(20260922)
     torch.backends.cuda.matmul.allow_tf32 = False
     torch.backends.cudnn.allow_tf32 = False
@@ -134,6 +136,7 @@ def run_inference(args, rows, references, report):
                          "packages": {name: importlib.metadata.version(name) for name in
                                       ("torch", "numpy", "transformers", "tokenizers", "tensorrt-cu12")}}
     model = RubertAnalyzer.from_local(args.model_path, decoder="word", profile="native", batch_size=args.batch_size)
+    report["runtime"]["torch_num_threads"] = torch.get_num_threads()
     report["corpora"] = {name: empty_summary() for name in evaluation.COUNTS}
     started = time.perf_counter()
     for start in range(0, len(rows), args.batch_size):
@@ -168,7 +171,7 @@ def main():
     os.environ.update(HF_HUB_OFFLINE="1", TRANSFORMERS_OFFLINE="1", TOKENIZERS_PARALLELISM="false")
     report = {"schema_version": 1, "status": "FAIL", "started_at_utc": datetime.now(timezone.utc).isoformat(),
               "configuration": {"batch_size": args.batch_size, "decoder": "word", "profile": "native",
-                                "max_documents_per_model_batch": args.batch_size, "cpu_threads": 4,
+                                "max_documents_per_model_batch": args.batch_size, "cpu_threads": args.cpu_threads,
                                 "reference": str(args.reference), "fresh_inference": True, "text_cache": False},
               "limitations": ["Exact preservation check against frozen model predictions, not perfect ground truth.",
                               "All 5095 previously inspected development texts; not independent held-out evidence.",

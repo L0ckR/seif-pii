@@ -92,7 +92,8 @@ def create_ner_app():
 
 def provenance(args):
     result = upgrade.provenance(args)
-    result["source_sha256"][str(Path(__file__).relative_to(ROOT))] = legacy.file_digest(Path(__file__))
+    for path in (Path(__file__), ROOT / "pyproject.toml", ROOT / "requirements.lock"):
+        result["source_sha256"][str(path.relative_to(ROOT))] = legacy.file_digest(path)
     return result
 
 
@@ -131,8 +132,9 @@ def launch_pair(args, replica, temporary, children, logs):
                "SEIF_MASTER_KEY": base64.b64encode(secrets.token_bytes(32)).decode("ascii"),
                "SEIF_NER_URL": ner_url, "SEIF_NER_TOKEN": token, "SEIF_NER_TIMEOUT_SECONDS": "20",
                "SEIF_NER_MAX_CONCURRENCY": str(args.api_ner_concurrency),
+               "SEIF_NER_HTTP_BACKEND": args.ner_http_backend,
                "SEIF_CPU_WORKERS": str(args.api_cpu_workers),
-               "SEIF_REQUIRE_FREE_THREADING": "1", "SEIF_LOG_LEVEL": "WARNING"}
+               "SEIF_REQUIRE_FREE_THREADING": "1", "SEIF_LOG_LEVEL": args.api_log_level}
     process, api_url = smoke.start_service((args.api_python, "seif.app:create_app", f"api-{replica}"),
                                            ROOT, api_env, logs[1], children)
     api_health = smoke.await_ready(process, api_url, args.startup_timeout)
@@ -339,6 +341,8 @@ def parse_args():
     parser.add_argument("--repeats", type=int, default=20)
     parser.add_argument("--cpu-threads", type=int, choices=(1, 2, 4, 8), default=4)
     parser.add_argument("--api-cpu-workers", type=int, choices=(1, 2, 4, 8), default=1)
+    parser.add_argument("--ner-http-backend", choices=("httpx", "aiohttp"), default="httpx")
+    parser.add_argument("--api-log-level", choices=("INFO", "WARNING"), default="WARNING")
     parser.add_argument("--api-ner-concurrency", type=int, default=4)
     parser.add_argument("--model-batch-size", "--batch-size", type=int, choices=(1, 2, 4, 8, 16, 32), default=1)
     parser.add_argument("--batch-wait-ms", type=float, default=1.0)
@@ -378,6 +382,7 @@ def main():
                                 "stages": args.stages, "repeats": args.repeats, "unique_texts": 446,
                                 "cpu_threads_per_ner": args.cpu_threads, "ner_max_jobs": args.ner_max_jobs,
                                 "ner_max_http": args.ner_max_http, "api_cpu_workers_per_replica": args.api_cpu_workers,
+                                "ner_http_backend": args.ner_http_backend, "api_log_level": args.api_log_level,
                                 "api_ner_concurrency": args.api_ner_concurrency,
                                 "model_batch_size": args.model_batch_size, "batch_wait_ms": args.batch_wait_ms,
                                 "api_processes_per_replica": 1, "ner_processes_per_replica": 1,

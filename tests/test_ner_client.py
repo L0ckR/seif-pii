@@ -144,7 +144,7 @@ def test_hybrid_api_restores_exactly_and_does_not_reanalyze_retries(monkeypatch,
     class FakeNer:
         calls = 0
 
-        def __init__(self, *args, max_concurrency=4):
+        def __init__(self, *args, max_concurrency=4, backend="httpx"):
             pass
 
         async def health(self):
@@ -175,7 +175,7 @@ def test_hybrid_api_restores_exactly_and_does_not_reanalyze_retries(monkeypatch,
 
 def test_model_failure_never_returns_plaintext_success(monkeypatch, caplog):
     class FailedNer:
-        def __init__(self, *args, max_concurrency=4):
+        def __init__(self, *args, max_concurrency=4, backend="httpx"):
             pass
 
         async def health(self):

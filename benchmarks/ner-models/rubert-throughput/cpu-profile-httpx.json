@@ -1,0 +1,700 @@
+{
+  "schema_version": 1,
+  "scope": "Diagnostic cProfile of the API event-loop thread, not a capacity result",
+  "runtime_source_commit": "7ccab68",
+  "successful_measured_mask_requests": 2230,
+  "total_profiled_function_calls": 11033938,
+  "primitive_calls": 10844119,
+  "profiled_seconds": 6.693440746999992,
+  "limitations": [
+    "Profiling changes latency and throughput; do not compare profiled RPS to unprofiled capacity.",
+    "Cumulative time is nested and cannot be summed.",
+    "Coroutine counts include resumptions, not just requests.",
+    "The interval includes startup health/warmup and verification outside the measured mask phase.",
+    "No original text, matched values or credentials are retained."
+  ],
+  "top_self": [
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method builtins.isinstance>",
+      "calls_including_async_resumes": 1097315,
+      "self_seconds": 0.14100922700000001,
+      "cumulative_seconds": 0.20793551200000002
+    },
+    {
+      "file": "site-packages/fastapi/encoders.py",
+      "line": 129,
+      "function": "jsonable_encoder",
+      "calls_including_async_resumes": 74139,
+      "self_seconds": 0.117545647,
+      "cumulative_seconds": 0.205322432
+    },
+    {
+      "file": "seif/detector.py",
+      "line": 1142,
+      "function": "add",
+      "calls_including_async_resumes": 39463,
+      "self_seconds": 0.09193864700000001,
+      "cumulative_seconds": 0.14458199300000002
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method builtins.max>",
+      "calls_including_async_resumes": 55848,
+      "self_seconds": 0.088638404,
+      "cumulative_seconds": 0.088638404
+    },
+    {
+      "file": "encoder.py",
+      "line": 207,
+      "function": "iterencode",
+      "calls_including_async_resumes": 11204,
+      "self_seconds": 0.079302049,
+      "cumulative_seconds": 0.079302049
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method builtins.next>",
+      "calls_including_async_resumes": 128191,
+      "self_seconds": 0.074480638,
+      "cumulative_seconds": 0.505967173
+    },
+    {
+      "file": "site-packages/anyio/abc/_sockets.py",
+      "line": 143,
+      "function": "extra_attributes",
+      "calls_including_async_resumes": 13963,
+      "self_seconds": 0.07148310000000001,
+      "cumulative_seconds": 0.126476735
+    },
+    {
+      "file": "site-packages/anyio/_backends/_asyncio.py",
+      "line": 1434,
+      "function": "send",
+      "calls_including_async_resumes": 8942,
+      "self_seconds": 0.070007597,
+      "cumulative_seconds": 0.10298567900000001
+    },
+    {
+      "file": "site-packages/httpcore/_async/connection_pool.py",
+      "line": 270,
+      "function": "_assign_requests_to_connections",
+      "calls_including_async_resumes": 5262,
+      "self_seconds": 0.064351317,
+      "cumulative_seconds": 0.45099944000000003
+    },
+    {
+      "file": "contextlib.py",
+      "line": 108,
+      "function": "__init__",
+      "calls_including_async_resumes": 62701,
+      "self_seconds": 0.062441260000000005,
+      "cumulative_seconds": 0.073854128
+    },
+    {
+      "file": "site-packages/h11/_headers.py",
+      "line": 152,
+      "function": "normalize_and_validate",
+      "calls_including_async_resumes": 4472,
+      "self_seconds": 0.060794756000000005,
+      "cumulative_seconds": 0.127132394
+    },
+    {
+      "file": "site-packages/httpx/_urlparse.py",
+      "line": 213,
+      "function": "urlparse",
+      "calls_including_async_resumes": 4474,
+      "self_seconds": 0.06031285,
+      "cumulative_seconds": 0.226643054
+    },
+    {
+      "file": "site-packages/prometheus_client/metrics.py",
+      "line": 138,
+      "function": "labels",
+      "calls_including_async_resumes": 22311,
+      "self_seconds": 0.0597805,
+      "cumulative_seconds": 0.086913736
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'search' of 're.Pattern' objects>",
+      "calls_including_async_resumes": 85653,
+      "self_seconds": 0.05866878700000001,
+      "cumulative_seconds": 0.05866878700000001
+    },
+    {
+      "file": "site-packages/fastapi/routing.py",
+      "line": 406,
+      "function": "app",
+      "calls_including_async_resumes": 19451,
+      "self_seconds": 0.058304938,
+      "cumulative_seconds": 6.092581644
+    },
+    {
+      "file": "seif/app.py",
+      "line": 435,
+      "function": "execute",
+      "calls_including_async_resumes": 19442,
+      "self_seconds": 0.057790037,
+      "cumulative_seconds": 5.492346993
+    },
+    {
+      "file": "site-packages/httpcore/_async/http11.py",
+      "line": 65,
+      "function": "handle_async_request",
+      "calls_including_async_resumes": 12755,
+      "self_seconds": 0.052966072,
+      "cumulative_seconds": 1.256628152
+    },
+    {
+      "file": "site-packages/h11/_connection.py",
+      "line": 272,
+      "function": "_process_event",
+      "calls_including_async_resumes": 13416,
+      "self_seconds": 0.051161086,
+      "cumulative_seconds": 0.181324965
+    },
+    {
+      "file": "site-packages/sniffio/_impl.py",
+      "line": 25,
+      "function": "current_async_library",
+      "calls_including_async_resumes": 41462,
+      "self_seconds": 0.049267327,
+      "cumulative_seconds": 0.06459667200000001
+    },
+    {
+      "file": "site-packages/anyio/_backends/_asyncio.py",
+      "line": 453,
+      "function": "__exit__",
+      "calls_including_async_resumes": 21337,
+      "self_seconds": 0.048758767,
+      "cumulative_seconds": 0.085351671
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'fullmatch' of 're.Pattern' objects>",
+      "calls_including_async_resumes": 83664,
+      "self_seconds": 0.048699848000000004,
+      "cumulative_seconds": 0.048699848000000004
+    },
+    {
+      "file": "site-packages/anyio/_backends/_asyncio.py",
+      "line": 422,
+      "function": "__enter__",
+      "calls_including_async_resumes": 21337,
+      "self_seconds": 0.047898285000000006,
+      "cumulative_seconds": 0.11600884800000001
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'get' of 'dict' objects>",
+      "calls_including_async_resumes": 216423,
+      "self_seconds": 0.043786379,
+      "cumulative_seconds": 0.043786379
+    },
+    {
+      "file": "seif/app.py",
+      "line": 385,
+      "function": "_detect_and_transform",
+      "calls_including_async_resumes": 19434,
+      "self_seconds": 0.042715398,
+      "cumulative_seconds": 5.128570153
+    },
+    {
+      "file": "contextlib.py",
+      "line": 303,
+      "function": "helper",
+      "calls_including_async_resumes": 60464,
+      "self_seconds": 0.041789504000000005,
+      "cumulative_seconds": 0.11080368900000001
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method builtins.len>",
+      "calls_including_async_resumes": 316911,
+      "self_seconds": 0.041627799,
+      "cumulative_seconds": 0.043046504
+    },
+    {
+      "file": "seif/person_fields.py",
+      "line": 302,
+      "function": "_all_candidates",
+      "calls_including_async_resumes": 2886,
+      "self_seconds": 0.041196247000000005,
+      "cumulative_seconds": 0.274249426
+    },
+    {
+      "file": "site-packages/anyio/_backends/_asyncio.py",
+      "line": 573,
+      "function": "_timeout",
+      "calls_including_async_resumes": 21337,
+      "self_seconds": 0.040684207,
+      "cumulative_seconds": 0.041689435000000004
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'finditer' of 're.Pattern' objects>",
+      "calls_including_async_resumes": 90930,
+      "self_seconds": 0.039654978,
+      "cumulative_seconds": 0.039654978
+    },
+    {
+      "file": "site-packages/uvicorn/protocols/http/httptools_impl.py",
+      "line": 463,
+      "function": "send",
+      "calls_including_async_resumes": 4496,
+      "self_seconds": 0.038425244000000004,
+      "cumulative_seconds": 0.07808719700000001
+    },
+    {
+      "file": "site-packages/httpx/_models.py",
+      "line": 284,
+      "function": "__getitem__",
+      "calls_including_async_resumes": 24595,
+      "self_seconds": 0.038315605,
+      "cumulative_seconds": 0.06699555800000001
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'match' of 're.Pattern' objects>",
+      "calls_including_async_resumes": 85812,
+      "self_seconds": 0.038135096,
+      "cumulative_seconds": 0.038135096
+    },
+    {
+      "file": "contextlib.py",
+      "line": 145,
+      "function": "__exit__",
+      "calls_including_async_resumes": 60464,
+      "self_seconds": 0.038022119,
+      "cumulative_seconds": 0.310106392
+    },
+    {
+      "file": "site-packages/httpcore/_models.py",
+      "line": 53,
+      "function": "enforce_headers",
+      "calls_including_async_resumes": 6709,
+      "self_seconds": 0.037871836,
+      "cumulative_seconds": 0.11100770600000001
+    },
+    {
+      "file": "site-packages/httpx/_models.py",
+      "line": 144,
+      "function": "__init__",
+      "calls_including_async_resumes": 11184,
+      "self_seconds": 0.03548127,
+      "cumulative_seconds": 0.07637767100000001
+    }
+  ],
+  "top_cumulative": [
+    {
+      "file": "site-packages/uvicorn/protocols/http/httptools_impl.py",
+      "line": 420,
+      "function": "run_asgi",
+      "calls_including_async_resumes": 19459,
+      "self_seconds": 0.011973022000000002,
+      "cumulative_seconds": 6.588629838
+    },
+    {
+      "file": "site-packages/uvicorn/middleware/proxy_headers.py",
+      "line": 28,
+      "function": "__call__",
+      "calls_including_async_resumes": 19460,
+      "self_seconds": 0.014773134,
+      "cumulative_seconds": 6.576732185
+    },
+    {
+      "file": "site-packages/fastapi/applications.py",
+      "line": 1160,
+      "function": "__call__",
+      "calls_including_async_resumes": 19460,
+      "self_seconds": 0.009442227000000001,
+      "cumulative_seconds": 6.558861224
+    },
+    {
+      "file": "site-packages/starlette/applications.py",
+      "line": 92,
+      "function": "__call__",
+      "calls_including_async_resumes": 19460,
+      "self_seconds": 0.009263673,
+      "cumulative_seconds": 6.549418997
+    },
+    {
+      "file": "site-packages/starlette/middleware/errors.py",
+      "line": 149,
+      "function": "__call__",
+      "calls_including_async_resumes": 19460,
+      "self_seconds": 0.012819104000000001,
+      "cumulative_seconds": 6.5401553240000005
+    },
+    {
+      "file": "seif/app.py",
+      "line": 115,
+      "function": "__call__",
+      "calls_including_async_resumes": 19460,
+      "self_seconds": 0.030685843,
+      "cumulative_seconds": 6.5273362200000005
+    },
+    {
+      "file": "seif/app.py",
+      "line": 199,
+      "function": "_dispatch_http",
+      "calls_including_async_resumes": 19459,
+      "self_seconds": 0.013317973,
+      "cumulative_seconds": 6.440076669000001
+    },
+    {
+      "file": "site-packages/starlette/middleware/exceptions.py",
+      "line": 47,
+      "function": "__call__",
+      "calls_including_async_resumes": 19452,
+      "self_seconds": 0.014205136,
+      "cumulative_seconds": 6.379253043
+    },
+    {
+      "file": "site-packages/starlette/_exception_handler.py",
+      "line": 31,
+      "function": "wrapped_app",
+      "calls_including_async_resumes": 38902,
+      "self_seconds": 0.018306042,
+      "cumulative_seconds": 6.359437976000001
+    },
+    {
+      "file": "site-packages/fastapi/middleware/asyncexitstack.py",
+      "line": 15,
+      "function": "__call__",
+      "calls_including_async_resumes": 19452,
+      "self_seconds": 0.013144443,
+      "cumulative_seconds": 6.35100537
+    },
+    {
+      "file": "site-packages/starlette/routing.py",
+      "line": 666,
+      "function": "__call__",
+      "calls_including_async_resumes": 19452,
+      "self_seconds": 0.009599792000000001,
+      "cumulative_seconds": 6.334270539
+    },
+    {
+      "file": "site-packages/fastapi/routing.py",
+      "line": 2719,
+      "function": "app",
+      "calls_including_async_resumes": 19452,
+      "self_seconds": 0.015884471,
+      "cumulative_seconds": 6.324670747000001
+    },
+    {
+      "file": "site-packages/fastapi/routing.py",
+      "line": 1261,
+      "function": "handle",
+      "calls_including_async_resumes": 19451,
+      "self_seconds": 0.009219913,
+      "cumulative_seconds": 6.278577351
+    },
+    {
+      "file": "site-packages/starlette/routing.py",
+      "line": 271,
+      "function": "handle",
+      "calls_including_async_resumes": 19451,
+      "self_seconds": 0.012616286,
+      "cumulative_seconds": 6.2677017290000006
+    },
+    {
+      "file": "site-packages/fastapi/routing.py",
+      "line": 134,
+      "function": "app",
+      "calls_including_async_resumes": 19451,
+      "self_seconds": 0.012103492,
+      "cumulative_seconds": 6.2550854430000005
+    },
+    {
+      "file": "site-packages/fastapi/routing.py",
+      "line": 137,
+      "function": "app",
+      "calls_including_async_resumes": 19451,
+      "self_seconds": 0.027402616,
+      "cumulative_seconds": 6.229322512
+    },
+    {
+      "file": "site-packages/fastapi/routing.py",
+      "line": 406,
+      "function": "app",
+      "calls_including_async_resumes": 19451,
+      "self_seconds": 0.058304938,
+      "cumulative_seconds": 6.092581644
+    },
+    {
+      "file": "site-packages/fastapi/routing.py",
+      "line": 344,
+      "function": "run_endpoint_function",
+      "calls_including_async_resumes": 19451,
+      "self_seconds": 0.009258318,
+      "cumulative_seconds": 5.527714434
+    },
+    {
+      "file": "seif/app.py",
+      "line": 501,
+      "function": "mask",
+      "calls_including_async_resumes": 19434,
+      "self_seconds": 0.012646844,
+      "cumulative_seconds": 5.503294955
+    },
+    {
+      "file": "seif/app.py",
+      "line": 435,
+      "function": "execute",
+      "calls_including_async_resumes": 19442,
+      "self_seconds": 0.057790037,
+      "cumulative_seconds": 5.492346993
+    },
+    {
+      "file": "seif/app.py",
+      "line": 415,
+      "function": "_resolve_record",
+      "calls_including_async_resumes": 19442,
+      "self_seconds": 0.010560431,
+      "cumulative_seconds": 5.139389004000001
+    },
+    {
+      "file": "seif/app.py",
+      "line": 385,
+      "function": "_detect_and_transform",
+      "calls_including_async_resumes": 19434,
+      "self_seconds": 0.042715398,
+      "cumulative_seconds": 5.128570153
+    },
+    {
+      "file": "seif/ner.py",
+      "line": 161,
+      "function": "detect",
+      "calls_including_async_resumes": 19434,
+      "self_seconds": 0.018963818,
+      "cumulative_seconds": 3.697567759
+    },
+    {
+      "file": "seif/ner.py",
+      "line": 148,
+      "function": "_detect_batch",
+      "calls_including_async_resumes": 19434,
+      "self_seconds": 0.008662154,
+      "cumulative_seconds": 3.640873211
+    },
+    {
+      "file": "seif/ner.py",
+      "line": 143,
+      "function": "_chunk",
+      "calls_including_async_resumes": 19434,
+      "self_seconds": 0.012836025000000001,
+      "cumulative_seconds": 3.632027809
+    },
+    {
+      "file": "seif/ner.py",
+      "line": 111,
+      "function": "_analyze_chunk",
+      "calls_including_async_resumes": 17232,
+      "self_seconds": 0.016220624,
+      "cumulative_seconds": 3.565151466
+    },
+    {
+      "file": "contextlib.py",
+      "line": 209,
+      "function": "__aenter__",
+      "calls_including_async_resumes": 15001,
+      "self_seconds": 0.010454199,
+      "cumulative_seconds": 2.853948474
+    },
+    {
+      "file": "site-packages/httpx/_client.py",
+      "line": 1542,
+      "function": "stream",
+      "calls_including_async_resumes": 17237,
+      "self_seconds": 0.011749118000000001,
+      "cumulative_seconds": 2.842531763
+    },
+    {
+      "file": "site-packages/httpx/_client.py",
+      "line": 1594,
+      "function": "send",
+      "calls_including_async_resumes": 15001,
+      "self_seconds": 0.011581751000000001,
+      "cumulative_seconds": 2.337787977
+    },
+    {
+      "file": "site-packages/httpx/_client.py",
+      "line": 1645,
+      "function": "_send_handling_auth",
+      "calls_including_async_resumes": 15001,
+      "self_seconds": 0.017148626,
+      "cumulative_seconds": 2.311557406
+    },
+    {
+      "file": "site-packages/httpx/_client.py",
+      "line": 1679,
+      "function": "_send_handling_redirects",
+      "calls_including_async_resumes": 15001,
+      "self_seconds": 0.008701042,
+      "cumulative_seconds": 2.28301723
+    },
+    {
+      "file": "site-packages/httpx/_client.py",
+      "line": 1717,
+      "function": "_send_single_request",
+      "calls_including_async_resumes": 15001,
+      "self_seconds": 0.023228827,
+      "cumulative_seconds": 2.271930056
+    },
+    {
+      "file": "seif/ner_transport.py",
+      "line": 32,
+      "function": "handle_async_request",
+      "calls_including_async_resumes": 15001,
+      "self_seconds": 0.007953754,
+      "cumulative_seconds": 1.9178005960000002
+    },
+    {
+      "file": "site-packages/httpx/_transports/default.py",
+      "line": 374,
+      "function": "handle_async_request",
+      "calls_including_async_resumes": 15001,
+      "self_seconds": 0.029145451000000003,
+      "cumulative_seconds": 1.909846842
+    },
+    {
+      "file": "site-packages/httpcore/_async/connection_pool.py",
+      "line": 199,
+      "function": "handle_async_request",
+      "calls_including_async_resumes": 15001,
+      "self_seconds": 0.029291371000000004,
+      "cumulative_seconds": 1.7641951020000002
+    },
+    {
+      "file": "site-packages/httpcore/_async/connection.py",
+      "line": 69,
+      "function": "handle_async_request",
+      "calls_including_async_resumes": 15803,
+      "self_seconds": 0.014650822,
+      "cumulative_seconds": 1.3324223080000002
+    },
+    {
+      "file": "site-packages/httpcore/_async/http11.py",
+      "line": 65,
+      "function": "handle_async_request",
+      "calls_including_async_resumes": 12755,
+      "self_seconds": 0.052966072,
+      "cumulative_seconds": 1.256628152
+    },
+    {
+      "file": "seif/detector.py",
+      "line": 1370,
+      "function": "detect",
+      "calls_including_async_resumes": 2236,
+      "self_seconds": 0.01872905,
+      "cumulative_seconds": 0.842469203
+    },
+    {
+      "file": "seif/ner.py",
+      "line": 57,
+      "function": "_response_json",
+      "calls_including_async_resumes": 4473,
+      "self_seconds": 0.013061721,
+      "cumulative_seconds": 0.6810078190000001
+    },
+    {
+      "file": "site-packages/httpx/_models.py",
+      "line": 982,
+      "function": "aiter_bytes",
+      "calls_including_async_resumes": 6709,
+      "self_seconds": 0.023055502000000002,
+      "cumulative_seconds": 0.634926726
+    },
+    {
+      "file": "site-packages/httpx/_models.py",
+      "line": 1037,
+      "function": "aiter_raw",
+      "calls_including_async_resumes": 6709,
+      "self_seconds": 0.01558347,
+      "cumulative_seconds": 0.578097038
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method builtins.next>",
+      "calls_including_async_resumes": 128191,
+      "self_seconds": 0.074480638,
+      "cumulative_seconds": 0.505967173
+    },
+    {
+      "file": "site-packages/httpx/_client.py",
+      "line": 340,
+      "function": "build_request",
+      "calls_including_async_resumes": 2237,
+      "self_seconds": 0.013373434,
+      "cumulative_seconds": 0.49140731800000004
+    },
+    {
+      "file": "site-packages/httpcore/_async/http11.py",
+      "line": 209,
+      "function": "_receive_event",
+      "calls_including_async_resumes": 8944,
+      "self_seconds": 0.021949528000000003,
+      "cumulative_seconds": 0.48789904100000003
+    },
+    {
+      "file": "site-packages/httpcore/_async/http11.py",
+      "line": 163,
+      "function": "_send_event",
+      "calls_including_async_resumes": 11179,
+      "self_seconds": 0.012541734,
+      "cumulative_seconds": 0.47193463700000005
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'extend' of 'list' objects>",
+      "calls_including_async_resumes": 59906,
+      "self_seconds": 0.017275467000000003,
+      "cumulative_seconds": 0.45771888800000005
+    },
+    {
+      "file": "site-packages/httpcore/_async/connection_pool.py",
+      "line": 270,
+      "function": "_assign_requests_to_connections",
+      "calls_including_async_resumes": 5262,
+      "self_seconds": 0.064351317,
+      "cumulative_seconds": 0.45099944000000003
+    },
+    {
+      "file": "site-packages/httpcore/_async/http11.py",
+      "line": 170,
+      "function": "_receive_response_headers",
+      "calls_including_async_resumes": 4472,
+      "self_seconds": 0.007679001,
+      "cumulative_seconds": 0.40802365500000004
+    },
+    {
+      "file": "site-packages/httpcore/_async/http11.py",
+      "line": 140,
+      "function": "_send_request_headers",
+      "calls_including_async_resumes": 4472,
+      "self_seconds": 0.010737582,
+      "cumulative_seconds": 0.396387784
+    },
+    {
+      "file": "site-packages/httpx/_models.py",
+      "line": 1065,
+      "function": "aclose",
+      "calls_including_async_resumes": 6709,
+      "self_seconds": 0.007063141,
+      "cumulative_seconds": 0.38433301000000003
+    }
+  ]
+}

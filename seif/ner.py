@@ -11,6 +11,7 @@ import httpx
 
 from .detector import Span
 from .ner_contract import MAX_ENTITIES, MAX_NER_SPAN, validate_entity
+from .ner_http import NerHttpError
 
 NER_UNAVAILABLE = "NER is unavailable"
 INVALID_NER_RESPONSE = "Invalid NER response"
@@ -71,16 +72,29 @@ def _entity_values(item: dict, text_length: int) -> tuple[int, int, float, str]:
 
 
 class NerClient:
-    def __init__(self, url: str, token: str, timeout: float = 20.0, *, transport=None, max_concurrency=4):
+    def __init__(self, url: str, token: str, timeout: float = 20.0, *, transport=None, max_concurrency=4, backend="httpx"):  # noqa: PLR0913 - preserve explicit transport injection and existing capacity options
         validate_ner_settings(url, token, timeout)
         if type(max_concurrency) is not int or not 1 <= max_concurrency <= 256:
             raise ValueError("NER concurrency must be an integer between 1 and 256")
+        if backend not in ("httpx", "aiohttp"):
+            raise ValueError("NER HTTP backend must be httpx or aiohttp")
+        self.timeout = timeout
+        if backend == "aiohttp" and transport is None:
+            from .ner_http import AiohttpNerSession
+
+            self.client = AiohttpNerSession(url, token, timeout, max_concurrency)
+        else:
+            self.client = self._httpx_client(url, token, timeout, transport, max_concurrency)
+        # A process-wide bound, shared by all requests using this app instance.
+        self.capacity = asyncio.Semaphore(max_concurrency)
+
+    @staticmethod
+    def _httpx_client(url, token, timeout, transport, max_concurrency):
         if transport is None and max_concurrency > 4:
             from .ner_transport import ShardedNerTransport
 
             transport = ShardedNerTransport(max_concurrency)
-        self.timeout = timeout
-        self.client = httpx.AsyncClient(
+        return httpx.AsyncClient(
             base_url=url.rstrip("/") + "/",
             headers={"Authorization": "Bearer " + token},
             timeout=httpx.Timeout(timeout, connect=min(timeout, 2.0)),
@@ -90,8 +104,6 @@ class NerClient:
             trust_env=False,
             transport=transport,
         )
-        # A process-wide bound, shared by all requests using this app instance.
-        self.capacity = asyncio.Semaphore(max_concurrency)
 
     async def close(self) -> None:
         await self.client.aclose()
@@ -105,7 +117,7 @@ class NerClient:
                     body = await _response_json(response, 4096, NER_UNAVAILABLE)
                     if body.get("status") != "ok":
                         raise NerUnavailable(NER_UNAVAILABLE)
-        except (httpx.HTTPError, TimeoutError, ValueError, TypeError, AttributeError, RecursionError):
+        except (httpx.HTTPError, NerHttpError, TimeoutError, ValueError, TypeError, AttributeError, RecursionError):
             raise NerUnavailable(NER_UNAVAILABLE) from None
 
     async def _analyze_chunk(self, text: str) -> dict:

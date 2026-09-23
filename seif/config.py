@@ -114,6 +114,7 @@ class Settings:
     ner_token: str = field(default="", repr=False)
     ner_timeout_seconds: float = 20.0
     ner_max_concurrency: int = 4
+    ner_http_backend: str = "httpx"
     policies: dict[str, Policy] = field(default_factory=lambda: {"demo": Policy()})
 
     def __post_init__(self) -> None:
@@ -121,6 +122,8 @@ class Settings:
             raise ValueError("demo must be a boolean")
         if type(self.ner_max_concurrency) is not int or not 1 <= self.ner_max_concurrency <= 256:
             raise ValueError("ner_max_concurrency must be an integer between 1 and 256")
+        if self.ner_http_backend not in ("httpx", "aiohttp"):
+            raise ValueError("ner_http_backend must be httpx or aiohttp")
         for name in (
             "ttl_seconds", "max_records", "max_store_bytes", "max_payload_chars", "max_body_bytes",
             "max_inflight_body_bytes", "max_inflight", "cpu_workers",
@@ -199,10 +202,12 @@ class Settings:
             sentinel_password=sentinel_password,
             ttl_seconds=int(os.getenv("SEIF_TTL_SECONDS", "900")),
             cpu_workers=int(os.getenv("SEIF_CPU_WORKERS", "4")),
+            max_inflight=int(os.getenv("SEIF_MAX_INFLIGHT", "128")),
             request_body_timeout_seconds=float(os.getenv("SEIF_REQUEST_BODY_TIMEOUT_SECONDS", "30")),
             ner_url=os.getenv("SEIF_NER_URL", ""),
             ner_token=os.getenv("SEIF_NER_TOKEN", ""),
             ner_timeout_seconds=float(os.getenv("SEIF_NER_TIMEOUT_SECONDS", "20")),
             ner_max_concurrency=int(os.getenv("SEIF_NER_MAX_CONCURRENCY", "4")),
+            ner_http_backend=os.getenv("SEIF_NER_HTTP_BACKEND", "httpx"),
             policies=policies,
         )

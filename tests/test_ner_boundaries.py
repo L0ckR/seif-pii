@@ -151,7 +151,7 @@ def test_api_name_components_mask_and_restore_full_payload(monkeypatch, mode):
     parts = [span(text, word, reason="model") for word in ("Дина", "Марковна", "Штольц")]
 
     class FakeNer:
-        def __init__(self, *_args, max_concurrency=4):
+        def __init__(self, *_args, max_concurrency=4, backend="httpx"):
             pass
 
         async def health(self):

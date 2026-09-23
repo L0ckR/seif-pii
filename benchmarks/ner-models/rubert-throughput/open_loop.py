@@ -285,6 +285,8 @@ def parse_args():
     parser.add_argument("--drain-timeout", type=float, default=60)
     parser.add_argument("--cpu-threads", type=int, choices=(1, 2, 4, 8), default=4)
     parser.add_argument("--api-cpu-workers", type=int, choices=(1, 2, 4, 8), default=2)
+    parser.add_argument("--ner-http-backend", choices=("httpx", "aiohttp"), default="httpx")
+    parser.add_argument("--api-log-level", choices=("INFO", "WARNING"), default="WARNING")
     parser.add_argument("--api-ner-concurrency", type=int, default=64)
     parser.add_argument("--model-batch-size", "--batch-size", type=int, choices=(1, 2, 4, 8, 16, 32), default=32)
     parser.add_argument("--batch-wait-ms", type=float, default=2)
@@ -316,6 +318,7 @@ def main():
     args = parse_args()
     config_keys = ("replicas", "mode", "target_rps", "duration", "max_inflight", "arrival_deadline_ms",
                    "drain_timeout", "cpu_threads", "api_cpu_workers", "api_ner_concurrency", "model_batch_size",
+                   "ner_http_backend", "api_log_level",
                    "batch_wait_ms", "ner_max_jobs", "ner_max_http", "timeout")
     report = {"schema_version": 1, "status": "FAIL", "started_at_utc": datetime.now(timezone.utc).isoformat(),
               "configuration": {key: getattr(args, key) for key in config_keys},

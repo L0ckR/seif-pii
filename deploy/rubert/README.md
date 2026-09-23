@@ -95,7 +95,10 @@ docker compose --env-file .env.rubert -f deploy/rubert/compose.yaml down
 | `SEIF_API_WORKERS` | 1 на контейнер | Число API-процессов, всего два |
 | `SEIF_CPU_WORKERS` | 4 на процесс | CPU executor API |
 | `SEIF_RUBERT_CPU_THREADS` | 4 на NER | Число intra-op CPU threads Torch; допустимо 1–32 |
+| `SEIF_NER_HTTP_BACKEND` | `httpx` | HTTP-клиент API → NER: `httpx` или `aiohttp` |
 | `SEIF_NER_MAX_CONCURRENCY` | 4 на процесс API | Одновременно отправленные в NER запросы |
+| `SEIF_LOG_LEVEL` | `INFO` | Уровень логирования API, одинаковый для сравниваемых профилей |
+| `SEIF_MAX_INFLIGHT` | 128 на API worker | Одновременные HTTP-запросы API, включая ожидание NER |
 | `SEIF_NER_MAX_MODEL_JOBS` | 4 на NER | Принятые задания, включая очередь; тот же `maxconn` у HAProxy |
 | `SEIF_NER_MAX_HTTP_INFLIGHT` | 16 на NER | Все HTTP-запросы, включая health |
 | `SEIF_NER_BATCH_SIZE` | 1 | Максимальный размер микробатча; допустимы 1/2/4/8/16/32 |
@@ -123,35 +126,63 @@ NER-клиент API имеет отдельный ограниченный retr
 429/503 и должна учитываться как ошибка в нагрузочном тесте. Эти ограничения
 нельзя превращать в «успешный RPS», считая только быстрые отказы.
 
-## Пример: восемь API workers и два NER
+## Текущий кандидат: четыре API workers и два NER
 
-`env.tuned-8api.template` — готовый **кандидат для нагрузочного тестирования**.
+`env.tuned-4api.template` — текущий **кандидат для нагрузочного тестирования**
+с aiohttp вместо HTTPX на участке API → NER.
 Он меняет только настройки, сохраняя секреты из `.env.rubert`. Это два
-API-контейнера по четыре процесса; балансировщик знает два адреса, а распределение
-соединений между четырьмя Uvicorn workers внутри контейнера выполняет их общий
-listening socket. Равномерную загрузку восьми процессов нужно проверять по CPU
-и числу запросов, а не выводить только из `SEIF_API_WORKERS=4`.
+API-контейнера по два процесса; балансировщик знает два адреса, а распределение
+соединений между двумя Uvicorn workers внутри контейнера выполняет их общий
+listening socket. Равномерную загрузку процессов нужно проверять по CPU
+и числу запросов, а не выводить только из `SEIF_API_WORKERS=2`.
 
 ```bash
-docker compose --env-file .env.rubert --env-file deploy/rubert/env.tuned-8api.template \
+docker compose --env-file .env.rubert --env-file deploy/rubert/env.tuned-4api.template \
   -f deploy/rubert/compose.yaml config --quiet
-docker compose --env-file .env.rubert --env-file deploy/rubert/env.tuned-8api.template \
+docker compose --env-file .env.rubert --env-file deploy/rubert/env.tuned-4api.template \
   -f deploy/rubert/compose.yaml up -d --build --wait --wait-timeout 300
 ```
 
 Настройки кандидата: API CPU executor=1, Torch threads=1, NER batch=32,
-batch wait=2 мс, NER concurrency=16 на каждый API-процесс, model jobs=128 и
+batch wait=2 мс, NER concurrency=32 на каждый API-процесс, model jobs=128 и
 HTTP capacity=256 на каждый NER. Decoder и классы остаются `word`/`native`.
+Логи API остаются на `INFO`; профиль не скрывает их стоимость переходом на `ERROR`.
 Нельзя заменять Torch threads настройкой `OMP_NUM_THREADS`: runtime явно вызывает
 `torch.set_num_threads(SEIF_RUBERT_CPU_THREADS)`.
 
-Восемь API-процессов допускают до 128 одновременных model-запросов и до 160
-соединений к NER с учётом запасных слотов HTTP-пулов. Поэтому private HAProxy
-получает global maxconn=512; прежний лимит 128 стал бы самостоятельным ограничением
-до достижения всей мощности NER. Backend maxconn=128 на NER согласован с model
+Четыре API-процесса допускают до 128 одновременных model-запросов и до 132
+соединений к NER с учётом запасного слота aiohttp connector каждого процесса.
+Private HAProxy получает global maxconn=512, включая idle keep-alive и probes;
+прежний лимит 128 не оставлял бы этот запас. Backend maxconn=128 на NER согласован с model
 jobs; probe не создаёт model job и использует запас HTTP capacity. Внешний HAProxy
-допускает 192 backend-соединения на каждый API-контейнер. Это ограничения очередей,
+допускает 256 backend-соединений на каждый API-контейнер. Это ограничения очередей,
 а не доказательство RPS. Суммарный объём очередей не должен заменять контроль p95/p99.
+
+В текущем кандидате `SEIF_MAX_INFLIGHT=256` на API worker оставляет запас для
+всплесков и неравномерного распределения keep-alive соединений между процессами.
+Этот запас не увеличивает NER concurrency (по-прежнему 32 на API worker) и
+не отменяет общий лимит одновременно буферизуемых тел запросов в 64 MiB на процесс.
+Результат длительной проверки этого лимита приведён ниже: отсутствие HTTP-ошибок
+среди отправленных запросов ещё не означает отсутствие потерь входящего потока.
+
+Предыдущий `env.tuned-8api.template` сохранён как HTTPX baseline. Для его запуска
+используется та же команда с этим именем второго `--env-file`; накладывать оба
+tuned-файла друг на друга не следует.
+
+| Параметр | Текущий кандидат `tuned-4api` | Предыдущий HTTPX baseline `tuned-8api` |
+|---|---:|---:|
+| API workers, всего | 4 (2×2) | 8 (2×4) |
+| HTTP-клиент NER | aiohttp | HTTPX с отдельными пулами |
+| NER concurrency на API worker | 32 | 16 |
+| Возможные NER-соединения, всего | 132 | 160 |
+| API HTTP max inflight на worker | 256 | 128 |
+| API backend maxconn на контейнер | 256 | 192 |
+| API RAM на контейнер | 1 GiB | 2 GiB |
+
+Оба tuned-профиля сохраняют два NER, batch 32 / wait 2 мс, CPU1/Torch1, INFO,
+private HAProxy maxconn 512 и общий Redis maxmemory 4 GiB / RAM 5 GiB.
+Сами настройки не подтверждают пятиминутную устойчивость на 2000 RPS;
+результаты испытаний и их ограничения приведены ниже.
 
 Обе API-реплики используют один Redis, один master key, одинаковый client API key
 и одинаковые policies. Нельзя запускать независимые memory vault для каждого
@@ -159,6 +190,33 @@ jobs; probe не создаёт model job и использует запас HTT
 Один Redis и один GPU остаются общими ресурсами этого профиля. Для подтверждения
 2000 RPS нужен открытый поток запросов через весь этот путь с общим Redis;
 измерение только NER или короткий closed-loop пик таким подтверждением не является.
+
+## Итог пятиминутных измерений
+
+**Строгие 2000 RPS без потерь не подтверждены.** В текущем профиле с четырьмя
+API workers и admission limit 256 генератор планировал 600 000 запросов за 300 с,
+отправил 599 986 и пропустил 14 из-за собственного ограничения одновременно
+активных запросов. Все отправленные 599 986 получили HTTP 200 и точный эталонный
+результат; HTTP-ошибок нет. Статус полного испытания — **OVERLOAD**, поскольку
+пропущенные генератором запросы также входят в критерий успешной нагрузки.
+
+| Пятиминутный профиль | Отправлено и совпало с эталоном из 600 000 | Пропуски генератора | HTTP-ошибки | p95 / max отправленных, мс | Отправленных дольше 500 мс |
+|---|---:|---:|---:|---:|---:|
+| [4 API + 2 NER, admission 256](../../benchmarks/ner-models/rubert-throughput/cluster-4api-2ner-aiohttp-open2000-300s-admission256.json) | 599 986 | 14 | 0 | 126,84 / 413,70 | 0 |
+| [6 API + 2 NER, admission 256](../../benchmarks/ner-models/rubert-throughput/cluster-6api-2ner-aiohttp-open2000-300s-admission256.json) | 599 363 | 637 | 0 | 138,09 / 2710,74 | 646 |
+
+Шесть API workers дали худший результат, поэтому отдельный deployment-профиль
+для них не добавлен: текущим кандидатом остаётся `env.tuned-4api.template`.
+В прогоне четырёх API также прошли восемь проверок восстановления через другую
+реплику с общим Redis. Повторная проверка качества на фактическом CPU thread 1
+подтвердила совпадение всех 5095 текстов, исходных границ, confidence и масок;
+это отсутствие регрессии относительно прежней модели, а не 100% качество разметки.
+
+Измерения выполнялись на локальных процессах с одной GPU и общим Redis;
+они **не проверяют запуск этого Docker Compose**, его HAProxy-путь, облачный
+туннель или полный 900-секундный цикл TTL. Генератор и сервис использовали один
+компьютер. Полный протокол, точные метрики, предыдущие прогоны и проверка качества
+сохранены в [отчёте об эксперименте](../../benchmarks/ner-models/rubert-throughput/README.md).
 
 ## Одна или две GPU
 
@@ -219,7 +277,7 @@ health check. Сам `/health` NER не выполняет inference: отказ
 процессе может не изменить этот флаг. Для такого случая нужны отдельное наблюдение
 за inference errors/GPU и проверенный механизм восстановления; автоматический
 failover по одним текущим probes не гарантируется.
-Один успешный `/health` контейнера с четырьмя workers не доказывает здоровье
+Один успешный `/health` контейнера с несколькими workers не доказывает здоровье
 каждого процесса: Uvicorn supervisor отвечает за их перезапуск, а деградацию
 мощности дополнительно контролируют метрики, CPU и error rate.
 Базовый лимит Redis — 1 GiB; tuned overlay задаёт 4 GiB (`SEIF_REDIS_MAXMEMORY=4gb`)
