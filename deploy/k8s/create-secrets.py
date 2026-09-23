@@ -32,7 +32,8 @@ def main() -> None:
             path = Path(temporary) / name
             path.write_text(value, encoding="ascii")
             command.append(f"--from-file={name}={path}")
-        subprocess.run(command, check=True)
+        # The executable is fixed; the namespace is one argv value and no shell is involved.
+        subprocess.run(command, check=True)  # noqa: S603
 
 
 if __name__ == "__main__":

@@ -284,6 +284,15 @@ jobs:
         run: |
           python scripts/code_quality.py output/seif-pii-quality-source.zip \
             --ruff ruff --output local-data/code-analysis/ci
+      - name: Lint Dockerfiles from the submitted service archive
+        run: |
+          python scripts/package.py --k8s
+          for path in Dockerfile Dockerfile.ner deploy/rubert/Dockerfile; do
+            unzip -p output/seif-pii-service-k8s.zip "$path" |
+              docker run --rm -i \
+                hadolint/hadolint@sha256:a1d49ae1a4e83c1dbad26b8c1ad7588c8bd1e04f4866b34ad3cac50335198552 \
+                hadolint --failure-threshold warning -
+          done
       - name: Enforce reviewed project lint policy
         run: ruff check seif tests scripts deploy
       - uses: actions/upload-artifact@v4
