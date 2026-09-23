@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 APP_FILE = "seif/app.py"
 PYPROJECT_FILE = "pyproject.toml"
 README_FILE = "README.md"
+RUBERT_DOCKERFILE = "deploy/rubert/Dockerfile"
 REQUIRED_FILES = (
     "seif/__init__.py",
     APP_FILE,
@@ -36,7 +37,7 @@ REQUIRED_FILES = (
     "third_party/pii-guard/NOTICE",
     "third_party/pii-guard/ADAPTATION.md",
     "deploy/ner/requirements-rubert-tensorrt.txt",
-    "deploy/rubert/Dockerfile",
+    RUBERT_DOCKERFILE,
     "deploy/rubert/requirements-runtime.txt",
 )
 TEMPLATES = {name: f"deploy/service/{name}" for name in (README_FILE, ".env.example", ".dockerignore")}
@@ -62,7 +63,7 @@ KUBERNETES_FILES = (
     "deploy/k8s/overlays/local/redis-pvs.yaml",
     "deploy/k8s/overlays/production/kustomization.yaml",
     "deploy/k8s/secret.template.yaml",
-    "deploy/rubert/Dockerfile",
+    RUBERT_DOCKERFILE,
     "deploy/rubert/README.md",
     "deploy/rubert/compose.yaml",
     "deploy/rubert/env.template",
@@ -202,7 +203,7 @@ def _validate_copy_line(name: str, line: str, members: dict[str, bytes]) -> None
 
 
 def _validate_docker_files(members: dict[str, bytes]) -> None:
-    for name in ("Dockerfile", "Dockerfile.ner", "deploy/rubert/Dockerfile"):
+    for name in ("Dockerfile", "Dockerfile.ner", RUBERT_DOCKERFILE):
         for line in members[name].decode("utf-8").splitlines():
             instruction = line.split(maxsplit=1)
             if instruction and instruction[0].upper() == "COPY":

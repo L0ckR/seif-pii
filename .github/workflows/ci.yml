@@ -156,8 +156,8 @@ jobs:
       - name: Start archived Compose stack with Redis and the real Russian model
         run: |
           cd "$SEIF_ARCHIVE_DIR"
-          docker compose -p seif-archive-ci -f compose.yaml -f compose.ner.yaml -f "$RUNNER_TEMP/seif-compose-ci.yaml" build ner
-          docker compose -p seif-archive-ci -f compose.yaml -f compose.ner.yaml -f "$RUNNER_TEMP/seif-compose-ci.yaml" up -d --no-build --wait --wait-timeout 180
+          docker compose -p seif-archive-ci -f compose.yaml -f compose.presidio.yaml -f "$RUNNER_TEMP/seif-compose-ci.yaml" build ner
+          docker compose -p seif-archive-ci -f compose.yaml -f compose.presidio.yaml -f "$RUNNER_TEMP/seif-compose-ci.yaml" up -d --no-build --wait --wait-timeout 180
       - name: Check archived hybrid API authentication and reversible protection
         run: |
           cd "$SEIF_ARCHIVE_DIR"
@@ -213,7 +213,7 @@ jobs:
           docker logs seif-smoke || true
           if [ -f "$RUNNER_TEMP/seif-compose-ci.yaml" ] && [ -d "${SEIF_ARCHIVE_DIR:-}" ]; then
             cd "$SEIF_ARCHIVE_DIR"
-            docker compose -p seif-archive-ci -f compose.yaml -f compose.ner.yaml -f "$RUNNER_TEMP/seif-compose-ci.yaml" logs --no-color || true
+            docker compose -p seif-archive-ci -f compose.yaml -f compose.presidio.yaml -f "$RUNNER_TEMP/seif-compose-ci.yaml" logs --no-color || true
           fi
       - name: Clean up archive integration containers and credentials
         if: always()
@@ -221,7 +221,7 @@ jobs:
           docker rm -f seif-smoke || true
           if [ -f "$RUNNER_TEMP/seif-compose-ci.yaml" ] && [ -d "${SEIF_ARCHIVE_DIR:-}" ]; then
             cd "$SEIF_ARCHIVE_DIR"
-            docker compose -p seif-archive-ci -f compose.yaml -f compose.ner.yaml -f "$RUNNER_TEMP/seif-compose-ci.yaml" down --volumes --remove-orphans || true
+            docker compose -p seif-archive-ci -f compose.yaml -f compose.presidio.yaml -f "$RUNNER_TEMP/seif-compose-ci.yaml" down --volumes --remove-orphans || true
             rm -f .env
           fi
       - name: Publish private repository container
