@@ -24,6 +24,9 @@ spec:
         app.kubernetes.io/part-of: seif
     spec:
       automountServiceAccountToken: false
+      # The Service named seif-ner would otherwise inject SEIF_NER_PORT as a
+      # tcp:// URL, overriding the server's numeric port default.
+      enableServiceLinks: false
       terminationGracePeriodSeconds: 45
       securityContext:
         runAsNonRoot: true
