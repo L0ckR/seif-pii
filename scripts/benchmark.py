@@ -6,6 +6,7 @@ Pairs are scheduled at that rate independently of response times. When the
 client concurrency cap is reached, the pair is dropped and reported rather
 than silently turning this into a closed-loop benchmark.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -40,8 +41,13 @@ def percentile(values: list[float], percent: float) -> float | None:
 def validate_options(args: argparse.Namespace) -> None:
     if not all(math.isfinite(value) and value > 0 for value in (args.rps, args.duration, args.timeout)):
         raise ValueError("rps, duration and timeout must be finite and positive")
-    if (type(args.concurrency) is not int or not 1 <= args.concurrency <= 8192
-            or args.rps * args.duration > 10_000_000 or args.duration > 3600 or args.timeout > 120):
+    if (
+        type(args.concurrency) is not int
+        or not 1 <= args.concurrency <= 8192
+        or args.rps * args.duration > 10_000_000
+        or args.duration > 3600
+        or args.timeout > 120
+    ):
         raise ValueError("Benchmark exceeds bounded rate, duration, concurrency or timeout settings")
 
 
@@ -57,9 +63,11 @@ class _BenchmarkRun:
         started = time.perf_counter()
         self.counters["requests_attempted"] += 1
         try:
-            async with self.client.post(self.args.url.rstrip("/") + "/process",
-                                   json={"payload": payload, "payload_id": payload_id},
-                                   allow_redirects=False) as response:
+            async with self.client.post(
+                self.args.url.rstrip("/") + "/process",
+                json={"payload": payload, "payload_id": payload_id},
+                allow_redirects=False,
+            ) as response:
                 self.statuses[str(response.status)] += 1
                 if response.status != 200:
                     self.errors[f"http_{response.status}"] += 1
@@ -147,8 +155,10 @@ class _BenchmarkRun:
             "http_statuses": dict(self.statuses),
             "errors": dict(self.errors),
             "latency_ms_all_attempts": {
-                "p50": percentile(self.latencies, 50), "p95": percentile(self.latencies, 95),
-                "p99": percentile(self.latencies, 99), "max": round(max(self.latencies), 3) if self.latencies else None,
+                "p50": percentile(self.latencies, 50),
+                "p95": percentile(self.latencies, 95),
+                "p99": percentile(self.latencies, 99),
+                "max": round(max(self.latencies), 3) if self.latencies else None,
             },
             "client_scheduler_max_lag_ms": round(scheduling_lag_max * 1000, 3),
             "limitations": [
@@ -160,7 +170,6 @@ class _BenchmarkRun:
         }
 
 
-
 async def benchmark(args: argparse.Namespace) -> dict:
     validate_options(args)
     headers = {}
@@ -170,8 +179,10 @@ async def benchmark(args: argparse.Namespace) -> dict:
         headers["X-API-Key"] = args.api_key
     connector = aiohttp.TCPConnector(limit=args.concurrency, keepalive_timeout=30)
     async with aiohttp.ClientSession(
-        timeout=aiohttp.ClientTimeout(total=args.timeout), headers=headers,
-        connector=connector, trust_env=False,
+        timeout=aiohttp.ClientTimeout(total=args.timeout),
+        headers=headers,
+        connector=connector,
+        trust_env=False,
     ) as client:
         run = _BenchmarkRun(args, client)
         elapsed, scheduling_lag_max = await run.schedule()

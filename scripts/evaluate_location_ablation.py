@@ -4,6 +4,7 @@
 No model inference and no edits to the first benchmark report. This corpus
 motivated the change, so this output is explicitly development evidence.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -60,11 +61,16 @@ def main():
         key, text = row["id"], row["text"]
         original = cached[key]
         base = detect(text)
-        base_changes += {(item.type, item.start, item.end) for item in base} != {tuple(item) for item in original["original_predictions"]["seif_fast"]}
+        base_changes += {(item.type, item.start, item.end) for item in base} != {
+            tuple(item) for item in original["original_predictions"]["seif_fast"]
+        }
         # The fixed spaCy engine gives PERSON/LOCATION score0.85; the old cache
         # retained spans, not scores. No context enhancer changes these labels.
-        candidates = [Span(start, end, kind, 0.85, "cached-ner") for kind, start, end in original["original_predictions"]["presidio_ru"]
-                      if kind in {"PERSON", "LOCATION"}]
+        candidates = [
+            Span(start, end, kind, 0.85, "cached-ner")
+            for kind, start, end in original["original_predictions"]["presidio_ru"]
+            if kind in {"PERSON", "LOCATION"}
+        ]
         result = merge_ner_candidates(text, base, candidates)
         truth[key] = {tuple(item) for item in original["merged_gold"]}
         coarse = coarsen({(item.type, item.start, item.end) for item in result}, map_with_location)
@@ -72,19 +78,24 @@ def main():
     if source_hash != sha((ROOT / "seif/detector.py").read_bytes()):
         raise RuntimeError("Detector changed during ablation.")
     report = {
-        "schema_version": 1, "measured_at_utc": datetime.now(timezone.utc).isoformat(),
+        "schema_version": 1,
+        "measured_at_utc": datetime.now(timezone.utc).isoformat(),
         "status": "Post-result development ablation, NOT an independent holdout result",
-        "baseline_report_sha256": sha(original_bytes), "baseline_detector_sha256": baseline["source_hashes"]["detector"],
-        "current_detector_sha256": source_hash, "evaluator_sha256": sha(Path(__file__).read_bytes()),
+        "baseline_report_sha256": sha(original_bytes),
+        "baseline_detector_sha256": baseline["source_hashes"]["detector"],
+        "current_detector_sha256": source_hash,
+        "evaluator_sha256": sha(Path(__file__).read_bytes()),
         "recomputed_fast_cases_changed": base_changes,
         "prediction_source": "Unchanged original cached Presidio PERSON/LOCATION offsets; fixed spaCy default score0.85 reconstructed because the original cache stored type/offsets only",
         "common5": score_scope(truth, new_predictions, COMMON),
         "person_all_cases": score_scope(truth, new_predictions, {"PERSON"}, whole_cases=False),
         "location_all_cases": score_scope(truth, new_predictions, {"LOCATION"}, whole_cases=False),
-        "limitations": ["Architecture selected after reviewing this corpus's aggregate results; no independent superiority claim.",
-                        "No NLP or HTTP inference; this measures the changed merge policy only.",
-                        "Original gold, rows, common-case selection and baseline report are unchanged.",
-                        "The separate untouched Scanpatch test is the final held-out mixed-language evaluation."],
+        "limitations": [
+            "Architecture selected after reviewing this corpus's aggregate results; no independent superiority claim.",
+            "No NLP or HTTP inference; this measures the changed merge policy only.",
+            "Original gold, rows, common-case selection and baseline report are unchanged.",
+            "The separate untouched Scanpatch test is the final held-out mixed-language evaluation.",
+        ],
     }
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report["common5"]["systems"]["seif_person_location_hybrid"]["typed_character_primary"], indent=2))

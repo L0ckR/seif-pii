@@ -5,6 +5,7 @@ This is a small development suite, not a representative bank dataset and not
 the organizer's span-Levenshtein score. Expected spans are explicitly marked
 in source before running the detector; results are never used as labels.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -57,7 +58,10 @@ FIXTURES = [
     ("pin", "ПИН-код карты: {{PIN|4321}}."),
     ("cardholder", "Имя держателя карты: {{CARDHOLDER|IVAN PETROV}}."),
     ("foreign_passport", "Загранпаспорт: {{FOREIGN_DOCUMENT|72 1234567}}."),
-    ("complex", "Клиент {{PERSON|Иванов Иван Иванович}} (email: {{EMAIL|ivan@example.net}}), паспорт {{PASSPORT|4509 123456}}; телефон {{PHONE|+7 (999) 123-45-67}}."),
+    (
+        "complex",
+        "Клиент {{PERSON|Иванов Иван Иванович}} (email: {{EMAIL|ivan@example.net}}), паспорт {{PASSPORT|4509 123456}}; телефон {{PHONE|+7 (999) 123-45-67}}.",
+    ),
     ("unicode", "«Email: {{EMAIL|hello@example.net}}» — 😊;\nтелефон: {{PHONE|+7 (999) 123-45-67}}!"),
     ("repeated_email", "{{EMAIL|one@example.net}} и снова {{EMAIL|one@example.net}}."),
     ("public_poet", "Расскажи о поэте Александре Пушкине и его стихах."),
@@ -78,7 +82,7 @@ def parse_fixture(marked: str) -> tuple[str, set[tuple[str, int, int]]]:
     cursor = 0
     position = 0
     for match in MARKER.finditer(marked):
-        prefix = marked[cursor:match.start()]
+        prefix = marked[cursor : match.start()]
         chunks.append(prefix)
         position += len(prefix)
         value = match.group(2)
@@ -99,12 +103,19 @@ def scores(tp: int, fp: int, fn: int) -> dict:
         precision = 0.0
     recall = tp / (tp + fn) if tp + fn else 1.0
     f1 = 2 * precision * recall / (precision + recall) if precision + recall else 0.0
-    return {"precision": round(precision, 6), "recall": round(recall, 6),
-            "f1": round(f1, 6), "true_positive": tp, "false_positive": fp, "false_negative": fn}
+    return {
+        "precision": round(precision, 6),
+        "recall": round(recall, 6),
+        "f1": round(f1, 6),
+        "true_positive": tp,
+        "false_positive": fp,
+        "false_negative": fn,
+    }
 
 
 def evaluate() -> dict:
     from seif.detector import detect
+
     totals: Counter[str] = Counter()
     per_type: dict[str, Counter[str]] = {}
     failures = []
@@ -127,7 +138,8 @@ def evaluate() -> dict:
     return {
         "schema_version": 1,
         "method": "exact (type, Unicode character start, end) span match; micro averaged",
-        "fixture_count": len(FIXTURES), "cases_exact_match": passed,
+        "fixture_count": len(FIXTURES),
+        "cases_exact_match": passed,
         "metrics": scores(totals["tp"], totals["fp"], totals["fn"]),
         "by_type": {kind: scores(c["tp"], c["fp"], c["fn"]) for kind, c in sorted(per_type.items())},
         "failures": failures,

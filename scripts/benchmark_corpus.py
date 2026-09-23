@@ -5,6 +5,7 @@ JSONL rows contain case_id, payload and optional positive weight. --prepare-only
 validates inputs without contacting any service. Credentials come only from
 SEIF_BENCH_SYSTEM / SEIF_BENCH_API_KEY. Reports never contain texts or case IDs.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -52,9 +53,13 @@ class Corpus:
 
     def summary(self):
         lengths = [len(case.payload) for case in self.cases]
-        return {"sha256": self.sha256, "bytes": self.byte_count, "cases": len(self.cases),
-                "total_weight": math.fsum(case.weight for case in self.cases),
-                "payload_characters": {"min": min(lengths), "max": max(lengths), "sum": sum(lengths)}}
+        return {
+            "sha256": self.sha256,
+            "bytes": self.byte_count,
+            "cases": len(self.cases),
+            "total_weight": math.fsum(case.weight for case in self.cases),
+            "payload_characters": {"min": min(lengths), "max": max(lengths), "sum": sum(lengths)},
+        }
 
 
 def strict_object(pairs):
@@ -81,10 +86,17 @@ def _read_case(raw, seen, line_number):
             raise ValueError
         identifier, payload = row["case_id"], row["payload"]
         weight = row.get("weight", 1)
-        if (not isinstance(identifier, str) or not identifier.strip() or len(identifier) > 256
-                or identifier in seen or not isinstance(payload, str)
-                or len(payload) > MAX_PAYLOAD_CHARS or type(weight) not in (int, float)
-                or not math.isfinite(weight) or not 0.000001 <= weight <= 1_000_000):
+        if (
+            not isinstance(identifier, str)
+            or not identifier.strip()
+            or len(identifier) > 256
+            or identifier in seen
+            or not isinstance(payload, str)
+            or len(payload) > MAX_PAYLOAD_CHARS
+            or type(weight) not in (int, float)
+            or not math.isfinite(weight)
+            or not 0.000001 <= weight <= 1_000_000
+        ):
             raise ValueError
         identifier.encode("utf-8")
         payload.encode("utf-8")
@@ -124,8 +136,9 @@ class WeightedCycle:
     Independent seeded jitter shuffles visits without expanding large weights
     into a repeated list. Memory is O(cases), each offered pair O(log cases).
     """
+
     def __init__(self, cases, seed):
-        self.cases, self.rng = cases, random.Random(seed)
+        self.cases, self.rng = cases, random.Random(seed) # noqa: B311
         self.heap = [(self.rng.random() / case.weight, i, 0) for i, case in enumerate(cases)]
         heapq.heapify(self.heap)
 
@@ -153,21 +166,32 @@ class Config:
     def validate(self):
         try:
             parsed = urlsplit(self.url)
-            valid_url = (parsed.scheme in {"http", "https"}
-                         and parsed.hostname in {"127.0.0.1", "localhost", "::1"}
-                         and parsed.port is not None and 1 <= parsed.port <= 65535
-                         and parsed.port not in PROTECTED_PORTS
-                         and not parsed.username and not parsed.password
-                         and parsed.path in {"", "/"} and not parsed.query and not parsed.fragment)
+            valid_url = (
+                parsed.scheme in {"http", "https"}
+                and parsed.hostname in {"127.0.0.1", "localhost", "::1"}
+                and parsed.port is not None
+                and 1 <= parsed.port <= 65535
+                and parsed.port not in PROTECTED_PORTS
+                and not parsed.username
+                and not parsed.password
+                and parsed.path in {"", "/"}
+                and not parsed.query
+                and not parsed.fragment
+            )
         except ValueError:
             valid_url = False
         if not valid_url:
             raise BenchmarkError("Use a dedicated loopback HTTP endpoint; shared live service ports are forbidden")
         if not all(math.isfinite(value) and value > 0 for value in (self.rps, self.duration, self.timeout)):
             raise BenchmarkError("Rate, duration and timeout must be finite and positive")
-        if (not math.isfinite(self.rps * self.duration) or self.rps * self.duration > 10_000_000
-                or self.duration > 3600 or self.timeout > 120
-                or not 1 <= self.concurrency <= 8192 or not 1024 <= self.max_response_bytes <= 64 * 1024 * 1024):
+        if (
+            not math.isfinite(self.rps * self.duration)
+            or self.rps * self.duration > 10_000_000
+            or self.duration > 3600
+            or self.timeout > 120
+            or not 1 <= self.concurrency <= 8192
+            or not 1024 <= self.max_response_bytes <= 64 * 1024 * 1024
+        ):
             raise BenchmarkError("Benchmark exceeds bounded rate/duration/concurrency/response settings")
 
 
@@ -191,9 +215,11 @@ def parse_response(content: bytes) -> Outcome:
 
 async def post_process(client, config, payload, correlation) -> Outcome:
     try:
-        async with client.post(config.url.rstrip("/") + "/process",
-                               json={"payload": payload, "payload_id": correlation},
-                               allow_redirects=False) as response:
+        async with client.post(
+            config.url.rstrip("/") + "/process",
+            json={"payload": payload, "payload_id": correlation},
+            allow_redirects=False,
+        ) as response:
             if response.status != 200:
                 return Outcome(response.status, error=f"http_{response.status}")
             content = bytearray()
@@ -220,10 +246,15 @@ def latency_summary(values):
         lower, upper = math.floor(position), math.ceil(position)
         return round(ordered[lower] + (ordered[upper] - ordered[lower]) * (position - lower), 3)
 
-    return {"count": len(values), "p50": percentile(50), "p95": percentile(95), "p99": percentile(99),
-            "max": round(ordered[-1], 3) if ordered else None,
-            "over_500ms": sum(value > 500 for value in ordered),
-            "over_1000ms": sum(value > 1000 for value in ordered)}
+    return {
+        "count": len(values),
+        "p50": percentile(50),
+        "p95": percentile(95),
+        "p99": percentile(99),
+        "max": round(ordered[-1], 3) if ordered else None,
+        "over_500ms": sum(value > 500 for value in ordered),
+        "over_1000ms": sum(value > 1000 for value in ordered),
+    }
 
 
 def _dispatch_pair(active, counters, finished, pair, limits):
@@ -263,8 +294,13 @@ async def schedule(config, pair, counters, on_offer):
             max_lag = max(max_lag, now - scheduled)
             counters["pairs_offered"] += 1
             assignment = on_offer(index)
-            _dispatch_pair(active, counters, finished, lambda index=index, assignment=assignment: pair(index, assignment),
-                           (now >= started + config.duration, config.concurrency))
+            _dispatch_pair(
+                active,
+                counters,
+                finished,
+                lambda index=index, assignment=assignment: pair(index, assignment),
+                (now >= started + config.duration, config.concurrency),
+            )
             if index % 32 == 31:
                 await asyncio.sleep(0)
         remaining = started + config.duration - time.perf_counter()
@@ -284,10 +320,25 @@ async def schedule(config, pair, counters, on_offer):
 class _CorpusRun:
     def __init__(self, config, corpus, requester):
         self.config, self.corpus, self.requester = config, corpus, requester
-        self.counters = Counter(dict.fromkeys((
-            "pairs_offered", "pairs_dispatched", "pairs_dropped_client_capacity", "pairs_dropped_client_deadline",
-            "pairs_verified", "pairs_mask_failed", "pairs_unmask_failed", "pairs_roundtrip_mismatch",
-            "pairs_mask_changed", "pairs_mask_unchanged", "requests_attempted", "requests_successful"), 0))
+        self.counters = Counter(
+            dict.fromkeys(
+                (
+                    "pairs_offered",
+                    "pairs_dispatched",
+                    "pairs_dropped_client_capacity",
+                    "pairs_dropped_client_deadline",
+                    "pairs_verified",
+                    "pairs_mask_failed",
+                    "pairs_unmask_failed",
+                    "pairs_roundtrip_mismatch",
+                    "pairs_mask_changed",
+                    "pairs_mask_unchanged",
+                    "requests_attempted",
+                    "requests_successful",
+                ),
+                0,
+            )
+        )
         self.errors, self.statuses, self.visited = Counter(), Counter(), Counter()
         self.latency = {phase: array("d") for phase in ("mask", "unmask")}
         self.source = WeightedCycle(self.corpus.cases, self.config.seed)
@@ -341,34 +392,50 @@ class _CorpusRun:
 
     def report(self, elapsed, lag):
         self.counters["http_requests_offered"] = 2 * self.counters["pairs_offered"]
-        self.counters["http_requests_not_attempted"] = self.counters["http_requests_offered"] - self.counters["requests_attempted"]
+        self.counters["http_requests_not_attempted"] = (
+            self.counters["http_requests_offered"] - self.counters["requests_attempted"]
+        )
         all_latencies = self.latency["mask"] + self.latency["unmask"]
-        return {"schema_version": 1, "measurement": "completed",
-                "method": "open-loop correlation pairs; 2 offered HTTP requests/pair; no retries",
-                "transport": "aiohttp", "event_loop": type(asyncio.get_running_loop()).__module__,
-                "target_url": self.config.url, "corpus": self.corpus.summary(),
-                "sampling": {"algorithm": "weighted virtual cycles with seeded per-visit jitter v1",
-                             "seed": self.config.seed, "offered_sequence_sha256": self.sequence_hash.hexdigest(),
-                             "unique_cases_dispatched": len(self.visited),
-                             "min_visits_dispatched": min(self.visited.values()) if self.visited else 0,
-                             "max_visits_dispatched": max(self.visited.values()) if self.visited else 0},
-                "configured_duration_seconds": self.config.duration,
-                "observed_elapsed_seconds_including_drain": round(elapsed, 6),
-                "offered_http_rps": self.config.rps, "max_concurrent_pairs": self.config.concurrency,
-                "request_timeout_seconds": self.config.timeout, "max_response_bytes": self.config.max_response_bytes,
-                "achieved_attempted_http_rps": round(self.counters["requests_attempted"] / elapsed, 3),
-                "achieved_successful_http_rps": round(self.counters["requests_successful"] / elapsed, 3),
-                "counts": dict(self.counters), "http_statuses": dict(self.statuses), "errors": dict(self.errors),
-                "latency_ms_all_attempts": latency_summary(all_latencies),
-                "latency_ms_mask": latency_summary(self.latency["mask"]),
-                "latency_ms_unmask": latency_summary(self.latency["unmask"]),
-                "client_scheduler_max_lag_ms": round(lag, 3),
-                "all_offered_pairs_verified": self.counters["pairs_verified"] == self.config.offered_pairs,
-                "limitations": ["Throughput includes draining requests after the scheduling window.",
-                                "Pair arrival times are open-loop; the second request follows its first response.",
-                                "A failed mask skips its unmask; client drops and unsent second requests remain counted.",
-                                "Roundtrip equality is not a PII recall measurement; annotation is evaluated separately.",
-                                "No original text, case identifier, request identifier or token is retained in this report."]}
+        return {
+            "schema_version": 1,
+            "measurement": "completed",
+            "method": "open-loop correlation pairs; 2 offered HTTP requests/pair; no retries",
+            "transport": "aiohttp",
+            "event_loop": type(asyncio.get_running_loop()).__module__,
+            "target_url": self.config.url,
+            "corpus": self.corpus.summary(),
+            "sampling": {
+                "algorithm": "weighted virtual cycles with seeded per-visit jitter v1",
+                "seed": self.config.seed,
+                "offered_sequence_sha256": self.sequence_hash.hexdigest(),
+                "unique_cases_dispatched": len(self.visited),
+                "min_visits_dispatched": min(self.visited.values()) if self.visited else 0,
+                "max_visits_dispatched": max(self.visited.values()) if self.visited else 0,
+            },
+            "configured_duration_seconds": self.config.duration,
+            "observed_elapsed_seconds_including_drain": round(elapsed, 6),
+            "offered_http_rps": self.config.rps,
+            "max_concurrent_pairs": self.config.concurrency,
+            "request_timeout_seconds": self.config.timeout,
+            "max_response_bytes": self.config.max_response_bytes,
+            "achieved_attempted_http_rps": round(self.counters["requests_attempted"] / elapsed, 3),
+            "achieved_successful_http_rps": round(self.counters["requests_successful"] / elapsed, 3),
+            "counts": dict(self.counters),
+            "http_statuses": dict(self.statuses),
+            "errors": dict(self.errors),
+            "latency_ms_all_attempts": latency_summary(all_latencies),
+            "latency_ms_mask": latency_summary(self.latency["mask"]),
+            "latency_ms_unmask": latency_summary(self.latency["unmask"]),
+            "client_scheduler_max_lag_ms": round(lag, 3),
+            "all_offered_pairs_verified": self.counters["pairs_verified"] == self.config.offered_pairs,
+            "limitations": [
+                "Throughput includes draining requests after the scheduling window.",
+                "Pair arrival times are open-loop; the second request follows its first response.",
+                "A failed mask skips its unmask; client drops and unsent second requests remain counted.",
+                "Roundtrip equality is not a PII recall measurement; annotation is evaluated separately.",
+                "No original text, case identifier, request identifier or token is retained in this report.",
+            ],
+        }
 
 
 async def run_with_requester(config, corpus, requester):
@@ -385,10 +452,12 @@ async def benchmark(config, corpus):
         raise BenchmarkError("Benchmark system and API key must be configured together")
     headers = {"X-System-ID": system, "X-API-Key": key} if system else {}
     connector = aiohttp.TCPConnector(limit=config.concurrency, keepalive_timeout=30)
-    async with aiohttp.ClientSession(headers=headers, trust_env=False, connector=connector,
-                                     timeout=aiohttp.ClientTimeout(total=config.timeout)) as client:
-        return await run_with_requester(config, corpus,
-                                        lambda payload, correlation: post_process(client, config, payload, correlation))
+    async with aiohttp.ClientSession(
+        headers=headers, trust_env=False, connector=connector, timeout=aiohttp.ClientTimeout(total=config.timeout)
+    ) as client:
+        return await run_with_requester(
+            config, corpus, lambda payload, correlation: post_process(client, config, payload, correlation)
+        )
 
 
 def file_hash(path):
@@ -410,13 +479,26 @@ def metadata(protocol):
             versions[package] = importlib.metadata.version(package)
         except importlib.metadata.PackageNotFoundError:
             versions[package] = None
-    sources = ["scripts/benchmark_corpus.py", "seif/app.py", "seif/config.py", "seif/detector.py",
-               "seif/ner.py", "scripts/ner_service.py", "requirements.lock", "deploy/ner/requirements-ner.txt"]
-    return {"recorded_at_utc": datetime.now(UTC).isoformat(), "python": sys.version.split()[0],
-            "platform": platform.platform(), "cpu_count": os.cpu_count(), "packages": versions,
-            "source_sha256": {name: file_hash(root / name) for name in sources},
-            "source_sha256_scope": "Local checkout at run start; match deployed service revisions separately.",
-            "protocol_sha256": file_hash(protocol) if protocol else None}
+    sources = [
+        "scripts/benchmark_corpus.py",
+        "seif/app.py",
+        "seif/config.py",
+        "seif/detector.py",
+        "seif/ner.py",
+        "scripts/ner_service.py",
+        "requirements.lock",
+        "deploy/ner/requirements-ner.txt",
+    ]
+    return {
+        "recorded_at_utc": datetime.now(UTC).isoformat(),
+        "python": sys.version.split()[0],
+        "platform": platform.platform(),
+        "cpu_count": os.cpu_count(),
+        "packages": versions,
+        "source_sha256": {name: file_hash(root / name) for name in sources},
+        "source_sha256_scope": "Local checkout at run start; match deployed service revisions separately.",
+        "protocol_sha256": file_hash(protocol) if protocol else None,
+    }
 
 
 def main():
@@ -434,16 +516,23 @@ def main():
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
     try:
-        config = Config(args.url, args.rps, args.duration, args.concurrency,
-                        args.timeout, args.seed, args.max_response_bytes)
+        config = Config(
+            args.url, args.rps, args.duration, args.concurrency, args.timeout, args.seed, args.max_response_bytes
+        )
         config.validate()
         corpus = load_corpus(args.corpus)
         provenance = metadata(args.protocol)
         if args.output.exists():
             raise BenchmarkError("Output already exists; preserve earlier evidence with a new output path")
         if args.prepare_only:
-            report = {"schema_version": 1, "measurement": "not_run", "corpus": corpus.summary(),
-                      "target_url": config.url, "planned_pairs": config.offered_pairs, "seed": config.seed}
+            report = {
+                "schema_version": 1,
+                "measurement": "not_run",
+                "corpus": corpus.summary(),
+                "target_url": config.url,
+                "planned_pairs": config.offered_pairs,
+                "seed": config.seed,
+            }
         else:
             try:
                 import uvloop
@@ -457,8 +546,16 @@ def main():
         fd = os.open(args.output, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
         with os.fdopen(fd, "wb") as stream:
             stream.write(encoded)
-        print(json.dumps({"report": str(args.output.resolve()), "sha256": hashlib.sha256(encoded).hexdigest(),
-                          "measurement": report["measurement"]}, ensure_ascii=False))
+        print(
+            json.dumps(
+                {
+                    "report": str(args.output.resolve()),
+                    "sha256": hashlib.sha256(encoded).hexdigest(),
+                    "measurement": report["measurement"],
+                },
+                ensure_ascii=False,
+            )
+        )
     except BenchmarkError as exc:
         parser.exit(2, str(exc) + "\n")
     except KeyboardInterrupt:

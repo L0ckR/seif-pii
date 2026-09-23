@@ -3,6 +3,7 @@
 Text copies and prediction caches stay in ignored local-data. Preparation fixes
 all 5095 cases before inference; no model, schema, threshold or label tuning.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -29,15 +30,33 @@ from seif.gliner_ner import SCHEMAS, GlinerAnalyzer  # noqa: E402
 
 ONNX_REPO = "DanKau/gliner2.5-multi-v1-onnx"
 ONNX_REVISION = "481ad683a5420349c20f7ccc992efd25f9f3b809"
-ONNX_FILES = (".export_meta.json", "config.json", "gliner2_config.json", "tokenizer.json",
-              "tokenizer_config.json", "onnx/encoder.onnx", "onnx/boundary.onnx", "onnx/classifier.onnx")
+ONNX_FILES = (
+    ".export_meta.json",
+    "config.json",
+    "gliner2_config.json",
+    "tokenizer.json",
+    "tokenizer_config.json",
+    "onnx/encoder.onnx",
+    "onnx/boundary.onnx",
+    "onnx/classifier.onnx",
+)
 BASE = ROOT / "benchmarks/ner-models/gliner25-multi-v1"
 DATA = ROOT / "datasets/golden/organizer-v1/cases.jsonl"
 VERSIONS = ("gliner2", "torch", "onnxruntime-gpu", "onnx", "transformers", "tokenizers", "numpy")
-SETTINGS = {"schema": "described-names", "labels": SCHEMAS["described-names"], "threshold": .8,
-            "precision": "FP32", "batch_size": 1, "cpu_threads": 4, "seed": 20260922,
-            "warmup": 5, "word_window": 384, "word_overlap": 64,
-            "overlap_policy": "native flat weighted interval scheduling", "tf32": False}
+SETTINGS = {
+    "schema": "described-names",
+    "labels": SCHEMAS["described-names"],
+    "threshold": 0.8,
+    "precision": "FP32",
+    "batch_size": 1,
+    "cpu_threads": 4,
+    "seed": 20260922,
+    "warmup": 5,
+    "word_window": 384,
+    "word_overlap": 64,
+    "overlap_policy": "native flat weighted interval scheduling",
+    "tf32": False,
+}
 
 
 def save(path, value):
@@ -61,14 +80,29 @@ def versions():
 
 
 def input_files(args):
-    names = {"organizer": DATA, "organizer_manifest": DATA.with_name("manifest.json"),
-             "organizer_native": BASE / "selected-service.jsonl", "organizer_spacy": BASE / "spacy-fresh.jsonl",
-             "organizer_native_metadata": BASE / "selected-service.meta.json",
-             "organizer_spacy_metadata": BASE / "spacy-fresh.meta.json",
-             "public_report": BASE / "public-transfer.json", "organizer_report": BASE / "comparison-selected-service.json"}
-    names.update({"public_" + name: args.public_run_dir / name for name in
-                  ("prepared-inputs.jsonl", "protocol.json", "spacy.jsonl", "spacy.meta.json",
-                   "gliner.jsonl", "gliner.meta.json")})
+    names = {
+        "organizer": DATA,
+        "organizer_manifest": DATA.with_name("manifest.json"),
+        "organizer_native": BASE / "selected-service.jsonl",
+        "organizer_spacy": BASE / "spacy-fresh.jsonl",
+        "organizer_native_metadata": BASE / "selected-service.meta.json",
+        "organizer_spacy_metadata": BASE / "spacy-fresh.meta.json",
+        "public_report": BASE / "public-transfer.json",
+        "organizer_report": BASE / "comparison-selected-service.json",
+    }
+    names.update(
+        {
+            "public_" + name: args.public_run_dir / name
+            for name in (
+                "prepared-inputs.jsonl",
+                "protocol.json",
+                "spacy.jsonl",
+                "spacy.meta.json",
+                "gliner.jsonl",
+                "gliner.meta.json",
+            )
+        }
+    )
     return names
 
 
@@ -76,11 +110,22 @@ def load_inputs(args):
     cases = golden.load_cases(DATA)
     if len(cases) != 446:
         raise ValueError("Expected the unchanged 446 organizer cases")
-    rows = [{"key": "organizer/" + key, "id": key, "dataset": "organizer", "split": "all",
-             "text": case["text"], "gold": [(e["type"], e["start"], e["end"]) for e in case["entities"]]}
-            for key, case in cases.items()]
+    rows = [
+        {
+            "key": "organizer/" + key,
+            "id": key,
+            "dataset": "organizer",
+            "split": "all",
+            "text": case["text"],
+            "gold": [(e["type"], e["start"], e["end"]) for e in case["entities"]],
+        }
+        for key, case in cases.items()
+    ]
     protocol = json.loads((args.public_run_dir / "protocol.json").read_text())
-    if golden.sha256(args.public_run_dir / "protocol.json") != "6058374163fc3978ec4a882d19328e96fad1032d61bbac168ad8a3c78df68a27":
+    if (
+        golden.sha256(args.public_run_dir / "protocol.json")
+        != "6058374163fc3978ec4a882d19328e96fad1032d61bbac168ad8a3c78df68a27"
+    ):
         raise ValueError("Public reference protocol differs")
     for name, checksum in protocol["source_sha256"].items():
         if golden.sha256(ROOT / name) != checksum:
@@ -97,17 +142,25 @@ def prepare(args):
     if fingerprint_model(args.native_path) != selected["model_file_sha256"]:
         raise ValueError("Native checkpoint differs from the selected reference")
     # Includes new adapter/runner while requiring every historical source above.
-    protocol = {"schema_version": 1, "prepared_at_utc": datetime.now(timezone.utc).isoformat(),
-                "source_sha256": source_hashes(), "input_sha256": {k: golden.sha256(p) for k, p in input_files(args).items()},
-                "model": ONNX_REPO, "revision": ONNX_REVISION,
-                "onnx_file_sha256": fingerprint_onnx(args.model_path),
-                "native_file_sha256": selected["model_file_sha256"], "settings": SETTINGS, "versions": versions(),
-                "cases": len(rows), "corpus_counts": dict(Counter(r["dataset"] for r in rows)),
-                "ordered_membership_sha256": public.digest_json([r["key"] for r in rows]),
-                "text_sha256": public.digest_json({r["key"]: hashlib.sha256(r["text"].encode()).hexdigest() for r in rows}),
-                "gold_sha256": public.digest_json({r["key"]: sorted(r["gold"]) for r in rows}),
-                "policy": "Full fixed corpora, selected native schema/threshold, no post-evaluation tuning. "
-                          "ONNX CPU/GPU and native CPU/GPU timed separately. Local inference only; no HTTP RPS claim."}
+    protocol = {
+        "schema_version": 1,
+        "prepared_at_utc": datetime.now(timezone.utc).isoformat(),
+        "source_sha256": source_hashes(),
+        "input_sha256": {k: golden.sha256(p) for k, p in input_files(args).items()},
+        "model": ONNX_REPO,
+        "revision": ONNX_REVISION,
+        "onnx_file_sha256": fingerprint_onnx(args.model_path),
+        "native_file_sha256": selected["model_file_sha256"],
+        "settings": SETTINGS,
+        "versions": versions(),
+        "cases": len(rows),
+        "corpus_counts": dict(Counter(r["dataset"] for r in rows)),
+        "ordered_membership_sha256": public.digest_json([r["key"] for r in rows]),
+        "text_sha256": public.digest_json({r["key"]: hashlib.sha256(r["text"].encode()).hexdigest() for r in rows}),
+        "gold_sha256": public.digest_json({r["key"]: sorted(r["gold"]) for r in rows}),
+        "policy": "Full fixed corpora, selected native schema/threshold, no post-evaluation tuning. "
+        "ONNX CPU/GPU and native CPU/GPU timed separately. Local inference only; no HTTP RPS claim.",
+    }
     protocol["baseline_control"] = baseline_control(args, rows)
     save(args.run_dir / "protocol.json", protocol)
     return protocol
@@ -119,18 +172,28 @@ def verify(args, protocol):
     if protocol["input_sha256"] != {k: golden.sha256(p) for k, p in input_files(args).items()}:
         raise ValueError("Corpus or frozen reference cache changed")
     rows = load_inputs(args)
-    if (protocol["ordered_membership_sha256"] != public.digest_json([r["key"] for r in rows])
-            or protocol["gold_sha256"] != public.digest_json({r["key"]: sorted(r["gold"]) for r in rows})
-            or protocol["text_sha256"] != public.digest_json({r["key"]: hashlib.sha256(r["text"].encode()).hexdigest() for r in rows})):
+    if (
+        protocol["ordered_membership_sha256"] != public.digest_json([r["key"] for r in rows])
+        or protocol["gold_sha256"] != public.digest_json({r["key"]: sorted(r["gold"]) for r in rows})
+        or protocol["text_sha256"]
+        != public.digest_json({r["key"]: hashlib.sha256(r["text"].encode()).hexdigest() for r in rows})
+    ):
         raise ValueError("Corpus order or annotations differ")
     return rows
 
 
 def timing(values):
     total = sum(values) / 1000
-    return {"cases": len(values), "summed_call_seconds": total, "documents_per_second": len(values) / total,
-            "p50_ms": statistics.median(values), "p95_ms": percentile(values, .95),
-            "p99_ms": percentile(values, .99), "max_ms": max(values), "mean_ms": statistics.mean(values)}
+    return {
+        "cases": len(values),
+        "summed_call_seconds": total,
+        "documents_per_second": len(values) / total,
+        "p50_ms": statistics.median(values),
+        "p95_ms": percentile(values, 0.95),
+        "p99_ms": percentile(values, 0.99),
+        "max_ms": max(values),
+        "mean_ms": statistics.mean(values),
+    }
 
 
 def create_analyzer(args):
@@ -141,7 +204,7 @@ def create_analyzer(args):
     torch.backends.cuda.matmul.allow_tf32 = False
     torch.backends.cudnn.allow_tf32 = False
     if args.backend == "native":
-        return GlinerAnalyzer.from_local(args.native_path, device=args.device, schema="described-names", threshold=.8)
+        return GlinerAnalyzer.from_local(args.native_path, device=args.device, schema="described-names", threshold=0.8)
     from seif.gliner_onnx import GlinerOnnxAnalyzer
 
     return GlinerOnnxAnalyzer.from_local(args.model_path, args.native_path, device=args.device, cpu_threads=4)
@@ -165,8 +228,10 @@ def measured_call(analyzer, text, device):
 def cache(args, rows, protocol):
     import torch
 
-    if (fingerprint_onnx(args.model_path) != protocol["onnx_file_sha256"]
-            or fingerprint_model(args.native_path) != protocol["native_file_sha256"]):
+    if (
+        fingerprint_onnx(args.model_path) != protocol["onnx_file_sha256"]
+        or fingerprint_model(args.native_path) != protocol["native_file_sha256"]
+    ):
         raise ValueError("Checkpoint changed after preparation")
     target = args.run_dir / f"{args.backend}-{args.device}-{args.scope}.jsonl"
     if target.exists() or target.with_suffix(".meta.json").exists():
@@ -184,34 +249,62 @@ def cache(args, rows, protocol):
             entities, error, ms = measured_call(analyzer, row["text"], args.device)
             by_corpus[row["dataset"]].append(ms)
             per_case.append({"case_id": row["key"], "latency_ms": ms, "error_type": error})
-            record = {"case_id": row["key"], "text_sha256": hashlib.sha256(row["text"].encode()).hexdigest(),
-                      "entities": entities}
+            record = {
+                "case_id": row["key"],
+                "text_sha256": hashlib.sha256(row["text"].encode()).hexdigest(),
+                "entities": entities,
+            }
             if error:
                 record["inference_error"] = error
                 failures[row["dataset"]].append({"case_id": row["key"], "error_type": error})
             stream.write(json.dumps(record, sort_keys=True, separators=(",", ":")) + "\n")
             if index % 100 == 0:
                 stream.flush()
-                print(json.dumps({"completed": index, "total": len(selected), "backend": args.backend, "device": args.device}), flush=True)
+                print(
+                    json.dumps(
+                        {"completed": index, "total": len(selected), "backend": args.backend, "device": args.device}
+                    ),
+                    flush=True,
+                )
     elapsed = time.perf_counter() - started
     verify(args, protocol)
-    if (fingerprint_onnx(args.model_path) != protocol["onnx_file_sha256"]
-            or fingerprint_model(args.native_path) != protocol["native_file_sha256"]):
+    if (
+        fingerprint_onnx(args.model_path) != protocol["onnx_file_sha256"]
+        or fingerprint_model(args.native_path) != protocol["native_file_sha256"]
+    ):
         raise ValueError("Weights changed during inference")
-    metadata = {"schema_version": 1, "backend": args.backend, "device": args.device, "scope": args.scope,
-                "cases": len(selected), "measured_at_utc": datetime.now(timezone.utc).isoformat(),
-                "cache_sha256": golden.sha256(target), "protocol_sha256": golden.sha256(args.run_dir / "protocol.json"),
-                "settings": SETTINGS, "versions": versions(), "source_sha256": protocol["source_sha256"],
-                "hardware": {"platform": platform.platform(), "logical_cpus": os.cpu_count(),
-                             "gpu": torch.cuda.get_device_name() if args.device == "cuda" else None},
-                "timing_by_corpus": {k: {**timing(v), "failed_cases": len(failures[k]),
-                                         "valid_complete_corpus_measurement": not failures[k],
-                                         "successful_documents_per_second": (len(v) - len(failures[k])) / (sum(v) / 1000)}
-                                     for k, v in by_corpus.items()},
-                "failures_by_corpus": dict(failures),
-                "elapsed_seconds_including_cache": elapsed, "documents_per_second_including_cache": len(selected) / elapsed,
-                "per_case_latency_ms": per_case,
-                "timing_scope": "Warm sequential full analyzer calls, batch1, no HTTP/Redis/masking/concurrency; not service RPS."}
+    metadata = {
+        "schema_version": 1,
+        "backend": args.backend,
+        "device": args.device,
+        "scope": args.scope,
+        "cases": len(selected),
+        "measured_at_utc": datetime.now(timezone.utc).isoformat(),
+        "cache_sha256": golden.sha256(target),
+        "protocol_sha256": golden.sha256(args.run_dir / "protocol.json"),
+        "settings": SETTINGS,
+        "versions": versions(),
+        "source_sha256": protocol["source_sha256"],
+        "hardware": {
+            "platform": platform.platform(),
+            "logical_cpus": os.cpu_count(),
+            "gpu": torch.cuda.get_device_name() if args.device == "cuda" else None,
+        },
+        "timing_by_corpus": {
+            k: {
+                **timing(v),
+                "failed_cases": len(failures[k]),
+                "valid_complete_corpus_measurement": not failures[k],
+                "successful_documents_per_second": (len(v) - len(failures[k])) / (sum(v) / 1000),
+            }
+            for k, v in by_corpus.items()
+        },
+        "failures_by_corpus": dict(failures),
+        "elapsed_seconds_including_cache": elapsed,
+        "documents_per_second_including_cache": len(selected) / elapsed,
+        "per_case_latency_ms": per_case,
+        "timing_scope": "Warm sequential full analyzer calls, batch1, no HTTP/Redis/masking/concurrency; not service RPS.",
+    }
     if hasattr(analyzer, "metadata"):
         metadata["adapter"] = analyzer.metadata()
     save(target.with_suffix(".meta.json"), metadata)
@@ -220,8 +313,13 @@ def cache(args, rows, protocol):
 
 def reference_caches(args, rows):
     cases = golden.load_cases(DATA)
-    native = {"organizer/" + k: v["entities"] for k, v in golden.load_ner_cache(BASE / "selected-service.jsonl", cases).items()}
-    spacy = {"organizer/" + k: v["entities"] for k, v in golden.load_ner_cache(BASE / "spacy-fresh.jsonl", cases).items()}
+    native = {
+        "organizer/" + k: v["entities"]
+        for k, v in golden.load_ner_cache(BASE / "selected-service.jsonl", cases).items()
+    }
+    spacy = {
+        "organizer/" + k: v["entities"] for k, v in golden.load_ner_cache(BASE / "spacy-fresh.jsonl", cases).items()
+    }
     external = [r for r in rows if r["dataset"] != "organizer"]
     digest = golden.sha256(args.public_run_dir / "protocol.json")
     for name, result in (("gliner", native), ("spacy", spacy)):
@@ -237,12 +335,23 @@ def parity(rows, reference, candidate):
         before = {(x["start"], x["end"], x["entity_type"]): x["score"] for x in reference[key]}
         after = {(x["start"], x["end"], x["entity_type"]): x["score"] for x in candidate[key]}
         if before.keys() != after.keys():
-            differences.append({"case_id": key, "missing": len(before.keys() - after.keys()), "extra": len(after.keys() - before.keys())})
+            differences.append(
+                {
+                    "case_id": key,
+                    "missing": len(before.keys() - after.keys()),
+                    "extra": len(after.keys() - before.keys()),
+                }
+            )
         common += len(before.keys() & after.keys())
         scores.extend(abs(before[k] - after[k]) for k in before.keys() & after.keys())
-    return {"cases": len(rows), "identical_span_cases": len(rows) - len(differences), "changed_cases": differences,
-            "matched_spans": common, "maximum_score_difference_on_matched_spans": max(scores, default=0),
-            "mean_score_difference_on_matched_spans": statistics.mean(scores) if scores else 0}
+    return {
+        "cases": len(rows),
+        "identical_span_cases": len(rows) - len(differences),
+        "changed_cases": differences,
+        "matched_spans": common,
+        "maximum_score_difference_on_matched_spans": max(scores, default=0),
+        "mean_score_difference_on_matched_spans": statistics.mean(scores) if scores else 0,
+    }
 
 
 def score_public(rows, predictions, caches):
@@ -256,9 +365,12 @@ def score_public(rows, predictions, caches):
         for name, values in predictions.items():
             spans = {(mapping.get(s.type, "UNMAPPED_PRED:" + s.type), s.start, s.end) for s in values[key]}
             mapped[name][key] = public.redmad.merge_adjacent(text, spans) if redmad else spans
-    return {"cases": len(rows), "full_masking_all_gold_types": public.protection_metrics(rows, predictions),
-            "typed_all_types_unfiltered": public.scope_metrics(truth, mapped),
-            "raw_model_person": public.raw_person_metrics(rows, caches)}
+    return {
+        "cases": len(rows),
+        "full_masking_all_gold_types": public.protection_metrics(rows, predictions),
+        "typed_all_types_unfiltered": public.scope_metrics(truth, mapped),
+        "raw_model_person": public.raw_person_metrics(rows, caches),
+    }
 
 
 def score_organizer(cases, cache):
@@ -292,10 +404,18 @@ def baseline_control(args, rows):
             for profile in ("hybrid", "person_only"):
                 if metrics[name + "_" + profile] != reference[slot + "_" + profile]:
                     raise ValueError("Public baseline aggregates do not reproduce: " + ds + "/" + name)
-                if measured["typed_all_types_unfiltered"]["systems"][name + "_" + profile] != typed[slot + "_" + profile]:
+                if (
+                    measured["typed_all_types_unfiltered"]["systems"][name + "_" + profile]
+                    != typed[slot + "_" + profile]
+                ):
                     raise ValueError("Public typed baseline aggregates differ: " + ds + "/" + name)
-    return {"organizer_all_aggregates_exact": True, "public_full_masking_all_gold_types_exact": True,
-            "public_typed_all_types_exact": True, "native_and_spacy": True, "cases": len(rows)}
+    return {
+        "organizer_all_aggregates_exact": True,
+        "public_full_masking_all_gold_types_exact": True,
+        "public_typed_all_types_exact": True,
+        "native_and_spacy": True,
+        "cases": len(rows),
+    }
 
 
 def evaluate(args, rows, protocol):
@@ -318,25 +438,45 @@ def evaluate(args, rows, protocol):
         part = [r for r in selected if r["dataset"] == dataset]
         failures = sorted(r["key"] for r in part if r["key"] in failed_ids)
         if failures:
-            corpora[dataset] = {"cases": len(part), "quality_available": False, "failed_case_ids": failures,
-                                "reason": "No complete-corpus quality claim when actual inference failed; no cases silently excluded."}
+            corpora[dataset] = {
+                "cases": len(part),
+                "quality_available": False,
+                "failed_case_ids": failures,
+                "reason": "No complete-corpus quality claim when actual inference failed; no cases silently excluded.",
+            }
             continue
         if dataset != "organizer":
             corpora[dataset] = score_public(part, predictions, caches)
             continue
         organizer_cache = {key: {"entities": candidate["organizer/" + key]} for key in cases}
         scored = {name: score_organizer(cases, values) for name, values in caches.items()}
-        corpora[dataset] = {"cases": len(part), "service_hybrid": scored, "raw_person_candidate": person_only(cases, organizer_cache)}
-    result = {"schema_version": 1, "protocol_sha256": golden.sha256(args.run_dir / "protocol.json"),
-              "protocol": protocol, "candidate_metadata": metadata, "corpora": corpora,
-              "parity_vs_native": {ds: (None if metadata["failures_by_corpus"].get(ds)
-                                         else parity([r for r in selected if r["dataset"] == ds], caches["native"], candidate))
-                                   for ds in dict.fromkeys(r["dataset"] for r in selected)},
-              "limitations": ["Organizer labels are provisional AI silver, not organizer ground truth.",
-                              "Corpora already used for rule development; selected GLiNER schema tuned on organizer before this experiment.",
-                              "No thresholds or annotations changed for the ONNX export.",
-                              "Full masking counts protected alphanumeric positions; typed metrics retain wrong classes.",
-                              "No inference speed claim is an HTTP RPS measurement."]}
+        corpora[dataset] = {
+            "cases": len(part),
+            "service_hybrid": scored,
+            "raw_person_candidate": person_only(cases, organizer_cache),
+        }
+    result = {
+        "schema_version": 1,
+        "protocol_sha256": golden.sha256(args.run_dir / "protocol.json"),
+        "protocol": protocol,
+        "candidate_metadata": metadata,
+        "corpora": corpora,
+        "parity_vs_native": {
+            ds: (
+                None
+                if metadata["failures_by_corpus"].get(ds)
+                else parity([r for r in selected if r["dataset"] == ds], caches["native"], candidate)
+            )
+            for ds in dict.fromkeys(r["dataset"] for r in selected)
+        },
+        "limitations": [
+            "Organizer labels are provisional AI silver, not organizer ground truth.",
+            "Corpora already used for rule development; selected GLiNER schema tuned on organizer before this experiment.",
+            "No thresholds or annotations changed for the ONNX export.",
+            "Full masking counts protected alphanumeric positions; typed metrics retain wrong classes.",
+            "No inference speed claim is an HTTP RPS measurement.",
+        ],
+    }
     verify(args, protocol)
     save(args.output, result)
     return {"output": str(args.output), "cases": len(selected), "parity": result["parity_vs_native"]}

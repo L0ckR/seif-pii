@@ -6,6 +6,7 @@ Run in an isolated ordinary CPython 3.13 environment with presidio-analyzer
 Both detectors run in the same process. No API, Redis, remote model or service
 is called. The small fresh challenge was frozen before either detector ran.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -57,7 +58,10 @@ FRESH_FIXTURES = [
     ("fresh_25", "Конференция состоится 20.11.2027, доклад длится 40 минут."),
     ("fresh_26", "Компания Северный Ветер открыла новый офис."),
     ("fresh_27", "Как безопасно хранить номер карты и CVV, если сами значения не указаны?"),
-    ("fresh_28", "В статье о поэте Борисе Пастернаке клиент {{PERSON|Борис Пастернак}} указал {{EMAIL|reader@example.org}}."),
+    (
+        "fresh_28",
+        "В статье о поэте Борисе Пастернаке клиент {{PERSON|Борис Пастернак}} указал {{EMAIL|reader@example.org}}.",
+    ),
 ]
 FROZEN_AT = "2026-09-22T07:41:45Z"
 FROZEN_SOURCE_SHA256 = "31c36e36e19fe553858ba4f335030919ed3344fccdf638ee1c4880beff2ebdbb"
@@ -65,10 +69,20 @@ FROZEN_SOURCE_SHA256 = "31c36e36e19fe553858ba4f335030919ed3344fccdf638ee1c4880be
 # Only these four types have a direct semantic counterpart without inference.
 COMMON = {"PERSON": "PERSON", "EMAIL_ADDRESS": "EMAIL", "PHONE_NUMBER": "PHONE", "CREDIT_CARD": "CARD"}
 COARSE = {
-    "PERSON": "PERSON", "CARDHOLDER": "PERSON", "EMAIL": "EMAIL_ADDRESS", "PHONE": "PHONE_NUMBER",
-    "CARD": "CREDIT_CARD", "BIRTH_DATE": "DATE_TIME", "PASSPORT_DATE": "DATE_TIME",
-    "BIRTH_PLACE": "LOCATION", "ADDRESS": "LOCATION", "COUNTRY": "LOCATION", "CITY": "LOCATION",
-    "STREET": "LOCATION", "CITIZENSHIP": "NRP", "PASSPORT_ISSUER": "ORGANIZATION",
+    "PERSON": "PERSON",
+    "CARDHOLDER": "PERSON",
+    "EMAIL": "EMAIL_ADDRESS",
+    "PHONE": "PHONE_NUMBER",
+    "CARD": "CREDIT_CARD",
+    "BIRTH_DATE": "DATE_TIME",
+    "PASSPORT_DATE": "DATE_TIME",
+    "BIRTH_PLACE": "LOCATION",
+    "ADDRESS": "LOCATION",
+    "COUNTRY": "LOCATION",
+    "CITY": "LOCATION",
+    "STREET": "LOCATION",
+    "CITIZENSHIP": "NRP",
+    "PASSPORT_ISSUER": "ORGANIZATION",
 }
 SOURCES = {
     "languages": "https://presidio.dataprivacystack.org/analyzer/languages/",
@@ -115,15 +129,25 @@ def build_presidio():
     recognizers = [
         SpacyRecognizer(supported_language="ru"),
         EmailRecognizer(supported_language="ru", context=["email", "e-mail", "почта", "электронная"]),
-        PhoneRecognizer(supported_language="ru", supported_regions=("RU",) + PhoneRecognizer.DEFAULT_SUPPORTED_REGIONS,
-                        context=["телефон", "тел", "мобильный", "номер", "связь", "контакт"]),
-        CreditCardRecognizer(supported_language="ru", context=["карта", "карты", "платёжная", "кредитная", "банковская", "card"]),
-        DateRecognizer(supported_language="ru", context=["дата", "рождение", "рождения", "выдан", "выдача", "выдачи", "родился", "родилась"]),
+        PhoneRecognizer(
+            supported_language="ru",
+            supported_regions=("RU",) + PhoneRecognizer.DEFAULT_SUPPORTED_REGIONS,
+            context=["телефон", "тел", "мобильный", "номер", "связь", "контакт"],
+        ),
+        CreditCardRecognizer(
+            supported_language="ru", context=["карта", "карты", "платёжная", "кредитная", "банковская", "card"]
+        ),
+        DateRecognizer(
+            supported_language="ru",
+            context=["дата", "рождение", "рождения", "выдан", "выдача", "выдачи", "родился", "родилась"],
+        ),
     ]
     registry = RecognizerRegistry(supported_languages=["ru"])
     for recognizer in recognizers:
         registry.add_recognizer(recognizer)
-    analyzer = AnalyzerEngine(registry=registry, nlp_engine=engine, supported_languages=["ru"], default_score_threshold=0.0)
+    analyzer = AnalyzerEngine(
+        registry=registry, nlp_engine=engine, supported_languages=["ru"], default_score_threshold=0.0
+    )
     metadata = {
         "name": "stock Russian spaCy model + upstream generic recognizers adapted to ru",
         "upstream_english_default": False,
@@ -136,9 +160,16 @@ def build_presidio():
         "network_during_analysis": "none; tldextract uses bundled public suffix snapshot",
         "excluded_entities": "URL, IP, crypto, IBAN and country-specific non-Russian IDs are outside this assignment and are not enabled",
         "custom_russian_identifier_rules": False,
-        "recognizers": [{"name": item.name, "supported_language": item.supported_language,
-                         "supported_entities": item.supported_entities, "context": item.context,
-                         "phone_regions": list(getattr(item, "supported_regions", []))} for item in recognizers],
+        "recognizers": [
+            {
+                "name": item.name,
+                "supported_language": item.supported_language,
+                "supported_entities": item.supported_entities,
+                "context": item.context,
+                "phone_regions": list(getattr(item, "supported_regions", [])),
+            }
+            for item in recognizers
+        ],
     }
     if not all(item.supported_language == "ru" for item in recognizers):
         raise RuntimeError("Recognizer language differs from the fixed Russian comparison protocol")
@@ -165,17 +196,29 @@ def metric(expected, predicted) -> dict:
             for kind, _, _ in spans:
                 by_type.setdefault(kind, Counter())[name] += 1
         if wanted != found:
-            failures.append({"case_id": case_id, "false_positive": sorted(groups["fp"]), "false_negative": sorted(groups["fn"])})
-    return {**scores(totals["tp"], totals["fp"], totals["fn"]), "exact_cases": exact_cases,
-            "evaluated_cases": len(expected), "negative_cases": negatives, "negative_cases_with_fp": negatives_with_fp,
-            "by_type": {kind: scores(c["tp"], c["fp"], c["fn"]) for kind, c in sorted(by_type.items())},
-            "failures": failures}
+            failures.append(
+                {"case_id": case_id, "false_positive": sorted(groups["fp"]), "false_negative": sorted(groups["fn"])}
+            )
+    return {
+        **scores(totals["tp"], totals["fp"], totals["fn"]),
+        "exact_cases": exact_cases,
+        "evaluated_cases": len(expected),
+        "negative_cases": negatives,
+        "negative_cases_with_fp": negatives_with_fp,
+        "by_type": {kind: scores(c["tp"], c["fp"], c["fn"]) for kind, c in sorted(by_type.items())},
+        "failures": failures,
+    }
 
 
 def remap(rows, mapping, keep_unknown=False):
-    return {case_id: {(mapping.get(kind, "UNMAPPED:" + kind), start, end)
-                      for kind, start, end in spans if keep_unknown or kind in mapping}
-            for case_id, spans in rows.items()}
+    return {
+        case_id: {
+            (mapping.get(kind, "UNMAPPED:" + kind), start, end)
+            for kind, start, end in spans
+            if keep_unknown or kind in mapping
+        }
+        for case_id, spans in rows.items()
+    }
 
 
 def evaluate_corpus(fixtures, detect, analyzer):
@@ -188,13 +231,25 @@ def evaluate_corpus(fixtures, detect, analyzer):
         ours[case_id] = {(span.type, span.start, span.end) for span in detect(text)}
         results = analyzer.analyze(text=text, language="ru", score_threshold=0.0)
         theirs[case_id] = {(span.entity_type, span.start, span.end) for span in results}
-        raw.append({"case_id": case_id, "text": text, "expected": sorted(expected), "seif": sorted(ours[case_id]),
-                    "presidio": [{"type": span.entity_type, "start": span.start, "end": span.end, "score": round(span.score, 5)} for span in results]})
+        raw.append(
+            {
+                "case_id": case_id,
+                "text": text,
+                "expected": sorted(expected),
+                "seif": sorted(ours[case_id]),
+                "presidio": [
+                    {"type": span.entity_type, "start": span.start, "end": span.end, "score": round(span.score, 5)}
+                    for span in results
+                ],
+            }
+        )
     strict_identity = {kind: kind for kind in COMMON.values()}
     common_truth = remap(truth, strict_identity)
     coarse_truth = remap(truth, COARSE)
     coarse_theirs = remap(theirs, {kind: kind for kind in COARSE.values()})
-    common_case_ids = [case_id for case_id, spans in truth.items() if all(kind in strict_identity for kind, _, _ in spans)]
+    common_case_ids = [
+        case_id for case_id, spans in truth.items() if all(kind in strict_identity for kind, _, _ in spans)
+    ]
 
     def selected(rows):
         return {case_id: rows[case_id] for case_id in common_case_ids}
@@ -203,17 +258,31 @@ def evaluate_corpus(fixtures, detect, analyzer):
         return {key: {("ANY_PII", start, end) for _, start, end in spans} for key, spans in rows.items()}
 
     report = {
-        "case_count": len(fixtures), "annotated_spans": sum(map(len, truth.values())), "canonical_corpus_sha256": canonical_hash(fixtures),
+        "case_count": len(fixtures),
+        "annotated_spans": sum(map(len, truth.values())),
+        "canonical_corpus_sha256": canonical_hash(fixtures),
         "common_strict4": {
             "selection_method": "Whole cases whose gold labels are a subset of PERSON/EMAIL/PHONE/CARD, including all gold-empty cases; no filtering based on predictions",
             "case_ids": common_case_ids,
             "seif": metric(selected(common_truth), selected(remap(ours, strict_identity))),
             "presidio": metric(selected(common_truth), selected(remap(theirs, COMMON))),
         },
-        "strict4_allcases_diagnostic": {"seif": metric(common_truth, remap(ours, strict_identity)), "presidio": metric(common_truth, remap(theirs, COMMON))},
-        "fine_taxonomy_requirement_fit": {"seif": metric(truth, ours), "presidio": metric(truth, remap(theirs, COMMON, keep_unknown=True))},
-        "coarse_diagnostic": {"seif": metric(coarse_truth, remap(ours, COARSE)), "presidio": metric(coarse_truth, coarse_theirs)},
-        "untyped_exact_span_coverage": {"seif": metric(untyped(truth), untyped(ours)), "presidio": metric(untyped(truth), untyped(theirs))},
+        "strict4_allcases_diagnostic": {
+            "seif": metric(common_truth, remap(ours, strict_identity)),
+            "presidio": metric(common_truth, remap(theirs, COMMON)),
+        },
+        "fine_taxonomy_requirement_fit": {
+            "seif": metric(truth, ours),
+            "presidio": metric(truth, remap(theirs, COMMON, keep_unknown=True)),
+        },
+        "coarse_diagnostic": {
+            "seif": metric(coarse_truth, remap(ours, COARSE)),
+            "presidio": metric(coarse_truth, coarse_theirs),
+        },
+        "untyped_exact_span_coverage": {
+            "seif": metric(untyped(truth), untyped(ours)),
+            "presidio": metric(untyped(truth), untyped(theirs)),
+        },
         "raw_cases": raw,
     }
     return report, texts
@@ -237,6 +306,7 @@ def _ranked_order(items, pass_index, *, domain, seed=BENCHMARK_ORDER_SEED):
     also breaks a digest tie, so duplicates and every occurrence are retained.
     This is an intentionally predictable benchmark schedule, not secret entropy.
     """
+
     def rank(indexed):
         position, _ = indexed
         label = [BENCHMARK_ORDER_ALGORITHM, seed, pass_index, domain, position]
@@ -247,7 +317,10 @@ def _ranked_order(items, pass_index, *, domain, seed=BENCHMARK_ORDER_SEED):
 
 
 def benchmark(texts_by_corpus, detect, analyzer, repeats, warmup):
-    calls = {"seif": lambda text: detect(text), "presidio": lambda text: analyzer.analyze(text=text, language="ru", score_threshold=0.0)}
+    calls = {
+        "seif": lambda text: detect(text),
+        "presidio": lambda text: analyzer.analyze(text=text, language="ru", score_threshold=0.0),
+    }
     rows = [(corpus, case_id, text) for corpus, texts in texts_by_corpus.items() for case_id, text in texts.items()]
     for _ in range(warmup):
         for _, _, text in rows:
@@ -264,19 +337,31 @@ def benchmark(texts_by_corpus, detect, analyzer, repeats, warmup):
                 samples[corpus][name].append((time.perf_counter_ns() - start) / 1_000_000)
     return {
         "scope": "detector-only, same process/interpreter, one caller, full analyzer including NLP versus full local detector; no mask/vault/HTTP",
-        "warmup_full_corpus_passes": warmup, "measured_passes": repeats,
+        "warmup_full_corpus_passes": warmup,
+        "measured_passes": repeats,
         "order": "deterministic interleaved SHA256 ranking; each pass ranks original positions",
         "order_protocol": {
-            "algorithm": BENCHMARK_ORDER_ALGORITHM, "seed": BENCHMARK_ORDER_SEED,
+            "algorithm": BENCHMARK_ORDER_ALGORITHM,
+            "seed": BENCHMARK_ORDER_SEED,
             "input_order": "corpus and case dictionary insertion order; system order seif, presidio",
             "ranking_key": "SHA256 of compact JSON [algorithm, seed, pass, domain, position]; position breaks ties",
             "domains": "rows; systems:<position in that pass's row order>",
             "historical_compatibility": "Order differs from the earlier random.Random shuffle protocol; timing runs are not order-identical.",
         },
-        "corpora": {corpus: {name: {"samples": len(values), "mean_ms": round(sum(values) / len(values), 6),
-                                   "p50_ms": percentile(values, 50), "p95_ms": percentile(values, 95),
-                                   "p99_ms": percentile(values, 99), "max_ms": round(max(values), 6)}
-                              for name, values in data.items()} for corpus, data in samples.items()},
+        "corpora": {
+            corpus: {
+                name: {
+                    "samples": len(values),
+                    "mean_ms": round(sum(values) / len(values), 6),
+                    "p50_ms": percentile(values, 50),
+                    "p95_ms": percentile(values, 95),
+                    "p99_ms": percentile(values, 99),
+                    "max_ms": round(max(values), 6),
+                }
+                for name, values in data.items()
+            }
+            for corpus, data in samples.items()
+        },
         "raw_latency_ms": samples,
     }
 
@@ -306,25 +391,51 @@ def main():
         raise RuntimeError("Detector changed during comparison; discard this run and use a fixed revision")
     reverse_common = {value: key for key, value in COMMON.items()}
     report = {
-        "schema_version": 1, "measured_at_utc": datetime.now(timezone.utc).isoformat(),
+        "schema_version": 1,
+        "measured_at_utc": datetime.now(timezone.utc).isoformat(),
         "method": "Exact (type, Unicode character start, end) micro precision/recall/F1; untyped spans and coarse taxonomy explicitly separate",
-        "environment": {"python": sys.version, "platform": platform.platform(), "cpu_count": os.cpu_count(),
-                        "gil_enabled": getattr(sys, "_is_gil_enabled", lambda: True)(),
-                        "load_average_before": load_before, "load_average_after": os.getloadavg(),
-                        "peak_process_rss_kib": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
-                        "same_interpreter_for_both": True,
-                        "numpy_thread_environment": {name: os.environ[name] for name in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS")},
-                        "installed_packages": dict(sorted((d.metadata["Name"], d.version) for d in importlib.metadata.distributions()))},
-        "source_hashes": {"seif_detector_sha256": detector_sha, "development_evaluator_sha256": sha256(ROOT / "scripts/evaluate.py"),
-                          "comparison_script_sha256": sha256(Path(__file__))},
-        "fresh_challenge_freeze": {"frozen_at_utc": FROZEN_AT, "original_file_sha256": FROZEN_SOURCE_SHA256,
-                                   "canonical_data_sha256": canonical_hash(FRESH_FIXTURES),
-                                   "before_first_measurement": True, "text_withheld_from_detector_author_until_changes_finished": True},
-        "presidio_configuration": configuration, "presidio_cold_initialization_seconds": round(init_seconds, 4),
-        "type_mapping": {kind: {"label": label, "strict_presidio_counterpart": reverse_common.get(kind),
-                                "coarse_counterpart_only": None if kind in reverse_common else COARSE.get(kind),
-                                "custom_ru_rule_or_context_classifier_required": kind not in reverse_common} for kind, label in TYPES.items()},
-        "corpora": corpora, "latency": latency, "official_sources": SOURCES,
+        "environment": {
+            "python": sys.version,
+            "platform": platform.platform(),
+            "cpu_count": os.cpu_count(),
+            "gil_enabled": getattr(sys, "_is_gil_enabled", lambda: True)(),
+            "load_average_before": load_before,
+            "load_average_after": os.getloadavg(),
+            "peak_process_rss_kib": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
+            "same_interpreter_for_both": True,
+            "numpy_thread_environment": {
+                name: os.environ[name] for name in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS")
+            },
+            "installed_packages": dict(
+                sorted((d.metadata["Name"], d.version) for d in importlib.metadata.distributions())
+            ),
+        },
+        "source_hashes": {
+            "seif_detector_sha256": detector_sha,
+            "development_evaluator_sha256": sha256(ROOT / "scripts/evaluate.py"),
+            "comparison_script_sha256": sha256(Path(__file__)),
+        },
+        "fresh_challenge_freeze": {
+            "frozen_at_utc": FROZEN_AT,
+            "original_file_sha256": FROZEN_SOURCE_SHA256,
+            "canonical_data_sha256": canonical_hash(FRESH_FIXTURES),
+            "before_first_measurement": True,
+            "text_withheld_from_detector_author_until_changes_finished": True,
+        },
+        "presidio_configuration": configuration,
+        "presidio_cold_initialization_seconds": round(init_seconds, 4),
+        "type_mapping": {
+            kind: {
+                "label": label,
+                "strict_presidio_counterpart": reverse_common.get(kind),
+                "coarse_counterpart_only": None if kind in reverse_common else COARSE.get(kind),
+                "custom_ru_rule_or_context_classifier_required": kind not in reverse_common,
+            }
+            for kind, label in TYPES.items()
+        },
+        "corpora": corpora,
+        "latency": latency,
+        "official_sources": SOURCES,
         "limitations": [
             "Development48 was used to improve SEIF and is biased in its favor; do not present its score as independent validation.",
             "Fresh28 is a small author-written synthetic challenge frozen before this comparison, not a representative independent corpus.",
@@ -341,9 +452,21 @@ def main():
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    summary = {"versions": {name: report["environment"]["installed_packages"].get(name) for name in ("presidio_analyzer", "presidio-analyzer", "spacy", "ru_core_news_sm")},
-               "common_strict4": {name: {system: {key: results["common_strict4"][system][key] for key in ("precision", "recall", "f1")} for system in ("seif", "presidio")} for name, results in corpora.items()},
-               "latency": latency["corpora"], "output": str(args.output)}
+    summary = {
+        "versions": {
+            name: report["environment"]["installed_packages"].get(name)
+            for name in ("presidio_analyzer", "presidio-analyzer", "spacy", "ru_core_news_sm")
+        },
+        "common_strict4": {
+            name: {
+                system: {key: results["common_strict4"][system][key] for key in ("precision", "recall", "f1")}
+                for system in ("seif", "presidio")
+            }
+            for name, results in corpora.items()
+        },
+        "latency": latency["corpora"],
+        "output": str(args.output),
+    }
     print(json.dumps(summary, ensure_ascii=False, indent=2))
 
 

@@ -3,6 +3,7 @@
 This is a reproducible linter comparison, not a reconstruction of the hackathon
 scoring algorithm. No submitted code is executed or sent to an external service.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -33,8 +34,12 @@ def extract_python(archive: Path, destination: Path) -> dict:
     with ZipFile(archive) as source:
         for member in source.infolist():
             path = PurePosixPath(member.filename)
-            if (path.is_absolute() or ".." in path.parts or "\\" in member.filename
-                    or str(path) != member.filename.rstrip("/")):
+            if (
+                path.is_absolute()
+                or ".." in path.parts
+                or "\\" in member.filename
+                or str(path) != member.filename.rstrip("/")
+            ):
                 raise ValueError("Archive contains a non-canonical path")
             if member.is_dir() or path.suffix != ".py" or path.parts[0] not in SOURCE_DIRECTORIES:
                 continue
@@ -49,7 +54,8 @@ def extract_python(archive: Path, destination: Path) -> dict:
             target.write_bytes(content)
             manifest[str(path)] = {
                 "sha256": hashlib.sha256(content).hexdigest(),
-                "bytes": len(content), "lines": len(content.splitlines()),
+                "bytes": len(content),
+                "lines": len(content.splitlines()),
             }
     if not manifest:
         raise ValueError("Archive contains no Python source files")
@@ -93,9 +99,7 @@ def summarize(report: list) -> dict:
     """Separate runtime, tooling, deployment and tests without dropping findings."""
     return {
         "total": len(report),
-        "by_scope": dict(sorted(Counter(
-            issue["location"]["path"].split("/", 1)[0] for issue in report
-        ).items())),
+        "by_scope": dict(sorted(Counter(issue["location"]["path"].split("/", 1)[0] for issue in report).items())),
         "by_rule": dict(Counter(issue["check_name"] for issue in report).most_common()),
         "by_severity": dict(sorted(Counter(issue["severity"] for issue in report).items())),
         "top_files": dict(Counter(issue["location"]["path"] for issue in report).most_common(12)),
@@ -104,9 +108,21 @@ def summarize(report: list) -> dict:
 
 def run_profile(ruff: str, source: Path, rules: str) -> tuple[list, list[str]]:
     arguments = [
-        "check", "--isolated", "--no-cache", "--target-version", "py312",
-        "--exclude", "", "--no-respect-gitignore",
-        "--line-length", "120", "--select", rules, "--output-format", "gitlab", ".",
+        "check",
+        "--isolated",
+        "--no-cache",
+        "--target-version",
+        "py312",
+        "--exclude",
+        "",
+        "--no-respect-gitignore",
+        "--line-length",
+        "120",
+        "--select",
+        rules,
+        "--output-format",
+        "gitlab",
+        ".",
     ]
     result = subprocess.run([ruff, *arguments], cwd=source, capture_output=True, text=True, check=False)
     if result.returncode not in (0, 1) or result.stderr.strip():
@@ -121,9 +137,11 @@ def analyze_archive(archive: Path, output: Path, ruff: str) -> dict:
     with archive.open("rb") as stream:
         archive_sha256 = hashlib.file_digest(stream, "sha256").hexdigest()
     metadata = {
-        "schema_version": 1, "archive": archive.name,
+        "schema_version": 1,
+        "archive": archive.name,
         "archive_sha256": archive_sha256,
-        "analyzer": version, "profiles": {},
+        "analyzer": version,
+        "profiles": {},
         "scope": "All Python files under seif/, scripts/, tests/, deploy/ in the source ZIP",
         "configuration": "Isolated fixed profiles; Ruff default thresholds; inline noqa is honored",
         "severity": "Native Ruff GitLab severity, unchanged; not Sonar or hackathon severity",
@@ -137,7 +155,9 @@ def analyze_archive(archive: Path, output: Path, ruff: str) -> dict:
             filename = f"{profile}.gitlab.json"
             (output / filename).write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
             metadata["profiles"][profile] = {
-                "report": filename, "ruff_arguments": arguments, **summarize(report),
+                "report": filename,
+                "ruff_arguments": arguments,
+                **summarize(report),
             }
     (output / "summary.json").write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return metadata
@@ -153,10 +173,20 @@ def main() -> None:
     if executable is None:
         parser.error("Ruff executable not found")
     result = analyze_archive(args.archive.resolve(), args.output.resolve(), str(Path(executable).resolve()))
-    print(json.dumps({"archive": result["archive"], "analyzer": result["analyzer"], "profiles": {
-        name: {key: value for key, value in profile.items() if key in {"total", "by_scope", "by_rule"}}
-        for name, profile in result["profiles"].items()
-    }}, ensure_ascii=False, indent=2))
+    print(
+        json.dumps(
+            {
+                "archive": result["archive"],
+                "analyzer": result["analyzer"],
+                "profiles": {
+                    name: {key: value for key, value in profile.items() if key in {"total", "by_scope", "by_rule"}}
+                    for name, profile in result["profiles"].items()
+                },
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+    )
 
 
 if __name__ == "__main__":
