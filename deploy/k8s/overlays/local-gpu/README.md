@@ -49,6 +49,19 @@ VPN-шлюз; `scripts/ssh_bind_interface_proxy.py` фиксирует исхо�
 звена после изменения: `http://127.0.0.1:8767/health` локально и
 `https://seif.176-108-251-123.sslip.io/health` снаружи.
 
+Второй, независимый публичный вход — именованный Cloudflare Tunnel на
+`https://api.muravyinaya-ferma.online`. Он направляет HTTPS через Cloudflare
+сразу на `http://127.0.0.1:8767` и не зависит от VM, Caddy или обратного SSH.
+Его локальный конфиг и учётные файлы находятся в `~/.cloudflared/`, вне Git;
+пользовательский `seif-cloudflare-tunnel.service` включён для автозапуска.
+Прежний адрес через VM остаётся доступен параллельно. Проверка двух маршрутов:
+
+```bash
+curl -fsS https://api.muravyinaya-ferma.online/health
+curl -fsS https://seif.176-108-251-123.sslip.io/health
+systemctl --user is-active seif-cloudflare-tunnel.service seif-cloudru-tunnel.service
+```
+
 `setup-kind-node.sh` настраивает NVIDIA Runtime/CDI только внутри узла kind и
 локальный TCP-прокси для NodePort. Docker daemon хоста он не перезапускает.
 При пересоздании узла повторите подготовку и загрузку образов. PVC и данные
