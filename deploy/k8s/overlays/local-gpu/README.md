@@ -39,6 +39,16 @@ docker run -d --name seif-kind-gateway --restart unless-stopped --network kind \
 curl -fsS http://127.0.0.1:8767/health
 ```
 
+Публичная VM передаёт запросы на этот loopback-порт через постоянный обратный
+SSH-туннель. На машине с прозрачным VPN обычный SSH уходил через медленный
+VPN-шлюз; `scripts/ssh_bind_interface_proxy.py` фиксирует исходящее соединение
+на физическом интерфейсе, сохраняя шифрование SSH. Для `ProxyCommand` укажите
+`/usr/bin/python3 /path/to/seif-pii/scripts/ssh_bind_interface_proxy.py eth1 %h %p`
+в пользовательском systemd-сервисе туннеля; замените `eth1` на нужный интерфейс.
+Если прямой путь недоступен, скрипт пробует обычный маршрут. Проверяйте оба
+звена после изменения: `http://127.0.0.1:8767/health` локально и
+`https://seif.176-108-251-123.sslip.io/health` снаружи.
+
 `setup-kind-node.sh` настраивает NVIDIA Runtime/CDI только внутри узла kind и
 локальный TCP-прокси для NodePort. Docker daemon хоста он не перезапускает.
 При пересоздании узла повторите подготовку и загрузку образов. PVC и данные
