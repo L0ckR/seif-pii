@@ -21,5 +21,6 @@ images:
     newTag: rubert-be55982
 patches:
   - path: api-patch.yaml
+  - path: hpa-patch.yaml
   - path: ner-patch.yaml
   - path: service-patch.yaml

@@ -8,6 +8,7 @@ spec:
       runtimeClassName: nvidia
       containers:
         - name: ner
+          imagePullPolicy: Never
           env:
             - name: SEIF_NER_BACKEND
               value: rubert

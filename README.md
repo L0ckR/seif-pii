@@ -24,6 +24,9 @@
 RuBERT внутри локального [kind-кластера](deploy/k8s/overlays/local-gpu/README.md)
 с тремя API-подами и Redis/Sentinel. В NER-сервисе и `compose.ner.yaml`
 RuBERT выбран по умолчанию.
+На организаторском корпусе локальный вход в kind выдержал 2000 RPS без ошибок;
+публичный Cloud.ru/SSH-путь при этой нагрузке не выдержал. Подробности — в
+[отчёте RPS](docs/kind-gpu-rps-20260924.md).
 Простой `make run` без NER запускает только правила; для CPU-хоста Presidio
 включается отдельно через `compose.presidio.yaml`.
 
@@ -107,14 +110,9 @@ Quick Tunnel работает только пока запущены компь�
 
 ## Redis и секреты
 
-Создайте `.env` с двумя случайными ключами:
-
-```bash
-python3 - <<'PY'
-import base64
-import os
-import secrets
-```
+Для локального запуска создайте `.env` по [.env.example](.env.example) и
+настройте ключи по [инструкции сервиса](deploy/service/README.md).
+Для нового kind-кластера секреты создаёт
+`python3 deploy/k8s/create-secrets.py` после создания namespace `seif`.
 
 <img width="260" height="177" alt="image" src="https://github.com/user-attachments/assets/0a4edd11-0dda-41bd-99ff-ecaa096b2907" />
-
