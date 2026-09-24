@@ -50,13 +50,17 @@ VPN-шлюз; `scripts/ssh_bind_interface_proxy.py` фиксирует исхо�
 `https://seif.176-108-251-123.sslip.io/health` снаружи.
 
 Второй, независимый публичный вход — именованный Cloudflare Tunnel на
-`https://api.muravyinaya-ferma.online`. Он направляет HTTPS через Cloudflare
-сразу на `http://127.0.0.1:8767` и не зависит от VM, Caddy или обратного SSH.
-Его локальный конфиг и учётные файлы находятся в `~/.cloudflared/`, вне Git;
+`https://muravyinaya-ferma.online` и `https://api.muravyinaya-ferma.online`.
+Он направляет HTTPS через Cloudflare сразу на `http://127.0.0.1:8767` и не
+зависит от VM, Caddy или обратного SSH. Транспорт туннеля — QUIC; в текущей
+сетевой конфигурации он идёт через VPN-маршрут WSL. Прямые маршруты к Cloudflare
+edge, использовавшиеся при отладке HTTP/2, отключены.
+Локальный конфиг и учётные файлы находятся в `~/.cloudflared/`, вне Git;
 пользовательский `seif-cloudflare-tunnel.service` включён для автозапуска.
-Прежний адрес через VM остаётся доступен параллельно. Проверка двух маршрутов:
+Прежний адрес через VM остаётся доступен параллельно. Проверка маршрутов:
 
 ```bash
+curl -fsS https://muravyinaya-ferma.online/health
 curl -fsS https://api.muravyinaya-ferma.online/health
 curl -fsS https://seif.176-108-251-123.sslip.io/health
 systemctl --user is-active seif-cloudflare-tunnel.service seif-cloudru-tunnel.service
