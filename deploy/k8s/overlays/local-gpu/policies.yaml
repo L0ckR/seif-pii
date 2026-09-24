@@ -1,0 +1,31 @@
+# Secrets are environment variable names, never literal values.
+systems:
+  demo:
+    enabled: true
+    # false keeps access and detection enabled but returns the original text.
+    # Use a YAML boolean, never the quoted string "false".
+    masking_enabled: true
+    api_key_env: SEIF_DEMO_API_KEY
+    mode: mask
+    allow_unmask: true
+    rps: 2500
+    types: []
+    min_types: 1
+    required_types: []
+  bank-assistant:
+    enabled: false
+    api_key_env: SEIF_BANK_API_KEY
+    mode: token
+    allow_unmask: true
+    allowed_modes: [token, mask, synthetic]
+    rps: 2500
+  card-support:
+    enabled: false
+    api_key_env: SEIF_CARD_API_KEY
+    mode: mask
+    types: [CARD, CVV, PIN, CARDHOLDER, PERSON]
+    # Optional co-occurrence rule requested by the assignment.
+    min_types: 2
+    required_types: [CARD]
+    allow_unmask: false
+    rps: 1000

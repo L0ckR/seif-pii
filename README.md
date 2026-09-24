@@ -21,7 +21,9 @@
 ## Профили распознавания
 
 Публичный `/process` сейчас работает в гибридном режиме с двумя GPU-репликами
-RuBERT. В NER-сервисе и `compose.ner.yaml` RuBERT выбран по умолчанию.
+RuBERT внутри локального [kind-кластера](deploy/k8s/overlays/local-gpu/README.md)
+с тремя API-подами и Redis/Sentinel. В NER-сервисе и `compose.ner.yaml`
+RuBERT выбран по умолчанию.
 Простой `make run` без NER запускает только правила; для CPU-хоста Presidio
 включается отдельно через `compose.presidio.yaml`.
 

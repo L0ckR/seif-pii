@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seif-api
+spec:
+  template:
+    spec:
+      containers:
+        - name: api
+          env:
+            - name: SEIF_DEMO
+              value: "1"
+            - name: SEIF_WORKERS
+              value: "3"
+            - name: SEIF_CPU_WORKERS
+              value: "1"
+            - name: SEIF_MAX_INFLIGHT
+              value: "256"
+            - name: SEIF_NER_HTTP_BACKEND
+              value: aiohttp
+            - name: SEIF_NER_MAX_CONCURRENCY
+              value: "32"
+            - name: SEIF_REQUEST_CAPTURE_DIR
+              value: /var/lib/seif/capture
+            - name: SEIF_REQUEST_CAPTURE_MAX_DISK_BYTES
+              value: "1073741824"
+          volumeMounts:
+            - name: capture
+              mountPath: /var/lib/seif/capture
+      volumes:
+        - name: capture
+          persistentVolumeClaim:
+            claimName: seif-capture

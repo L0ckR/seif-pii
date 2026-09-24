@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: seif-local-rubert-model
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes: [ReadWriteOnce]
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  claimRef:
+    namespace: seif
+    name: seif-rubert-model
+  local:
+    path: /var/local/seif/model
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values: [seif-control-plane]
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: seif-rubert-model
+spec:
+  accessModes: [ReadWriteOnce]
+  storageClassName: ""
+  volumeName: seif-local-rubert-model
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: seif-local-capture
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes: [ReadWriteOnce]
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  claimRef:
+    namespace: seif
+    name: seif-capture
+  local:
+    path: /var/local/seif/capture
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values: [seif-control-plane]
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: seif-capture
+spec:
+  accessModes: [ReadWriteOnce]
+  storageClassName: ""
+  volumeName: seif-local-capture
+  resources:
+    requests:
+      storage: 10Gi

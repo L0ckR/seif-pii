@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seif-ner
+spec:
+  template:
+    spec:
+      runtimeClassName: nvidia
+      containers:
+        - name: ner
+          env:
+            - name: SEIF_NER_BACKEND
+              value: rubert
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: all
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: compute,utility
+            - name: SEIF_NER_BATCH_SIZE
+              value: "32"
+            - name: SEIF_NER_BATCH_WAIT_MS
+              value: "2.0"
+            - name: SEIF_NER_MAX_HTTP_INFLIGHT
+              value: "256"
+            - name: SEIF_NER_MAX_MODEL_JOBS
+              value: "128"
+            - name: SEIF_RUBERT_CPU_THREADS
+              value: "1"
+            - name: SEIF_RUBERT_DECODER
+              value: word
+            - name: SEIF_RUBERT_PROFILE
+              value: native
+            - name: SEIF_RUBERT_MODEL_PATH
+              value: /models/rubert
+          resources:
+            requests:
+              cpu: "1"
+              memory: 2Gi
+            limits:
+              cpu: "4"
+              memory: 6Gi
+          volumeMounts:
+            - name: model
+              mountPath: /models/rubert
+              readOnly: true
+      volumes:
+        - name: model
+          persistentVolumeClaim:
+            claimName: seif-rubert-model

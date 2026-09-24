@@ -1,0 +1,17 @@
+[Unit]
+Description=SEIF kind node TCP gateway to the Kubernetes API Service
+After=containerd.service kubelet.service
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/haproxy -f /etc/haproxy/seif-node-gateway.cfg -db
+Restart=always
+RestartSec=2
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+CapabilityBoundingSet=
+
+[Install]
+WantedBy=multi-user.target
