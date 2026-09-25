@@ -38,25 +38,33 @@ def write_all(fd: int, data: bytes) -> None:
         view = view[os.write(fd, view):]
 
 
+def forward_stdin(selector: selectors.BaseSelector, connection: socket.socket) -> None:
+    data = os.read(sys.stdin.fileno(), 65536)
+    if data:
+        connection.sendall(data)
+    else:
+        selector.unregister(sys.stdin.buffer)
+        connection.shutdown(socket.SHUT_WR)
+
+
+def forward_socket(selector: selectors.BaseSelector, connection: socket.socket) -> bool:
+    data = connection.recv(65536)
+    if data:
+        write_all(sys.stdout.fileno(), data)
+        return True
+    selector.unregister(connection)
+    return False
+
+
 def forward(connection: socket.socket) -> None:
-    selector = selectors.DefaultSelector()
-    selector.register(sys.stdin.buffer, selectors.EVENT_READ, "stdin")
-    selector.register(connection, selectors.EVENT_READ, "socket")
-    while selector.get_map():
-        for key, _ in selector.select():
-            if key.data == "stdin":
-                data = os.read(sys.stdin.fileno(), 65536)
-                if data:
-                    connection.sendall(data)
-                else:
-                    selector.unregister(sys.stdin.buffer)
-                    connection.shutdown(socket.SHUT_WR)
-            else:
-                data = connection.recv(65536)
-                if data:
-                    write_all(sys.stdout.fileno(), data)
-                else:
-                    selector.unregister(connection)
+    with selectors.DefaultSelector() as selector:
+        selector.register(sys.stdin.buffer, selectors.EVENT_READ, "stdin")
+        selector.register(connection, selectors.EVENT_READ, "socket")
+        while selector.get_map():
+            for key, _ in selector.select():
+                if key.data == "stdin":
+                    forward_stdin(selector, connection)
+                elif not forward_socket(selector, connection):
                     return
 
 
